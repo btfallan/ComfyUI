@@ -38,7 +38,7 @@ lora*
 *.pack
 
 # --- ComfyUI_Workflows: keep the actual workflow definitions, drop generated media/assets ---
-ComfyUI_Workflows/**/*.png
+# ComfyUI_Workflows/**/*.png
 ComfyUI_Workflows/**/*.jpg
 ComfyUI_Workflows/**/*.jpeg
 ComfyUI_Workflows/**/*.webp
