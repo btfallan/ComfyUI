@@ -1,0 +1,1157 @@
+{
+  "id": "9637208c-c8e4-41f8-92be-6bf1e7920194",
+  "revision": 1,
+  "last_node_id": 293,
+  "last_link_id": 756,
+  "nodes": [
+    {
+      "id": 254,
+      "type": "MaskToImage",
+      "pos": [
+        1668.5949140936673,
+        2870.967871520199
+      ],
+      "size": [
+        176.39999389648438,
+        26
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 702
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            703
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskToImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.61"
+      },
+      "widgets_values": [],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 255,
+      "type": "PreviewImage",
+      "pos": [
+        1673.6030317694476,
+        2950.4643314811356
+      ],
+      "size": [
+        230,
+        290
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 703
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Mask",
+      "properties": {
+        "Node name for S&R": "PreviewImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.61"
+      },
+      "widgets_values": [],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 256,
+      "type": "SAMLoader",
+      "pos": [
+        1272.951481476483,
+        1968.8602970573131
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAM_MODEL",
+          "type": "SAM_MODEL",
+          "slot_index": 0,
+          "links": [
+            716
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SAMLoader",
+        "cnr_id": "comfyui-impact-pack",
+        "ver": "8.22.2"
+      },
+      "widgets_values": [
+        "sam_vit_b_01ec64.pth",
+        "AUTO"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 269,
+      "type": "easy cleanGpuUsed",
+      "pos": [
+        1709.5144479951884,
+        1831.0512754123215
+      ],
+      "size": [
+        161.3404296875,
+        26
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "type": "*",
+          "link": 709
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            707,
+            708
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "easy cleanGpuUsed",
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.3"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 259,
+      "type": "PreviewImage",
+      "pos": [
+        1696.507722422404,
+        2159.6023101600135
+      ],
+      "size": [
+        230,
+        300
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 705
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Cropped (refined)",
+      "properties": {
+        "Node name for S&R": "PreviewImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.61"
+      },
+      "widgets_values": [],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 260,
+      "type": "UltralyticsDetectorProvider",
+      "pos": [
+        1276.1685835272642,
+        1842.1597050162964
+      ],
+      "size": [
+        315,
+        78
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "BBOX_DETECTOR",
+          "type": "BBOX_DETECTOR",
+          "slot_index": 0,
+          "links": [
+            715
+          ]
+        },
+        {
+          "name": "SEGM_DETECTOR",
+          "type": "SEGM_DETECTOR",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UltralyticsDetectorProvider",
+        "cnr_id": "comfyui-impact-subpack",
+        "ver": "1.3.5"
+      },
+      "widgets_values": [
+        "bbox/face_yolov9c.pt"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 258,
+      "type": "PreviewImage",
+      "pos": [
+        1695.8733326830004,
+        2531.932065569588
+      ],
+      "size": [
+        230,
+        310
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 704
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.61"
+      },
+      "widgets_values": [],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 262,
+      "type": "Image Comparer (rgthree)",
+      "pos": [
+        2633.612695136975,
+        1858.8689425339503
+      ],
+      "size": [
+        475.1329040527344,
+        817.25634765625
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "image_a",
+          "type": "IMAGE",
+          "link": 706
+        },
+        {
+          "dir": 3,
+          "name": "image_b",
+          "type": "IMAGE",
+          "link": 742
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "name": "images",
+          "shape": 3,
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "圖片對比",
+      "properties": {
+        "comparer_mode": "Slide",
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2509092031"
+      },
+      "widgets_values": [
+        [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/api/view?filename=rgthree.compare._temp_kazzi_00001_.png&type=temp&subfolder=&rand=0.023855388554111845"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/api/view?filename=rgthree.compare._temp_kazzi_00002_.png&type=temp&subfolder=&rand=0.5520363653174835"
+          }
+        ]
+      ]
+    },
+    {
+      "id": 287,
+      "type": "LoadImage",
+      "pos": [
+        -579.9248964724843,
+        2059.4235368828013
+      ],
+      "size": [
+        444.5218162265443,
+        478.6373506527341
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            742,
+            743
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.8.2",
+        "image": "clipspace/clipspace-painted-masked-1776185883825.png [input]"
+      },
+      "widgets_values": [
+        "anima 半寫實 (01).png",
+        "image"
+      ]
+    },
+    {
+      "id": 268,
+      "type": "PlaySound|pysssss",
+      "pos": [
+        1686.388696551652,
+        1920.5411851184479
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "any",
+          "type": "*",
+          "link": 708
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "shape": 6,
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PlaySound|pysssss"
+      },
+      "widgets_values": [
+        "always",
+        0.5,
+        "notify.mp3"
+      ]
+    },
+    {
+      "id": 266,
+      "type": "SaveImage",
+      "pos": [
+        2048.8566028377018,
+        1814.240622764985
+      ],
+      "size": [
+        516.83740234375,
+        833.8287963867188
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 707
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "面部修復後儲存圖片(Images saved after facial retouching.)",
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.61"
+      },
+      "widgets_values": [
+        "comfyui_FaceDetailer"
+      ]
+    },
+    {
+      "id": 292,
+      "type": "MarkdownNote",
+      "pos": [
+        -1388.803831980626,
+        1738.9709395274188
+      ],
+      "size": [
+        700,
+        990
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Model Links",
+      "properties": {},
+      "widgets_values": [
+        "Guide: [Subgraph](https://docs.comfy.org/interface/features/subgraph)\n\n## Model Links (for Local Users)\n\nFor BF16 and NVFP4 variants, see [Comfy-Org/Krea-2](https://huggingface.co/Comfy-Org/Krea-2)\n\n**diffusion_models**\n\n- [krea2_turbo_fp8_scaled.safetensors](https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_4b_fp8_scaled.safetensors](https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors)\n\n**vae**\n\n- [qwen_image_vae.safetensors](https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors)\n\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 diffusion_models/\n│   │   └── krea2_turbo_fp8_scaled.safetensors\n│   ├── 📂 text_encoders/\n│   │   └── qwen3vl_4b_fp8_scaled.safetensors\n│   ├── 📂 vae/\n│   │   └── qwen_image_vae.safetensors\n \n\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 265,
+      "type": "CLIPLoader",
+      "pos": [
+        280.09117421654514,
+        1848.5641197006807
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            711,
+            718
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.75"
+      },
+      "widgets_values": [
+        "krea2\\qwen3vl_4b_fp8_scaled.safetensors",
+        "krea2",
+        "default"
+      ]
+    },
+    {
+      "id": 263,
+      "type": "VAELoader",
+      "pos": [
+        560.7340856890777,
+        1859.4882510453185
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            712
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.75"
+      },
+      "widgets_values": [
+        "krea2\\qwen_image_vae.safetensors"
+      ]
+    },
+    {
+      "id": 273,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -114.87827167721001,
+        2047.5939107103825
+      ],
+      "size": [
+        529.4420776367188,
+        641.1295166015625
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 719
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            713,
+            721
+          ]
+        }
+      ],
+      "title": "面部相關提示詞-正面 (Facial related prompts - positive)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.62"
+      },
+      "widgets_values": [
+        "solo, (18-year-old female), photo of a South Korean idol.\n\nShe looked at the camera and gave a natural smile. She has green hair, She has green eyes.\n"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 272,
+      "type": "Note",
+      "pos": [
+        -588.5621801092069,
+        1786.6472490178594
+      ],
+      "size": [
+        442.1937790877072,
+        223.85739925835696
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "此處只寫與臉部描述相關的提示詞，和整體照片品質的提示詞。\n可使用人物lora。\n某些圖片可能會無法辨識臉部，導致\"FaceDetailer\"的功能失效。 可以嘗試重新啟動comfyui。\n上傳的圖片過大時會導致顯示卡記憶體不足。\n\nThis section only includes prompts related to facial descriptions and overall photo quality.\nThe character Lora can be used.\nSome images may fail to recognize faces, causing the \"FaceDetailer\" function to malfunction.\nYou can try restarting comfyui.\nUploading images that are too large can cause insufficient memory on the graphics card."
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 275,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        497.9687905033564,
+        2369.500380295517
+      ],
+      "size": [
+        247.151953125,
+        26
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 721
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            714
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConditioningZeroOut",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.73",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.4.1",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 271,
+      "type": "Lora Loader (LoraManager)",
+      "pos": [
+        850.9714851410256,
+        1851.786138887699
+      ],
+      "size": [
+        414.2801208496094,
+        579.714111328125
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 717
+        },
+        {
+          "name": "clip",
+          "shape": 7,
+          "type": "CLIP",
+          "link": 718
+        },
+        {
+          "name": "lora_stack",
+          "shape": 7,
+          "type": "LORA_STACK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            756
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            719
+          ]
+        },
+        {
+          "name": "trigger_words",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "loaded_loras",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Lora Loader (LoraManager)",
+        "cnr_id": "comfyui-lora-manager",
+        "ver": "392c157cb531805888d4d5054db58dd38ac721ee",
+        "__lm_widget_ids": [
+          "__lm_autocomplete_meta_text",
+          "text",
+          "loras"
+        ]
+      },
+      "widgets_values": [
+        {
+          "version": 1,
+          "textWidgetName": "text"
+        },
+        "",
+        []
+      ]
+    },
+    {
+      "id": 267,
+      "type": "UNETLoader",
+      "pos": [
+        -122.60686048199587,
+        1850.6584566157276
+      ],
+      "size": [
+        390.50470277293175,
+        82
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            717
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.75"
+      },
+      "widgets_values": [
+        "krea2\\Pornmaster_krea2_Turbo_int8_convrot_v2.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 270,
+      "type": "FaceDetailer",
+      "pos": [
+        1292.483791997897,
+        2137.0079763907934
+      ],
+      "size": [
+        350,
+        1180
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 743
+        },
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 756
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 711
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 712
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 713
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 714
+        },
+        {
+          "name": "bbox_detector",
+          "type": "BBOX_DETECTOR",
+          "link": 715
+        },
+        {
+          "name": "sam_model_opt",
+          "shape": 7,
+          "type": "SAM_MODEL",
+          "link": 716
+        },
+        {
+          "name": "segm_detector_opt",
+          "shape": 7,
+          "type": "SEGM_DETECTOR",
+          "link": null
+        },
+        {
+          "name": "detailer_hook",
+          "shape": 7,
+          "type": "DETAILER_HOOK",
+          "link": null
+        },
+        {
+          "name": "scheduler_func_opt",
+          "shape": 7,
+          "type": "SCHEDULER_FUNC",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            706,
+            709
+          ]
+        },
+        {
+          "name": "cropped_refined",
+          "shape": 6,
+          "type": "IMAGE",
+          "slot_index": 1,
+          "links": [
+            705
+          ]
+        },
+        {
+          "name": "cropped_enhanced_alpha",
+          "shape": 6,
+          "type": "IMAGE",
+          "slot_index": 2,
+          "links": [
+            704
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "slot_index": 3,
+          "links": [
+            702
+          ]
+        },
+        {
+          "name": "detailer_pipe",
+          "type": "DETAILER_PIPE",
+          "links": null
+        },
+        {
+          "name": "cnet_images",
+          "shape": 6,
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FaceDetailer",
+        "cnr_id": "comfyui-impact-pack",
+        "ver": "8.22.2"
+      },
+      "widgets_values": [
+        768,
+        true,
+        2048,
+        406010673324408,
+        "decrement",
+        8,
+        1,
+        "euler",
+        "simple",
+        0.5,
+        100,
+        true,
+        false,
+        0.5,
+        128,
+        2,
+        "center-1",
+        32,
+        0.5,
+        0,
+        0.7,
+        "False",
+        128,
+        "",
+        1,
+        false,
+        20,
+        false,
+        false
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 293,
+      "type": "Note",
+      "pos": [
+        405.6358975574826,
+        3010.421793394157
+      ],
+      "size": [
+        859.2586811639139,
+        303.7287799636074
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "guide_size建議在512~1024範圍之間，數字越大速度越慢。如果面部修復功能沒有生效時，需提高guide_size的數字。\n或是重啟comfyui。\n\nFaceDetailer功能本身有bug，有些圖片可能無法讀取到人物面部會導致黑畫面。\n\n調整\"denoise\"可以控制面部重繪的幅度。\n\n\n\nThe guide size is recommended to be between 512 and 1024; the larger the number, the slower the speed.\nIf the facial repair function is ineffective, the guide_size number needs to be increased.\nOr restart comfyui.\n\nThe \"FaceDetailer\" feature itself has a bug; it may fail to read faces in some images, resulting in a black screen.\n\nAdjusting \"denoise\" controls the extent of facial redrawing.\n"
+      ],
+      "color": "#322",
+      "bgcolor": "#533"
+    }
+  ],
+  "links": [
+    [
+      702,
+      270,
+      3,
+      254,
+      0,
+      "MASK"
+    ],
+    [
+      703,
+      254,
+      0,
+      255,
+      0,
+      "IMAGE"
+    ],
+    [
+      704,
+      270,
+      2,
+      258,
+      0,
+      "IMAGE"
+    ],
+    [
+      705,
+      270,
+      1,
+      259,
+      0,
+      "IMAGE"
+    ],
+    [
+      706,
+      270,
+      0,
+      262,
+      0,
+      "IMAGE"
+    ],
+    [
+      707,
+      269,
+      0,
+      266,
+      0,
+      "IMAGE"
+    ],
+    [
+      708,
+      269,
+      0,
+      268,
+      0,
+      "*"
+    ],
+    [
+      709,
+      270,
+      0,
+      269,
+      0,
+      "IMAGE"
+    ],
+    [
+      711,
+      265,
+      0,
+      270,
+      2,
+      "CLIP"
+    ],
+    [
+      712,
+      263,
+      0,
+      270,
+      3,
+      "VAE"
+    ],
+    [
+      713,
+      273,
+      0,
+      270,
+      4,
+      "CONDITIONING"
+    ],
+    [
+      714,
+      275,
+      0,
+      270,
+      5,
+      "CONDITIONING"
+    ],
+    [
+      715,
+      260,
+      0,
+      270,
+      6,
+      "BBOX_DETECTOR"
+    ],
+    [
+      716,
+      256,
+      0,
+      270,
+      7,
+      "SAM_MODEL"
+    ],
+    [
+      717,
+      267,
+      0,
+      271,
+      0,
+      "MODEL"
+    ],
+    [
+      718,
+      265,
+      0,
+      271,
+      1,
+      "CLIP"
+    ],
+    [
+      719,
+      271,
+      1,
+      273,
+      0,
+      "CLIP"
+    ],
+    [
+      721,
+      273,
+      0,
+      275,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      742,
+      287,
+      0,
+      262,
+      1,
+      "IMAGE"
+    ],
+    [
+      743,
+      287,
+      0,
+      270,
+      0,
+      "IMAGE"
+    ],
+    [
+      756,
+      271,
+      0,
+      270,
+      1,
+      "MODEL"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "FaceDetailer",
+      "bounding": [
+        -615.090980476133,
+        1708.1950097117822,
+        3805.582258662018,
+        1699.4985433476731
+      ],
+      "color": "#b58b2a",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.4752921481248756,
+      "offset": [
+        436.8899132790704,
+        -1850.5580977366078
+      ]
+    },
+    "frontendVersion": "1.45.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

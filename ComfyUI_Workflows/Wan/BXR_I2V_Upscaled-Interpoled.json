@@ -1,0 +1,325 @@
+{
+  "84": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "89": {
+    "inputs": {
+      "text": "(worst quality, low quality, lowres, jpeg artifacts, compression artifacts:1.4), (bad anatomy, bad hands, extra fingers, mutated hands, broken fingers, fused fingers, missing limbs, three legs, malformed limbs, disfigured, deformed, poorly drawn face:1.3), (watermark, text, signature, subtitles, logo:1.2), (grid lines, visible seams, tiling artifacts, overlapping frames:1.4), (noise, grain, static noise, grit:1.4), (blurry, blurred, blurry details, depth of field, motion blur:1.3), (loli, child), (overall gray, washed out, monochromatic, overexposed, gaudy colors, messy background, crowded background:1.2), (walking backwards, reverse motion:1.3), (cum in eyes:1.6), (milky eyes:1.5), (blind, cataracts, eye discharge:1.4), (fluid clipping through skin:1.5), (internal fluid:1.4), (cum in hair:1.3), (mesh glitch, bad collision, floating fluids:1.3), (static, still image, frozen, loop failure, morphing, morphing limbs:1.5).",
+      "clip": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  },
+  "90": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "93": {
+    "inputs": {
+      "text": "score_9, score_8_up, score_7_up, (Masterpiece, best quality, photorealistic:1.45), (RAW photo, 8k UHD, ultra-detailed:1.3), glossy wet skin, heavy sweat and arousal fluids, subsurface scattering, cinematic night bedroom lighting with city view, sharp focus.\n21 year old stunning woman named Sienna, long brown hair in high ponytail, bright golden-brown eyes, heavy freckles, toned athletic body, white tank top pulled up exposing breasts, black choker, black lace panties pulled aside.\nStarting frame locked: straddling him on bed, rubbing her clit and pussy along his thick shaft with her hand guiding it, looking at viewer with seductive expression, glistening skin.\n[MOTION 100/0 female-driven shaft riding handjob, high motion high impact]: She takes full control, passionately grinding and rubbing her wet pussy and clit along the full length of his thick cock with her hand stroking and guiding, building intense friction until he explodes with thick cum shooting over her chest, breasts and face. Heavy natural breast jiggle, realistic fluids and body movement, smooth continuous high-motion with pleasure expressions from start to finish until the very last millisecond. Realistic physics.",
+      "clip": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "95": {
+    "inputs": {
+      "unet_name": "DasiwaWAN22I2V14BLightspeed_snatchkissHighV11.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "96": {
+    "inputs": {
+      "unet_name": "DasiwaWAN22I2V14BLightspeed_snatchkissLowV11.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "97": {
+    "inputs": {
+      "image": "6.9_00162_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "98": {
+    "inputs": {
+      "width": 720,
+      "height": 960,
+      "length": 81,
+      "batch_size": 1,
+      "positive": [
+        "93",
+        0
+      ],
+      "negative": [
+        "89",
+        0
+      ],
+      "vae": [
+        "90",
+        0
+      ],
+      "start_image": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "WanImageToVideo"
+    }
+  },
+  "101": {
+    "inputs": {
+      "lora_name": "DR34ML4Y_I2V_14B_HIGH_V2.safetensors",
+      "strength_model": 0.7,
+      "model": [
+        "95",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "102": {
+    "inputs": {
+      "lora_name": "DR34ML4Y_I2V_14B_LOW_V2.safetensors",
+      "strength_model": 0.7,
+      "model": [
+        "96",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "103": {
+    "inputs": {
+      "shift": 6,
+      "model": [
+        "102",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "104": {
+    "inputs": {
+      "shift": 6,
+      "model": [
+        "101",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "126": {
+    "inputs": {
+      "ckpt_name": "rife49",
+      "multiplier": 4,
+      "ensemble": true,
+      "images": [
+        "150:136",
+        0
+      ]
+    },
+    "class_type": "FL_RIFE",
+    "_meta": {
+      "title": "FL RIFE Frame Interpolation"
+    }
+  },
+  "127": {
+    "inputs": {
+      "fps": 64,
+      "images": [
+        "198",
+        0
+      ]
+    },
+    "class_type": "CreateVideo",
+    "_meta": {
+      "title": "Create Video (32FPS)"
+    }
+  },
+  "153": {
+    "inputs": {
+      "model_name": "4x_foolhardy_Remacri.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "178": {
+    "inputs": {
+      "add_noise": "disable",
+      "noise_seed": 288061972799101,
+      "steps": 8,
+      "cfg": 2.5,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "start_at_step": 4,
+      "end_at_step": 8,
+      "return_with_leftover_noise": "disable",
+      "model": [
+        "103",
+        0
+      ],
+      "positive": [
+        "98",
+        0
+      ],
+      "negative": [
+        "98",
+        1
+      ],
+      "latent_image": [
+        "179",
+        0
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "179": {
+    "inputs": {
+      "add_noise": "enable",
+      "noise_seed": 317926973559432,
+      "steps": 8,
+      "cfg": 2.5,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "start_at_step": 0,
+      "end_at_step": 4,
+      "return_with_leftover_noise": "enable",
+      "model": [
+        "104",
+        0
+      ],
+      "positive": [
+        "98",
+        0
+      ],
+      "negative": [
+        "98",
+        1
+      ],
+      "latent_image": [
+        "98",
+        2
+      ]
+    },
+    "class_type": "KSamplerAdvanced",
+    "_meta": {
+      "title": "KSampler (Advanced)"
+    }
+  },
+  "184": {
+    "inputs": {
+      "filename_prefix": "C:\\ComfyUI_windows_portable\\ComfyUI\\output\\5.15-6.15\\6.9\\Sienna\\2\\1_6.12_Sienna\\6.14",
+      "format": "auto",
+      "codec": "auto",
+      "video": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save Video (32 FPS)"
+    }
+  },
+  "198": {
+    "inputs": {
+      "upscale_model": [
+        "153",
+        0
+      ],
+      "image": [
+        "126",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
+    }
+  },
+  "150:194": {
+    "inputs": {
+      "tile_size": 512,
+      "overlap": 64,
+      "temporal_size": 64,
+      "temporal_overlap": 8,
+      "samples": [
+        "178",
+        0
+      ],
+      "vae": [
+        "90",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeTiled",
+    "_meta": {
+      "title": "VAE Decode (Tiled)"
+    }
+  },
+  "150:136": {
+    "inputs": {
+      "anything": [
+        "150:194",
+        0
+      ]
+    },
+    "class_type": "easy cleanGpuUsed",
+    "_meta": {
+      "title": "Clean VRAM Used"
+    }
+  }
+}

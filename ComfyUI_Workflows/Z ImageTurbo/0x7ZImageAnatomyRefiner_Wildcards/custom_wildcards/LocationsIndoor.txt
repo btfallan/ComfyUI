@@ -1,0 +1,444 @@
+
+Messy unmade bed
+Modern minimalist cooking space
+Living room
+Bathroom
+Sunroom
+Narrow hallway
+Cluttered wooden desk
+Dark basement
+Attic space
+Modern open-plan space
+Rustic dining table
+Walk-in closet
+Small reading nook
+Garage interior
+Mudroom
+Game room
+Minimalist bedroom
+Victorian parlor
+Children’s playroom
+Home theater
+Laundry room
+Pantry shelves
+Entryway
+Bachelor pad living area
+Grandmother’s sitting room
+Unfinished room
+Loft apartment
+Breakfast nook
+Man cave
+Guest room
+Meditation corner
+Wine cellar
+Greenhouse extension
+Sewing room
+Music practice room
+Trophy room
+Panic room
+Balcony enclosure
+Foyer
+Pet room
+Hearth room
+Computer battlestation
+Butler’s pantry
+Sick room
+Party aftermath
+Indoor pool area
+Home gym
+Trophy kitchen
+Squatter’s room
+Solarium
+Supermarket aisle
+Cozy coffee shop
+Upscale clothing boutique
+Used bookstore
+Fast food interior
+Fine dining restaurant
+Dive bar
+Mall atrium
+Flower shop
+Barber shop
+Antique shop
+Arcade
+Movie theater lobby
+Gym weight room
+Bowling alley
+Art gallery
+Laundromat
+Convenience store
+Bakery
+Tattoo parlor
+Record store
+Ice cream parlor
+Hardware store
+Pharmacy
+Bank lobby
+Hotel reception
+Casino floor
+Nightclub dance floor
+Tea house
+Comic book shop
+Pawn shop
+Pet store
+Shoe store
+Toy store
+Jewelry store
+Post office
+Butcher shop
+Fish market
+Deli counter
+Candy shop
+Surf shop
+Souvenir shop
+Bridal salon
+Auto showroom
+Garden center (indoor)
+Thrift store
+Internet cafe
+Hookah lounge
+Yoga studio
+Escape room
+Corporate office
+Conference room
+CEO corner office
+Classroom
+Science lab
+Library reading room
+Elementary school hallway
+Principal’s office
+University lecture hall
+Art studio
+Hospital corridor
+Operating theater
+Doctor’s waiting room
+Dentist chair
+Police station desk
+Interrogation room
+Jail cell
+Courtroom
+Fire station garage
+Call center
+Server room
+Archive room
+Architect’s workspace
+Fashion design workshop
+Radio station booth
+Television news set
+Warehouse
+Factory floor
+Mechanic shop
+Woodworking shop
+Pottery studio
+Blacksmith forge
+Greenhouse nursery
+Museum exhibit
+Planetarium
+Aquarium tunnel
+Zoo reptile house
+Church sanctuary
+Mosque prayer hall
+Synagogue interior
+Buddhist temple
+Funeral home parlor
+Wedding reception hall
+Bingo hall
+Community center
+Voting booth area
+DMV waiting area
+Airport control tower
+Ship bridge
+Submarine interior
+Subway car
+Subway platform
+Train station concourse
+Train dining car
+Bus interior
+Airport terminal
+Baggage claim
+Airplane cabin
+Cockpit
+Cruise ship cabin
+Ferry deck (enclosed)
+Taxi interior
+Limousine interior
+Ambulance back
+RV interior
+Space station module
+Elevator
+Escalator tunnel
+Parking garage
+Pedestrian tunnel
+Locker room
+Public restroom
+Phone booth
+ATM vestibule
+Vending machine area
+Laundry room (basement)
+Boiler room
+Generator room
+Maintenance closet
+Security guard booth
+Ticketing booth
+Toll booth interior
+Lighthouse lantern room
+Windmill interior
+Water tower interior
+Sewer tunnel
+Mine shaft
+Cave dwelling
+Bunker
+Vault
+Cryogenics lab
+Server farm
+Clean room
+Sound stage
+Backstage dressing room
+Orchestra pit
+Circus tent interior
+Photo booth
+Confessional
+Voting booth
+Abandoned asylum
+Squat house
+Hoarder's room
+Burned out room
+Flooded basement
+Crime scene
+Construction site interior
+Renovation zone
+Open house
+Christmas living room
+Birthday party room
+Halloween party
+Romantic dinner setting
+Cyberpunk apartment
+Steampunk workshop
+Spaceship bridge
+Medieval tavern
+Castle great hall
+Dungeon
+Wizard's tower
+Alchemist lab
+Vampire lair
+Zombie barricade
+1950s diner
+1970s living room
+1980s arcade
+Victorian greenhouse
+Art deco lobby
+Mid-century modern den
+Industrial loft
+Minimalist gallery
+Maximalist bedroom
+Rustic cabin
+Beach house living room
+Zen garden (indoor)
+Gothic cathedral nave
+Brutalist government hall
+Rococo salon
+Noir detective office
+Western saloon
+Clock tower interior
+Bell tower
+Organ loft
+Puppet theater backstage
+Taxidermy workshop
+Dollhouse interior (macro view)
+Model train landscape
+Inside a computer
+Inside a musical instrument
+Inside a refrigerator
+Inside a car engine
+Inside a geode
+Ant colony (indoor terrarium)
+Beehive (observation)
+Birdcage
+Hamster tube maze
+Pillow fort
+Box fort
+Treehouse (enclosed)
+Ice hotel room
+Underwater hotel room
+Yurt interior
+Tipi interior
+Igloo interior
+Tent interior
+Glamping tent
+Container home
+Tiny house
+Houseboat interior
+Canal boat cabin
+Private jet cabin
+Helicopter cabin
+Hot air balloon basket
+Cable car interior
+Ferris wheel pod
+Ski lodge lounge
+Sauna
+Steam room
+Salt cave
+Sensory deprivation tank
+Tanning bed
+Photo darkroom
+Wine tasting room
+Cigar lounge
+Speakeasy
+Jazz club
+Comedy club
+Strip club
+Drag dressing room
+Ballet studio
+Boxing ring
+Wrestling mat
+Fencing piste
+Climbing gym
+Skate park (indoor)
+Trampoline park
+Laser tag arena
+Paintball field (indoor)
+Go-kart track
+VR arcade
+Dormitory room
+Capsule hotel pod
+Sunken conversation pit
+Sleeping porch
+Root cellar
+Storm shelter
+Servant’s quarters
+Attic crawlspace
+Garage band studio
+Murphy bed studio apartment
+Artist’s squat
+Safe house
+Panic room
+Hunting lodge
+Gatehouse interior
+Pool house
+Solarium
+Widow’s walk (enclosed)
+Inglenook
+Cat café
+Automat
+Bodega
+Duty-free shop
+Newsstand kiosk
+Haberdashery
+Perfumerie
+Cobbler shop
+Violin repair shop
+Chemist’s shop (vintage)
+Auction house floor
+Travel agency
+Video rental store (nostalgic)
+Dry cleaners
+Tailor’s fitting room
+Changing room
+Department store makeup counter
+Check cashing booth
+Nuclear power plant control room
+Distillery barrel room
+Brewery fermentation hall
+Textile mill floor
+Printing press room
+Dark fiber data center
+Hydroelectric turbine hall
+Incinerator room
+Abattoir
+Meat locker
+Creamery
+Glassblowing workshop
+Foundry floor
+Clockmaker’s workshop
+Bookbindery
+Restoration lab (art)
+Forensic lab
+Air traffic control tower
+Harbormaster’s office
+Lighthouse living quarters
+Morgue
+Autopsy room
+Padded cell
+Orphanage dormitory
+Boarding school refectory
+Monastery scriptorium
+Catacombs
+Crypt
+Sacristy
+Choir loft
+Senate chamber
+Embassy reception hall
+Diplomat’s office
+Postal sorting room
+Evidence locker
+Detention center common room
+Customs interrogation room
+Sleeper train compartment
+Caboose interior
+Dining car kitchen
+Airship gondola
+Cockpit (fighter jet)
+Cargo plane hold
+Food truck interior
+Double-decker bus upper deck
+Gypsy wagon (Vardo) interior
+Circus caravan
+Showman’s trailer
+Tour bus bunk area
+Narrowboat cabin
+Icebreaker ship bridge
+Bathysphere
+Trawler wheelhouse
+Projection booth
+Cinema concession stand backroom
+Theater green room
+Theater catwalk
+Orchestra rehearsal room
+Foley studio
+Dubbing booth
+Radio station control room
+VIP box (stadium)
+Squash court
+Bowling alley pinsetter room
+Snooker hall
+Mahjong parlor
+Pachinko parlor
+Karaoke booth
+Turkish bath (Hammam)
+Onsen bathhouse
+Romanarium (tepidarium)
+Massage parlor room
+Tiki bar
+Oxygen bar
+Members-only club lounge
+Opium den (historical)
+riest hole
+Smuggler’s cave
+Prohibition tunnel
+Cold War fallout shelter
+Abandoned mall food court
+Derelict subway station
+Utility tunnel
+Ventilation shaft (large scale)
+Elevator shaft (maintenance view)
+Dumbwaiter shaft (view from opening)
+Attic cistern room
+Bell tower belfry
+Clock tower mechanism room
+Throne room
+Banquet hall
+Keep armory
+Castle scullery
+Alchemist’s library
+Apothecary
+Saloon poker room
+Captain’s quarters (galleon)
+Stagecoach interior
+Viking longhouse
+Roman villa atrium
+Egyptian tomb antechamber
+Oracle’s chamber
+Gladiator holding cell
+Inquisition torture chamber
+Spy’s safehouse (Cold War era)
+Trench dugout (WWI)

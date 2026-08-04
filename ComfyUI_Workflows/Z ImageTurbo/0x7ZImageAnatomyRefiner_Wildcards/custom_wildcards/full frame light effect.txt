@@ -1,0 +1,600 @@
+Intense white light directly behind the subject creating a glowing halo around the entire body.
+Total silhouette with the full body blacked out against a bright white background.
+Rim light tracing the entire profile of the body from head to toe.
+Light source hidden directly behind the torso, creating a radial glow outward.
+Soft backlight making the entire outline of the subject glow gold against darkness.
+Bright light flaring into the lens, washing out the entire scene with a haze.
+Subject blocking a massive light source, with rays bursting out around the whole figure.
+Double rim lighting with blue light on the left side of the body and red on the right.
+Backlight reflecting off moisture in the air to create a glowing aura around the person.
+Thin, sharp line of light defining the edge of the entire figure in pitch darkness.
+Backlight positioned low, casting long shadows of the subject toward the camera.
+Backlight positioned high, highlighting the top of the head and shoulders heavily.
+Soft, diffused backlight wrapping slightly around the edges of the whole form.
+Hard, crisp backlight creating a sharp separation between the subject and background.
+Backlight filtering through a translucent backdrop behind the subject.
+Glowing outline of the subject against a deep blue twilight-colored background.
+Rim light that fades from white at the top to orange at the bottom of the figure.
+Massive backlight creating a lens flare that covers the whole image.
+Subject completely dark except for a sliver of light defining the side profile.
+Halo lighting effect that blows out the edges of the subject into pure white.
+Strong light shining through thin clothing, revealing the silhouette of the body underneath.
+Entire scene bathed in a soft, ethereal white glow (bloom effect).
+Bright light behind the subject making loose clothing appear translucent and glowing.
+Overexposed background bleeding light over the edges of the subject.
+Light passing through smoke filling the room, making the air itself glow white.
+Soft glow emanating from a foggy atmosphere enveloping the subject.
+Diffused light creating a "heavenly" aura around the entire figure.
+Strong backlight making the subject's hair and edges glow intensely.
+Light shining through a sheet hung in front of the subject, creating a soft shadow shape.
+Glow effect on the skin created by soft, omnidirectional lighting.
+Light creating a halo effect that lowers the contrast of the whole image.
+Strong light hitting mist or spray, creating a glowing cloud around the subject.
+Light penetrating the scene to create a soft, dreamy, pastel look.
+Hazy atmosphere causing light sources to bloom and spread across the frame.
+Subject standing in a beam of light that illuminates floating dust particles around them.
+Light diffusing through a rainy atmosphere, creating a soft, wet glow.
+Volumetric lighting making the air look thick and luminous.
+Soft focus effect applied to the lighting of the entire scene.
+Light reflecting off a white floor, filling the scene with soft upward radiance.
+Entire subject backlit by a massive softbox, creating a wrap-around glow.
+Large horizontal stripes of light and shadow cast across the entire body and wall.
+Grid-like pattern of square shadows projected over the whole scene.
+Dappled, irregular spots of sunlight filtering through leaves covering the subject.
+Sharp, diagonal shadow cutting the entire scene exactly in half.
+Intricate, lace-like shadow pattern projected over the whole figure.
+Shadow of a large window frame (cross shape) projected onto the subject and floor.
+Pattern of small circular dots of light covering the subject and background.
+Long, stretched shadows elongating the subject's form across the ground.
+Moving, fluid-like shadow patterns reflecting off water onto the whole scene.
+Shadow pattern resembling cage bars falling across the entire room.
+Geometric triangular shadows cast across the body and background.
+Soft, blurry shadows with undefined edges creating a mottled look on the subject.
+Hard, crisp shadows with razor-sharp edges defining the whole figure.
+Shadow pattern of a woven texture projected onto the entire subject.
+Single vertical slit of light illuminating only the center of the body.
+Circular spotlight pattern with a hard edge surrounding the subject.
+Massive shadow of a structure looming over the subject and background.
+Abstract, swirling shadow patterns created by distortion covering the scene.
+Prism-like rainbow stripes projected across the entire width of the image.
+Mottled, camouflage-like pattern of light and dark patches over the whole area.
+Light hitting the entire subject from a 45-degree angle (Classic studio).
+Light hitting directly from the front, flattening the appearance of the whole body.
+Light hitting directly from the side, splitting the entire body into light and dark halves.
+Light hitting from directly above, casting deep shadows downward on the whole figure.
+Light hitting from directly below, casting shadows upwards on the entire body (Horror).
+High frontal light creating a butterfly shadow under the nose and chin.
+Broad lighting illuminating the side of the body turned toward the camera.
+Short lighting illuminating the side of the body turned away from the camera.
+Rim lighting on both sides of the body, leaving the center dark (Badger).
+Single spotlight focused on the upper body, leaving the legs in darkness.
+Light grazing the entire surface of the body from the side to emphasize texture.
+Light coming from slightly behind and to the side, highlighting the cheek and shoulder.
+Top-down lighting creating a dramatic "skull-like" shadowing on the face and torso.
+Under-lighting creating a ghostly, unnatural look for the whole subject.
+90-degree side lighting highlighting the profile curve of the entire body.
+Light positioned to create deep shadows in the hollows of the body's musculature.
+Light positioned to highlight the definition of the entire physique.
+Soft light wrapping 180 degrees around the subject.
+Hard light pointing straight down from the zenith, creating short shadows.
+Light hitting the subject from floor level looking up, creating a looming effect.
+Warm orange light on the left side of the scene, cool blue light on the right.
+Monochromatic deep red light bathing the entire scene and subject.
+Monochromatic deep blue light with high contrast black shadows.
+Sickly green ambient light filling the entire space.
+Bright pink light highlighting the edges of the subject against a dark background.
+Teal and orange color grading applied to the whole light spectrum.
+Purple ambient light with a bright white key light on the subject.
+Cyan light coming from below, magenta light hitting from above.
+Yellow light mixed with harsh white light covering the scene.
+Soft lavender light filling the shadows of the entire room.
+Sepia-toned lighting making the whole scene look desaturated and brown.
+Acid green rim light outlining the entire subject.
+Deep violet light mixed with flashes of red covering the background.
+Pure white light on the subject, deep red background light.
+Golden yellow light hitting the subject, blue shadows behind them.
+Pastel pink and baby blue soft lighting filling the scene.
+Intense, saturated red light on one half of the scene.
+Cool white light mixing with warm yellow ambient glow throughout.
+Multi-colored gradients washing over the subject and background.
+Split toning with green highlights and purple shadows across the whole image.
+Extremely hard light creating distinct, sharp shadow lines across the scene.
+Extremely soft, diffused light wrapping around the entire form.
+Point-source light creating high contrast on the whole subject.
+Large-source light creating smooth, shadowless gradients over the body.
+Hazy light that lowers the contrast of the entire image.
+Crisp, punchy light that makes colors pop across the scene.
+Muted, flat light with very little dynamic range on the subject.
+Specular light creating bright white hotspots on the skin and clothing.
+Diffused light that eliminates texture across the whole image.
+Directional beam of light revealing dust particles in the air.
+Scattered light bouncing off walls to fill in all shadows.
+Harsh, unforgiving light that highlights every detail of the subject.
+Creamy, flattering light that smooths out the entire subject.
+Light with a rapid fall-off (bright center on subject, dark edges of room).
+Even, global illumination with no discernable direction.
+Stippled light creating a noisy, grainy texture over the scene.
+Focused beam of light that is brighter in the center of the frame.
+Reflected light bouncing upward to fill shadows on the whole body.
+Light passing through a diffusion filter creating a "bloom" on the scene.
+Overexposed light blowing out the highlights to pure white.
+Visible beams of light cutting through a foggy atmosphere across the scene.
+Light scattering in a thick haze, creating a glow around the subject.
+Massive shafts of light streaming down from above (God rays) onto the subject.
+Light illuminating floating dust motes filling the dark space.
+Mist illuminated by a backlight, creating a white silhouette of the subject.
+Light catching swirling smoke patterns filling the room.
+Steam rising and catching the light from a side source.
+Light diffusing through a rainy atmosphere, creating streaks across the frame.
+Volumetric cone of light highlighting the subject in a dark void.
+Haze causing the light to shimmer and distort across the scene (heat haze).
+Light reflecting off falling snow or particles filling the air.
+Soft glow radiating from the subject into the surrounding fog.
+Light beams breaking through a patterned obstruction above the scene.
+Atmospheric bloom around bright light sources in the background.
+Light catching spray or droplets filling the air around the subject.
+Smoky atmosphere colored by red directional light.
+Dense fog obscuring the feet, lit from below.
+Single light ray isolated in a pitch-black void falling on the subject.
+Turbid water effect with light beams filtering down on the scene.
+Glow of breath vapor visible in cold air surrounding the subject.
+Reflection & Surface Interaction (Scene Scale)
+Sharp white highlights reflecting off the subject's wet skin and clothes.
+Broad, glossy reflections on the floor and background surfaces.
+Light glinting off metallic textures worn by the subject.
+Entire subject reflected in a large mirror or window.
+Light reflecting off a wet floor, illuminating the subject from below.
+Distorted reflections of the subject on a curved, shiny background.
+Light catching the sheen of oil or sweat on the entire body.
+Matte lighting with no specular highlights anywhere in the scene.
+Light rippling across reflective fabric worn by the subject.
+Mirror-like reflection of the subject on the ground.
+Light scattering through sparkling or glittery textures on the subject.
+High-contrast reflection on black vinyl or latex worn by the subject.
+Soft sheen reflecting off satin or silk materials draped on the body.
+Prismatic reflections splitting light into colors across the scene.
+Light grazing a rough wall texture behind the subject.
+Light absorbed by dark velvet-like textures in the scene.
+Double reflection creating a ghosting effect of the subject.
+Light reflecting off a transparent barrier between viewer and subject.
+Caustic light patterns reflecting from liquid onto the whole scene.
+Anamorphic lens flare stretching horizontally across the entire image.
+Subject lit only by a tiny, weak point of light in the distance.
+Deep shadows hiding the face and body features.
+Single sliver of light illuminating just the side profile of the subject.
+Subject emerging from total darkness into a pool of light.
+Faint, ghostly glow providing barely enough light to see the figure.
+Silhouette with no detail, just a black shape against dim grey.
+Light that falls off rapidly into pitch blackness around the subject.
+Subject catching a tiny reflection in an otherwise dark space.
+Half-lit body with the shadow side merging with the black background.
+Intermittent light flashing in the darkness on the subject.
+Low-key lighting with high contrast and deep blacks throughout.
+Ambient glow that is barely perceptible in the room.
+Light originating from a small source held by the subject.
+Rim light only, with no fill light on the front of the subject.
+Subject lit by a faint blue cast in a dark environment.
+Underexposed image with crushed blacks dominating the scene.
+Light illuminating only the smoke, leaving the subject dark.
+Faint red glow visible in the shadows of the room.
+Lighting that mimics starlight or moonlight (very dim/blue) on the scene.
+Subject illuminated by a brief, harsh flash in the dark.
+Cool pale blue light illuminating the whole subject from below.
+Flickering warm orange light dancing on the entire subject.
+Harsh, greenish fluorescent cast from above filling the room.
+Bright pink light bar reflecting on the whole subject.
+Soft, warm glow coming from a small side source.
+Repeating pattern of flashing colored lights washing over the scene.
+Steady red light casting a warning-like glow on the subject.
+Cool white light coming from an open rectangular source (doorway shape).
+Dynamic, changing colors washing over the face and body.
+Grid of lights illuminating the subject from the front.
+Ring-shaped light source illuminating the subject evenly.
+Linear strip of light tracing the contour of the body.
+Ultraviolet light making white clothing glow in the dark.
+Warm yellow beam cutting through a cool blue ambient room.
+Softbox style lighting creating a large square reflection on the subject.
+Hard flash lighting with a completely dark background.
+Strobe light freezing the subject's motion in a dark space.
+Rotating light source creating moving shadows across the room.
+Digital matrix-style green light reflecting on the subject.
+Pulsing light that gets brighter and dimmer on the whole scene.
+Long exposure light trails streaking around the subject.
+Light painting creating shapes in the air around the figure.
+Double exposure of a silhouette filled with a light pattern.
+Projected texture of noise or static onto the entire subject.
+Light that looks liquid or melting dripping down the scene.
+Chromatic aberration splitting the light edges into RGB colors.
+Light that originates from inside the subject (glowing core).
+Negative image lighting (light shadows, dark highlights).
+Infrared style lighting (pale skin, black eyes/sky).
+Thermal camera style lighting (heat map colors on body).
+Light filtered through a kaleidoscope pattern covering the image.
+Distortion caused by shooting through glass or plastic in front of the lens.
+Bokeh balls of light obscuring the foreground and subject.
+Light creating a "glitch" artifact effect on the whole image.
+Subject lit by sparkles or embers floating in the air.
+Light refracting through a prism to create rainbows over the scene.
+Light warped by heat distortion waves across the image.
+Shadowless "void" lighting (pure white all around the subject).
+Lighting that emphasizes the contours like a topographical map.
+Light creating a halo of spikes or rays radiating from the subject.
+Romantic: Soft, warm, candle-like flicker filling the room.
+Clinical: Bright, flat, cool white, sterile, no shadows anywhere.
+Horror: Hard uplighting, deep shadows, green tint on the scene.
+Melancholy: Blue, dim, diffused, rainy texture over the image.
+Heroic: Golden rim light, low angle sun-like source on the subject.
+Mystery: Subject hidden in shadow, silhouette, fog, high contrast.
+Ethereal: Overexposed, glowing, white bloom, soft focus scene.
+Dangerous: Red pulsing light, harsh shadows, gritty texture.
+Nostalgic: Golden haze, lens flare, dust motes, warm tone.
+Cyberpunk: Neon pink/blue, high contrast, wet reflections on everything.
+Lonely: Single spotlight in a vast dark void.
+Joyful: Bright, sunny, high key, colorful, shadowless scene.
+Intimate: Dim, warm, close proximity source lighting the subject.
+Chaotic: Strobe lights, motion blur, random colors flashing.
+Dreamy: Pastel colors, soft blur, diffuse glow everywhere.
+Cold: Blue tint, frost-like sharpness, stark white light.
+Divine: Beams of light from above, halo effect on the subject.
+Gritty: High contrast, hard light, enhancing texture of the scene.
+Glamour: Soft, wrapping light, beauty dish style on the subject.
+Noir: Black and white, venetian blind shadows, smoke filling the scene.
+Light focused sharply on the subject, blurring the background.
+Light focused on the background, leaving the subject in silhouette.
+Shallow depth of field with bokeh background lights.
+Deep depth of field with everything in sharp focus.
+Split focus with light hitting foreground and background equally.
+Tilt-shift effect making the scene look miniature.
+Soft focus filter applied to the light source itself.
+Motion blur on the lights but not the subject.
+Motion blur on the subject but not the lights.
+Zoom burst effect creating radial light streaks from the center.
+Sidelight enhancing the texture of the subject's clothing.
+Hard light bringing out details in the skin and surroundings.
+Soft light smoothing out all texture in the scene.
+Light catching the fuzz or fine hairs on the subject's outline.
+Light highlighting the grain of the background texture.
+Light catching moisture or rain droplets on the whole scene.
+Light emphasizing the flow of draped material on the subject.
+Light showing the roughness of the walls behind the subject.
+Light reflecting off glitter or sequins covering the subject.
+Light catching dust or scratches on the camera lens surface.
+Front fill light mixed with strong back rim light on the subject.
+Warm key light mixed with cool fill light on the shadows.
+Top-down hair light mixed with bottom-up chin light.
+Hard key light with soft fill light balancing the scene.
+Rim light on the left, rim light on the right, dark center body.
+Colored background light with white foreground light.
+Light spinning around the subject during the exposure.
+Light moving closer and further away (pulsing effect).
+Light panning across the subject horizontally.
+Strobe firing multiple times in one exposure (multi-flash effect).
+Light bouncing off a colored wall onto the subject (color cast).
+Light filtering through an obstruction to create beams on the scene.
+Light reflecting off a floor to illuminate the subject from below.
+Light passing through a colored gel or filter over the lens.
+Light blocked by a solid object to create a silhouette.
+Light focused through a lens to a sharp point on the subject.
+Light scattered by a diffuser material softening the whole scene.
+Light reflected by a gold surface creating a warm tint.
+Light reflected by a silver surface creating a cool tint.
+Light absorbed by black material creating deep shadows (negative fill).
+Soft, dreamy bloom on all highlights in the image.
+High-key lighting (mostly white tones dominating the scene).
+Low-key lighting (mostly black tones dominating the scene).
+Mid-tone contrast emphasis on the subject.
+Vignette darkening the corners of the image.
+Spotlight effect with a defined circular edge.
+Gradient light fading from bright top to dark bottom.
+Gradient light fading from bright left to dark right.
+Specular highlights that look like stars on the subject.
+Light that creates a "halo" separating the subject from the background.
+Lighting that flattens the 3D form (2D look).
+Lighting that exaggerates the 3D volume of the subject.
+Cross-lighting (two lights from opposite sides hitting the subject).
+Three-point lighting (Key, Fill, Rim) fully illuminating the subject.
+Light that looks like it's underwater (caustics on the whole scene).
+Soft gradient light wrapping around the curvature of the shoulders.
+Sharp, cold blue rim light cutting through a heavy fog.
+Golden light spilling over the edges of the subject’s hair.
+Intermittent beams of light piercing through darkness behind the figure.
+Diffused white glow softening the edges of the entire silhouette.
+Hard backlight creating a stark separation between subject and background.
+Subtle violet edge lighting fading into deep black shadows.
+Bright light leaking around the torso causing a lens bloom.
+Warm amber glow illuminating the translucency of the ears and fingers.
+Vertical strip of light defining only the spine and legs.
+Chaotic light rays bursting outward from behind the subject’s head.
+Muted grey backlight creating a low-contrast, ethereal silhouette.
+Speckled light patterns dancing across the back of the figure.
+Intense cyan light tracing the profile against a magenta background.
+White light reflecting off sweat to create glistening highlights.
+Shadowy figure framed by a perfect circle of bright light.
+Split rim lighting with hard white on one side and soft yellow on the other.
+Hazy backlight turning the subject into a vague, ghostly shape.
+Prism-like light splitting into rainbow colors around the edges.
+Deep orange light casting a warm, fireside glow on the back.
+Stroboscopic light freezing multiple outlines of the subject in motion.
+Single spotlight form behind creating a triangular beam around the figure.
+Light refracting through smoke to create volumetric density around the body.
+Overexposed background causing the subject’s edges to erode into white.
+Thin laser-like beam tracing the exact contour of the face.
+Gentle moonlight effect outlining the top of the head in silver.
+Harsh, gritty backlight revealing the texture of clothing fibers.
+Pulsating glow expanding and contracting from behind the subject.
+Diagonal slash of light cutting across the silhouette from behind.
+Soft pastel pink rim light creating a dreamlike atmosphere.
+Light bouncing off particles in the air to create a starry background.
+Heavy shadow with only the eyes illuminated by a sliver of backlight.
+Green neon edge light giving the subject a radioactive appearance.
+Uneven backlight making one side of the silhouette thicker than the other.
+Bright flare obscuring the face while highlighting the rest of the body.
+Copper-colored rim light contrasting against a cool blue shadow.
+Light filtering through a grate pattern to cast grid lines on the back.
+Smooth, continuous line of light tracing the subject from head to heel.
+Jagged, electric blue light crackling around the subject’s outline.
+Warm light blooming heavily around the subject’s hair, creating a halo.
+Cold, clinical white light stripping away all color from the edges.
+Low-intensity glow barely separating the figure from the black background.
+Radiant starburst effect originating from the center of the back.
+Saturation of red light turning the entire silhouette into a crimson shape.
+Light leaking through the gaps between the arms and the torso.
+Flickering candlelight effect casting dancing shadows forward.
+Horizontal bands of light scanning up and down the figure from behind.
+Intense backlight causing chromatic aberration along the subject's edges.
+Soft, milky light creating a low-contrast, fog-like silhouette.
+Focused beam hitting the back of the head, leaving the body in shadow.
+Dual-tone backlight mixing teal and orange at the edges of the subject.
+Shimmering heat haze effect warping the light around the body.
+Bright white outline resembling a hand-drawn sketch against black.
+Scattered light rays creating a crown effect around the head.
+Deep purple backlight blending into the darkness of the subject’s clothing.
+Hard light hitting the back at an angle, illuminating one cheekbone.
+Specular highlights sparkling on the rim of the subject’s silhouette.
+Moody blue light casting long, dramatic shadows forward from the feet.
+Light source partially obscured, creating a crescent shape around the body.
+Soft gold light bleeding into the shadows of the subject’s skin.
+High-contrast rim light giving the subject a metallic appearance.
+Light diffusing through fabric to silhouette the body underneath.
+Bright, expansive light washing out all details except the core shape.
+Thin, surgical light separating the subject from a pitch-black void.
+Anamorphic lens flare stretching horizontally across the silhouette.
+Warm sunlight effect dappling the edges of the figure.
+Cold light creating a frosted look on the rim of the subject.
+Light reflecting off the floor behind to uplight the silhouette.
+Intense strobe effect freezing the edges in sharp relief.
+Soft, painterly glow smoothing out the transition between light and dark.
+Light rays catching dust motes swirling around the subject.
+Acid green backlight creating a toxic, unsettling aura.
+Concentric circles of light radiating outward from behind the torso.
+Sharp, angular shadows cast forward by a low rear light.
+Light wrapping entirely around the neck but leaving the face dark.
+Broken beams of light suggesting an obstructed source behind.
+Rich indigo light merging with the shadows of the subject.
+Sparkling bokeh balls forming a background for the dark silhouette.
+Intense spotlight creating a perfectly round rim on the hair.
+Faint, ghostly outline barely visible in the surrounding darkness.
+Vivid crimson edge light tapering off into total blackness.
+Light refracting through a medium to create a rainbow halo.
+Hard, directional backlight emphasizing the muscle structure of the back.
+Soft, buttery yellow light coating the edge of the figure.
+Light blooming massively to consume the thinner parts of the subject.
+Cool grey light creating a flat, graphic novel style silhouette.
+Warm gradient shifting from red to yellow along the profile.
+Piercing white light creating a star filter effect on shiny edges.
+Turbulent, smoky light swirling directly behind the subject.
+Geometric shapes of light projecting onto the back of the figure.
+Subsurface scattering making the ears glow bright red.
+Distant light source creating a small, distinct rim on the shoulder.
+Noise and grain texture visible in the glowing areas of light.
+Ultraviolet style glow making white clothing elements pop.
+Light cutting across the eyes from behind, leaving the rest dark.
+Soft vignette of light centering focus on the dark silhouette.
+Harsh, overexposed rim light eliminating all edge detail.
+Rusty orange light creating a gritty, industrial atmosphere.
+Bouncing light filling the shadows with a faint, colored tint.
+Pure white background forcing the subject into a high-contrast void.
+ntense white backlight flooding the scene, creating a radiant halo effect that softens the entire frame.
+Stark high-contrast lighting rendering the foreground in absolute black against a blindingly bright white background.
+Massive lens flare bursting from the background, washing out the entire scene with a hazy, overexposed white glow.
+Soft, ethereal white bloom bathing the entire environment in a dreamlike, diffuse radiance.
+Overexposed background illumination bleeding light over the edges of all foreground objects.
+Global translucency effect caused by bright light penetrating thin materials throughout the scene.
+Bright, hazy atmosphere causing all light sources to bloom and spread across the frame.
+"Heavenly" aura created by diffused, omnidirectional light wrapping around every object in the space.
+Soft focus effect applied to the lighting, smoothing out texture and contrast across the whole image.
+High-key lighting setup eliminating all deep shadows for a flat, bright, and clinical look.
+Flash of pure white light consuming the background and eroding the edges of foreground shapes.
+Soft, milky light creating a low-contrast, fog-like atmosphere across the entire view.
+Volumetric lighting piercing through dense fog, creating visible shafts of illumination throughout the space.
+Light beams illuminating floating dust particles that fill the entire dark volume of the room.
+Misty atmosphere illuminated by a backlight, turning the scene into a wash of glowing white and grey.
+Light passing through smoke filling the room, making the air itself appear to glow.
+Steam rising throughout the scene, catching light from a side source to create a textured, cloudy effect.
+Light diffusing through a rainy atmosphere, creating shimmering wet streaks across the frame.
+Haze causing the air to shimmer with heat distortion, warping the light across the scene.
+Turbid water effect with light beams filtering down from above to illuminate the entire underwater-style space.
+Glow of vapor visible in cold air, softening the sharpness of the entire environment.
+Light scattering in a thick haze, lowering the contrast and creating a glow throughout the image.
+Deep fog obscuring the floor, lit from below to create a glowing base for the scene.
+Smoke-filled environment colored by intense red directional lighting.
+Large horizontal bands of light and deep shadow slicing across the entire width of the image.
+Geometric grid of hard light and shadow projected over the whole environment.
+Dappled, irregular spots of sunlight filtering through overhead foliage to cover the entire area.
+Sharp, diagonal shadow cutting the scene exactly in half, separating light from dark.
+Intricate, lace-like shadow pattern projected across the entire foreground and background.
+Massive cross-shaped shadow from a window frame projected onto the floor and walls.
+Pattern of small circular dots of light covering the entire visible space.
+Long, stretched shadows elongating across the ground towards the camera.
+Fluid, rippling caustic patterns reflecting off water onto the walls and ceiling.
+Shadow pattern resembling cage bars falling across the entire room.
+Abstract, swirling shadow patterns created by distortion covering the whole scene.
+Prism-like rainbow stripes projected across the entire width of the image.
+Mottled, camouflage-like pattern of light and dark patches covering the whole area.
+Venetian blind shadow slats cast across the entire depth of the room.
+Split-tone atmospheric lighting washing the left side of the room in deep blue and the right in intense red.
+Monochromatic deep red light bathing the entire scene, crushing all color detail.
+Sickly green ambient light filling the entire space with a cinematic horror tone.
+Teal and orange color grading applied to the lighting spectrum of the whole environment.
+Cyan light flooding from below mixed with magenta light hitting the scene from above.
+Soft lavender light filling the shadows of the entire room for a pastel aesthetic.
+Sepia-toned lighting making the whole scene look desaturated, warm, and vintage.
+Acid green rim lighting outlining all objects against a dark background.
+Deep violet light mixed with flashes of red covering the background atmosphere.
+Golden yellow light washing over the scene with deep blue shadows in the background.
+Pastel pink and baby blue soft lighting filling the entire volume of the space.
+Cool white light mixing with warm yellow ambient glow throughout the room.
+Multi-colored gradients washing over the background and foreground simultaneously.
+Rusty orange light creating a gritty, industrial atmosphere across the scene.
+Neon pink and blue "cyberpunk" lighting reflecting off wet surfaces in the scene.
+Pitch black environment lit only by a tiny, weak point of light in the distance.
+Single sliver of light cutting through the darkness to define a profile in the void.
+Low-key lighting with high contrast and deep blacks dominating the entire frame.
+Faint, ghostly glow providing barely enough light to distinguish shapes in the dark.
+Rim light only, leaving the center of the scene in total silhouette.
+Intermittent strobe light flashing in the darkness, freezing motion in a black space.
+Deep shadows hiding the majority of the scene, revealing only edges.
+Underexposed image with crushed blacks dominating the scene ambiance.
+Lighting that mimics faint starlight or moonlight (very dim/blue) across the landscape.
+Single spotlight isolated in a vast, dark void falling on the center of the frame.
+Scene illuminated by a brief, harsh flash, leaving the background in darkness.
+Subtle violet edge lighting fading into deep black shadows across the frame.
+Faint red glow visible only in the deepest shadows of the room.
+Anamorphic lens flare stretching horizontally across the entire image.
+Chromatic aberration splitting light edges into RGB colors across the whole scene.
+Bokeh balls of light obscuring the foreground and blurring the depth of the image.
+Light creating a "glitch" artifact effect distorting the entire frame.
+Sparkles or embers floating in the air, catching light and filling the frame with specks.
+Light refracting through a prism to create rainbow arcs over the scene.
+Distortion caused by shooting through glass or plastic, warping the light sources.
+Star filter effect creating spiked rays around every specular highlight in the scene.
+Soft, painterly glow smoothing out the transition between light and dark areas.
+Light trails from long exposure streaking around the environment.
+Double exposure effect blending a silhouette with a texture pattern.
+Projected texture of noise or static covering the entire lighting field.
+High-contrast specular lighting reflecting off wet surfaces throughout the damp environment.
+Broad, glossy reflections on the floor and background surfaces mirroring the light.
+Matte lighting with no specular highlights anywhere in the scene.
+Light grazing a rough wall texture to emphasize the grain of the environment.
+Light absorbed by dark velvet-like textures, creating a "black hole" effect in the shadows.
+Reflected light bouncing upward from the floor to fill shadows across the scene.
+Caustic light patterns reflecting from liquid onto the whole environment.
+Light scattering through sparkling or glittery textures filling the air.
+Hard light bringing out gritty details in the surroundings.
+Soft light smoothing out all texture in the scene for a creamy look.
+Light reflecting off a white floor, filling the scene with soft upward radiance.
+Light hitting the entire scene from a 45-degree angle (Classic studio setup).
+Light hitting directly from the front, flattening the appearance of the entire space.
+Light hitting from directly above, casting deep shadows downward on all objects.
+Light hitting from directly below, casting unnatural upward shadows on the environment.
+Hard light pointing straight down from the zenith, creating short, harsh shadows.
+Rim lighting on both sides of the frame, leaving the center dark (Badger effect).
+Single spotlight focused on the upper half of the frame, leaving the bottom in darkness.
+Soft light wrapping 180 degrees around the center of the scene.
+Concentric circles of light radiating outward from the center of the background.
+Vertical strip of light dividing the dark scene down the middle.
+Diagonal slash of light cutting across the silhouette of the foreground.
+Linear strip of light tracing the contour of the environment.
+Rotating light source creating moving shadows across the room.
+Three-point lighting (Key, Fill, Rim) fully illuminating the central space.
+Cross-lighting (two lights from opposite sides) hitting the center of the scene.
+Pulsing light effect expanding and contracting rhythmically across the walls.
+Kaleidoscopic light patterns refracting and multiplying across the view.
+Vignette effect where light fades rapidly into darkness at the corners of the frame.
+Harsh fluorescent green cast creating an institutional or sterile atmosphere.
+Warm, flickering candlelight effect dancing across the entire lower atmosphere.
+Cool daylight filtering through semi-transparent curtains, creating a soft wash.
+Projected shadow of a spinning fan blade cutting rhythmically through the light.
+Abstract "bokeh" background with out-of-focus lights in various colors.
+Light reflecting off a mirror ball, sending hundreds of small dots spinning around the room.
+Deep indigo "blacklight" effect causing white elements in the scene to fluoresce.
+Hard, angular geometric shapes of light slicing through a smoky void.
+Soft gradient light shifting from magenta at the top to cyan at the bottom.
+Atmospheric "God rays" breaking through holes in a ceiling structure.
+Light spilling out from an open doorway into a dark, surrounding space.
+Sudden burst of light simulating an explosion or lightning strike.
+Soft, ambient glow mimicking the light of a campfire in the dark.
+Cold, clinical white light with absolutely no shadows (shadowless void).
+Film burn effect creating irregular patches of orange and white light on the edges.
+Light leaking into the frame, creating washed-out streaks of color.
+Digital "matrix" style rain of green code light reflecting on the environment.
+Scanning laser beam cutting a horizontal plane through the smoke.
+Soft, golden hour sunlight flooding the scene from a low angle.
+Blue "hour" twilight illumination creating a sombre, low-contrast look.
+Infrared-style lighting turning foliage white and skies black.
+Thermal imaging color palette mapping heat to light across the scene.
+Negative image lighting where shadows are bright and highlights are dark.
+Stroboscopic effect creating multiple ghosted edges on moving elements.
+Light refracting through crystal, casting spectral shards on the floor.
+Dense, heavy atmosphere where the light source is completely obscured by fog.
+Underwater "abyss" lighting, fading into total blackness at the bottom.
+Light reflecting off oil slicks, creating swirling iridescent patterns on the ground.
+Hard, defined circle of light (spotlight) on the floor in a dark room.
+Softbox lighting creating a large, rectangular reflection on glossy surfaces.
+Ring light reflection visible in all reflective surfaces in the scene.
+Dust motes dancing in a single, solitary beam of sunlight.
+Light passing through stained glass, casting colored patterns on the floor.
+Shadows of rain droplets running down a window pane projected into the room.
+Abstract, flowing "aurora borealis" style curtains of light in the sky.
+Harsh, blinding searchlight sweeping across the dark environment.
+Soft, diffused bounce light from a large white reflector filling the space.
+Warm, intimate glow from string lights hanging out of focus in the foreground.
+Cool, industrial blue light from overhead fluorescent tubes.
+Red emergency beacon light rotating and sweeping the walls.
+Static, grainy "noise" texture applied to the lighting of the whole scene.
+VHS tape tracking error lines of light distortion across the bottom of the frame.
+Soft, romantic "glow" filter applied to highlight bloom.
+Sharp, crystalline light creating high-contrast, jagged shadows.
+Light reflecting off snow, creating a bright, upward fill light.
+Shadows of waving grass projected onto a vertical surface.
+Light passing through a woven basket texture, creating a grid on the floor.
+Abstract blobs of colored light moving like a lava lamp background.
+Hard, cinematic teal backlight cutting through a warm, smoky foreground.
+Soft, grey "overcast day" lighting with very low contrast.
+Bright, sunny "noon" lighting with short, hard shadows.
+Light reflecting off a gold surface, casting a warm, metallic tint.
+Light reflecting off a silver surface, casting a cool, metallic tint.
+Sudden transition from dark to light (gradient) across the horizontal axis.
+Sudden transition from light to dark (gradient) across the vertical axis.
+Checkerboard pattern of light and shadow on the floor.
+Spiraling light tunnel effect drawing the eye to the center.
+Abstract light painting trails suspended in the air.
+Glow of a neon sign reflecting on wet pavement.
+Light filtering through a dense canopy of trees (komorebi).
+Shadows of birds in flight projected onto the ground.
+Light reflecting off shattered glass, scattering shards of light everywhere.
+Soft, dreamlike haze with a pastel pink tint.
+Hard, gritty texture emphasized by raking light across the floor.
+Light passing through a keyhole shape, illuminating a specific patch.
+Shadow of a spiral staircase cast on the wall.
+Light reflecting off bubbles floating in the air.
+Subtle, pulsing glow suggesting a heartbeat rhythm in the light.
+Flickering, unstable light suggesting a failing bulb.
+Constant, unwavering dead white light.
+Warm, cozy "fireplace" glow filling the room.
+Cool, eerie "moonlight" glow filling the room.
+Light creating a silhouette of a cityscape in the background.
+Shadows of swaying branches moving in the wind.
+Light reflecting off a polished marble floor.
+Soft, velvety darkness with only the edges of objects lit.
+Bright, cheerful morning light streaming through a window.
+Gloomy, depressive grey light filtering through clouds.
+Sharp, electric blue lightning bolt illuminating the scene for a split second.
+Soft, rainbow-colored gradient washing over the walls.
+Hard, red laser dots scattered across the environment.
+Light creating a "vignette" of shadow around a central bright spot.
+Soft, diffused light mimicking a cloudy day at the beach.
+Hard, direct light mimicking a spotlight on a stage.
+Light reflecting off a disco ball, creating moving dots.
+Shadows of a crowd of people projected onto a wall.
+Light passing through a prism, creating a spectrum on the floor.
+Soft, ethereal glow mimicking the afterlife.
+Hard, gritty light mimicking a war zone.
+Light reflecting off a metallic surface, creating a cold, industrial look.
+Soft, warm light mimicking a sunset.
+Cool, blue light mimicking a sunrise.
+Light creating a "halo" effect around the entire scene.
+Shadows of a fence projected onto the ground.
+Light reflecting off a wet road at night.
+Soft, diffused light mimicking a dream sequence.
+Hard, direct light mimicking an interrogation room.

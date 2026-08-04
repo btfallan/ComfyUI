@@ -1,0 +1,32 @@
+{
+    "DaSiWa Wan22 H-L Lightspeed": {
+        "author": "local",
+        "title": "DaSiWa Wan22 H-L Lightspeed",
+        "description": "Basic SwarmUI preset usable with my DaSiWa WAN 2.2 Checkpoint",
+        "preview_image": "imgs/model_placeholder.jpg",
+        "param_map": {
+            "prompt": "{value}",
+            "negativeprompt": "",
+            "model": "Wan/High/Wan2_2-I2V-H-LS-DaSiWa-nM_LureNoir",
+            "steps": "4",
+            "cfgscale": "1",
+            "aspectratio": "2:3",
+            "sidelength": "815",
+            "sampler": "euler",
+            "scheduler": "simple",
+            "initimage": "",
+            "initimagecreativity": "0",
+            "videomodel": "Wan/High/Wan2_2-I2V-H-LS-DaSiWa-nM_LureNoir",
+            "videoswapmodel": "Wan/Low/Wan2_2-I2V-L-LS-DaSiWa-nM_LureNoir",
+            "videoswappercent": "0.5",
+            "videoframes": "81",
+            "videosteps": "4",
+            "videocfg": "1",
+            "videoresolution": "Image",
+            "videoformat": "h265-mp4",
+            "videofps": "16",
+            "automaticvae": "true",
+            "sigmashift": "5"
+        }
+    }
+}

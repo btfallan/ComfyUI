@@ -1,0 +1,588 @@
+** ComfyUI startup time: 2026-08-03 19:50:39.342
+[2026-08-03 19:50:39.343] ** Platform: Windows
+[2026-08-03 19:50:39.343] ** Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
+[2026-08-03 19:50:39.343] ** Python executable: C:\Users\btfal\miniconda3\envs\comfyenv\python.exe
+[2026-08-03 19:50:39.343] ** ComfyUI Path: C:\temp\ComfyUI\ComfyUI
+[2026-08-03 19:50:39.344] ** ComfyUI Base Folder Path: C:\temp\ComfyUI\ComfyUI
+[2026-08-03 19:50:39.344] ** User directory: C:\temp\ComfyUI\ComfyUI_Custom\user
+[2026-08-03 19:50:39.344] ** ComfyUI-Manager config path: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\config.ini
+[2026-08-03 19:50:39.345] ** Log path: C:\temp\ComfyUI\ComfyUI_Custom\user\comfyui.log
+[PRE] ComfyUI-Manager
+[2026-08-03 19:50:43.275] Found comfy_kitchen backend cuda: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'gemv_awq_w4a16', 'int8_linear', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8']}
+[2026-08-03 19:50:43.275] Found comfy_kitchen backend hip: {'available': False, 'disabled': False, 'unavailable_reason': 'PyTorch ROCm/HIP runtime not available', 'capabilities': []}
+[2026-08-03 19:50:43.275] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_embedding', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'gemv_awq_w4a16', 'int8_linear', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8']}
+[2026-08-03 19:50:43.276] Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'int8_linear', 'quantize_and_rotate_rowwise', 'quantize_int8_rowwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_']}
+[2026-08-03 19:50:43.282] Checkpoint files will always be loaded safely.
+[2026-08-03 19:50:43.366] Total VRAM 16303 MB, total RAM 130328 MB
+[2026-08-03 19:50:43.366] pytorch version: 2.12.1+cu130
+[2026-08-03 19:50:43.367] Set vram state to: NORMAL_VRAM
+[2026-08-03 19:50:43.367] Device: cuda:0 NVIDIA GeForce RTX 5070 Ti : cudaMallocAsync
+[2026-08-03 19:50:43.388] Using async weight offloading with 2 streams
+[2026-08-03 19:50:43.388] Enabled pinned memory 52131.0
+[2026-08-03 19:50:43.428] Using pytorch attention
+[2026-08-03 19:50:47.795] DynamicVRAM support detected and enabled
+[2026-08-03 19:50:47.795] Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
+[2026-08-03 19:50:47.795] ComfyUI version: 0.29.0
+[2026-08-03 19:50:47.796] comfy-aimdo version: 0.4.10
+[2026-08-03 19:50:47.797] comfy-kitchen version: 0.2.25
+[2026-08-03 19:50:47.801] comfyui-frontend-package version: 1.47.11
+[2026-08-03 19:50:47.801] comfyui-workflow-templates version: 0.11.23
+[2026-08-03 19:50:47.801] comfyui-embedded-docs version: 0.5.9
+[2026-08-03 19:50:47.801] comfy-kitchen version: 0.2.25
+[2026-08-03 19:50:47.801] comfy-aimdo version: 0.4.10
+[2026-08-03 19:50:47.803] [Prompt Server] web root: C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\comfyui_frontend_package\static
+[2026-08-03 19:50:47.803] Asset seeder disabled
+[2026-08-03 19:50:47.803] [START] ComfyUI-Manager
+[2026-08-03 19:50:47.922] [ComfyUI-Manager] Using GitPython backend
+[2026-08-03 19:50:47.954] [ComfyUI-Manager] network_mode: public
+[2026-08-03 19:50:49.610] No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+[2026-08-03 19:50:50.140] [aistudynow] Loaded module: aistudynow_OutputCleaner
+[2026-08-03 19:50:50.857] [aistudynow] Loaded module: aistudynow_QwenVL
+[2026-08-03 19:50:50.859] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF
+[2026-08-03 19:50:50.882] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF_PromptEnhancer
+[2026-08-03 19:50:50.883] [aistudynow] Loaded module: aistudynow_QwenVL_HF
+[2026-08-03 19:50:50.883] [aistudynow] Loaded module: aistudynow_QwenVL_PromptEnhancer
+[2026-08-03 19:50:53.826] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy-mtb] | INFO -> loaded [96m103[0m nodes successfuly[0m
+[2026-08-03 19:50:53.826] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy-mtb] | INFO -> Some nodes (5) could not be loaded. This can be ignored, but go to http://127.0.0.1:8188/mtb if you want more information.[0m
+[2026-08-03 19:50:53.833] Web extensions folder found at C:\temp\ComfyUI\ComfyUI\web\extensions\ComfyLiterals
+[2026-08-03 19:50:53.860] Imported AddPaddingAdvanced successfully
+[2026-08-03 19:50:53.861] Imported AddPaddingBase successfully
+[2026-08-03 19:50:53.861] Imported AD_ImageResize successfully
+[2026-08-03 19:50:53.861] Imported AD_MockupMaker successfully
+[2026-08-03 19:50:53.862] Imported AD_PosterMaker successfully
+[2026-08-03 19:50:53.862] Imported AD_PromptSaver successfully
+[2026-08-03 19:50:53.862] Imported ComfyUI-FofrToolkit successfully
+[2026-08-03 19:50:54.356] Imported ComfyUI-ImageCaptioner successfully
+[2026-08-03 19:50:54.357] Imported ComfyUI-imageResize successfully
+[2026-08-03 19:50:54.357] Imported ComfyUI-textAppend successfully
+[2026-08-03 19:50:54.358] Imported imagecreatemask successfully
+[2026-08-03 19:50:54.358] Imported multiline_string successfully
+[2026-08-03 19:50:54.402] [AnimateDiffEvo] - [0;31mERROR[0m - No motion models found. Please download one and place in: ['C:\\temp\\ComfyUI\\ComfyUI_Custom\\custom_nodes\\comfyui-animatediff-evolved\\models', 'C:\\temp\\ComfyUI\\ComfyUI\\models\\animatediff_models']
+[2026-08-03 19:50:54.405] Adding C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes to sys.path
+[2026-08-03 19:50:54.406] Adding C:\temp\ComfyUI\ComfyUI\custom_nodes to sys.path
+[2026-08-03 19:50:54.415] Could not find efficiency nodes
+[2026-08-03 19:50:54.421] [36;20m[comfyui_controlnet_aux] | INFO -> Using ckpts path: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux\ckpts[0m
+[2026-08-03 19:50:54.421] [36;20m[comfyui_controlnet_aux] | INFO -> Using symlinks: False[0m
+[2026-08-03 19:50:54.422] [36;20m[comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'CPUExecutionProvider', 'CoreMLExecutionProvider'][0m
+[2026-08-03 19:50:54.441] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux\node_wrappers\dwpose.py:26: UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
+  warnings.warn("DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly")
+[2026-08-03 19:50:54.453] Loaded comfyui_controlnet_aux nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
+[2026-08-03 19:50:54.466] Loaded AdvancedControlNet nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
+[2026-08-03 19:50:54.466] module 'ComfyUI-Advanced-ControlNet' has no attribute 'NODE_CLASS_MAPPINGS'
+[2026-08-03 19:50:54.468] Could not find AnimateDiff nodes
+[2026-08-03 19:50:54.472] Loaded IPAdapter nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
+[2026-08-03 19:50:54.476] Could not find VideoHelperSuite nodes
+[2026-08-03 19:50:54.479] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-08-03 19:50:54.607] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-08-03 19:50:54.616] [Impact Pack] custom_wildcards path not found: C:\temp\ComfyUI_Custom\custom_nodes\comfyui-impact-pack\custom_wildcards. Using default path.
+[2026-08-03 19:50:54.617] Loaded ImpactPack nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
+[2026-08-03 19:50:54.617] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-08-03 19:50:54.618] [Impact Pack] Wildcards loading done.
+[2026-08-03 19:50:54.622] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-08-03 19:50:54.622] [Impact Pack] Wildcards loading done.
+[2026-08-03 19:50:57.873] [34m[ComfyUI-Easy-Use] server: [0mv1.3.6 [92mLoaded[0m
+[2026-08-03 19:50:57.874] [34m[ComfyUI-Easy-Use] web root: [0mC:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use\web_version/v2 [92mLoaded[0m
+[2026-08-03 19:50:58.173] Traceback (most recent call last):
+  File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2247, in load_custom_node
+    module_spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer\__init__.py", line 4, in <module>
+    from .nodes_sdxl import NODE_CLASS_MAPPINGS as NODE_CLASS_MAPPINGS_SDXL
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer\nodes_sdxl.py", line 15, in <module>
+    from .sdxl_train_network import SdxlNetworkTrainer
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer\sdxl_train_network.py", line 10, in <module>
+    from .library import sdxl_model_util, sdxl_train_util, strategy_base, strategy_sd, strategy_sdxl, train_util
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer\library\sdxl_train_util.py", line 15, in <module>
+    from .sdxl_lpw_stable_diffusion import SdxlStableDiffusionLongPromptWeightingPipeline
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer\library\sdxl_lpw_stable_diffusion.py", line 13, in <module>
+    from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
+ImportError: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\transformers\__init__.py)
+
+[2026-08-03 19:50:58.173] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer module for custom nodes: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\transformers\__init__.py)
+[2026-08-03 19:50:58.190] ComfyUI-GGUF: Allowing full torch compile
+[2026-08-03 19:50:58.199] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-08-03 19:50:58.208] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-08-03 19:50:58.209] [Impact Pack] Wildcards loading done.
+[2026-08-03 19:50:58.212] ### Loading: ComfyUI-Impact-Subpack (V1.3.5)
+[2026-08-03 19:50:58.213] [Impact Pack/Subpack] Using folder_paths to determine whitelist path: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
+[2026-08-03 19:50:58.213] [Impact Pack/Subpack] Ensured whitelist directory exists: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack
+[2026-08-03 19:50:58.214] [Impact Pack/Subpack] Loaded 0 model(s) from whitelist: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
+[2026-08-03 19:50:58.282] [Impact Subpack] ultralytics_bbox: C:\temp\ComfyUI\ComfyUI\models\ultralytics\bbox
+[2026-08-03 19:50:58.282] [Impact Subpack] ultralytics_segm: C:\temp\ComfyUI\ComfyUI\models\ultralytics\segm
+[2026-08-03 19:50:58.291] ### Loading: ComfyUI-Inspire-Pack (V1.23)
+[2026-08-03 19:50:58.590] --------------------- Jake Upgrade Nodes ---------------------
+[2026-08-03 19:50:58.591] 🔶 Version 2.7.5
+[2026-08-03 19:50:58.592] 🔶 Config file loaded successfully
+[2026-08-03 19:50:58.593] 🔶 Using standard version of RandomPrompter
+[2026-08-03 19:50:58.602] 🔶 All main modules loaded
+[2026-08-03 19:50:58.602] 🔶 No deprecated nodes loaded
+[2026-08-03 19:50:58.603] 🔶 Total nodes: 108
+[2026-08-03 19:50:58.603] --------------------------------------------------------------
+[2026-08-03 19:50:58.630] [JoyCaption] ℹ️ No custom models found, skipping user-defined HF models.
+[2026-08-03 19:50:58.631] [JoyCaption GGUF] ℹ️ No custom models found, skipping user-defined GGUF models.
+[2026-08-03 19:50:58.633] ✅ K3NK Image Grab (WanVideoWrapper frame groups): Loaded
+[2026-08-03 19:50:58.633]    - anchor_frame_index: selects a specific frame from the anchor file
+[2026-08-03 19:50:58.633]    - batch_start_frame: starting FRAME GROUP index (0=first group, 1=second group, etc.)
+[2026-08-03 19:50:58.633]    - batch_end_frame: FRAME GROUPS to remove from END (0=none, 1=remove last group, etc.)
+[2026-08-03 19:50:58.633]    - max_batch_frames: maximum number of frames (0=ignored)
+[2026-08-03 19:50:58.633]    - WanVideoWrapper uses groups of 4 frames - parameters work with frame groups
+[2026-08-03 19:50:58.633]    - Example: batch_start_frame=1 skips the first 4 frames
+[2026-08-03 19:50:58.633]    - Example: batch_end_frame=1 removes the last 4 frames
+[2026-08-03 19:50:58.633]    - frame_stride: applies to frames inside .latent files when latent_frame_stride=True
+[2026-08-03 19:50:58.668] [LoRA-Manager] Found LoRA roots:
+ - C:/temp/ComfyUI/ComfyUI/models/loras
+ - C:/temp/ComfyUI/ComfyUI_Custom/models/loras
+[2026-08-03 19:50:58.669] [LoRA-Manager] Found checkpoint roots:
+ - C:/temp/ComfyUI/ComfyUI/models/checkpoints
+ - C:/temp/ComfyUI/ComfyUI/models/diffusion_models
+ - C:/temp/ComfyUI/ComfyUI/models/unet
+ - C:/temp/ComfyUI/ComfyUI_Custom/models/checkpoints
+ - C:/temp/ComfyUI/ComfyUI_Custom/models/diffusion_models
+ - C:/temp/ComfyUI/ComfyUI_Custom/models/unet
+[2026-08-03 19:50:58.669] [LoRA-Manager] Found embedding roots:
+ - C:/temp/ComfyUI/ComfyUI/models/embeddings
+ - C:/temp/ComfyUI/ComfyUI_Custom/models/embeddings
+[2026-08-03 19:50:58.684] [LoRA-Manager] Symlink cache loaded with 0 mappings
+[2026-08-03 19:50:58.684] [LoRA-Manager] Symlink mappings restored from cache in 1.39 ms
+[2026-08-03 19:50:58.689] [LoRA-Manager] Updated 'comfyui' library with current folder paths
+[2026-08-03 19:50:58.788] [LoRA-Manager] Detected async ComfyUI execution, installing async metadata hooks
+[2026-08-03 19:50:58.788] [LoRA-Manager] Metadata collection hooks installed for runtime values
+[2026-08-03 19:50:58.788] [LoRA-Manager] ComfyUI Metadata Collector initialized
+[2026-08-03 19:50:58.789] [LoRA-Manager] Example images path: 
+[2026-08-03 19:50:58.789] [LoRA-Manager] Added static route for locales: /locales -> C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager\locales
+[2026-08-03 19:50:58.847] Blocked by policy: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Manager
+[2026-08-03 19:51:00.209] --------------
+[2026-08-03 19:51:00.209] [91m ### Mixlab Nodes: [93mLoaded
+[2026-08-03 19:51:00.214] json_repair## OK
+[2026-08-03 19:51:00.225] ChatGPT.available True
+[2026-08-03 19:51:00.226] edit_mask.available True
+[2026-08-03 19:51:00.368] ## clip_interrogator_model not found: C:\temp\ComfyUI\ComfyUI\models\clip_interrogator\Salesforce\blip-image-captioning-base, pls download from https://huggingface.co/Salesforce/blip-image-captioning-base
+[2026-08-03 19:51:00.369] ClipInterrogator.available True
+[2026-08-03 19:51:00.369] ## text_generator_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\text2image-prompt-generator, pls download from https://huggingface.co/succinctly/text2image-prompt-generator/tree/main
+[2026-08-03 19:51:00.370] ## zh_en_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\opus-mt-zh-en, pls download from https://huggingface.co/Helsinki-NLP/opus-mt-zh-en/tree/main
+[2026-08-03 19:51:00.370] PromptGenerate.available True
+[2026-08-03 19:51:00.370] ChinesePrompt.available True
+[2026-08-03 19:51:00.370] RembgNode_.available True
+[2026-08-03 19:51:00.515] TripoSR.available
+[2026-08-03 19:51:00.515] MiniCPMNode.available
+[2026-08-03 19:51:00.587] Scenedetect.available False
+[2026-08-03 19:51:00.612] FishSpeech.available
+[2026-08-03 19:51:00.620] SenseVoice.available
+[2026-08-03 19:51:00.647] Whisper.available False
+[2026-08-03 19:51:00.648] fal-client## OK
+[2026-08-03 19:51:00.669] FalVideo.available
+[2026-08-03 19:51:00.669] [93m -------------- [0m
+[2026-08-03 19:51:00.766] Traceback (most recent call last):
+  File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2247, in load_custom_node
+    module_spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node\__init__.py", line 1, in <module>
+    from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node\nodes.py", line 31, in <module>
+    from .stable_diffusion_prompt_reader.sd_prompt_reader.constants import (
+        SUPPORTED_FORMATS,
+    )
+ModuleNotFoundError: No module named 'C:\\temp\\ComfyUI\\ComfyUI_Custom\\custom_nodes\\comfyui-prompt-reader-node.stable_diffusion_prompt_reader'
+
+[2026-08-03 19:51:00.766] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node module for custom nodes: No module named 'C:\\temp\\ComfyUI\\ComfyUI_Custom\\custom_nodes\\comfyui-prompt-reader-node.stable_diffusion_prompt_reader'
+[2026-08-03 19:51:00.766] Failed to auto update `Quality of Life Suit` 
+[2026-08-03 19:51:00.767] [33mQualityOfLifeSuit_Omar92_DIR:[0m C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
+[2026-08-03 19:51:00.784] 
+[0;33m[ReActor][0m - [38;5;173mSTATUS[0m - [0;32mRunning v0.7.0-a2 in ComfyUI[0m
+[2026-08-03 19:51:00.889] Torch version: 2.12.1+cu130
+[2026-08-03 19:51:01.067] [34m[ComfyUI-RMBG][0m v[93m3.1.0[0m | [93m43 nodes[0m [92mLoaded[0m
+[2026-08-03 19:51:01.075] Traceback (most recent call last):
+  File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2247, in load_custom_node
+    module_spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\__init__.py", line 1, in <module>
+    from .py.nodes.node import SaveImageWithMetaData
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\__init__.py", line 3, in <module>
+    from .hook import pre_execute, pre_get_input_data
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\hook.py", line 1, in <module>
+    from .nodes.node import SaveImageWithMetaData
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\nodes\node.py", line 19, in <module>
+    from ..capture import Capture
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\capture.py", line 5, in <module>
+    from .defs.captures import CAPTURE_FIELD_LIST
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\defs\__init__.py", line 5, in <module>
+    from .captures import CAPTURE_FIELD_LIST
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\defs\captures.py", line 3, in <module>
+    from .formatters import (
+    ...<8 lines>...
+    )
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata\py\defs\formatters.py", line 10, in <module>
+    from comfy.sd2_clip import SD2Tokenizer
+ModuleNotFoundError: No module named 'comfy.sd2_clip'
+
+[2026-08-03 19:51:01.075] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata module for custom nodes: No module named 'comfy.sd2_clip'
+[2026-08-03 19:51:01.084] ⚡ SeedVR2 optimizations check: SageAttention ✅ | Flash Attention ❌ | Triton ✅
+[2026-08-03 19:51:01.084] 💡 Optional: pip install flash-attn
+[2026-08-03 19:51:01.084] 🔧 Conv3d workaround active: PyTorch 2.12.1, cuDNN 92000 (fixing VAE 3x memory bug)
+[2026-08-03 19:51:01.198] 📊 Initial CUDA memory: 14.60GB free / 15.92GB total
+[2026-08-03 19:51:01.710] (pysssss:WD14Tagger) [DEBUG] Available ORT providers: AzureExecutionProvider, CPUExecutionProvider
+[2026-08-03 19:51:01.711] (pysssss:WD14Tagger) [DEBUG] Using ORT providers: CUDAExecutionProvider, CPUExecutionProvider
+[2026-08-03 19:51:01.729] ------------------------------------------
+[2026-08-03 19:51:01.729] [34mComfyroll Studio v1.76 : [92m 175 Nodes Loaded[0m
+[2026-08-03 19:51:01.729] ------------------------------------------
+[2026-08-03 19:51:01.729] ** For changes, please see patch notes at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/blob/main/Patch_Notes.md
+[2026-08-03 19:51:01.729] ** For help, please see the wiki at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/wiki
+[2026-08-03 19:51:01.729] ------------------------------------------
+[2026-08-03 19:51:01.735] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ckpts path: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux\ckpts[0m
+[2026-08-03 19:51:01.735] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using symlinks: False[0m
+[2026-08-03 19:51:01.736] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'CPUExecutionProvider', 'CoreMLExecutionProvider'][0m
+[2026-08-03 19:51:02.749] LOADED 6 FONTS
+[2026-08-03 19:51:03.363] 
+
+███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗               
+████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝               
+██╔████╔██║███████║██║     ███████║██║██╔██╗ ██║█████╗                 
+██║╚██╔╝██║██╔══██║██║     ██╔══██║██║██║╚██╗██║██╔══╝                 
+██║ ╚═╝ ██║██║  ██║╚██████╗██║  ██║██║██║ ╚████║███████╗               
+╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝               
+                                                                       
+██████╗ ███████╗██╗     ██╗   ██╗███████╗██╗ ██████╗ ███╗   ██╗███████╗
+██╔══██╗██╔════╝██║     ██║   ██║██╔════╝██║██╔═══██╗████╗  ██║██╔════╝
+██║  ██║█████╗  ██║     ██║   ██║███████╗██║██║   ██║██╔██╗ ██║███████╗
+██║  ██║██╔══╝  ██║     ██║   ██║╚════██║██║██║   ██║██║╚██╗██║╚════██║
+██████╔╝███████╗███████╗╚██████╔╝███████║██║╚██████╔╝██║ ╚████║███████║
+╚═════╝ ╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+                                                                       
+
+[2026-08-03 19:51:03.364] 
+[2026-08-03 19:51:03.379] # 😺dzNodes: LayerStyle -> [1;33mCannot import name 'guidedFilter' from 'cv2.ximgproc'
+A few nodes cannot works properly, while most nodes are not affected. Please REINSTALL package 'opencv-contrib-python'.
+For detail refer to [4mhttps://github.com/chflame163/ComfyUI_LayerStyle/issues/5[0m[m
+[2026-08-03 19:51:03.447] [92m[tinyterraNodes] [32mLoaded[0m
+[2026-08-03 19:51:03.522] USDU batch patches applied successfully.
+[2026-08-03 19:51:03.522] USDU batch patches applied successfully.
+[2026-08-03 19:51:03.551] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> loaded [96m111[0m nodes successfuly[0m
+[2026-08-03 19:51:03.552] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Some nodes (2) could not be loaded. This can be ignored, but go to http://127.0.0.1:8188/mtb if you want more information.[0m
+[2026-08-03 19:51:03.558] 
+[32mInitializing ControlAltAI Nodes[0m
+[2026-08-03 19:51:03.567] Loading crt-nodes module
+[2026-08-03 19:51:03.575] ✅ ControlNet Aux loaded from 'comfyui_controlnet_aux' with 47 preprocessors
+[2026-08-03 19:51:03.646] [crt-pll] presets + automix routes registered
+[2026-08-03 19:51:03.659] [IAMCCS] FFmpeg auto-expose skipped: [WinError 3] The system cannot find the path specified: 'D:\\'
+[2026-08-03 19:51:03.660] IAMCCS compat: enabled local Qwen Multi-Gen seed widget patch
+[2026-08-03 19:51:03.660] IAMCCS compat: LoadedModel.model_mmap_residency is not present; skipping mmap residency monkeypatch for newer ComfyUI core
+[2026-08-03 19:51:03.674] [IAMCCS_V2V_AUDIO_DEBUG] AudioVAE.encode_guard installed
+[2026-08-03 19:51:03.691] [IAMCCS] IAMCCS_QWEN_VL_FLF / Cine Board Analyzer nodes loaded OK
+[2026-08-03 19:51:03.720] 
+  ___    _    __  __  ____ ____  ____   ____            _           
+ |_ _|  / \  |  \/  |/ ___/ ___|/ ___| |  _ \ ___   ___| | _____    
+  | |  / _ \ | |\/| | |  | |    \___ \ | |_) / _ \ / __| |/ / __|   
+  | | / ___ \| |  | | |__| |___  ___) ||  __/ (_) | (__|   <\__ \   
+ |___/_/   \_\_|  |_|\____\____||____/ |_|   \___/ \___|_|\_\___/   
+
+
+[2026-08-03 19:51:03.720] by IAMCCS (follow me on patreon.com/IAMCCS or carminecristalloscalzi.com)
+[2026-08-03 19:51:03.720] IAMCCS nodes loaded: 324
+[2026-08-03 19:51:03.720] - IAMCCS-SuperNodes AU+IMG2VID Exec Finalize, IAMCCS-SuperNodes AU+IMG2VID Exec Planner, IAMCCS-SuperNodes AU+IMG2VID Exec Render, IAMCCS-SuperNodes AU+IMG2VID Exec VAE, IAMCCS-SuperNodes Second Stage, IAMCCS_AUIMG2VID_AudioTimeline, IAMCCS_AUIMG2VID_Continuity, IAMCCS_AUIMG2VID_DiskExtension, IAMCCS_AUIMG2VID_Finalize, IAMCCS_AUIMG2VID_KeyframeTimeline
+[2026-08-03 19:51:03.720] - IAMCCS_AUIMG2VID_Planner, IAMCCS_AUIMG2VID_ProjectTimelinePlanner, IAMCCS_AUIMG2VID_ReanchorLatent, IAMCCS_AUIMG2VID_RefreshPolicy, IAMCCS_AUIMG2VID_RuntimeBridge, IAMCCS_ApplyLoRAHooksToConditioning, IAMCCS_ApplyScheduledWanLoRAFromConditioning, IAMCCS_AudioBoardArranger, IAMCCS_AudioBoardDirectShotboardAdapter, IAMCCS_AudioBoardMixer
+[2026-08-03 19:51:03.720] - IAMCCS_AudioExtender, IAMCCS_AudioExtensionMath, IAMCCS_AudioNormalizeForLTX, IAMCCS_AudioPhaseLazyGate, IAMCCS_AudioSegmentAutoPlanner, IAMCCS_AudioTimelineAssembler, IAMCCS_AudioTimelineGate, IAMCCS_AutoLinkArguments, IAMCCS_AutoLinkConverter, IAMCCS_BoardMaker
+[2026-08-03 19:51:03.721] - IAMCCS_BoardMaker_DialogueFoley, IAMCCS_BuildScheduledWanModelBank, IAMCCS_BusOut, IAMCCS_CineAllInOneFLFEngine, IAMCCS_CineAudioDurationProbe, IAMCCS_CineAudioInfo, IAMCCS_CineAudioPromptDirector, IAMCCS_CineAudioTranscriptPromptCompiler, IAMCCS_CineBoardDurationLock, IAMCCS_CineDialogueDurationPlanner
+[2026-08-03 19:51:03.721] - IAMCCS_CineDialogueLineRouter, IAMCCS_CineDialoguePromptKit, IAMCCS_CineDialogueTimingReconciler, IAMCCS_CineDirectorGuideB, IAMCCS_CineEmotionButtons, IAMCCS_CineFLFEngineSimple, IAMCCS_CineFLFEngineSimpleDyno, IAMCCS_CineFLFLengthCompensator, IAMCCS_CineFLFProductor, IAMCCS_CineFLFProductorDyno
+[2026-08-03 19:51:03.721] - IAMCCS_CineFilmmaker, IAMCCS_CineFilmmakerBackend, IAMCCS_CineFilmmakerCropGuides1to1, IAMCCS_CineFilmmakerGuide, IAMCCS_CineFilmmakerGuide1to1, IAMCCS_CineFinalAudioMixer, IAMCCS_CineInfo, IAMCCS_CineInfo3, IAMCCS_CineInfoV2, IAMCCS_CineInfoV2V
+[2026-08-03 19:51:03.721] - IAMCCS_CineInfoV2VBackendRouter, IAMCCS_CineInfoV2VPoseTransfer, IAMCCS_CineInfoV2VScail, IAMCCS_CineInfoV2VWanAnimate, IAMCCS_CineLTXSequencer, IAMCCS_CineLTXSequencerExact, IAMCCS_CineLatentDurationCrop, IAMCCS_CineLineStacker, IAMCCS_CineMotionSketch, IAMCCS_CineMultiGenDirector
+[2026-08-03 19:51:03.721] - IAMCCS_CineMusicVideoPlanner, IAMCCS_CinePPAntiAlias, IAMCCS_CinePromptArchitect, IAMCCS_CinePromptComposer, IAMCCS_CinePromptRelayAdapter, IAMCCS_CinePromptRelayLatentShapeSync, IAMCCS_CinePromptRelaySafeEncode, IAMCCS_CinePromptRelayTimeline, IAMCCS_CineRefLatentControl, IAMCCS_CineReferenceBoard
+[2026-08-03 19:51:03.721] - IAMCCS_CineRelayOrBypass, IAMCCS_CineResolutionParityTranslator, IAMCCS_CineShotAudioDirector, IAMCCS_CineShotLineBuilder, IAMCCS_CineShotPlanner, IAMCCS_CineShotboardBackendPro, IAMCCS_CineShotboardFinalFrameTrim, IAMCCS_CineShotboardLite, IAMCCS_CineShotboardPlannerPro, IAMCCS_CineShotboardPlannerProLegacy
+[2026-08-03 19:51:03.721] - IAMCCS_CineShotboardPlannerProV2, IAMCCS_CineShotboardPlannerV3, IAMCCS_CineShotboardPlannerV4, IAMCCS_CineShotboardPlannerV5V2V, IAMCCS_CineShotboardTailTrimPolicy, IAMCCS_CineShotboardTimelinePro, IAMCCS_CineShotboardV4Backend, IAMCCS_CineShotboardV4CropGuides, IAMCCS_CineShotboardV4Guide, IAMCCS_CineShotboardV5V2VRouter
+[2026-08-03 19:51:03.721] - IAMCCS_CineSpeech1PromptCompiler, IAMCCS_CineSpeechLength, IAMCCS_CineStage2BypassSwitch, IAMCCS_CineStage2PreviewToggle, IAMCCS_CineSwitch, IAMCCS_CineTemporalCutBarrier, IAMCCS_CineTimelineAudioMixer, IAMCCS_CineUTAntiAlias, IAMCCS_CineV2VAssetSelector, IAMCCS_CineV2VTimelineDirector
+[2026-08-03 19:51:03.721] - IAMCCS_CineV2VTimelineLineBuilder, IAMCCS_CineVideoToWooshInputs, IAMCCS_CineWooshFoleyChunkPlanner, IAMCCS_CineWorkflowInspector, IAMCCS_ControlAudEfx, IAMCCS_ControlAudEfxPanel, IAMCCS_DetailAtelier, IAMCCS_DetailAtelierAdvanced, IAMCCS_DetailAtelierSampler, IAMCCS_DialogueAudioBoardBridge
+[2026-08-03 19:51:03.721] - IAMCCS_DialogueTagEditor, IAMCCS_FlashVSRPanelBatchPrep, IAMCCS_FlashVSRPanelBatchRestore, IAMCCS_FluxKleinMultiGen, IAMCCS_FluxKleinRefine, IAMCCS_GGUF_accelerator, IAMCCS_GemmaAssistLazyGate, IAMCCS_GemmaAssistOutput, IAMCCS_GetAutoLink, IAMCCS_GoyAICanvasPaint
+[2026-08-03 19:51:03.721] - IAMCCS_HWProbeRecommendations, IAMCCS_HardMemoryPurge, IAMCCS_HwSupporter, IAMCCS_HwSupporterAny, IAMCCS_IdeoImageHashDebug, IAMCCS_IdeoInfo, IAMCCS_IdeoInpaintPrep, IAMCCS_IdeoMaskedPixels, IAMCCS_IdeoNoiseDebug, IAMCCS_IdeoRandomNoiseNoCache
+[2026-08-03 19:51:03.721] - IAMCCS_IdeoTranslate, IAMCCS_IdeogramJSONPreviewPass, IAMCCS_IdeogramSheetBuilder, IAMCCS_IdeogramStoryboardSheet, IAMCCS_ImageBatch6, IAMCCS_ImageBatchRangeLite, IAMCCS_ImageResizeBatchSafe, IAMCCS_IntValueMonitor, IAMCCS_Krea2MultiGen, IAMCCS_LTX2_BlendLatentBridge
+[2026-08-03 19:51:03.721] - IAMCCS_LTX2_ConditionNextLatentWithPrevOverlap, IAMCCS_LTX2_ContextLatent, IAMCCS_LTX2_ControlPreprocess, IAMCCS_LTX2_EnsureFrames8nPlus1, IAMCCS_LTX2_EnsureMinFrames, IAMCCS_LTX2_ExtendSampler, IAMCCS_LTX2_ExtensionModule, IAMCCS_LTX2_ExtensionModule_Disk, IAMCCS_LTX2_ExtensionModule_simple, IAMCCS_LTX2_FirstLastFramesController
+[2026-08-03 19:51:03.721] - IAMCCS_LTX2_FirstLastLatentControl, IAMCCS_LTX2_FirstLastLatentControl_Pro, IAMCCS_LTX2_FrameCountValidator, IAMCCS_LTX2_FrameRateSync, IAMCCS_LTX2_GetImageFromBatch, IAMCCS_LTX2_ImageBatchCropByPad, IAMCCS_LTX2_ImageBatchPadReflect, IAMCCS_LTX2_InitLatentSampler, IAMCCS_LTX2_JointRefreshLatent, IAMCCS_LTX2_JointRefreshLatent_Disk
+[2026-08-03 19:51:03.721] - IAMCCS_LTX2_LastFrameBridgeLoad, IAMCCS_LTX2_LastFrameBridgeSave, IAMCCS_LTX2_LoRAStack, IAMCCS_LTX2_LoRAStackModelIO, IAMCCS_LTX2_LoRAStackSegmented6, IAMCCS_LTX2_LoRAStackStaged, IAMCCS_LTX2_LoadLatentBridge, IAMCCS_LTX2_LongVideoWrapperPrep, IAMCCS_LTX2_LongVideoWrapperPrepDisk, IAMCCS_LTX2_LoopingSampler
+[2026-08-03 19:51:03.722] - IAMCCS_LTX2_MiddleFrames, IAMCCS_LTX2_ModelWithLoRA_Segmented6, IAMCCS_LTX2_OneShotLowRAMLooper, IAMCCS_LTX2_ReferenceImageSwitch, IAMCCS_LTX2_ReferenceStartFramesInjector, IAMCCS_LTX2_SaveLatentBridge, IAMCCS_LTX2_SegmentQueueLoop, IAMCCS_LTX2_TimeFrameCount, IAMCCS_LTX2_Validator, IAMCCS_LTXVideoDurationCrop
+[2026-08-03 19:51:03.722] - IAMCCS_LatentTailSlice, IAMCCS_LazyAnySwitch, IAMCCS_LoadImagesFromDirLite, IAMCCS_LoadResizeSegmentFromDir, IAMCCS_Ltx2HelperModules_AudioTimeline, IAMCCS_Ltx2HelperModules_Continuity, IAMCCS_Ltx2HelperModules_DiskExtension, IAMCCS_Ltx2HelperModules_Finalize, IAMCCS_Ltx2HelperModules_KeyframeTimeline, IAMCCS_Ltx2HelperModules_Planner
+[2026-08-03 19:51:03.722] - IAMCCS_Ltx2HelperModules_ProjectTimelinePlanner, IAMCCS_Ltx2HelperModules_ReanchorLatent, IAMCCS_Ltx2HelperModules_RefreshPolicy, IAMCCS_Ltx2HelperModules_RuntimeBridge, IAMCCS_ModelWithLoRA, IAMCCS_ModelWithLoRA_LTX2, IAMCCS_ModelWithLoRA_LTX2_Staged, IAMCCS_ModelWithLoRA_RuntimeBridge, IAMCCS_MotionBridgeLoad, IAMCCS_MotionBridgeSave
+[2026-08-03 19:51:03.722] - IAMCCS_MotionGuideBridge, IAMCCS_MotionPartsICLoRAApply, IAMCCS_MotionScale, IAMCCS_MotionScaleAdvanced, IAMCCS_MotionSketchRenderer, IAMCCS_MoveAhead, IAMCCS_MoveAheadEnforcer, IAMCCS_MultiSwitch, IAMCCS_MultiTimelineBridge, IAMCCS_MultiTimelineTakePicker
+[2026-08-03 19:51:03.722] - IAMCCS_MultilinePromptSplitter8, IAMCCS_Navigator, IAMCCS_ProjectTimelinePlanner, IAMCCS_QWEN_VL_FLF, IAMCCS_QWEN_VL_FLF_Advanced, IAMCCS_QwenMultiGen, IAMCCS_SamplerAdvancedVersion1, IAMCCS_ScailExtendPlan, IAMCCS_ScailExtends, IAMCCS_ScailIdentitySeeder
+[2026-08-03 19:51:03.722] - IAMCCS_ScailIdentityTracker, IAMCCS_ScailMultiReference, IAMCCS_SegmentPlanFromPlanner, IAMCCS_SegmentPlanner, IAMCCS_SegmentPlannerLinked, IAMCCS_SegmentPlannerSettings, IAMCCS_SegmentSwitch, IAMCCS_SelectScheduledWanModelFromConditioning, IAMCCS_SelectScheduledWanModelPairFromConditioning, IAMCCS_SetAutoLink
+[2026-08-03 19:51:03.722] - IAMCCS_ShotboardPlannerV2V, IAMCCS_ShotboardV4MultigenAdapter, IAMCCS_ShotboardVideoEditorRenderV1, IAMCCS_ShotboardVideoEditorV1, IAMCCS_SourceFramesToDisk, IAMCCS_SourceRangeFromSegmentPlan, IAMCCS_StartDirToVideoLatent, IAMCCS_StartImagesToVideoLatent, IAMCCS_StoryboardAutoCropGrid, IAMCCS_StoryboardAutoCropGridPRO
+[2026-08-03 19:51:03.722] - IAMCCS_StoryboardCaptionSheet, IAMCCS_StoryboardFrameDesigner, IAMCCS_StoryboardFrameDesignerV2, IAMCCS_StoryboardPromptContactSheet, IAMCCS_SupernodeBase, IAMCCS_SupernodeModule, IAMCCS_TakePackage, IAMCCS_TakeRouter, IAMCCS_TargetCrop, IAMCCS_ThreeSegmentPlanner
+[2026-08-03 19:51:03.722] - IAMCCS_TwoSegmentPlanner, IAMCCS_V2VActiveBackendSwitch, IAMCCS_V2VBusToLTX, IAMCCS_V2VBusToPoseTransfer, IAMCCS_V2VBusToScail, IAMCCS_V2VBusToWanAnimate, IAMCCS_V2VStageSwitch, IAMCCS_VAEDecodeTiledSafe, IAMCCS_VAEDecodeToDisk, IAMCCS_VRAMCleanup
+[2026-08-03 19:51:03.722] - IAMCCS_VRAMFlushLatent, IAMCCS_VideoColorCorrectionControl, IAMCCS_VideoCombineFromDir, IAMCCS_VideoHardConcat, IAMCCS_WDC_LTXKeyframer, IAMCCS_WDC_LTXSequencer, IAMCCS_WDC_LTXSequencerFixed5, IAMCCS_WDC_MultiImageLoader, IAMCCS_WanAnimateExtendPlan, IAMCCS_WanAnimateExtends
+[2026-08-03 19:51:03.722] - IAMCCS_WanChunkGatePure, IAMCCS_WanCineInfoPure, IAMCCS_WanContinuityGuide, IAMCCS_WanFLFPairFromTimeline, IAMCCS_WanImageBatchFrameSelect, IAMCCS_WanImageMotion, IAMCCS_WanImageMotionInductive, IAMCCS_WanImageMotionPro, IAMCCS_WanImageMotionProLegacy, IAMCCS_WanImageMotionProPlus
+[2026-08-03 19:51:03.722] - IAMCCS_WanImageMotionProPlus_Simple, IAMCCS_WanImageMotionPro_AdaIN, IAMCCS_WanImageMotion_AdaIN, IAMCCS_WanIndexedPromptEncode, IAMCCS_WanLoRAHookSchedule, IAMCCS_WanLoRARuntimeBridge, IAMCCS_WanLoRASchedule, IAMCCS_WanLoRAStack, IAMCCS_WanLoRAStackModelIO, IAMCCS_WanLoadImageFromBoard
+[2026-08-03 19:51:03.722] - IAMCCS_WanLoadImageFromPath, IAMCCS_WanLongPlanner, IAMCCS_WanPrevTailPrep, IAMCCS_WanPromptLoopInfo, IAMCCS_WanPromptPhasePlanner, IAMCCS_WanRelayOrBypassPure, IAMCCS_WanSVIToFLFBridgeProPlus, IAMCCS_WanSVIToFLFBridgeProPlus_Simple, IAMCCS_WanShotboardLoopAccumulator, IAMCCS_WanShotboardLoopAccumulatorLinear
+[2026-08-03 19:51:03.722] - IAMCCS_WanShotboardLoopChunkSelect, IAMCCS_WanShotboardLoopInfo, IAMCCS_WanShotboardLoopState, IAMCCS_WanShotboardPlannerPure, IAMCCS_WanShotboardPrevSamplesLoopSelect, IAMCCS_WanSviFlfTimeline, IAMCCS_WanSviFlfTimelinePick, IAMCCS_bus_group, IAMCCS_shotboarder_aud+vid_exporter_PRO, WanImageMotionPro
+[2026-08-03 19:51:03.722] - WanImageMotionProLegacy, WanImageMotionProPlus, WanMotionProTrimmer, iamccs_ltx2_lora_stack
+[2026-08-03 19:51:03.931] Using pytorch attention
+[2026-08-03 19:51:03.937] (RES4LYF) Init
+[2026-08-03 19:51:03.937] (RES4LYF) Importing beta samplers.
+[2026-08-03 19:51:03.952] (RES4LYF) Importing legacy samplers.
+[2026-08-03 19:51:03.975] 
+[2026-08-03 19:51:03.975] [92m[rgthree-comfy] Loaded 48 exciting nodes. 🎉[0m
+[2026-08-03 19:51:03.975] 
+[2026-08-03 19:51:03.975] [33m[rgthree-comfy] ComfyUI's new Node 2.0 rendering may be incompatible with some rgthree-comfy nodes and features, breaking some rendering as well as losing the ability to access a node's properties (a vital part of many nodes). It also appears to run MUCH more slowly spiking CPU usage and causing jankiness and unresponsiveness, especially with large workflows. Personally I am not planning to use the new Nodes 2.0 and, unfortunately, am not able to invest the time to investigate and overhaul rgthree-comfy where needed. If you have issues when Nodes 2.0 is enabled, I'd urge you to switch it off as well and join me in hoping ComfyUI is not planning to deprecate the existing, stable canvas rendering all together.
+[0m
+[2026-08-03 19:51:03.977] [92m[save_image_extended] AVIF is supported! Woohoo![0m
+[2026-08-03 19:51:03.979] [92m[save_image_extended][0m JXL is not supported. To add it: pip install jxlpy[0m
+[2026-08-03 19:51:03.979] [92m[save_image_extended][0m                       You will need a valid MSVC env to build the wheel[0m
+[2026-08-03 19:51:03.979] [92m[save_image_extended][0m version: 2.64[0m
+[2026-08-03 19:51:03.990] 📊 Initial CUDA memory: 14.60GB free / 15.92GB total
+[2026-08-03 19:51:04.612] [34mWAS Node Suite: [0mOpenCV Python FFMPEG support is enabled[0m
+[2026-08-03 19:51:04.612] [34mWAS Node Suite [93mWarning: [0m`ffmpeg_bin_path` is not set in `C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.[0m
+[2026-08-03 19:51:05.184] [34mWAS Node Suite: [0mFinished.[0m [32mLoaded[0m [0m217[0m [32mnodes successfully.[0m
+[2026-08-03 19:51:05.184] 
+	[3m[93m"You have within you right now, everything you need to deal with whatever the world can throw at you."[0m[3m - Brian Tracy[0m
+[2026-08-03 19:51:05.184] 
+[2026-08-03 19:51:05.779] [34mWAS Node Suite: [0mOpenCV Python FFMPEG support is enabled[0m
+[2026-08-03 19:51:05.780] [34mWAS Node Suite [93mWarning: [0m`ffmpeg_bin_path` is not set in `C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-ns\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.[0m
+[2026-08-03 19:51:06.351] [34mWAS Node Suite: [0mFinished.[0m [32mLoaded[0m [0m220[0m [32mnodes successfully.[0m
+[2026-08-03 19:51:06.352] 
+	[3m[93m"Success is not final, failure is not fatal: It is the courage to continue that counts."[0m[3m - Winston Churchill[0m
+[2026-08-03 19:51:06.352] 
+[2026-08-03 19:51:06.361] 
+Import times for custom nodes:
+[2026-08-03 19:51:06.361]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Qwen-Aspect-Ratio
+[2026-08-03 19:51:06.361]    0.0 seconds: C:\temp\ComfyUI\ComfyUI\custom_nodes\websocket_image_save.py
+[2026-08-03 19:51:06.361]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-PainterI2Vadvanced
+[2026-08-03 19:51:06.361]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mxtoolkit
+[2026-08-03 19:51:06.361]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wywywywy-pause
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-detail-daemon
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Krea-2-Two-Stage-Sampler
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2T-Enhancer
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\image-size-tools
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\one-node-flux-2-klein
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\bobs_latent_optimizer
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-load-image-from-url
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-find-perfect-resolution
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\masquerade-nodes-comfyui
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2TextEncoder
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ttp_toolset
+[2026-08-03 19:51:06.362]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\cg-use-everywhere
+[2026-08-03 19:51:06.362]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\confyui-node-prompt-stash-saver
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wlsh_nodes
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Simple-Prompt-Batcher
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyLiterals
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Inpaint-CropAndStitch
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-QwenEditUtils
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_JPS-Nodes
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wd14-tagger
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-GGUF
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-EditUtils
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-VAE-Utils
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MelBandRoFormer
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\SickOllie
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-K3NK-ComfyUI-Nodes
+[2026-08-03 19:51:06.363]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-florence2
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Flux2Klein-Enhancer
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LoRA-Block-Filter
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\save-image-extended-comfyui
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-Resolution-Master
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Wan22FMLF
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inpaint-nodes
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-custom-scripts
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QwenVL
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_essentials
+[2026-08-03 19:51:06.364]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-image-saver
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NovaSR
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\derfuu_comfyui_moddednodes
+[2026-08-03 19:51:06.364]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FramePackWrapper_PlusOne
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\controlaltai-nodes
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-frame-interpolation
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Chibi-Nodes
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyMath
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NAG
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-adaptiveprompts
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\10S-Comfy-nodes
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ultimatesdupscale
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\basic_data_handling
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-jakeupgrade
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\rgthree-comfy
+[2026-08-03 19:51:06.365]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NO8D-controls
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_Comfyroll_CustomNodes
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-kjnodes
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-animatediff-evolved
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inspire-pack
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\seedvr2_videoupscaler
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fearnworksnodes
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LTXVideo
+[2026-08-03 19:51:06.366]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-ergouzi-Nodes
+[2026-08-03 19:51:06.366]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MMAudio
+[2026-08-03 19:51:06.366]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-videohelpersuite
+[2026-08-03 19:51:06.366]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_tinyterranodes
+[2026-08-03 19:51:06.367]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_layerstyle
+[2026-08-03 19:51:06.367]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\IAMCCS-nodes
+[2026-08-03 19:51:06.367]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-subpack
+[2026-08-03 19:51:06.367]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy-mtb
+[2026-08-03 19:51:06.367]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\crt-nodes
+[2026-08-03 19:51:06.368]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wan-i2v-control
+[2026-08-03 19:51:06.368]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-ReActor
+[2026-08-03 19:51:06.368]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager
+[2026-08-03 19:51:06.368]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-SeedVR2_VideoUpscaler
+[2026-08-03 19:51:06.368]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-rmbg
+[2026-08-03 19:51:06.368]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-art-venture
+[2026-08-03 19:51:06.368]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\RES4LYF
+[2026-08-03 19:51:06.368]    0.2 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer
+[2026-08-03 19:51:06.368]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-itools
+[2026-08-03 19:51:06.368]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-WanVideoWrapper
+[2026-08-03 19:51:06.368]    0.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Addoor
+[2026-08-03 19:51:06.368]    0.7 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\aistudynow-qwenvl
+[2026-08-03 19:51:06.368]    0.8 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-sam3
+[2026-08-03 19:51:06.368]    1.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui
+[2026-08-03 19:51:06.368]    1.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-ns
+[2026-08-03 19:51:06.368]    1.6 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fill-nodes
+[2026-08-03 19:51:06.368]    1.8 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes
+[2026-08-03 19:51:06.368]    2.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use
+[2026-08-03 19:51:06.368]    2.9 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Boyonodes
+[2026-08-03 19:51:06.368] 
+[2026-08-03 19:51:06.371] Context impl SQLiteImpl.
+[2026-08-03 19:51:06.371] Will assume non-transactional DDL.
+[2026-08-03 19:51:06.489] Using RAM pressure cache.
+[2026-08-03 19:51:06.534] [LoRA-Manager] Deduplicate: removed 0 history rows, 0 queue rows, 0 orphaned queue rows
+[2026-08-03 19:51:06.536] Starting server
+
+[2026-08-03 19:51:06.541] To see the GUI go to: http://127.0.0.1:8188
+[2026-08-03 19:51:06.555] [LoRA-Manager] Lora cache hydrated from persisted snapshot with 420 models
+[2026-08-03 19:51:06.556] [LoRA-Manager] Recipe cache hit: loaded 1 recipes from persistent cache
+[2026-08-03 19:51:06.557] [LoRA-Manager] Checkpoint cache hydrated from persisted snapshot with 38 models
+[2026-08-03 19:51:06.557] [LoRA-Manager] Recipe cache initialized in 0.02 seconds. Found 1 recipes
+[2026-08-03 19:51:06.567] [LoRA-Manager] Embedding cache hydrated from persisted snapshot with 1 models
+[2026-08-03 19:51:06.575] [LoRA-Manager] FTS index validated, reusing existing index with 1 recipes
+[2026-08-03 19:51:13.051] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-08-03 19:51:13.052] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/clipspace.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-08-03 19:51:13.054] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe-lightbox.esm.min.js
+[2026-08-03 19:51:13.056] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/groupNode.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-08-03 19:51:13.057] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-08-03 19:51:13.086] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-08-03 19:51:13.087] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-08-03 19:51:13.088] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-08-03 19:51:13.088] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-08-03 19:51:13.089] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-08-03 19:51:13.122] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/pickr.min.js
+[2026-08-03 19:51:13.123] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe.min.css
+[2026-08-03 19:51:13.262] [36;20m[C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Found multiple match, we will pick the last C:\temp\ComfyUI\ComfyUI\models\upscale_models
+['C:\\temp\\ComfyUI\\ComfyUI_Custom\\models\\upscale_models', 'C:\\temp\\ComfyUI\\ComfyUI\\models\\upscale_models'][0m
+[2026-08-03 19:51:13.479] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-08-03 19:51:13.480] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-08-03 19:51:13.564] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-08-03 19:51:13.564] [NovaSR] Looking for models in: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-08-03 19:51:13.565] [NovaSR] Model directory exists!
+[2026-08-03 19:51:13.565] [NovaSR] Found model: NovaSR.safetensors
+[2026-08-03 19:51:13.565] [NovaSR] Total models found: 1
+[2026-08-03 19:51:13.565] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-08-03 19:51:13.567] [33mQualityOfLifeSuit_Omar92:[0m:NSP ready
+[2026-08-03 19:51:13.863] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/classic.min.css
+[2026-08-03 19:51:13.865] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.css
+[2026-08-03 19:51:13.866] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/model-viewer.min.js
+[2026-08-03 19:51:13.871] [ComfyUI-Manager] The ComfyRegistry cache update is still in progress, so an outdated cache is being used.
+[2026-08-03 19:51:13.983] FETCH DATA from: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\cache\3351870820_custom-node-list.json [DONE]
+[2026-08-03 19:51:14.027] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.min.js
+[2026-08-03 19:51:14.321] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-08-03 19:51:14.322] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-08-03 19:51:14.361] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-08-03 19:51:14.361] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-08-03 19:51:16.008] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-08-03 19:51:16.009] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-08-03 19:51:16.010] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-08-03 19:51:16.011] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-08-03 19:51:16.012] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-08-03 19:51:16.014] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui/components/button.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-08-03 19:51:21.965] got prompt
+[2026-08-03 19:51:31.554] Interrupting prompt 8b348143-4583-4a9c-80c4-61a190d4d868
+[2026-08-03 19:51:31.715] Processing interrupted
+[2026-08-03 19:51:31.716] Prompt executed in 9.75 seconds
+[2026-08-03 19:51:40.522] got prompt
+[2026-08-03 19:51:58.652] Interrupting prompt e2e5f482-6972-40de-a67d-bf5e271d75a5
+[2026-08-03 19:51:58.742] Processing interrupted
+[2026-08-03 19:51:58.744] Prompt executed in 18.22 seconds
+[2026-08-03 19:52:02.444] got prompt
+[2026-08-03 19:52:29.294] Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 743/743 [00:06<00:00, 108.87it/s]
+[2026-08-03 19:52:30.751] !!! Exception during processing !!! 'SizeDict' object cannot be interpreted as an integer
+[2026-08-03 19:52:30.757] Traceback (most recent call last):
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 545, in execute
+    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 344, in get_output_data
+    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager\py\metadata_collector\metadata_hook.py", line 171, in async_map_node_over_list_with_metadata
+    results = await original_map_node_over_list(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 318, in _async_map_node_over_list
+    await process_inputs(input_dict, i)
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 306, in process_inputs
+    result = f(**inputs)
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 430, in generate
+    raise e
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 407, in generate
+    response = self.predictor.generate(
+        image=pil_image,
+    ...<5 lines>...
+        top_k=top_k,
+    )
+  File "C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 214, in generate
+    image = image.resize(self.target_size, Image.Resampling.LANCZOS)
+  File "C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\PIL\Image.py", line 2438, in resize
+    im = self.im.resize(size, resample, box)
+TypeError: 'SizeDict' object cannot be interpreted as an integer
+
+[2026-08-03 19:52:30.759] Prompt executed in 28.31 seconds
+[2026-08-03 19:53:18.434] FETCH ComfyRegistry Data [DONE]
+[2026-08-03 19:53:18.630] [ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes
+[2026-08-03 19:53:18.699] FETCH DATA from: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\cache\1514988643_custom-node-list.json [DONE]
+[2026-08-03 19:53:18.761] [ComfyUI-Manager] All startup tasks have been completed.
+[2026-08-03 19:59:28.901] got prompt
+[2026-08-03 19:59:29.047] !!! Exception during processing !!! 'SizeDict' object cannot be interpreted as an integer
+[2026-08-03 19:59:29.050] Traceback (most recent call last):
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 545, in execute
+    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 344, in get_output_data
+    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager\py\metadata_collector\metadata_hook.py", line 171, in async_map_node_over_list_with_metadata
+    results = await original_map_node_over_list(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )
+    ^
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 318, in _async_map_node_over_list
+    await process_inputs(input_dict, i)
+  File "C:\temp\ComfyUI\ComfyUI\execution.py", line 306, in process_inputs
+    result = f(**inputs)
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 430, in generate
+    raise e
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 407, in generate
+    response = self.predictor.generate(
+        image=pil_image,
+    ...<5 lines>...
+        top_k=top_k,
+    )
+  File "C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption\JC.py", line 214, in generate
+    image = image.resize(self.target_size, Image.Resampling.LANCZOS)
+  File "C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\PIL\Image.py", line 2438, in resize
+    im = self.im.resize(size, resample, box)
+TypeError: 'SizeDict' object cannot be interpreted as an integer
+
+[2026-08-03 19:59:29.053] Prompt executed in 0.15 seconds
+[2026-08-03 20:00:41.551] 
+Stopped server

@@ -1,0 +1,11 @@
+.github/workflows/publish.yml
+.gitignore
+.python-version
+LICENSE
+README.md
+__init__.py
+assets/banner.svg
+assets/icon.svg
+image_size_nodes.py
+pyproject.toml
+requirements.txt

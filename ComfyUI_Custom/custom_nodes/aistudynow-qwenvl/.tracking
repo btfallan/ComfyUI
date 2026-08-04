@@ -1,0 +1,17 @@
+.github/workflows/publish_action.yml
+.gitignore
+LICENSE
+README.md
+__init__.py
+aistudynow_OutputCleaner.py
+aistudynow_QwenVL.py
+aistudynow_QwenVL_GGUF.py
+aistudynow_QwenVL_GGUF_PromptEnhancer.py
+aistudynow_QwenVL_HF.py
+aistudynow_QwenVL_PromptEnhancer.py
+aistudynow_System_Prompts.json
+config.json
+gguf_models.json
+hf_models.json
+pyproject.toml
+requirements.txt

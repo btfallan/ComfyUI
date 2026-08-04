@@ -1,0 +1,9 @@
+.github/workflows/publish.yml
+.github/workflows/test.yml
+.gitignore
+Bobs_Latent_Optimizer.py
+LICENSE
+README.md
+__init__.py
+pyproject.toml
+tests/test_latent_optimizer.py

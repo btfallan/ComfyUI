@@ -1,0 +1,16 @@
+__init__.py
+README.md
+LICENSE
+requirements.txt
+Taskfile.yml
+.gitignore
+pyproject.toml
+fw_nodes_example_workflow.json
+static/banner-1544x500.png
+static/TrimToTokens.png
+static/CountFiles.png
+static/TokenCount.png
+nodes/__init__.py
+nodes/fw_nodes.py
+tests/smoke.py
+.github/workflows/publish.yml

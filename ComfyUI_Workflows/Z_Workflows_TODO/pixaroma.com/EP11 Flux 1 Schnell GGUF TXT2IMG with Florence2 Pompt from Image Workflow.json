@@ -1,0 +1,1268 @@
+{
+  "last_node_id": 63,
+  "last_link_id": 103,
+  "nodes": [
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": {
+        "0": 1691,
+        "1": 41,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 675.7811279296875,
+        "1": 736.768310546875
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 102
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 48,
+      "type": "Label (rgthree)",
+      "pos": {
+        "0": 86,
+        "1": 54,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 185.595703125,
+        "1": 20
+      },
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "UPLOAD AN IMAGE",
+      "properties": {
+        "fontSize": 20,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 49,
+      "type": "Label (rgthree)",
+      "pos": {
+        "0": 428,
+        "1": 27,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 289.0625,
+        "1": 20
+      },
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Select a model, and caption task",
+      "properties": {
+        "fontSize": 20,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 38,
+      "type": "workflow/florence2",
+      "pos": {
+        "0": 348.80902099609375,
+        "1": 87.34153747558594,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 436.8559875488281,
+        "1": 424
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora",
+          "type": "PEFTLORA",
+          "link": null
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 42
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            40,
+            41
+          ],
+          "shape": 3
+        },
+        {
+          "name": "data",
+          "type": "JSON",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "workflow/florence2"
+      },
+      "widgets_values": [
+        "microsoft/Florence-2-base",
+        "fp16",
+        "sdpa",
+        "",
+        "more_detailed_caption",
+        true,
+        false,
+        1024,
+        3,
+        true,
+        "",
+        75685630507907,
+        "randomize"
+      ]
+    },
+    {
+      "id": 31,
+      "type": "easy showAnything",
+      "pos": {
+        "0": 803,
+        "1": 86,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 385.2569274902344,
+        "1": 424.272705078125
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "type": "*",
+          "link": 40
+        }
+      ],
+      "outputs": [],
+      "title": "Prompt from Image",
+      "properties": {
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "The image shows a modern, minimalist two-story building with a unique architectural design. The building is made of concrete and has a white exterior with large windows and a balcony on the second floor. The entrance of the building is visible through the glass windows, and there is a large pool in front of it. The pool is surrounded by large rocks and trees, and the sky is blue with a few clouds. The water in the pool reflects the building and the surrounding landscape. The overall atmosphere of the image is peaceful and serene."
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 34,
+      "type": "Any Switch (rgthree)",
+      "pos": {
+        "0": 1251,
+        "1": 502,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 168,
+        "1": 106
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "any_01",
+          "type": "STRING",
+          "link": 41,
+          "dir": 3
+        },
+        {
+          "name": "any_02",
+          "type": "STRING",
+          "link": 31,
+          "dir": 3
+        },
+        {
+          "name": "any_03",
+          "type": "STRING",
+          "link": null,
+          "dir": 3
+        },
+        {
+          "name": "any_04",
+          "type": "STRING",
+          "link": null,
+          "dir": 3
+        },
+        {
+          "name": "any_05",
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "STRING",
+          "links": [
+            103
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "dir": 4,
+          "label": "STRING"
+        }
+      ],
+      "properties": {},
+      "widgets_values": []
+    },
+    {
+      "id": 33,
+      "type": "easy positive",
+      "pos": {
+        "0": 792,
+        "1": 592,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 413.43341064453125,
+        "1": 212.17962646484375
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "links": [
+            31
+          ],
+          "slot_index": 0,
+          "shape": 3
+        }
+      ],
+      "title": "Your Prompt",
+      "properties": {
+        "Node name for S&R": "easy positive"
+      },
+      "widgets_values": [
+        "a cute cartoon cat, digital painting"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 29,
+      "type": "LoadImage",
+      "pos": {
+        "0": 20.80951690673828,
+        "1": 105.34154510498047,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 307.8559875488281,
+        "1": 402.75836181640625
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            42
+          ],
+          "slot_index": 0,
+          "shape": 3
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "architecture.png",
+        "image"
+      ]
+    },
+    {
+      "id": 50,
+      "type": "Label (rgthree)",
+      "pos": {
+        "0": 1298,
+        "1": 621,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 311.25,
+        "1": 20
+      },
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Enable\\Disable Prompt from Image",
+      "properties": {
+        "fontSize": 20,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 32,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": {
+        "0": 1245,
+        "1": 550,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 415.38751220703125,
+        "1": 58
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Prompt Switch",
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "",
+        "showNav": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "default"
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 63,
+      "type": "workflow/txt2img flux schnell",
+      "pos": {
+        "0": 1240,
+        "1": 40,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": [
+        420.04253508038755,
+        394
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "CLIPTextEncode text",
+          "type": "STRING",
+          "link": 103,
+          "widget": {
+            "name": "CLIPTextEncode text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            102
+          ],
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "workflow/txt2img flux schnell"
+      },
+      "widgets_values": [
+        "flux1-schnell-Q8_0.gguf",
+        "t5-v1_1-xxl-encoder-Q8_0.gguf",
+        "clip_l.safetensors",
+        "flux",
+        1024,
+        1024,
+        1,
+        "ae.safetensors",
+        "",
+        732411181564623,
+        "randomize",
+        4,
+        1,
+        "dpmpp_2m",
+        "sgm_uniform",
+        1,
+        "closeup portrait of a sci-fi warrior robot, rusty metal, mech, cinematic, red eyes, dark interior background, movie scene, sharp, rim light, epic, golden hour"
+      ]
+    }
+  ],
+  "links": [
+    [
+      31,
+      33,
+      0,
+      34,
+      1,
+      "STRING"
+    ],
+    [
+      40,
+      38,
+      2,
+      31,
+      0,
+      "*"
+    ],
+    [
+      41,
+      38,
+      2,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      42,
+      29,
+      0,
+      38,
+      1,
+      "IMAGE"
+    ],
+    [
+      102,
+      63,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      103,
+      34,
+      0,
+      63,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Prompt from Image",
+      "bounding": [
+        11,
+        13,
+        1194,
+        523
+      ],
+      "color": "#3f789e",
+      "font_size": 24
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9090909090909091,
+      "offset": [
+        12.183167739941396,
+        76.23350941329407
+      ]
+    },
+    "groupNodes": {
+      "florence2": {
+        "nodes": [
+          {
+            "id": -1,
+            "type": "DownloadAndLoadFlorence2Model",
+            "pos": {
+              "0": -948,
+              "1": 761,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 365.4000244140625,
+              "1": 106
+            },
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "lora",
+                "type": "PEFTLORA",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "florence2_model",
+                "type": "FL2MODEL",
+                "links": [],
+                "slot_index": 0,
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "DownloadAndLoadFlorence2Model"
+            },
+            "widgets_values": [
+              "thwri/CogFlorence-2.2-Large",
+              "fp16",
+              "sdpa"
+            ],
+            "index": 0
+          },
+          {
+            "id": -1,
+            "type": "Florence2Run",
+            "pos": {
+              "0": -540,
+              "1": 362,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 400,
+              "1": 352
+            },
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": null
+              },
+              {
+                "name": "florence2_model",
+                "type": "FL2MODEL",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "links": null,
+                "shape": 3
+              },
+              {
+                "name": "mask",
+                "type": "MASK",
+                "links": null,
+                "shape": 3
+              },
+              {
+                "name": "caption",
+                "type": "STRING",
+                "links": [],
+                "slot_index": 2,
+                "shape": 3
+              },
+              {
+                "name": "data",
+                "type": "JSON",
+                "links": null,
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "Florence2Run"
+            },
+            "widgets_values": [
+              "",
+              "more_detailed_caption",
+              true,
+              false,
+              1024,
+              3,
+              true,
+              "",
+              1023,
+              "increment"
+            ],
+            "index": 1
+          }
+        ],
+        "links": [
+          [
+            null,
+            0,
+            1,
+            0,
+            29,
+            "IMAGE"
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            30,
+            "FL2MODEL"
+          ]
+        ],
+        "external": [
+          [
+            1,
+            2,
+            "STRING"
+          ]
+        ]
+      },
+      "txt2img flux schnell": {
+        "nodes": [
+          {
+            "id": -1,
+            "type": "UnetLoaderGGUF",
+            "pos": {
+              "0": 1240,
+              "1": 40,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 384.2056884765625,
+              "1": 65.37272644042969
+            },
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [],
+                "slot_index": 0,
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "UnetLoaderGGUF"
+            },
+            "widgets_values": [
+              "flux1-schnell-Q8_0.gguf"
+            ],
+            "index": 0
+          },
+          {
+            "id": -1,
+            "type": "DualCLIPLoaderGGUF",
+            "pos": {
+              "0": 1240,
+              "1": 160,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 378.7062072753906,
+              "1": 106
+            },
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "CLIP",
+                "type": "CLIP",
+                "links": [],
+                "slot_index": 0,
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "DualCLIPLoaderGGUF"
+            },
+            "widgets_values": [
+              "t5-v1_1-xxl-encoder-Q8_0.gguf",
+              "clip_l.safetensors",
+              "flux"
+            ],
+            "index": 1
+          },
+          {
+            "id": -1,
+            "type": "EmptySD3LatentImage",
+            "pos": {
+              "0": 1740,
+              "1": 220,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 315,
+              "1": 106
+            },
+            "flags": {},
+            "order": 9,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [],
+                "slot_index": 0,
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EmptySD3LatentImage"
+            },
+            "widgets_values": [
+              1024,
+              1024,
+              1
+            ],
+            "color": "#323",
+            "bgcolor": "#535",
+            "index": 2
+          },
+          {
+            "id": -1,
+            "type": "VAELoader",
+            "pos": {
+              "0": 2150,
+              "1": 370,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 315,
+              "1": 58
+            },
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "name": "VAE",
+                "type": "VAE",
+                "links": [],
+                "shape": 3
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAELoader"
+            },
+            "widgets_values": [
+              "ae.safetensors"
+            ],
+            "index": 3
+          },
+          {
+            "id": -1,
+            "type": "CLIPTextEncode",
+            "pos": {
+              "0": 1680,
+              "1": 130,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 425.27801513671875,
+              "1": 180.6060791015625
+            },
+            "flags": {
+              "collapsed": true
+            },
+            "order": 12,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "clip",
+                "type": "CLIP",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+              ""
+            ],
+            "color": "#322",
+            "bgcolor": "#533",
+            "index": 4
+          },
+          {
+            "id": -1,
+            "type": "CLIPTextEncode",
+            "pos": {
+              "0": 1670,
+              "1": 80,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 422.84503173828125,
+              "1": 164.31304931640625
+            },
+            "flags": {
+              "collapsed": true
+            },
+            "order": 15,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "clip",
+                "type": "CLIP",
+                "link": null
+              },
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "text"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+              "closeup portrait of a sci-fi warrior robot, rusty metal, mech, cinematic, red eyes, dark interior background, movie scene, sharp, rim light, epic, golden hour"
+            ],
+            "color": "#232",
+            "bgcolor": "#353",
+            "index": 5
+          },
+          {
+            "id": -1,
+            "type": "KSampler",
+            "pos": {
+              "0": 2150,
+              "1": 50,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 315,
+              "1": 262
+            },
+            "flags": {},
+            "order": 16,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "MODEL",
+                "link": null
+              },
+              {
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": null
+              },
+              {
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": null
+              },
+              {
+                "name": "latent_image",
+                "type": "LATENT",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "KSampler"
+            },
+            "widgets_values": [
+              391412166253985,
+              "randomize",
+              4,
+              1,
+              "dpmpp_2m",
+              "sgm_uniform",
+              1
+            ],
+            "index": 6
+          },
+          {
+            "id": -1,
+            "type": "VAEDecode",
+            "pos": {
+              "0": 2490,
+              "1": 60,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "6": 0,
+              "7": 0,
+              "8": 0,
+              "9": 0
+            },
+            "size": {
+              "0": 210,
+              "1": 46
+            },
+            "flags": {},
+            "order": 17,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "samples",
+                "type": "LATENT",
+                "link": null
+              },
+              {
+                "name": "vae",
+                "type": "VAE",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAEDecode"
+            },
+            "index": 7
+          }
+        ],
+        "links": [
+          [
+            1,
+            0,
+            4,
+            0,
+            54,
+            "CLIP"
+          ],
+          [
+            1,
+            0,
+            5,
+            0,
+            54,
+            "CLIP"
+          ],
+          [
+            null,
+            0,
+            5,
+            1,
+            34,
+            "STRING"
+          ],
+          [
+            0,
+            0,
+            6,
+            0,
+            53,
+            "MODEL"
+          ],
+          [
+            5,
+            0,
+            6,
+            1,
+            58,
+            "CONDITIONING"
+          ],
+          [
+            4,
+            0,
+            6,
+            2,
+            57,
+            "CONDITIONING"
+          ],
+          [
+            2,
+            0,
+            6,
+            3,
+            55,
+            "LATENT"
+          ],
+          [
+            6,
+            0,
+            7,
+            0,
+            60,
+            "LATENT"
+          ],
+          [
+            3,
+            0,
+            7,
+            1,
+            56,
+            "VAE"
+          ]
+        ],
+        "external": [
+          [
+            7,
+            0,
+            "IMAGE"
+          ]
+        ],
+        "config": {
+          "4": {
+            "input": {
+              "text": {
+                "visible": false
+              }
+            }
+          },
+          "5": {
+            "input": {
+              "text": {
+                "visible": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "version": 0.4
+}

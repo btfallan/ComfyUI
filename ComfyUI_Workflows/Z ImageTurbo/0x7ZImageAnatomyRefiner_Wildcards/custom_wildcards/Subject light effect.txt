@@ -1,0 +1,294 @@
+High frontal lighting casting a small, distinct shadow directly beneath the nose.
+Triangular patch of light illuminating the shadowed side of the cheek.
+Vertical line of darkness splitting the face into exactly one bright side and one dark side.
+Deep, obscuring shadows cast into the eye sockets by harsh overhead lighting.
+Upward-cast lighting creating inverted shadows on the forehead and upper lip.
+Soft, shadowless illumination flattening the facial features.
+Rounded shadow falling slightly to the side of the nose.
+Narrow, focused beam illuminating only the eyes while the rest of the face remains dark.
+Dual rim lights hitting both cheeks from behind, leaving the center of the face in shadow.
+Pinpoint spotlight highlighting only the lips.
+Razor-thin white line tracing the exact outer profile against a dark background.
+Golden backlight creating a fibrous, glowing halo around the hair.
+Graduated rim light fading from bright white at the top to darkness at the bottom.
+Hard, metallic-looking edge lighting separating the form from the background.
+Soft light wrapping around the curvature of the shoulders and neck.
+Vertical sliver of light illuminating only the protrusion of the spine.
+Internal silhouette glow where the core is faintly illuminated but edges are dark.
+Backlight creating a translucent, glowing fringe on hair tips.
+Intermittent edge lighting defining only the high points of the muscle structure.
+Subsurface scattering creating a warm, red translucent glow through the ears.
+Sharp, high-contrast specular highlights reflecting off the forehead and nose.
+Soft, diffused illumination smoothing out skin pores and texture.
+Hard, grazing side-light emphasizing surface texture and wrinkles.
+Oily, wet-look sheen creating broad white reflections on the skin.
+Matte lighting resulting in a flat, non-reflective skin finish.
+Chromatic aberration causing red and blue color fringing on the skin outline.
+Soft, peach-fuzz glow created by backlighting fine hairs on the skin.
+High-contrast horizontal stripes of light and shadow cast across the face.
+Intricate, organic lace-like shadow textures projected onto the skin.
+Geometric grid pattern of light lines contouring the curvature of the body.
+Mottled, irregular spots of light and shadow covering the form.
+Diamond-shaped mesh shadow pattern wrapping around the face.
+Fluid, rippling caustic light patterns reflecting across the skin.
+Sharp, diagonal slash of light cutting across the eyes.
+Prismatic rainbow spectrum band falling diagonally across the face.
+Cross-shaped shadow pattern projected over the chest.
+Stippled pointillism effect of tiny light dots covering the skin.
+Dual-tone lighting with cool teal on the left and warm orange on the right.
+Monochromatic deep red saturation bathing the entire form.
+Fluorescence making teeth and eyes glow bright blue.
+Warm amber gradient fading into cool blue shadows on the skin.
+Pale, sickly green cast washing over the skin tones.
+Neon pink rim lighting contrasting with a deep blue fill light.
+Soft pastel lavender wash filling the shadows of the skin.
+Desaturated, sepia-toned lighting on the skin with high contrast.
+Cool, blue-tinted white light illuminating the face from below.
+Internal bioluminescent patterns glowing directly from the skin surface.
+Intense brightness emitting directly from the irises of the eyes.
+Soft, radial glow emanating from the center of the chest.
+Electrical arc-style lighting crackling around the shoulders.
+Translucent, motion-blurred double trailing slightly behind the form.
+Floating ring of light hovering immediately above the head.
+Pixelated, digital noise pattern obscuring parts of the face.
+Soft, colored aura radiating outward from the body’s outline.
+Light seemingly trapped inside the body, illuminating veins.
+Gold-tinted metallic reflection coating the entire skin surface.
+Hard light highlighting only the clavicles and jawline.
+Soft light catching the moisture in the eyes (catchlights).
+Shadow of the eyelashes cast downward onto the cheekbones.
+Light passing through the fingers, revealing the bone structure.
+Circular spotlight creating a vignette effect directly on the face.
+Linear gradient of light moving from the top of the head to the neck.
+Harsh flash lighting flattening the form and creating a hard shadow outline.
+Softbox reflection visible as a square shape in the eye.
+Ring-shaped reflection visible in the iris.
+Light highlighting the texture of fabric draped over the form.
+Translucency of clothing revealing the silhouette of the limbs underneath.
+Light glancing off metallic accessories worn on the body.
+Deep shadow dividing the torso into geometric shapes.
+Light fading rapidly into darkness across the curve of the cheek.
+Bright "kicker" light hitting the temple from a rear angle.
+Soft glow on the cheeks resembling a blush effect.
+Interference pattern of light bands projected on the torso.
+Warm light grazing the hair while cool light fills the face.
+Shadow masking the mouth while the eyes remain lit.
+Shadow masking the eyes while the mouth remains lit.
+Light defining the tendons in the neck.
+Speckled light pattern resembling stars projected on the skin.
+Hard outline of shadow cast by the nose onto the cheek.
+Soft glow emanating from the palms of the hands.
+Light creating a distinct separation between the jawline and the neck.
+
+High frontal lighting casting a small, distinct shadow directly beneath the nose.
+Triangular patch of light illuminating the shadowed side of the cheek.
+Vertical line of darkness splitting the face into exactly one bright side and one dark side.
+Deep, obscuring shadows cast into the eye sockets by harsh overhead lighting.
+Upward-cast lighting creating inverted shadows on the forehead and upper lip.
+Soft, shadowless illumination flattening the facial features.
+Rounded shadow falling slightly to the side of the nose.
+Narrow, focused beam illuminating only the eyes while the rest of the face remains dark.
+Dual rim lights hitting both cheeks from behind, leaving the center of the face in shadow.
+Pinpoint spotlight highlighting only the lips.
+Razor-thin white line tracing the exact outer profile against a dark background.
+Golden backlight creating a fibrous, glowing halo around the hair.
+Graduated rim light fading from bright white at the top to darkness at the bottom.
+Hard, metallic-looking edge lighting separating the form from the background.
+Soft light wrapping around the curvature of the shoulders and neck.
+Vertical sliver of light illuminating only the protrusion of the spine.
+Internal silhouette glow where the core is faintly illuminated but edges are dark.
+Backlight creating a translucent, glowing fringe on hair tips.
+Intermittent edge lighting defining only the high points of the muscle structure.
+Subsurface scattering creating a warm, red translucent glow through the ears.
+Sharp, high-contrast specular highlights reflecting off the forehead and nose.
+Soft, diffused illumination smoothing out skin pores and texture.
+Hard, grazing side-light emphasizing surface texture and wrinkles.
+Oily, wet-look sheen creating broad white reflections on the skin.
+Matte lighting resulting in a flat, non-reflective skin finish.
+Chromatic aberration causing red and blue color fringing on the skin outline.
+Soft, peach-fuzz glow created by backlighting fine hairs on the skin.
+High-contrast horizontal stripes of light and shadow cast across the face.
+Intricate, organic lace-like shadow textures projected onto the skin.
+Geometric grid pattern of light lines contouring the curvature of the body.
+Mottled, irregular spots of light and shadow covering the form.
+Diamond-shaped mesh shadow pattern wrapping around the face.
+Fluid, rippling caustic light patterns reflecting across the skin.
+Sharp, diagonal slash of light cutting across the eyes.
+Prismatic rainbow spectrum band falling diagonally across the face.
+Cross-shaped shadow pattern projected over the chest.
+Stippled pointillism effect of tiny light dots covering the skin.
+Dual-tone lighting with cool teal on the left and warm orange on the right.
+Monochromatic deep red saturation bathing the entire form.
+Fluorescence making teeth and eyes glow bright blue.
+Warm amber gradient fading into cool blue shadows on the skin.
+Pale, sickly green cast washing over the skin tones.
+Neon pink rim lighting contrasting with a deep blue fill light.
+Soft pastel lavender wash filling the shadows of the skin.
+Desaturated, sepia-toned lighting on the skin with high contrast.
+Cool, blue-tinted white light illuminating the face from below.
+Internal bioluminescent patterns glowing directly from the skin surface.
+Intense brightness emitting directly from the irises of the eyes.
+Soft, radial glow emanating from the center of the chest.
+Electrical arc-style lighting crackling around the shoulders.
+Translucent, motion-blurred double trailing slightly behind the form.
+Floating ring of light hovering immediately above the head.
+Pixelated, digital noise pattern obscuring parts of the face.
+Soft, colored aura radiating outward from the body’s outline.
+Light seemingly trapped inside the body, illuminating veins.
+Gold-tinted metallic reflection coating the entire skin surface.
+Hard light highlighting only the clavicles and jawline.
+Soft light catching the moisture in the eyes (catchlights).
+Shadow of the eyelashes cast downward onto the cheekbones.
+Light passing through the fingers, revealing the bone structure.
+Circular spotlight creating a vignette effect directly on the face.
+Linear gradient of light moving from the top of the head to the neck.
+Harsh flash lighting flattening the form and creating a hard shadow outline.
+Softbox reflection visible as a square shape in the eye.
+Ring-shaped reflection visible in the iris.
+Light highlighting the texture of fabric draped over the form.
+Translucency of clothing revealing the silhouette of the limbs underneath.
+Light glancing off metallic accessories worn on the body.
+Deep shadow dividing the torso into geometric shapes.
+Light fading rapidly into darkness across the curve of the cheek.
+Bright "kicker" light hitting the temple from a rear angle.
+Soft glow on the cheeks resembling a blush effect.
+Interference pattern of light bands projected on the torso.
+Warm light grazing the hair while cool light fills the face.
+Shadow masking the mouth while the eyes remain lit.
+Shadow masking the eyes while the mouth remains lit.
+Light defining the tendons in the neck.
+Speckled light pattern resembling stars projected on the skin.
+Hard outline of shadow cast by the nose onto the cheek.
+Soft glow emanating from the palms of the hands.
+Light creating a distinct separation between the jawline and the neck.
+Horizontal band of light illuminating only the mouth and chin.
+Fractured light patterns resembling broken glass projected on the face.
+Soft bounce light filling the shadows under the chin.
+Rim light highlighting the cartilage of the nose profile.
+Stark black shadow line cutting horizontally across the forehead.
+Glistening highlights on individual beads of sweat.
+Light catching the fine vellus hairs on the upper lip.
+Deep, dramatic shadows emphasizing the ribcage structure.
+Soft halo of light blurring the transition between skin and background.
+Harsh, gritty light revealing every imperfection in the complexion.
+Light reflecting off the teeth to create a bright focal point.
+Shadows of hair strands casting thin lines across the eyes.
+Iridescent sheen shifting colors across the high points of the face.
+Circular pool of light isolating the face in a sea of darkness.
+Hard "Rembrandt" triangle on the cheek with razor-sharp edges.
+Soft "Rembrandt" triangle on the cheek with blurred, feathery edges.
+Light fading from magenta at the top of the head to cyan at the chin.
+Two distinct catchlights in the eyes suggesting dual light sources.
+Light penetrating the webs between fingers.
+Glow illuminating the bridge of the nose while eyes remain shadowed.
+Flickering, warm light dancing across the facial features.
+Cool, static light emphasizing the pallor of the skin.
+Rim light that is broken and intermittent along the shoulder line.
+Soft light blooming around the edges of the ears.
+Deep shadow in the philtrum emphasizing the shape of the lips.
+Light catching the moisture on the lower eyelid.
+Top-down gradient darkening the legs while illuminating the torso.
+Bottom-up gradient darkening the head while illuminating the feet.
+Concentric rings of shadow radiating from the center of the face.
+Sharp, angular shadow cast by the jaw onto the neck.
+Light reflecting off the curvature of the fingernails.
+Shadows obscuring the perimeter of the face, leaving only the center lit.
+Bright, glowing outline around the hands.
+Light seemingly emitting from the mouth.
+Shadows deepening the hollows of the collarbones.
+Strip of light tracing the curve of the bicep.
+Soft, hazy light reducing the contrast of the hair texture.
+Hard light highlighting the texture of braided or textured hair.
+Spectrum of rainbow colors splitting across the bridge of the nose.
+Shadow pattern resembling wireframe topography on the cheek.
+Single, intense point of light reflecting on the tip of the nose.
+Light emphasizing the definition of the abdominal muscles.
+Shadows completely obscuring the neck, making the head appear floating.
+Light catching the edges of the eyelids.
+Soft, dreamlike glow smoothing the jawline.
+Hard, graphic shadow dividing the neck from the shoulder.
+Light reflecting off the moist surface of the tongue.
+Deep, conical shadow hollowed out under the cheekbones.
+Light creating a "negative image" effect on the face (dark highlights, bright shadows).
+Rapid fall-off of light leaving the ears in darkness.
+Bright spot of light on the crown of the head.
+Soft, omnidirectional glow minimizing the nose shadow.
+Hard shadow of the hand cast across the face.
+Light reflecting off the texture of wet hair.
+Red rim light on the left, blue rim light on the right.
+Green under-lighting creating a ghostly appearance.
+Shadows creating a skull-like appearance on the face.
+Light emphasizing the curvature of the forehead.
+Faint, pulsing glow visible beneath the skin surface.
+Sharp reflection of a grid pattern in the eye.
+Shadow pattern resembling flowing water on the torso.
+Light catching the fine spray of moisture in the air around the head.
+Deep shadows isolating the muscles of the back.
+Light reflecting off a glossy, synthetic material on the body.
+Soft, velvet-like sheen on the skin.
+Hard, chiseled lighting on the knuckles.
+Light fading into the darkness of the open mouth.
+Shadows creating a mask-like effect around the eyes.
+Bright, vertical line of light centered on the throat.
+Soft, wrapping light creating a cylindrical appearance to the limbs.
+Hard, grazing light on the shins.
+Light catching the ridges of a scar.
+Glow illuminating the space between the arm and the body.
+Shadows creating a hollowed-out look to the temples.
+Light reflecting off the curvature of the heel.
+Soft, diffused light illuminating the palms.
+Hard, dramatic light on the protruding ankle bone.
+Shadows accentuating the curvature of the spine.
+Light creating a halo effect around the fingertips.
+Deep, rich shadows in the folds of the skin.
+Light reflecting off the moisture on the lips.
+Shadow pattern resembling leaves moving across the face.
+Light creating a distinct line between the lips.
+Soft, ethereal glow around the hair line.
+Hard, directional light emphasizing the brow ridge.
+Shadows obscuring the feet while the legs are lit.
+Light catching the movement of hair.
+Bright, specular highlight on the chin.
+Soft, warm light filling the ear canal.
+Hard, cool light on the back of the neck.
+Shadows creating a dramatic, moody look to the eyes.
+Light reflecting off the wet surface of the eye.
+Soft, romantic glow on the cheek.
+Hard, edgy light on the jaw.
+Shadows creating a mysterious, hidden look to the face.
+Light catching the fine details of the iris.
+Bright, intense light on the forehead.
+Soft, gentle light on the neck.
+Hard, defined shadow of the nose.
+Light creating a sparkle in the eye.
+Shadows accentuating the shape of the mouth.
+Light reflecting off the curvature of the shoulder.
+Soft, hazy glow around the body.
+Hard, crisp light on the hand.
+Shadows creating depth in the ear.
+Light catching the texture of the skin.
+Bright, glowing outline of the profile.
+Soft, diffused light on the back.
+Hard, dramatic shadow on the chest.
+Light reflecting off the nail polish.
+Shadows creating a sculptured look to the face.
+Light catching the tiny hairs on the ear.
+Bright, specular highlight on the cheekbone.
+Soft, warm glow on the shoulder.
+Hard, cool light on the arm.
+Shadows creating a dramatic silhouette.
+Light reflecting off the wet skin.
+Soft, romantic light on the face.
+Hard, edgy shadow on the neck.
+Light catching the details of the lips.
+Bright, intense glow on the hair.
+Soft, gentle shadow on the cheek.
+Hard, defined light on the nose.
+Light creating a shimmer on the skin.
+Shadows accentuating the shape of the eye.
+Light reflecting off the curvature of the leg.
+Soft, hazy light on the arm.
+Hard, crisp shadow on the hand.
+Shadows creating depth in the face.
+Light catching the texture of the hair.
+Bright, glowing outline of the body.

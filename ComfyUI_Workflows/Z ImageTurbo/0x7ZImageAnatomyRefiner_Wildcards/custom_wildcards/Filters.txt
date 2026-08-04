@@ -1,0 +1,37 @@
+CineStill 800T: Tungsten-balanced film look with signature red halation around bright lights and cool shadows.
+Kodak Aerochrome: Infrared film style turning all green foliage into intense shades of hot pink and crimson.
+Fuji Velvia 50: Extremely high saturation and contrast, emphasizing vibrant landscapes and deep blacks.
+Ilford Delta 3200: Ultra-high grain black and white, gritty, noisy, and raw with low fidelity.
+Lomo Cross-Process: Unpredictable, high-contrast color shifts with yellow highlights and blue shadows (dragan effect).
+Polaroid 600: Soft, washed-out vintage look with a greenish-blue tint and faded blacks.
+Kodachrome 64: Rich, archival color palette with distinct red and yellow dominance and stark contrast.
+Wet Plate Collodion: Imperfect, eerie edges, chemical stains, and extremely shallow focus fall-off.
+Cyanotype: Monochromatic deep Prussian blue and white high-contrast print style.
+Technicolor (3-Strip): Hyper-saturated, glowing primary colors mimicking 1940s cinema.
+Teal and Orange: The classic Hollywood blockbuster look; cool shadows (teal) and warm skin tones (orange).
+Bleach Bypass: High contrast, low saturation, silver-tinted look common in war movies (e.g., Saving Private Ryan).
+Cyberpunk Neon: Crushed blacks with pumped-up magentas, cyans, and acid greens.
+Matrix Green: Heavy green tint in the mid-tones and highlights, creating a sickly, digital atmosphere.
+Day for Night: A deep blue, underexposed filter simulating nighttime while shooting in daylight.
+Sin City High-Con: Pure black and white with a single isolated color (e.g., red) remaining saturated.
+Wes Anderson Pastel: Flat, low-contrast lighting with a highly specific palette of symmetrical pastels (pink/yellow).
+Midnight Blue: Shadows lifted to a deep navy blue, eliminating true blacks for a moody, twilight feel.
+Golden Hour Grade: Pushing the white balance heavily towards warm ambers and golds, softening contrast.
+VHS Tracking: Horizontal distortion lines, color bleeding (chroma shift), and interlacing artifacts.
+CCTV Security: Grainy, low-resolution black and white with high compression artifacts and blown-out highlights.
+Datamosh: Digital compression breaking down, smearing pixels and colors into abstract shapes.
+1-Bit Dither: Pixel art style reduced to only black and white pixels with dithering patterns.
+Thermal Vision: Heat-map color palette (blue/purple cold, red/yellow/white hot).
+Night Vision (Phosphor): Intense monochromatic bright green with heavy grain and vignette.
+Halftone Print: Comic book style comprised of CMYK dots (Ben-Day dots).
+Disposable Camera: Harsh, cool-toned flash look with vignetting and slightly blurry edges.
+Anaglyph 3D: Red and Cyan color separation offset to create a stereoscopic 3D effect.
+Solarization (Sabattier Effect): Partial reversal of tones where some highlights turn dark and shadows turn bright.
+Posterization: Reducing the number of tonal levels, creating flat bands of color instead of smooth gradients.
+Oil Painting Filter: Smoothing out fine details to resemble brush strokes and canvas texture.
+Double Exposure: Two distinct images layered over one another with varying opacity.
+HDR (High Dynamic Range): Exaggerated local contrast and detail, creating a hyper-real, "crunchy" look.
+Soft Focus / Orton Effect: A sharp image overlaid with a blurred version of itself, creating a dreamy glow.
+Vaporwave: Aethetic mixing pastel pinks, purples, and nostalgic 90s computer graphic gradients.
+Dichroic Prism: Splitting the light into spectral components, creating rainbow shards across the image.
+Desaturated Matte: "Kinfolk" style with muted colors and lifted blacks (grey shadows) for a flat, modern look.

@@ -1,0 +1,999 @@
+{
+  "id": "2fa2ba21-58fb-4aca-a0c6-6c61f5d588ab",
+  "revision": 0,
+  "last_node_id": 1407,
+  "last_link_id": 3314,
+  "nodes": [
+    {
+      "id": 1362,
+      "type": "VAELoader",
+      "pos": [
+        -22330,
+        1740
+      ],
+      "size": [
+        230,
+        60
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            3218,
+            3287
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "qwen_image_vae.safetensors"
+      ]
+    },
+    {
+      "id": 1301,
+      "type": "NO8DLoraStack",
+      "pos": [
+        -22000,
+        1080
+      ],
+      "size": [
+        600,
+        720
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3074
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "links": []
+        },
+        {
+          "name": "trigger_words",
+          "type": "STRING",
+          "links": [
+            3307
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DLoraStack"
+      },
+      "widgets_values": [
+        "None",
+        "[]",
+        ""
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1246,
+      "type": "UNETLoader",
+      "pos": [
+        -22000,
+        930
+      ],
+      "size": [
+        600,
+        90
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3074,
+            3291
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.25.0",
+        "models": [
+          {
+            "name": "krea2_turbo_fp8_scaled.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "krea2_turbo_int8_convrot-b19a4f0be264.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 913,
+      "type": "CLIPLoader",
+      "pos": [
+        -22500,
+        930
+      ],
+      "size": [
+        400,
+        110
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2270
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.8.2",
+        "models": [
+          {
+            "name": "qwen_3_8b_fp8mixed.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors",
+            "directory": "text_encoders"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "qwen3vl_4b_fp8_scaled.safetensors",
+        "krea2",
+        "default"
+      ]
+    },
+    {
+      "id": 1268,
+      "type": "VAEEncode",
+      "pos": [
+        -22500,
+        1740
+      ],
+      "size": [
+        150,
+        60
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 2976
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 3218
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode",
+        "cnr_id": "comfy-core",
+        "ver": "0.26.0",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 1266,
+      "type": "ImageScaleToTotalPixels",
+      "pos": [
+        -22500,
+        1570
+      ],
+      "size": [
+        400,
+        110
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3289
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2976
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageScaleToTotalPixels",
+        "cnr_id": "comfy-core",
+        "ver": "0.26.0",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "lanczos",
+        2,
+        16
+      ]
+    },
+    {
+      "id": 1386,
+      "type": "NO8DEmptyLatent",
+      "pos": [
+        -22500,
+        1260
+      ],
+      "size": [
+        400,
+        250
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            3288
+          ]
+        },
+        {
+          "label": "width",
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "label": "height",
+          "name": "height",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DEmptyLatent"
+      },
+      "widgets_values": [
+        "SD3 / Flux / Krea2",
+        "768",
+        "9:16",
+        true,
+        0,
+        0,
+        1
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1348,
+      "type": "NO8DLoadImages",
+      "pos": [
+        -23800,
+        930
+      ],
+      "size": [
+        600,
+        870
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "Images",
+          "name": "images",
+          "shape": 6,
+          "type": "IMAGE",
+          "links": [
+            3308
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DLoadImages",
+        "no8d_image_loader_source": "temp",
+        "no8d_image_loader_output_keys": [
+          "input//test_000008.png"
+        ],
+        "no8d_image_loader_thumb_size": 400,
+        "no8d_image_loader_prev_thumb_size": 380
+      },
+      "widgets_values": [
+        "[{\"name\":\"test_000008.png\",\"subfolder\":\"\",\"type\":\"input\",\"width\":3840,\"height\":2176,\"size\":25077973}]",
+        "[{\"name\":\"test_000008.png\",\"subfolder\":\"\",\"type\":\"input\",\"width\":3840,\"height\":2176,\"size\":25077973}]"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 989,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -22500,
+        1100
+      ],
+      "size": [
+        400,
+        100
+      ],
+      "flags": {
+        "collapsed": false,
+        "pinned": true
+      },
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2270
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 3303
+        }
+      ],
+      "outputs": [
+        {
+          "label": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "slot_index": 0,
+          "links": [
+            3286
+          ]
+        }
+      ],
+      "title": "CLIP Text Encode (Positive Prompt)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "cnr_id": "comfy-core",
+        "ver": "0.8.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 1399,
+      "type": "NO8DPromptView",
+      "pos": [
+        -23150,
+        1270
+      ],
+      "size": [
+        450,
+        530
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "Text",
+          "name": "text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 3309
+        },
+        {
+          "name": "fixed_text",
+          "type": "STRING",
+          "widget": {
+            "name": "fixed_text"
+          },
+          "link": 3307
+        }
+      ],
+      "outputs": [
+        {
+          "label": "Positive",
+          "name": "positive",
+          "type": "STRING",
+          "links": [
+            3303
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DPromptView"
+      },
+      "widgets_values": [
+        true,
+        "",
+        "atmospheric photography.\nphotorealistic 3D rendered character illustration. medium shot; the camera is at subject eye level, front three-quarter view, subject angled slightly left relative to anthropomorphic teddy bear mascot; subject axis: upper center to lower center vertical; occupying about 32% of the frame. a standard lens keeps relatively natural spatial proportions. Seated on a jet ski; one furry hand grips the handlebar while the other arm is raised high in a waving gesture. Body faces slightly toward the viewer's left. Light tan fluffy fur; wears a brown visor cap with a small bear emblem, a white cropped t-shirt with red collar trim and two chest patches, and white shorts with thin red vertical stripes. Open tropical ocean with turquoise water stretching to the horizon; pale blue sky dotted with scattered fluffy white clouds. Bright natural daylight with soft, even illumination; warm sunny color palette of turquoise, blue, and cream.",
+        "0",
+        null
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1405,
+      "type": "NO8DABPreview",
+      "pos": [
+        -22590,
+        -270
+      ],
+      "size": [
+        1290,
+        1030
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image_a",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 3314
+        },
+        {
+          "name": "image_b",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_a",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DABPreview",
+        "no8d_ab_preview": {
+          "a": {
+            "filename": "NO8DABPreview_A_temp_aeaoo_00001_.png",
+            "subfolder": "",
+            "type": "temp"
+          },
+          "b": {
+            "filename": "NO8DABPreview_B_temp_aeaoo_00001_.png",
+            "subfolder": "",
+            "type": "temp"
+          }
+        }
+      },
+      "widgets_values": [
+        true,
+        ""
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1154,
+      "type": "Label (rgthree)",
+      "pos": [
+        -23830,
+        -730
+      ],
+      "size": [
+        2432.8125,
+        240
+      ],
+      "flags": {
+        "pinned": true,
+        "allow_interaction": false
+      },
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "🥸 NO8D-Controls ✨",
+      "properties": {
+        "fontSize": 240,
+        "fontFamily": "Arial",
+        "fontColor": "orange",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0,
+        "angle": 0,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 1407,
+      "type": "NO8DBatchPromptPlus",
+      "pos": [
+        -23150,
+        930
+      ],
+      "size": [
+        450,
+        270
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "Images",
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 3308
+        }
+      ],
+      "outputs": [
+        {
+          "label": "prompt",
+          "name": "prompt",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            3309
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DBatchPromptPlus"
+      },
+      "widgets_values": [
+        "Natural language",
+        "Auto",
+        "Auto",
+        "Standard",
+        "English",
+        "",
+        0,
+        "randomize"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1351,
+      "type": "NO8DSaveImageTextDataset",
+      "pos": [
+        -21280,
+        830
+      ],
+      "size": [
+        580,
+        1070
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 3312
+        },
+        {
+          "name": "caption",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "metadata",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "NO8DSaveImageTextDataset"
+      },
+      "widgets_values": [
+        "",
+        "[{\"variable\":\"none\",\"text\":\"test\"}]",
+        "png",
+        100,
+        false
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1201,
+      "type": "MarkdownNote",
+      "pos": [
+        -21280,
+        510
+      ],
+      "size": [
+        580,
+        250
+      ],
+      "flags": {
+        "pinned": true
+      },
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## [If you want to know more, you're welcome to join my community](https://patreon.com/no8d?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink)"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1400,
+      "type": "NO8DGenerate",
+      "pos": [
+        -23900,
+        -270
+      ],
+      "size": [
+        1300,
+        1030
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3291
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 3286
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 3287
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 3288
+        },
+        {
+          "name": "negative",
+          "shape": 7,
+          "type": "CONDITIONING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            3289,
+            3312,
+            3314
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "NO8DGenerate",
+        "no8d_generate_preview": {
+          "filename": "ComfyUI_temp_ilikl_00001_.png",
+          "subfolder": "",
+          "type": "temp"
+        }
+      },
+      "widgets_values": [
+        9,
+        1,
+        "res_multistep",
+        "sgm_uniform",
+        544167400818282,
+        "randomize",
+        1,
+        60,
+        "",
+        "{\"base_image_file\":\"\",\"mask_image_file\":\"\",\"mask_active\":false,\"mask_tool\":null,\"mask_base_width\":0,\"mask_base_height\":0,\"brush_size\":80,\"eraser_size\":80,\"mask_opacity\":0.4,\"mask_color\":\"#66ccff\",\"invert\":false,\"strokes\":[]}"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    }
+  ],
+  "links": [
+    [
+      2270,
+      913,
+      0,
+      989,
+      0,
+      "CLIP"
+    ],
+    [
+      2976,
+      1266,
+      0,
+      1268,
+      0,
+      "IMAGE"
+    ],
+    [
+      3074,
+      1246,
+      0,
+      1301,
+      0,
+      "MODEL"
+    ],
+    [
+      3218,
+      1362,
+      0,
+      1268,
+      1,
+      "VAE"
+    ],
+    [
+      3286,
+      989,
+      0,
+      1400,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      3287,
+      1362,
+      0,
+      1400,
+      2,
+      "VAE"
+    ],
+    [
+      3288,
+      1386,
+      0,
+      1400,
+      3,
+      "LATENT"
+    ],
+    [
+      3289,
+      1400,
+      0,
+      1266,
+      0,
+      "IMAGE"
+    ],
+    [
+      3291,
+      1246,
+      0,
+      1400,
+      0,
+      "MODEL"
+    ],
+    [
+      3303,
+      1399,
+      0,
+      989,
+      1,
+      "STRING"
+    ],
+    [
+      3307,
+      1301,
+      1,
+      1399,
+      1,
+      "STRING"
+    ],
+    [
+      3308,
+      1348,
+      0,
+      1407,
+      0,
+      "IMAGE"
+    ],
+    [
+      3309,
+      1407,
+      0,
+      1399,
+      0,
+      "STRING"
+    ],
+    [
+      3312,
+      1400,
+      0,
+      1351,
+      0,
+      "IMAGE"
+    ],
+    [
+      3314,
+      1400,
+      0,
+      1405,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "2k",
+      "bounding": [
+        1310,
+        -1950,
+        1200,
+        900
+      ],
+      "color": "#3f789e",
+      "flags": {
+        "pinned": true
+      }
+    },
+    {
+      "id": 3,
+      "title": "Krea2",
+      "bounding": [
+        -22600,
+        800,
+        1300,
+        1100
+      ],
+      "color": "#3f789e",
+      "flags": {
+        "pinned": true
+      }
+    },
+    {
+      "id": 6,
+      "title": "prompt",
+      "bounding": [
+        -23900,
+        800,
+        1300,
+        1100
+      ],
+      "color": "#3f789e",
+      "flags": {
+        "pinned": true
+      }
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.495000000000002,
+      "offset": [
+        24473.108749447754,
+        415.5573888268997
+      ]
+    },
+    "frontendVersion": "1.45.21",
+    "workflowRendererVersion": "LG",
+    "groupNodes": {},
+    "ue_links": [],
+    "node_versions": {
+      "comfy-core": "0.3.14",
+      "ComfyUI-DepthAnythingV2": "003d7b44bafd3a8a4c3693a9ca3ddcd72f4883ab",
+      "ComfyUI-AutomaticCFG": "2e395317b65c05a97a0ef566c4a8c7969305dafa",
+      "teacache": "1.2.2",
+      "ComfyUI-Custom-Scripts": "bc8922deff73f59311c05cef27b9d4caaf43e87b",
+      "ComfyUI_Comfyroll_CustomNodes": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+      "ComfyUI-post-processing-nodes": "c49a05254795403648f2c1774b6f5ea39f96e7d5",
+      "was-node-suite-comfyui": "056badacda52e88d29d6a65f9509cd3115ace0f2",
+      "ComfyUI_UltimateSDUpscale": "ff3fdfeee03de46d4462211cffd165d27155e858",
+      "comfyui-dynamicprompts": "3f2fff32358cf39e21b8b440ca87eac9a8e2bade"
+    },
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "links_added_by_ue": []
+  },
+  "version": 0.4
+}

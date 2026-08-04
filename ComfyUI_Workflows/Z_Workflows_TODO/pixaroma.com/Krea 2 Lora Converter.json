@@ -1,0 +1,114 @@
+{
+  "id": "aa2ccdc0-75f7-4da8-98d8-1209bf45dae1",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "PixaromaNote",
+      "pos": [
+        -2094.147945748097,
+        445.60984519313575
+      ],
+      "size": [
+        573.1240192953849,
+        666.8475482592268
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "ComfyUI-Pixaroma",
+        "ver": "1227d9898f9d5137533df750611ca97e8c738f3d",
+        "Node name for S&R": "PixaromaNote"
+      },
+      "widgets_values": [
+        "{\"version\":1,\"content\":\"<h1>KREA 2 LoRA CONVERTER</h1><p>\\n\\n</p><p>Convert a <strong>fal.ai Krea 2 LoRA</strong> into a standard LoRA that can be loaded correctly in ComfyUI.</p><p>\\n\\n</p><blockquote>\\n  LoRAs produced by the fal.ai Krea 2 trainer use layer names that ComfyUI does not recognize. This node renames those layers and saves a compatible copy without changing the trained weights.\\n</blockquote><p>\\n\\n</p><hr class=\\\"pix-note-hr-solid\\\" style=\\\"color: #b8b8b8\\\"><p>\\n\\n</p><h2><span data-ic=\\\"LORA\\\" class=\\\"pix-note-ic\\\" contenteditable=\\\"false\\\" style=\\\"color: #f66744\\\"></span>&nbsp;Required LoRA</h2><p>\\n\\n</p><p>This converter is intended for LoRAs created with the <strong>fal.ai Krea 2 Trainer</strong>.</p><p>\\n\\n</p><p>\\n  <span class=\\\"pix-note-btnblock\\\">\\n    <a class=\\\"pix-note-vp\\\" style=\\\"background-color: #f66744\\\" href=\\\"https://fal.ai/models/fal-ai/krea-2-trainer\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\">Open fal.ai Krea 2 Trainer</a>\\n  </span>&nbsp;\\n</p><p>\\n\\n</p><div class=\\\"pix-note-folderhint\\\" style=\\\"color: #f66744\\\">Place in: ComfyUI/models/loras/krea2</div><p>\\n\\n</p><p>After adding the downloaded LoRA, refresh the model list or restart ComfyUI so the file appears in the converter dropdown.</p><p>\\n\\n</p><hr class=\\\"pix-note-hr-solid\\\" style=\\\"color: #b8b8b8\\\"><p>\\n\\n</p><h2><span data-ic=\\\"gear\\\" class=\\\"pix-note-ic\\\" contenteditable=\\\"false\\\" style=\\\"color: #f66744\\\"></span>&nbsp;How to Convert</h2><p>\\n\\n</p><ol>\\n  <li>Select the original fal.ai Krea 2 LoRA from the first dropdown.</li>\\n  <li>Review or edit the output filename.</li>\\n  <li>Leave <strong>Overwrite</strong> disabled unless you want to replace an existing converted file.</li>\\n  <li>Check the status message to confirm that the selected file is recognized as a Krea 2 LoRA.</li>\\n  <li>Click <strong>Convert</strong>.</li>\\n</ol><p>\\n\\n</p><p>The converted file is saved inside your ComfyUI LoRA folder and becomes available to normal LoRA loader nodes.</p><p>\\n\\n</p><hr class=\\\"pix-note-hr-solid\\\" style=\\\"color: #b8b8b8\\\"><p>\\n\\n</p><h2><span data-ic=\\\"pixaroma\\\" class=\\\"pix-note-ic\\\" contenteditable=\\\"false\\\" style=\\\"color: #f66744\\\"></span>&nbsp;Resources</h2><p>\\n\\n</p><p>\\n  <a class=\\\"pix-note-discord\\\" href=\\\"https://discord.com/invite/gggpkVgBf3\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\">Join Discord</a>&nbsp;\\n  <a class=\\\"pix-note-yt\\\" href=\\\"https://www.youtube.com/@pixaroma\\\" target=\\\"_blank\\\" rel=\\\"noopener noreferrer\\\">Pixaroma YouTube Channel</a>&nbsp;\\n</p>\",\"buttonColor\":\"#f66744\",\"lineColor\":\"#f66744\",\"width\":526,\"height\":975.1308540543554,\"backgroundColor\":\"#2a2a2a\"}",
+        ""
+      ],
+      "color": "#1d1d1d",
+      "bgcolor": "#2a2a2a"
+    },
+    {
+      "id": 3,
+      "type": "PixaromaLabel",
+      "pos": [
+        -2094.147945748097,
+        335.1318281796324
+      ],
+      "size": [
+        343,
+        51
+      ],
+      "flags": {
+        "no_title": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "ComfyUI-Pixaroma",
+        "ver": "80b307e8d1882fd933959cb0ea94a26d143557b5",
+        "Node name for S&R": "PixaromaLabel",
+        "aux_id": "pixaroma/ComfyUI-Pixaroma"
+      },
+      "widgets_values": [
+        "{\"text\":\"Krea 2 LoRA Converter\",\"fontSize\":31,\"fontFamily\":\"Arial\",\"fontColor\":\"#ffffff\",\"textAlign\":\"left\",\"backgroundColor\":\"#f66744\",\"padding\":10,\"borderRadius\":0,\"opacity\":1,\"fontWeight\":\"normal\",\"lineHeight\":1}"
+      ],
+      "color": "rgba(0,0,0,0)",
+      "bgcolor": "rgba(0,0,0,0)"
+    },
+    {
+      "id": 1,
+      "type": "KreaLoraConvertPixaroma",
+      "pos": [
+        -1478.7380453544754,
+        445.60984519313575
+      ],
+      "size": [
+        304.499609375,
+        250
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "ComfyUI-Pixaroma",
+        "ver": "98d3e7b7e226f04e922a4bd47485993170895702",
+        "Node name for S&R": "KreaLoraConvertPixaroma"
+      },
+      "widgets_values": [
+        "krea2\\krea2-questpaint26.safetensors",
+        "krea2-questpaint26_comfyui.safetensors",
+        false,
+        ""
+      ],
+      "color": "#1d1d1d",
+      "bgcolor": "#2a2a2a"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0152559799477416,
+      "offset": [
+        2423.6262513901097,
+        -142.5843231563462
+      ]
+    },
+    "frontendVersion": "1.45.20",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

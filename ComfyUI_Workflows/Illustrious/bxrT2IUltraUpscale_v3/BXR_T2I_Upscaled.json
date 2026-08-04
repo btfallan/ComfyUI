@@ -1,0 +1,331 @@
+{
+  "85": {
+    "inputs": {
+      "images": [
+        "86",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "86": {
+    "inputs": {
+      "samples": [
+        "102",
+        0
+      ],
+      "vae": [
+        "106",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "87": {
+    "inputs": {
+      "model_name": "4x_NMKD-Siax_200k.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "88": {
+    "inputs": {
+      "anything": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "easy cleanGpuUsed",
+    "_meta": {
+      "title": "Clean VRAM Used"
+    }
+  },
+  "89": {
+    "inputs": {
+      "anything": [
+        "86",
+        0
+      ]
+    },
+    "class_type": "easy cleanGpuUsed",
+    "_meta": {
+      "title": "Clean VRAM Used"
+    }
+  },
+  "96": {
+    "inputs": {
+      "text": "(worst quality, low quality, normal quality:1.4),\n(lowres, jpeg artifacts, compression artifacts:1.4),\n(blur, motion blur, bokeh, depth of field:1.3),\n(noise, grain, grit:1.2), smeared makup, deformed lips,\n(watermark, text, signature:1.2), (black spots on face:1.3),\n(grid lines, visible seams, tiling artifacts:1.4),\n(bad anatomy, mutation:1.1).",
+      "clip": [
+        "107",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "97": {
+    "inputs": {
+      "text": "Score_6, score_5, score_4, worst quality, low quality, text, censored, deformed, (bad hand:1.2), blurry, (watermark), (simple background), ugly, (old looking woman's face:1.3), bunny ears, extra hands, deformed fingers, extra fingers, fat, chubby body, narrow face, camera or phone, poor_quality_eyes, watermark, extra_limbs, fused_limbs, bad_anatomy, same hair, twins, futa, futanari, middle aged, old, transexual, trans, extra penis, extra legs, extra arms, bad anatomy, extra fabric on stomach.",
+      "clip": [
+        "107",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "100": {
+    "inputs": {
+      "hue": 0,
+      "saturation": 10.187226258513718,
+      "brightness": 0,
+      "contrast": 10.187226258513718,
+      "sharpness": 0,
+      "Hue": 0,
+      "Saturation": 10.187226258513718,
+      "Brightness": 0,
+      "Contrast": 10.187226258513718,
+      "Sharpness": 0,
+      "Reset": null,
+      "image": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "FL_ImageAdjuster",
+    "_meta": {
+      "title": "FL Image Adjuster"
+    }
+  },
+  "102": {
+    "inputs": {
+      "seed": 835093350581186,
+      "steps": 25,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1,
+      "model": [
+        "107",
+        0
+      ],
+      "positive": [
+        "112",
+        0
+      ],
+      "negative": [
+        "97",
+        0
+      ],
+      "latent_image": [
+        "113",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler/Low Res Preview"
+    }
+  },
+  "103": {
+    "inputs": {
+      "upscale_by": 3,
+      "seed": 835093350581186,
+      "steps": 26,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 0.35,
+      "mode_type": "Chess",
+      "tile_width": 1536,
+      "tile_height": 1536,
+      "mask_blur": 48,
+      "tile_padding": 64,
+      "seam_fix_mode": "None",
+      "seam_fix_denoise": 0.35,
+      "seam_fix_width": 64,
+      "seam_fix_mask_blur": 24,
+      "seam_fix_padding": 32,
+      "force_uniform_tiles": true,
+      "tiled_decode": false,
+      "image": [
+        "89",
+        0
+      ],
+      "model": [
+        "107",
+        0
+      ],
+      "positive": [
+        "109",
+        0
+      ],
+      "negative": [
+        "96",
+        0
+      ],
+      "vae": [
+        "106",
+        2
+      ],
+      "upscale_model": [
+        "87",
+        0
+      ]
+    },
+    "class_type": "UltimateSDUpscale",
+    "_meta": {
+      "title": "Ultimate SD Upscale"
+    }
+  },
+  "106": {
+    "inputs": {
+      "ckpt_name": "illustriousRealismBy_v10VAE.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "107": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "DR34ML4Y_I2V_14B_HIGH_V2.safetensors",
+        "strength": 0.4
+      },
+      "lora_2": {
+        "on": true,
+        "lora": "DR34ML4Y_I2V_14B_LOW_V2.safetensors",
+        "strength": 0.4
+      },
+      "lora_3": {
+        "on": true,
+        "lora": "Realistic_Elle_NSFW.safetensors",
+        "strength": 0.5
+      },
+      "lora_4": {
+        "on": true,
+        "lora": "DetailerILv2-000008.safetensors",
+        "strength": 0.75
+      },
+      "lora_5": {
+        "on": false,
+        "lora": "perfect eyes v2.1.safetensors",
+        "strength": 0.6
+      },
+      "lora_6": {
+        "on": true,
+        "lora": "CreateConcept_Illustrious_v2.safetensors",
+        "strength": 0.2
+      },
+      "lora_7": {
+        "on": false,
+        "lora": "Eyes_for_Illustrious_Lora_Perfect_anime_eyes.safetensors",
+        "strength": 0.5
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "106",
+        0
+      ],
+      "clip": [
+        "106",
+        1
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Power Lora Loader (rgthree)"
+    }
+  },
+  "109": {
+    "inputs": {
+      "text": "score_9,score_8_up,score_7_up,score_6_up,score_5_up, (masterpiece, best quality, photorealistic:1.4), ultra-detailed, smooth skin texture, glossy skin sheen, sharp focus, perfect anatomy, natural sweat and fluids, high-fidelity details, clean realistic lighting, no artifacts, no blur, no deformities.\n\nRealistic male face and muscles, realistic male hair,\n\n1girl, 21 years old, young adult woman, ultra petite, pretty girl, blushing, shy, (huge round eyes, blue eyes), shy, pouty lips, parted lips, medium round breasts, (body freckles, face freckles:1.2)\n",
+      "clip": [
+        "107",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "110": {
+    "inputs": {
+      "filename_prefix": "C:\\ComfyUI_windows_portable\\ComfyUI\\output\\5.15-6.15\\6.9\\Sienna\\1\\6.13",
+      "images": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "112": {
+    "inputs": {
+      "text": "brunette, long ponytail, young adult woman, ultra petite, pretty girl, blushing, shy, (huge round eyes, blue eyes), shy, pouty lips, parted lips, medium round breasts, body freckles, crotchless panties, strapless crop top, mini skirt, leather choker with gold studs.\n\nSensual but extremely messy deepthroat blowjob: beautiful woman on her knees giving an intense, sloppy blowjob. Her lips are stretched tightly around a thick veiny cock, mouth wide open with realistic stretching. Heavy, thick saliva and drool pouring out uncontrollably — long glossy strands of spit hanging from her lips and chin, thick strings of saliva connecting her mouth to the shaft, heavy dripping down onto her breasts and chest. Tongue visibly licking and pressing against the underside of the cock. Strong throat bulge visible on every deep thrust. Face and chest covered in glistening spit and fluids. Extremely wet and messy oral, saliva everywhere in realistic amounts.\n\nSide view showing her chest, breasts, and thighs while kneeling in front of the man. Dynamic intimate low angle camera with gentle movement, slow-motion inserts focusing on the lips gripping the shaft, thick saliva strings stretching and breaking, and the cock sliding in and out of her mouth. Warm erotic lighting with strong specular highlights on wet skin and saliva. Highly detailed saliva texture, glossy strands, and realistic fluid physics.\n\nPerfect anatomy, realistic mouth and throat deformation, erotic atmosphere, intense sensual expression.\n(one woman and one male:1.3).\n\nerotic expression, bedroom background with bed and window visible, cinematic blue lighting, high resolution, sharp focus, realistic anatomy.",
+      "clip": [
+        "107",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "113": {
+    "inputs": {
+      "width": 1200,
+      "height": 1600,
+      "batch_size": 3
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "114": {
+    "inputs": {
+      "images": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "117": {
+    "inputs": {
+      "images": [
+        "100",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+# --- git backup from repo rebuild ---
+.git.bak-*/
+
+# --- Nested apps managed separately (not vendored) ---
+/ComfyUI/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+*.egg
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- ComfyUI runtime data (models/inputs/outputs are regenerable or huge) ---
+ComfyUI_Custom/models/
+ComfyUI/models/*
+ComfyUI/input/*
+ComfyUI/output/*
+lora*
+
+# --- Model / weight file types (wherever they show up, e.g. inside custom_nodes) ---
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+*.gguf
+*.engine
+*.pack
+
+# --- ComfyUI_Workflows: keep the actual workflow definitions, drop generated media/assets ---
+ComfyUI_Workflows/**/*.png
+ComfyUI_Workflows/**/*.jpg
+ComfyUI_Workflows/**/*.jpeg
+ComfyUI_Workflows/**/*.webp
+ComfyUI_Workflows/**/*.gif
+ComfyUI_Workflows/**/*.mp4
+ComfyUI_Workflows/**/*.webm
+ComfyUI_Workflows/**/*.zip
+ComfyUI_Workflows/**/*.7z
+ComfyUI_Workflows/**/*.rar

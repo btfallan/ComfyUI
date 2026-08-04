@@ -1,0 +1,132 @@
+Acid Green
+Alabaster
+Amber
+Amethyst
+Apricot
+Aqua
+Aquamarine
+Azure
+Baby Blue
+Beige
+Bioluminescent Blue
+Bisque
+Blood Red
+Bone
+Bronze
+Burgundy
+Burnt Orange
+Buttercream
+Canary Yellow
+Candlelight
+Caramel
+Carmine
+Celadon
+Cerulean
+Champagne
+Charcoal
+Chartreuse
+Cherry
+Citrine
+Cobalt
+Cool White
+Copper
+Coral
+Cornflower
+Cream
+Crimson
+Cyan
+Deep Purple
+Dusty Rose
+Electric Blue
+Emerald
+Forest Green
+Fuchsia
+Gold
+Golden Hour
+Grape
+Gunmetal
+Heliotrope
+Honey
+Hot Pink
+Ice Blue
+Indigo
+Infrared
+Ivory
+Jade
+Kelly Green
+Lavender
+Lemon
+Lilac
+Lime
+Magenta
+Mandarin
+Marigold
+Maroon
+Mauve
+Midnight Blue
+Mint
+Moonlight
+Moss
+Mustard
+Neon Blue
+Neon Green
+Neon Pink
+Obsidian
+Ochre
+Olive
+Opal
+Orange
+Orchid
+Pale Yellow
+Pastel Pink
+Peach
+Pearl
+Periwinkle
+Pewter
+Pine
+Platinum
+Plum
+Powder Blue
+Prismatic
+Pumpkin
+Pure White
+Purple
+Raspberry
+Red
+Rose Gold
+Royal Blue
+Ruby
+Rust
+Saffron
+Sage
+Salmon
+Sapphire
+Scarlet
+Seafoam
+Sepia
+Sienna
+Silver
+Sky Blue
+Slate
+Smoke
+Spring Green
+Steel Blue
+Straw
+Sunset
+Tan
+Tangerine
+Teal
+Terracotta
+Titanium
+Topaz
+Turquoise
+Twilight
+Ultraviolet
+Vermilion
+Violet
+Viridian
+Warm White
+Wheat
+White
+Wine
+Yellow

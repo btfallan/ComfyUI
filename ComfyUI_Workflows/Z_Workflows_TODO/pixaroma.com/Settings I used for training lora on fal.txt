@@ -1,0 +1,50 @@
+Website where you can train a lora online: https://fal.ai/models/fal-ai/krea-2-trainer
+-------
+
+Krea 2 LoRA quick starting guide
+
+Use 15 to 20 good-quality images, train at 1024 resolution, use a 0.0001 learning rate, and start around 700 to 1000 steps.
+
+Real person or woman character: about 700 steps
+Cartoon character: about 1000 steps
+Art style: about 1000 steps
+Use a unique trigger word
+
+These are proven starting settings, not fixed rules. Lower the steps if the LoRA overtrains, or increase them if the result is too weak.
+
+-------
+
+A woman character lora
+example trigger word: pixag1rl26
+
+Fal.ai settings.
+Setting		Value
+Uploaded Images	16
+Steps		700
+Resolution	1024
+Learning Rate	0.0001
+
+-------
+
+A Style Lora
+example trigger word: questpaint26
+
+Setting		Value
+Images		20
+Steps		1000
+Resolution	1024
+Learning rate	0.0001
+
+
+-------
+
+A cartoon character
+example trigger word: pixabunny26
+
+Setting		Value
+Images		17
+Steps		1000
+Resolution	1024
+Learning Rate	0.0001
+
+

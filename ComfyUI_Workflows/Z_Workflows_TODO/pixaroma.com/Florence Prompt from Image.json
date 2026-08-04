@@ -1,0 +1,529 @@
+{
+  "id": "ff927e6b-44c8-4b09-9299-8ca55ff8ff3a",
+  "revision": 0,
+  "last_node_id": 76,
+  "last_link_id": 118,
+  "nodes": [
+    {
+      "id": 48,
+      "type": "Label (rgthree)",
+      "pos": [
+        81.56346893310547,
+        3.421996593475342
+      ],
+      "size": [
+        185.595703125,
+        20
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "UPLOAD AN IMAGE",
+      "properties": {
+        "fontSize": 20,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 66,
+      "type": "workflow>Florence2",
+      "pos": [
+        358.00750732421875,
+        35.89274978637695
+      ],
+      "size": [
+        401.7745666503906,
+        460
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora",
+          "type": "PEFTLORA",
+          "link": null
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 104
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            102
+          ]
+        },
+        {
+          "name": "data",
+          "type": "JSON",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "workflow>Florence2"
+      },
+      "widgets_values": [
+        "microsoft/Florence-2-base",
+        "fp16",
+        "sdpa",
+        "",
+        691255439374067,
+        "randomize",
+        "",
+        "more_detailed_caption",
+        true,
+        false,
+        1024,
+        3,
+        true,
+        ""
+      ]
+    },
+    {
+      "id": 31,
+      "type": "easy showAnything",
+      "pos": [
+        783.7877197265625,
+        73.45177459716797
+      ],
+      "size": [
+        385.2569274902344,
+        424.272705078125
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 102
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Prompt from Image",
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "54614079ca96fa66c8953ff89dc66ca77245f5db",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "The image is a digital illustration of a white rabbit standing in a garden. The rabbit has big, round eyes and a big smile on its face. It is wearing a brown leather backpack with a buckle on the front. The background is filled with colorful flowers and trees, creating a peaceful and serene atmosphere. The overall mood of the image is cheerful and playful."
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 49,
+      "type": "Label (rgthree)",
+      "pos": [
+        424.5651550292969,
+        -41.108707427978516
+      ],
+      "size": [
+        289.0625,
+        20
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Select a model, and caption task",
+      "properties": {
+        "fontSize": 20,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "transparent",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 29,
+      "type": "LoadImage",
+      "pos": [
+        16.37295913696289,
+        54.7635612487793
+      ],
+      "size": [
+        307.8559875488281,
+        402.75836181640625
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            104
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "Bunny.png",
+        "image"
+      ]
+    }
+  ],
+  "links": [
+    [
+      102,
+      66,
+      2,
+      31,
+      0,
+      "*"
+    ],
+    [
+      104,
+      29,
+      0,
+      66,
+      1,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.3310000000000004,
+      "offset": [
+        154.36593949450727,
+        106.5824913613401
+      ]
+    },
+    "frontendVersion": "1.27.10",
+    "groupNodes": {
+      "Florence2": {
+        "nodes": [
+          {
+            "id": -1,
+            "type": "DownloadAndLoadFlorence2Model",
+            "pos": [
+              10,
+              -140
+            ],
+            "size": [
+              365.4000244140625,
+              130
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "lora",
+                "name": "lora",
+                "shape": 7,
+                "type": "PEFTLORA",
+                "link": null
+              },
+              {
+                "localized_name": "model",
+                "name": "model",
+                "type": "COMBO",
+                "widget": {
+                  "name": "model"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "precision",
+                "name": "precision",
+                "type": "COMBO",
+                "widget": {
+                  "name": "precision"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "attention",
+                "name": "attention",
+                "type": "COMBO",
+                "widget": {
+                  "name": "attention"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "convert_to_safetensors",
+                "name": "convert_to_safetensors",
+                "shape": 7,
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "convert_to_safetensors"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "florence2_model",
+                "name": "florence2_model",
+                "type": "FL2MODEL",
+                "slot_index": 0,
+                "links": []
+              }
+            ],
+            "properties": {
+              "cnr_id": "comfyui-florence2",
+              "ver": "de485b65b3e1b9b887ab494afa236dff4bef9a7e",
+              "Node name for S&R": "DownloadAndLoadFlorence2Model"
+            },
+            "widgets_values": [
+              "microsoft/Florence-2-base",
+              "fp16",
+              "sdpa",
+              ""
+            ],
+            "index": 0
+          },
+          {
+            "id": -1,
+            "type": "Florence2Run",
+            "pos": [
+              377.3746643066406,
+              111.34429168701172
+            ],
+            "size": [
+              400,
+              364
+            ],
+            "flags": {},
+            "order": 12,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "image",
+                "name": "image",
+                "type": "IMAGE",
+                "link": null
+              },
+              {
+                "localized_name": "florence2_model",
+                "name": "florence2_model",
+                "type": "FL2MODEL",
+                "link": null
+              },
+              {
+                "localized_name": "text_input",
+                "name": "text_input",
+                "type": "STRING",
+                "widget": {
+                  "name": "text_input"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "task",
+                "name": "task",
+                "type": "COMBO",
+                "widget": {
+                  "name": "task"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "fill_mask",
+                "name": "fill_mask",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "fill_mask"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "keep_model_loaded",
+                "name": "keep_model_loaded",
+                "shape": 7,
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "keep_model_loaded"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "max_new_tokens",
+                "name": "max_new_tokens",
+                "shape": 7,
+                "type": "INT",
+                "widget": {
+                  "name": "max_new_tokens"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "num_beams",
+                "name": "num_beams",
+                "shape": 7,
+                "type": "INT",
+                "widget": {
+                  "name": "num_beams"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "do_sample",
+                "name": "do_sample",
+                "shape": 7,
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "do_sample"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "output_mask_select",
+                "name": "output_mask_select",
+                "shape": 7,
+                "type": "STRING",
+                "widget": {
+                  "name": "output_mask_select"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "seed",
+                "name": "seed",
+                "shape": 7,
+                "type": "INT",
+                "widget": {
+                  "name": "seed"
+                },
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "image",
+                "name": "image",
+                "type": "IMAGE",
+                "links": null
+              },
+              {
+                "localized_name": "mask",
+                "name": "mask",
+                "type": "MASK",
+                "links": null
+              },
+              {
+                "localized_name": "caption",
+                "name": "caption",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "localized_name": "data",
+                "name": "data",
+                "type": "JSON",
+                "links": null
+              }
+            ],
+            "properties": {
+              "cnr_id": "comfyui-florence2",
+              "ver": "de485b65b3e1b9b887ab494afa236dff4bef9a7e",
+              "Node name for S&R": "Florence2Run"
+            },
+            "widgets_values": [
+              "",
+              "more_detailed_caption",
+              true,
+              false,
+              1024,
+              3,
+              true,
+              "",
+              1036358576482241,
+              "randomize"
+            ],
+            "index": 1
+          }
+        ],
+        "links": [
+          [
+            null,
+            0,
+            1,
+            0,
+            29,
+            "IMAGE"
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            53,
+            "FL2MODEL"
+          ]
+        ],
+        "external": [
+          [
+            1,
+            2,
+            "STRING"
+          ]
+        ]
+      }
+    },
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

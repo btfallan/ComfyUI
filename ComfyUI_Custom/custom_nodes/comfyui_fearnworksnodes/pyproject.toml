@@ -1,0 +1,19 @@
+[project]
+name = "comfyui_fearnworksnodes"
+description = "This extension provides various nodes to support multimodal workflows."
+version = "0.1.2"
+license = "LICENSE"
+
+
+[project.urls]
+Repository = "https://github.com/fearnworks/ComfyUI_FearnworksNodes"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "fearnworks"
+DisplayName = "Fearnworks Nodes"
+Icon = ""
+
+[tool.setuptools.packages.find]
+include = ["nodes"]  
+exclude = []  

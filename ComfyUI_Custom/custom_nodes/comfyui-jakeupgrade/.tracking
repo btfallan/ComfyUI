@@ -1,0 +1,893 @@
+.github/workflows/publish.yml
+.gitignore
+LICENSE
+README.md
+Workflow/ComfyUI/API/JK_API_ControlNet_Preprocessor.json
+Workflow/ComfyUI/API/JK_API_Img_Upscale.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_Kontext_1.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_Kontext_2.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_Redux_1.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_Redux_2.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_USO_1.json
+Workflow/ComfyUI/API/JK_API_Imgedit_Flux_USO_2.json
+Workflow/ComfyUI/API/JK_API_Imgedit_QWen.json
+Workflow/ComfyUI/API/JK_API_Imgen_Flux.json
+Workflow/ComfyUI/API/JK_API_Imgen_Flux_ckpt.json
+Workflow/ComfyUI/API/JK_API_Imgen_QWen.json
+Workflow/ComfyUI/API/JK_API_Imgen_SD15.json
+Workflow/ComfyUI/API/JK_API_Imgen_SD3.json
+Workflow/ComfyUI/API/JK_API_Imgen_SDXL.json
+Workflow/ComfyUI/API/JK_API_Refine_Flux.json
+Workflow/ComfyUI/API/JK_API_Refine_Flux_ckpt.json
+Workflow/ComfyUI/API/JK_API_Refine_QWen.json
+Workflow/ComfyUI/API/JK_API_Refine_SD15.json
+Workflow/ComfyUI/API/JK_API_Refine_SD3.json
+Workflow/ComfyUI/API/JK_API_TP_MakeImageGrid.json
+Workflow/ComfyUI/API/JK_API_TP_SplitImageGrid.json
+Workflow/ComfyUI/API/dev/JK API ControlNet Preprocessor-params.py
+Workflow/ComfyUI/API/dev/JK API ControlNet Preprocessor.json
+Workflow/ComfyUI/API/dev/JK API Img Upscale-params.py
+Workflow/ComfyUI/API/dev/JK API Img Upscale.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Kontext 1-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Kontext 1.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Kontext 2-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Kontext 2.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Redux 1-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Redux 1.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Redux 2-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux Redux 2.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux USO 1-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux USO 1.json
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux USO 2-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit Flux USO 2.json
+Workflow/ComfyUI/API/dev/JK API Imgedit QWen-params.py
+Workflow/ComfyUI/API/dev/JK API Imgedit QWen.json
+Workflow/ComfyUI/API/dev/JK API Imgen Flux Ckpt-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen Flux Ckpt.json
+Workflow/ComfyUI/API/dev/JK API Imgen Flux-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen Flux.json
+Workflow/ComfyUI/API/dev/JK API Imgen QWen-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen QWen.json
+Workflow/ComfyUI/API/dev/JK API Imgen SD15-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen SD15.json
+Workflow/ComfyUI/API/dev/JK API Imgen SD3-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen SD3.json
+Workflow/ComfyUI/API/dev/JK API Imgen SDXL-params.py
+Workflow/ComfyUI/API/dev/JK API Imgen SDXL.json
+Workflow/ComfyUI/API/dev/JK API Refine Flux Ckpt-params.py
+Workflow/ComfyUI/API/dev/JK API Refine Flux Ckpt.json
+Workflow/ComfyUI/API/dev/JK API Refine Flux-params.py
+Workflow/ComfyUI/API/dev/JK API Refine Flux.json
+Workflow/ComfyUI/API/dev/JK API Refine QWen-params.py
+Workflow/ComfyUI/API/dev/JK API Refine QWen.json
+Workflow/ComfyUI/API/dev/JK API Refine SD15-params.py
+Workflow/ComfyUI/API/dev/JK API Refine SD15.json
+Workflow/ComfyUI/API/dev/JK API Refine SD3-params.py
+Workflow/ComfyUI/API/dev/JK API Refine SD3.json
+Workflow/ComfyUI/API/dev/JK API TP MakeImageGrid-params.py
+Workflow/ComfyUI/API/dev/JK API TP MakeImageGrid.json
+Workflow/ComfyUI/API/dev/JK API TP SplitImageGrid-params.py
+Workflow/ComfyUI/API/dev/JK API TP SplitImageGrid.json
+Workflow/ComfyUI/All Nodes-JK.json
+Workflow/ComfyUI/All Subgraph-JK.json
+Workflow/ComfyUI/All Subgraph-Wan-JK.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_3DGS.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_CRM&Zero123plus&MVDream&CharacterGen.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Hunyuan3D2.1Wrapper_All.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Hunyuan3D2.1Wrapper_Mesh.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Hunyuan3D2.1Wrapper_Texture.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Hunyuan3DWrapper.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Trellis2.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Trellis2_mv.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Unique3D&Wonder3D&Era3D.json
+Workflow/ComfyUI/Main/img2mesh/JK_workflow_img2mesh_Zero123&SV3D.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_API.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_Flux.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_QWen.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_QWen_ModelSheet.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_QWen_ModelSheet_adv.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_RandomPrompter.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_SD15.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_SD3.json
+Workflow/ComfyUI/Main/imgen/JK_workflow_imgen_SDXL.json
+Workflow/ComfyUI/Main/imgen/mGPU/JK_workflow_imgen_Flux_mGPU.json
+Workflow/ComfyUI/Main/imgen/mGPU/JK_workflow_imgen_QWen_ModelSheet_adv_mGPU.json
+Workflow/ComfyUI/Main/imgen/mGPU/JK_workflow_imgen_QWen_ModelSheet_mGPU.json
+Workflow/ComfyUI/Main/imgen/mGPU/JK_workflow_imgen_QWen_mGPU.json
+Workflow/ComfyUI/Main/video/FramePack/JK_workflow_Video-FramePack.json
+Workflow/ComfyUI/Main/video/FramePack/JK_workflow_Video-FramePack_mGPU.json
+Workflow/ComfyUI/Main/video/LTXV2/JK_workflow_Video-LTXV2.json
+Workflow/ComfyUI/Main/video/LTXV2/JK_workflow_Video-LTXV2__Cuts.json
+Workflow/ComfyUI/Main/video/LTXV2/JK_workflow_Video-LTXV2__Long.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__Cuts_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__Cuts_HuMo.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__Cuts_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__Cuts_ff.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__Cuts_talk.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__VACE.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_LongCat.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_LongCatAvatar.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_OTA.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_SCAIL.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_SkyreelDF.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_SteadyDance.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_VACE_kf.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_WanAnim.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan__long_ff.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan_img2vid_ff.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan_img2vid_flf.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan_img2vid_ref.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan_txt2vid.json
+Workflow/ComfyUI/Main/video/Wan2.1/JK_workflow_Video-Wan_vid2vid.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__Cuts_v1.1.8_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__Cuts_v1.1.8_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__Cuts_v1.1.8_ff.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__long_v1.1.8_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__long_v1.1.8_SkyreelDF.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__long_v1.1.8_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__long_v1.1.8_VACE_kf.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/JK_workflow_Video-Wan__long_v1.1.8_ff.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__Cuts_v1.1.8_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__Cuts_v1.1.8_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__Cuts_v1.1.8_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__long_v1.1.8_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__long_v1.1.8_SkyreelDF_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__long_v1.1.8_VACE_kf_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__long_v1.1.8_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/Wrapper_v1.1.8/mGPU/JK_workflow_Video-Wan__long_v1.1.8_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__Cuts_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__Cuts_HuMo_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__Cuts_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__Cuts_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__Cuts_talk_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_LongCatAvatar_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_LongCat_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_OTA_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_SCAIL_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_SkyreelDF_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_SteadyDance_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_VACE_kf_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_WanAnim_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan__long_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan_img2vid_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan_img2vid_flf_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan_img2vid_ref_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan_txt2vid_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.1/mGPU/JK_workflow_Video-Wan_vid2vid_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__Cuts_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__Cuts_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__Cuts_ff.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__VACE.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_FUN.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_HoloCine.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_SVIpro.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_StoryMem.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_VACE.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_VACE_kf.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22__long_ff.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22_img2vid_ff.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22_img2vid_flf.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22_img2vid_ref.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22_txt2vid.json
+Workflow/ComfyUI/Main/video/Wan2.2/JK_workflow_Video-Wan22_vid2vid.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__Cuts_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__Cuts_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__Cuts_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_FUN_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_HoloCine_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_SVIpro_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_StoryMem_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_VACE_kf_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_VACE_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22__long_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22_img2vid_ff_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22_img2vid_flf_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22_img2vid_ref_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22_txt2vid_mGPU.json
+Workflow/ComfyUI/Main/video/Wan2.2/mGPU/JK_workflow_Video-Wan22_vid2vid_mGPU.json
+Workflow/ComfyUI/Module/JK_module_00_AutoPrompt.json
+Workflow/ComfyUI/Module/JK_module_01_ImgGen.json
+Workflow/ComfyUI/Module/JK_module_01_ImgGen_Adv.json
+Workflow/ComfyUI/Module/JK_module_02_ImgEdit.json
+Workflow/ComfyUI/Module/JK_module_04_Refine.json
+Workflow/ComfyUI/Module/JK_module_05_Upscale_1st.json
+Workflow/ComfyUI/Module/JK_module_05_Upscale_2nd.json
+Workflow/ComfyUI/Module/JK_module_06_Detailer.json
+Workflow/ComfyUI/Module/JK_module_06_HandFix.json
+Workflow/ComfyUI/Module/JK_module_07_Inpaint.json
+Workflow/ComfyUI/Module/JK_module_Imgen_Concept.json
+Workflow/ComfyUI/Module/JK_module_Imgen_FluxKSampler.json
+Workflow/ComfyUI/Module/JK_module_Imgen_NoiseInjectionVariation.json
+Workflow/ComfyUI/Module/JK_module_Imgen_Seamless Texture.json
+Workflow/ComfyUI/Module/JK_module_Mesh-Gen18MVTex.json
+Workflow/ComfyUI/Module/JK_module_Mesh-Get_3D_data.json
+Workflow/ComfyUI/Module/JK_module_Mesh-ReMesh_Projection.json
+Workflow/ComfyUI/Module/JK_module_Motion-Get_Mesh_Sequence.json
+Workflow/ComfyUI/Module/JK_module_Video-AutoMask.json
+Workflow/ComfyUI/Module/JK_module_Video-AutoMotion.json
+Workflow/ComfyUI/Module/JK_module_Video-AutoPrompt.json
+Workflow/ComfyUI/Module/JK_module_Video-Control.json
+Workflow/ComfyUI/Module/JK_module_Video-Upscale&Interpolation.json
+Workflow/ComfyUI/Module/JK_module_Video-Upscale&Interpolation_mGPU.json
+Workflow/ComfyUI/Module/JK_module_Video-WanExplanation.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_ControlNet_Preprocessor.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Img_Upscale.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Imgen_Flux.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Imgen_Flux_ckpt.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Imgen_SD15.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Imgen_SD3.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Imgen_SDXL.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Refine_Flux.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Refine_Flux_ckpt.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Refine_SD15.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_Refine_SD3.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_TP_MakeImageGrid.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/JK_API_TP_SplitImageGrid.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API ControlNet Preprocessor-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API ControlNet Preprocessor.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Img Upscale-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Img Upscale.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen Flux Ckpt-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen Flux Ckpt.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen Flux-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen Flux.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SD15-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SD15.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SD3-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SD3.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SDXL-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Imgen SDXL.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine Flux Ckpt-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine Flux Ckpt.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine Flux-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine Flux.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine SD15-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine SD15.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine SD3-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API Refine SD3.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API TP MakeImageGrid-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API TP MakeImageGrid.json
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API TP SplitImageGrid-params.py
+Workflow/ComfyUI_~frontend-1.15.13/API_~v1.9.16/dev/JK API TP SplitImageGrid.json
+Workflow/ComfyUI_~frontend-1.15.13/All Grp Nodes-JK.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan__VACE.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan__VACE_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_img2vid_flf.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_img2vid_flf_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_img2vid_ref.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_img2vid_ref_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_vid2vid.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_Video-Wan_vid2vid_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_img2mesh_CRM&Zero123plus&MVDream&CharacterGen.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_img2mesh_Hunyuan3DWrapper.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_img2mesh_Unique3D&Wonder3D&Era3D.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_img2mesh_Zero123&SV3D.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_Flux.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_Flux_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_Flux_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SD15.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SD15_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SD3.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SD3_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SD3_mGPU.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SDXL.json
+Workflow/ComfyUI_~frontend-1.15.13/Main/JK_workflow_imgen_SDXL_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_01_ImgGen.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_01_ImgGen_Adv.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_04_Refine.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_04_Refine_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_05_Upscale_1st.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_05_Upscale_1st_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_06_Detailer_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_06_HandFix.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_06_HandFix_legacy.json
+Workflow/ComfyUI_~frontend-1.15.13/Module/JK_module_07_Inpaint.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_ControlNet_Preprocessor.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Img_Upscale.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Imgen_Flux.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Imgen_Flux_ckpt.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Imgen_SD15.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Imgen_SD3.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Imgen_SDXL.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Refine_Flux.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Refine_Flux_ckpt.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Refine_SD15.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_Refine_SD3.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_TP_MakeImageGrid.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/JK_API_TP_SplitImageGrid.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API ControlNet Preprocessor-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API ControlNet Preprocessor.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Img Upscale-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Img Upscale.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen Flux Ckpt-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen Flux Ckpt.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen Flux-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen Flux.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SD15-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SD15.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SD3-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SD3.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SDXL-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Imgen SDXL.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine Flux Ckpt-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine Flux Ckpt.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine Flux-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine Flux.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine SD15-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine SD15.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine SD3-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API Refine SD3.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API TP MakeImageGrid-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API TP MakeImageGrid.json
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API TP SplitImageGrid-params.py
+Workflow/ComfyUI_~frontend-1.23.4/API_~v1.9.20/dev/JK API TP SplitImageGrid.json
+Workflow/ComfyUI_~frontend-1.23.4/All Grp Nodes-JK.json
+Workflow/ComfyUI_~frontend-1.23.4/All Grp Nodes-Wan-JK.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan__VACE.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan__VACE_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan__long_VACE.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan__long_VACE_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_ff.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_ff_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_flf.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_flf_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_ref.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_img2vid_ref_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_vid2vid.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_Video-Wan_vid2vid_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_CRM&Zero123plus&MVDream&CharacterGen.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_Hunyuan3D2.1Wrapper_All.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_Hunyuan3D2.1Wrapper_Texture.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_Hunyuan3DWrapper.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_Unique3D&Wonder3D&Era3D.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_img2mesh_Zero123&SV3D.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_Flux.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_Flux_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_SD15.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_SD3.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_SD3_mGPU.json
+Workflow/ComfyUI_~frontend-1.23.4/Main/JK_workflow_imgen_SDXL.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_01_ImgGen.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_01_ImgGen_Adv.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_04_Refine.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_05_Upscale_1st.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_06_HandFix.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Imgen_Concept.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Imgen_FluxKSampler.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Imgen_NoiseInjectionVariation.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Imgen_Seamless Texture_deperated.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Mesh-Gen18MVTex.json
+Workflow/ComfyUI_~frontend-1.23.4/Module/JK_module_Video-AutoMask.json
+Workflow/Krita/Main/JK_workflow-Krita Common Adv.json
+Workflow/Krita/Main/JK_workflow-Krita Common.json
+Workflow/Krita/Main/JK_workflow-Krita Flux Adv.json
+Workflow/Krita/Main/JK_workflow-Krita Flux Kontext.json
+Workflow/Krita/Main/JK_workflow-Krita Flux Redux.json
+Workflow/Krita/Main/JK_workflow-Krita Flux USO.json
+Workflow/Krita/Main/JK_workflow-Krita Flux.json
+Workflow/Krita/Main/JK_workflow-Krita QWen Adv.json
+Workflow/Krita/Main/JK_workflow-Krita QWen Edit.json
+Workflow/Krita/Main/JK_workflow-Krita QWen.json
+Workflow/Krita/Main/JK_workflow-Krita SD15 Adv.json
+Workflow/Krita/Main/JK_workflow-Krita SD15.json
+Workflow/Krita/Main/JK_workflow-Krita SD3 Adv.json
+Workflow/Krita/Main/JK_workflow-Krita SD3.json
+Workflow/Krita/Main/JK_workflow-Krita SDXL Adv.json
+Workflow/Krita/Main/JK_workflow-Krita SDXL.json
+Workflow/Krita/Module/JK_module-Krita CN preprocessor.json
+Workflow/Krita/Module/JK_module-Krita HandFix Flux.json
+Workflow/Krita/Module/JK_module-Krita HandFix QWen.json
+Workflow/Krita/Module/JK_module-Krita HandFix SD15.json
+Workflow/Krita/Module/JK_module-Krita HandFix SD3.json
+Workflow/Krita/Module/JK_module-Krita HandFix SDXL.json
+Workflow/Krita/Module/JK_module-Krita Refine Flux.json
+Workflow/Krita/Module/JK_module-Krita Refine QWen.json
+Workflow/Krita/Module/JK_module-Krita Refine SD15.json
+Workflow/Krita/Module/JK_module-Krita Refine SD3.json
+Workflow/Krita/Module/JK_module-Krita Refine SDXL.json
+Workflow/Krita/Module/JK_module-Krita RemBG.json
+Workflow/Krita/Module/JK_module-Krita UpscaleRefine Flux.json
+Workflow/Krita/Module/JK_module-Krita UpscaleRefine QWen.json
+Workflow/Krita/Module/JK_module-Krita UpscaleRefine SD15.json
+Workflow/Krita/Module/JK_module-Krita UpscaleRefine SD3.json
+Workflow/Krita/Module/JK_module-Krita UpscaleRefine SDXL.json
+Workflow/Krita/SAI/JK_SAI-Krita Ctrl-Sketch.json
+Workflow/Krita/SAI/JK_SAI-Krita Ctrl-Structure.json
+Workflow/Krita/SAI/JK_SAI-Krita Ctrl-Style.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-Erase.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-RemBG.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-Repaint.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-ReplaceBGAndRelight.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-SearchAndRecolor.json
+Workflow/Krita/SAI/JK_SAI-Krita Edit-SearchAndReplace.json
+Workflow/Krita/SAI/JK_SAI-Krita Gen Core-txt2img.json
+Workflow/Krita/SAI/JK_SAI-Krita Gen SD3-img2img.json
+Workflow/Krita/SAI/JK_SAI-Krita Gen SD3-txt2img.json
+Workflow/Krita/SAI/JK_SAI-Krita Gen Ultra-img2img.json
+Workflow/Krita/SAI/JK_SAI-Krita Gen Ultra-txt2img.json
+Workflow/Krita/SAI/JK_SAI-Krita Upscale-Conservative.json
+Workflow/Krita/SAI/JK_SAI-Krita Upscale-Creative.json
+Workflow/Krita/SAI/JK_SAI-Krita Upscale-Fast.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita Common Adv.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita Common.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita Flux Adv.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita Flux.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SD15 Adv.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SD15.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SD3 Adv.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SD3.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SDXL Adv.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Main/JK_workflow-Krita SDXL.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita CN preprocessor.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita HandFix Flux.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita HandFix SD15.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita HandFix SD3.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita HandFix SDXL.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita Refine Flux.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita Refine SD15.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita Refine SD3.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita Refine SDXL.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita RemBG.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita UpscaleRefine Flux.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita UpscaleRefine SD15.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita UpscaleRefine SD3.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/Module/JK_module-Krita UpscaleRefine SDXL.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Ctrl-Sketch.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Ctrl-Structure.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Ctrl-Style.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-Erase.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-RemBG.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-Repaint.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-ReplaceBGAndRelight.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-SearchAndRecolor.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Edit-SearchAndReplace.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Gen Core-txt2img.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Gen SD3-img2img.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Gen SD3-txt2img.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Gen Ultra-img2img.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Gen Ultra-txt2img.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Upscale-Conservative.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Upscale-Creative.json
+Workflow/Krita_~frontend-1.15.13_v1.19.16/SAI/JK_SAI-Krita Upscale-Fast.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita Common Adv.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita Common.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita Flux Adv.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita Flux.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SD15 Adv.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SD15.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SD3 Adv.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SD3.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SDXL Adv.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Main/JK_workflow-Krita SDXL.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita CN preprocessor.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita HandFix Flux.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita HandFix SD15.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita HandFix SD3.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita HandFix SDXL.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita Refine Flux.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita Refine SD15.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita Refine SD3.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita Refine SDXL.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita RemBG.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita UpscaleRefine Flux.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita UpscaleRefine SD15.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita UpscaleRefine SD3.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/Module/JK_module-Krita UpscaleRefine SDXL.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Ctrl-Style.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Gen SD3-img2img.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Gen Ultra-img2img.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Upscale-Conservative.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Upscale-Creative.json
+Workflow/Krita_~frontend-1.23.4_v1.19.20/SAI/JK_SAI-Krita Upscale-Fast.json
+__init__.py
+categories.py
+config.ini.exsample
+imgs/ComfyUIAPIUI.png
+imgs/VidGen-Wan2.1.png
+imgs/VidGen-Wan2.2.png
+imgs/img2mesh-types.png
+imgs/img2mesh_3DGS-structure.png
+imgs/img2mesh_CRM&Zero123plus&MVDream&CharacterGen-structure.png
+imgs/img2mesh_Unique3D&Wonder3D&Era3D-structure.png
+imgs/img2mesh_Zero123&SV3D-structure.png
+imgs/nodes/3D/Adv 3D Viewer JK.png
+imgs/nodes/3D/Adv 3D Viewer JK_depth.png
+imgs/nodes/3D/Adv 3D Viewer JK_edge.png
+imgs/nodes/3D/Adv 3D Viewer JK_gtao.png
+imgs/nodes/3D/Adv 3D Viewer JK_lineart.png
+imgs/nodes/3D/Adv 3D Viewer JK_normal.png
+imgs/nodes/3D/Get Orbit Poses From List JK.png
+imgs/nodes/3D/Orbit Lists to Orbit Poses JK.png
+imgs/nodes/3D/Orbit Poses JK.png
+imgs/nodes/3D/Orbit Poses to Orbit Lists JK.png
+imgs/nodes/3D/SAM3D Mesh Sequence JK.png
+imgs/nodes/3D/aperture_width-max_threejs.png
+imgs/nodes/3D/aperture_width-maya_threejs.png
+imgs/nodes/Audio/Cut Audio Cuts JK.png
+imgs/nodes/Audio/Cut Audio Index JK.png
+imgs/nodes/Audio/Cut Audio JK.png
+imgs/nodes/Audio/Cut Audio Loop JK.png
+imgs/nodes/ControlNet/Apply ControlNet JK.png
+imgs/nodes/ControlNet/Apply Multi-ControlNet Adv JK.png
+imgs/nodes/ControlNet/ControlNet Loader JK.png
+imgs/nodes/ControlNet/Multi-ControlNet Param Stack JK.png
+imgs/nodes/Image/Color Grading JK.png
+imgs/nodes/Image/Enchance And Resize Hint Images JK.png
+imgs/nodes/Image/Image Crop by Mask Params JK.png
+imgs/nodes/Image/Image Crop by Mask Resolution Grp JK.png
+imgs/nodes/Image/Image Remove Alpha JK.png
+imgs/nodes/Image/Make Image Grid JK.png
+imgs/nodes/Image/Open+DW Pose JK.png
+imgs/nodes/Image/Rough Outline JK.png
+imgs/nodes/Image/Scale To Resolution JK.png
+imgs/nodes/Image/Split Image Grid JK.png
+imgs/nodes/LoRA/Apply LoRA Stack JK.png
+imgs/nodes/LoRA/Apply LoRA Stack Model Only JK.png
+imgs/nodes/LoRA/LoRA Stack JK.png
+imgs/nodes/LoRA/LoRA Stack Model Only JK.png
+imgs/nodes/Mask/Is Mask Empty JK.png
+imgs/nodes/Math/Math Nodes-Bool.png
+imgs/nodes/Math/Math Nodes-Conversion.png
+imgs/nodes/Math/Math Nodes-Evaluate.png
+imgs/nodes/Math/Math Nodes-Int.png
+imgs/nodes/Math/Math Nodes-String.png
+imgs/nodes/Math/Math Nodes_Float.png
+imgs/nodes/Misc/Aspect Ratio JK.png
+imgs/nodes/Misc/Get Nth String JK.png
+imgs/nodes/Misc/Guidance Default JK.png
+imgs/nodes/Misc/Image Resize Mode JK.png
+imgs/nodes/Misc/Inject Noise Params JK.png
+imgs/nodes/Misc/Ksampler Adv Parameters Default JK.png
+imgs/nodes/Misc/Ksampler Parameters Default JK.png
+imgs/nodes/Misc/Load String List From JSON JK.png
+imgs/nodes/Misc/Project Setting JK.png
+imgs/nodes/Misc/SD3 Prompts Switch JK.png
+imgs/nodes/Misc/Sampler Loader JK.png
+imgs/nodes/Misc/Save String List To JSON JK.png
+imgs/nodes/Misc/String To Combo JK.png
+imgs/nodes/Misc/Tiling Mode JK.png
+imgs/nodes/Misc/Upscale Method JK.png
+imgs/nodes/Prompt/Prompt Combine JK.png
+imgs/nodes/Prompt/Random Prompter Geek JK.png
+imgs/nodes/Prompt/Random Prompter JK.png
+imgs/nodes/Prompt/Shot Script Combiner JK.png
+imgs/nodes/Prompt/Shot Script Extractor JK.png
+imgs/nodes/Prompt/Sys Prompter JK.png
+imgs/nodes/Prompt/promptworkflow.png
+imgs/nodes/Prompt/sysprompterworkflow.png
+imgs/nodes/Switch/Switch Nodes.png
+imgs/nodes/Video/Create Loop Schedule List JK.png
+imgs/nodes/Video/Ltxv2 Frame Count JK.png
+imgs/nodes/Video/Scene Cuts JK.png
+imgs/nodes/Video/Wan Frame Count JK.png
+imgs/nodes/Video/Wan Wrapper Sampler Default JK.png
+imgs/nodes/Video/Wan22 cfg Scheduler List JK.png
+install.bat
+install.py
+install_manual.py
+nodes/.gitignore
+nodes/SimpleEval_Node_Examples.txt
+nodes/jake_node_3d.py
+nodes/jake_node_3d_sam3dseq.py
+nodes/jake_node_3d_viewer.py
+nodes/jake_node_audio.py
+nodes/jake_node_controlnet.py
+nodes/jake_node_deprecated.py
+nodes/jake_node_experimental.py
+nodes/jake_node_image.py
+nodes/jake_node_latent.py
+nodes/jake_node_lora.py
+nodes/jake_node_mask.py
+nodes/jake_node_math.py
+nodes/jake_node_misc.py
+nodes/jake_node_prompt.py
+nodes/jake_node_prompt_random.py
+nodes/jake_node_prompt_random_ABC.py
+nodes/jake_node_prompt_shared.py
+nodes/jake_node_switch.py
+nodes/jake_node_video.py
+nodes/jake_tools.py
+nodes/jake_utils.py
+nodes/prompt_data/audios/1-ambient.json
+nodes/prompt_data/audios/2-volume.json
+nodes/prompt_data/audios/900-dialogue.json
+nodes/prompt_data/audios/901-dynamic_modifier.json
+nodes/prompt_data/cameras/1-shot_size.json
+nodes/prompt_data/cameras/2-view_angle.json
+nodes/prompt_data/cameras/3-composition.json
+nodes/prompt_data/cameras/4-effects.json
+nodes/prompt_data/cameras/5-movement.json
+nodes/prompt_data/cameras/900-camera.json
+nodes/prompt_data/cameras/901-lens.json
+nodes/prompt_data/cameras/902-shutter.json
+nodes/prompt_data/cameras/903-aperture.json
+nodes/prompt_data/cameras/904-film.json
+nodes/prompt_data/cameras/905-iso.json
+nodes/prompt_data/cameras/906-exposure.json
+nodes/prompt_data/cameras/907-cuts.json
+nodes/prompt_data/descriptions/1-sensory.json
+nodes/prompt_data/descriptions/2-detail.json
+nodes/prompt_data/descriptions/3-quality.json
+nodes/prompt_data/descriptions/4-composition_description.json
+nodes/prompt_data/descriptions/5-color_description.json
+nodes/prompt_data/descriptions/6-creativity.json
+nodes/prompt_data/descriptions/901-sensory.json
+nodes/prompt_data/descriptions/902-detail.json
+nodes/prompt_data/descriptions/903-quality.json
+nodes/prompt_data/descriptions/904-composition_description.json
+nodes/prompt_data/descriptions/905-color_description.json
+nodes/prompt_data/descriptions/906-creativity.json
+nodes/prompt_data/directory.txt
+nodes/prompt_data/exp_strs/1-basic.json
+nodes/prompt_data/expressions/1-happy.txt
+nodes/prompt_data/expressions/10-contemptuous.json
+nodes/prompt_data/expressions/11-positive_mood.json
+nodes/prompt_data/expressions/12-negative_mood.json
+nodes/prompt_data/expressions/13-complex_mood.json
+nodes/prompt_data/expressions/14-other.json
+nodes/prompt_data/expressions/2-sad.json
+nodes/prompt_data/expressions/3-angry.yaml
+nodes/prompt_data/expressions/4-surprised.toml
+nodes/prompt_data/expressions/5-confused.csv
+nodes/prompt_data/expressions/6-disgusted.json
+nodes/prompt_data/expressions/7-fearful.json
+nodes/prompt_data/expressions/8-anxiety.json
+nodes/prompt_data/expressions/9-timidity.json
+nodes/prompt_data/facial_actions/1-combination.json
+nodes/prompt_data/facial_actions/2-eyebrows.json
+nodes/prompt_data/facial_actions/3-eyes.json
+nodes/prompt_data/facial_actions/4-nose.json
+nodes/prompt_data/facial_actions/5-mouth.json
+nodes/prompt_data/facial_actions/6-cheeks.json
+nodes/prompt_data/facial_actions/7-chin.json
+nodes/prompt_data/facial_actions/8-head.json
+nodes/prompt_data/facial_actions/999-injured.json
+nodes/prompt_data/lightings/1-time.json
+nodes/prompt_data/lightings/2-nature.json
+nodes/prompt_data/lightings/3-artificial.json
+nodes/prompt_data/lightings/4-direction.json
+nodes/prompt_data/lightings/5-mood.json
+nodes/prompt_data/motions/1-performance.json
+nodes/prompt_data/motions/2-pose.json
+nodes/prompt_data/motions/3-sexy_pose.json
+nodes/prompt_data/scenes/1-background.json
+nodes/prompt_data/scenes/2-atmosphere.json
+nodes/prompt_data/scenes/3-season.json
+nodes/prompt_data/scenes/4-weather.json
+nodes/prompt_data/scenes/5-color.json
+nodes/prompt_data/scenes/900-color_description.yml
+nodes/prompt_data/scenes/901-scale.json
+nodes/prompt_data/scenes/902-surface.json
+nodes/prompt_data/styles/1-artists/1-painter.json
+nodes/prompt_data/styles/1-artists/10-architect.json
+nodes/prompt_data/styles/1-artists/11-printmaker.json
+nodes/prompt_data/styles/1-artists/12-street_artist.json
+nodes/prompt_data/styles/1-artists/13-dark_artist.json
+nodes/prompt_data/styles/1-artists/14-designer_digital.json
+nodes/prompt_data/styles/1-artists/14-designer_fashion.json
+nodes/prompt_data/styles/1-artists/14-designer_industrial.json
+nodes/prompt_data/styles/1-artists/14-designer_interior.json
+nodes/prompt_data/styles/1-artists/14-designer_uncategorized.json
+nodes/prompt_data/styles/1-artists/15-collagist.json
+nodes/prompt_data/styles/1-artists/16-tattoo_artist.json
+nodes/prompt_data/styles/1-artists/17-craft_artist.json
+nodes/prompt_data/styles/1-artists/18-installation_artist.json
+nodes/prompt_data/styles/1-artists/19-glass_artist.json
+nodes/prompt_data/styles/1-artists/2-photographer.json
+nodes/prompt_data/styles/1-artists/3-illustrator.json
+nodes/prompt_data/styles/1-artists/4-comic_cartoon_artist.json
+nodes/prompt_data/styles/1-artists/5-concept_artist.json
+nodes/prompt_data/styles/1-artists/6-animation_maker.json
+nodes/prompt_data/styles/1-artists/7-filmmaker_director.json
+nodes/prompt_data/styles/1-artists/9-sculptor.json
+nodes/prompt_data/styles/1-artists/901-painter.json
+nodes/prompt_data/styles/1-artists/902-photographer.json
+nodes/prompt_data/styles/1-artists/903-illustrator.json
+nodes/prompt_data/styles/1-artists/904-comic_cartoon_artist.json
+nodes/prompt_data/styles/1-artists/905-concept_artist.json
+nodes/prompt_data/styles/1-artists/906-animation_maker.json
+nodes/prompt_data/styles/1-artists/907-filmmaker_director.json
+nodes/prompt_data/styles/1-artists/908-game_maker.json
+nodes/prompt_data/styles/1-artists/909-sculptor.json
+nodes/prompt_data/styles/1-artists/910-architect.json
+nodes/prompt_data/styles/1-artists/911-printmaker.json
+nodes/prompt_data/styles/1-artists/912-street_artist.json
+nodes/prompt_data/styles/1-artists/913-dark_artist.json
+nodes/prompt_data/styles/1-artists/914-designer_digital.json
+nodes/prompt_data/styles/1-artists/914-designer_fashion.json
+nodes/prompt_data/styles/1-artists/914-designer_industrial.json
+nodes/prompt_data/styles/1-artists/914-designer_interior.json
+nodes/prompt_data/styles/1-artists/914-designer_uncategorized.json
+nodes/prompt_data/styles/1-artists/915-collagist.json
+nodes/prompt_data/styles/1-artists/916-tattoo_artist.json
+nodes/prompt_data/styles/1-artists/917-craft_artist.json
+nodes/prompt_data/styles/1-artists/918-installation_artist.json
+nodes/prompt_data/styles/1-artists/919-glass_artist.json
+nodes/prompt_data/styles/1-artists/920-calligrapher.json
+nodes/prompt_data/styles/1-artists/99-uncategorized.json
+nodes/prompt_data/styles/1-artists/999-uncategorized.json
+nodes/prompt_data/styles/2-forms/1-painting.json
+nodes/prompt_data/styles/2-forms/10-digital.json
+nodes/prompt_data/styles/2-forms/11-sculpture.json
+nodes/prompt_data/styles/2-forms/12-architecture.json
+nodes/prompt_data/styles/2-forms/13-print.json
+nodes/prompt_data/styles/2-forms/14-carving.json
+nodes/prompt_data/styles/2-forms/15-collage.json
+nodes/prompt_data/styles/2-forms/16-tattoo.json
+nodes/prompt_data/styles/2-forms/17-printing.json
+nodes/prompt_data/styles/2-forms/18-calligraphy.json
+nodes/prompt_data/styles/2-forms/19-crafts.json
+nodes/prompt_data/styles/2-forms/2-animation.json
+nodes/prompt_data/styles/2-forms/20-other.json
+nodes/prompt_data/styles/2-forms/3-photography.json
+nodes/prompt_data/styles/2-forms/4-design.json
+nodes/prompt_data/styles/2-forms/5-fashion.json
+nodes/prompt_data/styles/2-forms/6-film.json
+nodes/prompt_data/styles/2-forms/7-game.json
+nodes/prompt_data/styles/2-forms/8-illustration.json
+nodes/prompt_data/styles/2-forms/9-comic_cartoon.json
+nodes/prompt_data/styles/2-forms/902-animation.json
+nodes/prompt_data/styles/2-forms/906-film.json
+nodes/prompt_data/styles/2-forms/907-game.json
+nodes/prompt_data/styles/3-genres.json
+nodes/prompt_data/styles/900-perception.json
+nodes/prompt_data/sys_prompt_preset.json
+nodes/prompt_data/sys_prompt_random_mapping.json
+nodes/sd_prompt_reader/.gitignore
+nodes/sd_prompt_reader/format/__init__.py
+nodes/sd_prompt_reader/format/a1111.py
+nodes/sd_prompt_reader/format/base_format.py
+nodes/sd_prompt_reader/format/comfyui.py
+nodes/sd_prompt_reader/format/drawthings.py
+nodes/sd_prompt_reader/format/easydiffusion.py
+nodes/sd_prompt_reader/format/fooocus.py
+nodes/sd_prompt_reader/format/invokeai.py
+nodes/sd_prompt_reader/format/novelai.py
+nodes/sd_prompt_reader/format/swarmui.py
+nodes/sd_prompt_reader/image_data_reader.py
+nodes/sd_prompt_reader/utility.py
+pyproject.toml
+replacement/ComfyUI-Manager/components/__JK.pack
+replacement/ComfyUI-Manager/components/__JK_1_15_13.pack
+replacement/ComfyUI_IPAdapter_plus/IPAdapterPlus.zip
+replacement/krita/ai_diffusion/workflows/JK Module Krita CN Preprocessor.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita HandFix Flux.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita HandFix SD15.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita HandFix SD3.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita HandFix SDXL.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Handfix QWen.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Refine Flux.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Refine QWen.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Refine SD15.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Refine SD3.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita Refine SDXL.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita RemBG.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita UpscaleRefine Flux.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita UpscaleRefine QWen.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita UpscaleRefine SD15.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita UpscaleRefine SD3.json
+replacement/krita/ai_diffusion/workflows/JK Module Krita UpscaleRefine SDXL.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Ctrl-Sketch.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Ctrl-Structure.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Ctrl-Style.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit Erase.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit RemBG.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit Repaint.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit Replace BG and Recolor.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit Search And Recolor.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Edit Search And Replace.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Gen Core-txt2img.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Gen SD3-img2img.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Gen SD3-txt2img.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Gen Ultra-img2img.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Gen Ultra-txt2img.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Upscale-Conservative.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Upscale-Creative.json
+replacement/krita/ai_diffusion/workflows/JK SAI Krita Upscale-Fast.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Common Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Common.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Flux Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Flux Kontext.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Flux Redux.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Flux USO.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita Flux.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita QWen Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita QWen Edit.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita QWen.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SD15 Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SD15.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SD3 Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SD3.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SDXL Adv.json
+replacement/krita/ai_diffusion/workflows/JK Workflow Krita SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita CN Preprocessor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita HandFix Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita HandFix SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita HandFix SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita HandFix SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita Refine Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita Refine SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita Refine SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita Refine SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita RemBG.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita UpscaleRefine Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita UpscaleRefine SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita UpscaleRefine SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Module Krita UpscaleRefine SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Ctrl-Sketch.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Ctrl-Structure.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Ctrl-Style.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit Erase.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit RemBG.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit Repaint.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit Replace BG and Recolor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit Search And Recolor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Edit Search And Replace.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Gen Core-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Gen SD3-img2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Gen SD3-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Gen Ultra-img2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Gen Ultra-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Upscale-Conservative.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Upscale-Creative.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK SAI Krita Upscale-Fast.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita Common Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita Common.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita Flux Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SD15 Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SD3 Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SDXL Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.16/JK Workflow Krita SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita CN Preprocessor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita HandFix Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita HandFix SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita HandFix SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita HandFix SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita Refine Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita Refine SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita Refine SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita Refine SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita RemBG.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita UpscaleRefine Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita UpscaleRefine SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita UpscaleRefine SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Module Krita UpscaleRefine SDXL.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Ctrl-Sketch.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Ctrl-Structure.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Ctrl-Style.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit Erase.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit RemBG.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit Repaint.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit Replace BG and Recolor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit Search And Recolor.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Edit Search And Replace.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Gen Core-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Gen SD3-img2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Gen SD3-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Gen Ultra-img2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Gen Ultra-txt2img.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Upscale-Conservative.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Upscale-Creative.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK SAI Krita Upscale-Fast.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita Common Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita Common.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita Flux Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita Flux.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SD15 Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SD15.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SD3 Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SD3.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SDXL Adv.json
+replacement/krita/ai_diffusion/workflows_~v1.9.20/JK Workflow Krita SDXL.json
+requirements.txt
+web/js/adv3d_viewer_jk.js
+web/js/random_prompter_JK.js
