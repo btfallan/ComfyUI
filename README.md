@@ -1,1 +1,3 @@
-# AzureTools
+# Install
+
+git clone --recurse-submodules
