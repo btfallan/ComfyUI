@@ -1,8 +1,8 @@
 {
   "id": "8a444cfc-5d8f-4aac-9f4b-bbfc93780fcc",
   "revision": 0,
-  "last_node_id": 50,
-  "last_link_id": 104,
+  "last_node_id": 51,
+  "last_link_id": 105,
   "nodes": [
     {
       "id": 49,
@@ -16,7 +16,7 @@
         26
       ],
       "flags": {},
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -150,52 +150,6 @@
       ],
       "properties": {
         "Node name for S&R": "SamplerCustomAdvanced",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 8,
-      "type": "VAEDecode",
-      "pos": [
-        1727,
-        287
-      ],
-      "size": [
-        140,
-        46
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 102
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 12
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "slot_index": 0,
-          "links": [
-            96
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -547,87 +501,6 @@
       ]
     },
     {
-      "id": 12,
-      "type": "UNETLoader",
-      "pos": [
-        31.865916283947943,
-        254.32213609930983
-      ],
-      "size": [
-        229.8605194091797,
-        82
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "slot_index": 0,
-          "links": [
-            103
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "UNETLoader",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "Flux 1\\flux1-dev.safetensors",
-        "default"
-      ]
-    },
-    {
-      "id": 50,
-      "type": "LoraLoaderModelOnly",
-      "pos": [
-        379.3334947583003,
-        319.891728027402
-      ],
-      "size": [
-        270,
-        82
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 103
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            104
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoraLoaderModelOnly",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        }
-      },
-      "widgets_values": [
-        "Flux\\ohwxma-step00000950.safetensors",
-        1
-      ]
-    },
-    {
       "id": 48,
       "type": "SDXLEmptyLatentSizePicker+",
       "pos": [
@@ -639,7 +512,7 @@
         170
       ],
       "flags": {},
-      "order": 5,
+      "order": 4,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -684,6 +557,87 @@
       ]
     },
     {
+      "id": 12,
+      "type": "UNETLoader",
+      "pos": [
+        31.865916283947943,
+        254.32213609930983
+      ],
+      "size": [
+        229.8605194091797,
+        82
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": [
+            103
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "Flux 1\\flux1-dev.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 50,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        379.3334947583003,
+        319.891728027402
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 103
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            104
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        }
+      },
+      "widgets_values": [
+        "Flux\\ohwxaa-step00001000.safetensors",
+        1.2
+      ]
+    },
+    {
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
@@ -723,7 +677,94 @@
         }
       },
       "widgets_values": [
-        "ohwxma viewed from above. She is staring up at viewer"
+        "ohwxaa. She has 34DD, full, round breasts. She looks at the viewer"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1727,
+        287
+      ],
+      "size": [
+        140,
+        46
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 102
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            96,
+            105
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 51,
+      "type": "SaveImage",
+      "pos": [
+        2026.1442274657584,
+        85.50135426080101
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 105
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        }
+      },
+      "widgets_values": [
+        "ComfyUI_%date:yyyy-MM-dd_hh-mm-ss%.png"
       ]
     }
   ],
@@ -871,16 +912,24 @@
       28,
       0,
       "MODEL"
+    ],
+    [
+      105,
+      8,
+      0,
+      51,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.658845000000003,
+      "scale": 0.3073560549142844,
       "offset": [
-        -734.2802890148195,
-        -260.7917513637448
+        1514.7644146672258,
+        799.4272677062536
       ]
     },
     "groupNodes": {
