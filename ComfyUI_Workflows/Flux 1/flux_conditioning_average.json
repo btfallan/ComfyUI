@@ -1,0 +1,716 @@
+{
+  "last_node_id": 100,
+  "last_link_id": 198,
+  "nodes": [
+    {
+      "id": 72,
+      "type": "EmptyLatentImage",
+      "pos": [
+        -840,
+        715
+      ],
+      "size": {
+        "0": 261.3883972167969,
+        "1": 106
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            181
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        1
+      ]
+    },
+    {
+      "id": 96,
+      "type": "VAEDecode",
+      "pos": [
+        645,
+        192
+      ],
+      "size": {
+        "0": 210,
+        "1": 46
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 189
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 190
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            191
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 12,
+      "type": "UNETLoader",
+      "pos": [
+        -903,
+        211
+      ],
+      "size": {
+        "0": 315,
+        "1": 82
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            179,
+            185
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux1-dev.sft",
+        "default"
+      ]
+    },
+    {
+      "id": 65,
+      "type": "PreviewImage",
+      "pos": [
+        662,
+        316
+      ],
+      "size": {
+        "0": 1403.010498046875,
+        "1": 1406.1397705078125
+      },
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 191
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 100,
+      "type": "InjectLatentNoise+",
+      "pos": [
+        -63,
+        278
+      ],
+      "size": {
+        "0": 210,
+        "1": 106
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 196
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            197
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InjectLatentNoise+"
+      },
+      "widgets_values": [
+        0,
+        "fixed",
+        2.5
+      ]
+    },
+    {
+      "id": 95,
+      "type": "FluxSamplerParams+",
+      "pos": [
+        267,
+        192
+      ],
+      "size": {
+        "0": 315,
+        "1": 266
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 185
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 198
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 197
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            189
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "params",
+          "type": "SAMPLER_PARAMS",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FluxSamplerParams+"
+      },
+      "widgets_values": [
+        "3",
+        "dpmpp_2m",
+        "beta",
+        "15",
+        "2.5",
+        "",
+        "",
+        ".6"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "VAELoader",
+      "pos": [
+        -373,
+        779
+      ],
+      "size": {
+        "0": 210,
+        "1": 58
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            190
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ae.sft"
+      ]
+    },
+    {
+      "id": 97,
+      "type": "LatentUpscaleBy",
+      "pos": [
+        -67,
+        456
+      ],
+      "size": {
+        "0": 210,
+        "1": 82
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 193
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            196
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LatentUpscaleBy"
+      },
+      "widgets_values": [
+        "bicubic",
+        1.2
+      ]
+    },
+    {
+      "id": 84,
+      "type": "FluxGuidance",
+      "pos": [
+        -807,
+        590
+      ],
+      "size": {
+        "0": 211.60000610351562,
+        "1": 58
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 167
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            180
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FluxGuidance"
+      },
+      "widgets_values": [
+        3
+      ]
+    },
+    {
+      "id": 11,
+      "type": "DualCLIPLoader",
+      "pos": [
+        -2028,
+        616
+      ],
+      "size": {
+        "0": 315,
+        "1": 106
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            150,
+            155
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DualCLIPLoader"
+      },
+      "widgets_values": [
+        "t5xxl_fp16.safetensors",
+        "clip_l.safetensors",
+        "flux"
+      ]
+    },
+    {
+      "id": 77,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -1577,
+        449
+      ],
+      "size": {
+        "0": 314.9543762207031,
+        "1": 186.71063232421875
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 150
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            152
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The image is a painting of a night sky with a crescent moon in the top right corner. The sky is filled with stars and swirls, and the moon is a bright yellow color. The background is a deep blue, with a few wispy clouds scattered across the sky. In the foreground, there is a tall tree with a twisted trunk and a small village with houses and buildings in the distance. The village is surrounded by hills and trees, and there are a few buildings scattered throughout the landscape. The overall mood of the painting is peaceful and serene. The painting is done in a realistic style, with loose brushstrokes and vibrant colors."
+      ]
+    },
+    {
+      "id": 78,
+      "type": "ConditioningAverage",
+      "pos": [
+        -1186,
+        555
+      ],
+      "size": {
+        "0": 253.60000610351562,
+        "1": 78
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning_to",
+          "type": "CONDITIONING",
+          "link": 152
+        },
+        {
+          "name": "conditioning_from",
+          "type": "CONDITIONING",
+          "link": 158
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            167,
+            198
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConditioningAverage"
+      },
+      "widgets_values": [
+        0.49
+      ]
+    },
+    {
+      "id": 93,
+      "type": "FluxSamplerParams+",
+      "pos": [
+        -475,
+        457
+      ],
+      "size": {
+        "0": 315,
+        "1": 266
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 179
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 180
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 181
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            193
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "params",
+          "type": "SAMPLER_PARAMS",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FluxSamplerParams+"
+      },
+      "widgets_values": [
+        "9",
+        "dpmpp_2m",
+        "beta",
+        "20",
+        "3.5",
+        "",
+        "",
+        "1.0"
+      ]
+    },
+    {
+      "id": 82,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -1587,
+        700
+      ],
+      "size": {
+        "0": 318.9894104003906,
+        "1": 180.128662109375
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 155
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            158
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The image is a close-up portrait of a woman's face. She appears to be in her late twenties or early thirties and has shoulder-length brunette hair that is styled in loose waves. She has a slight smile on her lips and is looking directly at the camera. She is wearing a black blazer and her makeup is natural-looking with a hint of pink lipstick. The background is blurred, so the focus is on her face"
+      ]
+    }
+  ],
+  "links": [
+    [
+      150,
+      11,
+      0,
+      77,
+      0,
+      "CLIP"
+    ],
+    [
+      152,
+      77,
+      0,
+      78,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      155,
+      11,
+      0,
+      82,
+      0,
+      "CLIP"
+    ],
+    [
+      158,
+      82,
+      0,
+      78,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      167,
+      78,
+      0,
+      84,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      179,
+      12,
+      0,
+      93,
+      0,
+      "MODEL"
+    ],
+    [
+      180,
+      84,
+      0,
+      93,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      181,
+      72,
+      0,
+      93,
+      2,
+      "LATENT"
+    ],
+    [
+      185,
+      12,
+      0,
+      95,
+      0,
+      "MODEL"
+    ],
+    [
+      189,
+      95,
+      0,
+      96,
+      0,
+      "LATENT"
+    ],
+    [
+      190,
+      10,
+      0,
+      96,
+      1,
+      "VAE"
+    ],
+    [
+      191,
+      96,
+      0,
+      65,
+      0,
+      "IMAGE"
+    ],
+    [
+      193,
+      93,
+      0,
+      97,
+      0,
+      "LATENT"
+    ],
+    [
+      196,
+      97,
+      0,
+      100,
+      0,
+      "LATENT"
+    ],
+    [
+      197,
+      100,
+      0,
+      95,
+      2,
+      "LATENT"
+    ],
+    [
+      198,
+      78,
+      0,
+      95,
+      1,
+      "CONDITIONING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.015255979947799,
+      "offset": [
+        2111.6572463865346,
+        15.426370488784421
+      ]
+    }
+  },
+  "version": 0.4
+}

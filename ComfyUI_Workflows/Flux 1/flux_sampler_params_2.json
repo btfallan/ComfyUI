@@ -1,0 +1,595 @@
+{
+  "last_node_id": 101,
+  "last_link_id": 221,
+  "nodes": [
+    {
+      "id": 11,
+      "type": "DualCLIPLoader",
+      "pos": [
+        38,
+        60
+      ],
+      "size": {
+        "0": 210,
+        "1": 106
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            10
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DualCLIPLoader"
+      },
+      "widgets_values": [
+        "t5xxl_fp16.safetensors",
+        "clip_l.safetensors",
+        "flux"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "UNETLoader",
+      "pos": [
+        290,
+        330
+      ],
+      "size": {
+        "0": 229.8605194091797,
+        "1": 82
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            210
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux1-dev.sft",
+        "default"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        310,
+        60
+      ],
+      "size": {
+        "0": 366.7709045410156,
+        "1": 201.41677856445312
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            211
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "A 50yo female assassin from a fantasy d&d setting, she is middle-eastern of Iranian origins with dark brown skin. The frame shows half body. She is strong, serious, concentrated, and she's looking from the bottom up. Proved by the many battles, with wrinkles and scars on her face.\n\nin the style of impressionism an oil on canvas painting with broad three-dimensional brushstrokes like impasto. The shapes are defined by rough patches of colors. The shapes, shadows and highlights are just suggested giving the painting high dynamism."
+      ]
+    },
+    {
+      "id": 48,
+      "type": "SDXLEmptyLatentSizePicker+",
+      "pos": [
+        244,
+        478
+      ],
+      "size": {
+        "0": 268.79998779296875,
+        "1": 170
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            221
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [],
+          "shape": 3,
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDXLEmptyLatentSizePicker+"
+      },
+      "widgets_values": [
+        "896x1088 (0.82)",
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "id": 98,
+      "type": "FluxSamplerParams+",
+      "pos": [
+        821,
+        46
+      ],
+      "size": {
+        "0": 250.37530517578125,
+        "1": 266
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 210
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 211
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 221
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            213
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "params",
+          "type": "SAMPLER_PARAMS",
+          "links": [
+            220
+          ],
+          "shape": 3,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FluxSamplerParams+"
+      },
+      "widgets_values": [
+        "0",
+        "euler",
+        "simple, beta",
+        "20",
+        "2...4+0.5",
+        "",
+        "",
+        "1"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "VAELoader",
+      "pos": [
+        828,
+        419
+      ],
+      "size": {
+        "0": 210,
+        "1": 58
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            214
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ae.sft"
+      ]
+    },
+    {
+      "id": 99,
+      "type": "VAEDecode",
+      "pos": [
+        1162,
+        43
+      ],
+      "size": {
+        "0": 140,
+        "1": 46
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 213
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 214
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            218
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 101,
+      "type": "PlotParameters+",
+      "pos": [
+        1410,
+        64
+      ],
+      "size": {
+        "0": 218.39999389648438,
+        "1": 150
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 218
+        },
+        {
+          "name": "params",
+          "type": "SAMPLER_PARAMS",
+          "link": 220
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            219
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PlotParameters+"
+      },
+      "widgets_values": [
+        "none",
+        "scheduler",
+        0,
+        "false"
+      ]
+    },
+    {
+      "id": 100,
+      "type": "PreviewImage",
+      "pos": [
+        1741,
+        55
+      ],
+      "size": [
+        2124.844436546746,
+        3377.761703119263
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 219
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    }
+  ],
+  "links": [
+    [
+      10,
+      11,
+      0,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      210,
+      12,
+      0,
+      98,
+      0,
+      "MODEL"
+    ],
+    [
+      211,
+      6,
+      0,
+      98,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      213,
+      98,
+      0,
+      99,
+      0,
+      "LATENT"
+    ],
+    [
+      214,
+      10,
+      0,
+      99,
+      1,
+      "VAE"
+    ],
+    [
+      218,
+      99,
+      0,
+      101,
+      0,
+      "IMAGE"
+    ],
+    [
+      219,
+      101,
+      0,
+      100,
+      0,
+      "IMAGE"
+    ],
+    [
+      220,
+      98,
+      1,
+      101,
+      1,
+      "SAMPLER_PARAMS"
+    ],
+    [
+      221,
+      48,
+      0,
+      98,
+      2,
+      "LATENT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.391425130122103,
+      "offset": [
+        500.39118433593114,
+        676.2065579183835
+      ]
+    },
+    "groupNodes": {
+      "test": {
+        "nodes": [
+          {
+            "type": "PrimitiveNode",
+            "pos": [
+              88,
+              617
+            ],
+            "size": {
+              "0": 210,
+              "1": 82
+            },
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [],
+                "widget": {
+                  "name": "width"
+                }
+              }
+            ],
+            "title": "width",
+            "properties": {
+              "Run widget replace on values": false
+            },
+            "index": 0
+          },
+          {
+            "type": "PrimitiveNode",
+            "pos": [
+              87,
+              745
+            ],
+            "size": {
+              "0": 210,
+              "1": 82
+            },
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "outputs": [
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [],
+                "widget": {
+                  "name": "height"
+                }
+              }
+            ],
+            "title": "height",
+            "properties": {
+              "Run widget replace on values": false
+            },
+            "index": 1
+          },
+          {
+            "type": "EmptyLatentImage",
+            "pos": [
+              402,
+              596
+            ],
+            "size": {
+              "0": 315,
+              "1": 106
+            },
+            "flags": {},
+            "order": 9,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "width",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "width"
+                },
+                "slot_index": 0
+              },
+              {
+                "name": "height",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "height"
+                },
+                "slot_index": 1
+              }
+            ],
+            "outputs": [
+              {
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EmptyLatentImage"
+            },
+            "widgets_values": [
+              1024,
+              1024,
+              1
+            ],
+            "index": 2
+          }
+        ],
+        "links": [
+          [
+            0,
+            0,
+            2,
+            0,
+            32,
+            "INT"
+          ],
+          [
+            1,
+            0,
+            2,
+            1,
+            33,
+            "INT"
+          ]
+        ],
+        "external": [
+          [
+            2,
+            0,
+            "LATENT"
+          ]
+        ]
+      }
+    }
+  },
+  "version": 0.4
+}

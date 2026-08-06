@@ -60981,6 +60981,16 @@
             "install_type": "git-clone",
             "reference": "https://github.com/pixaroma/ComfyUI-Pixaroma",
             "title": "ComfyUI-Pixaroma"
+        },
+        {
+            "author": "MengYe-Z",
+            "description": "Multi-point white balance and exposure correction for e-commerce product images.",
+            "files": [
+                "https://github.com/MengYe-Z/ComfyUI-MultiPointWhiteBalance"
+            ],
+            "install_type": "git-clone",
+            "reference": "https://github.com/MengYe-Z/ComfyUI-MultiPointWhiteBalance",
+            "title": "ComfyUI MultiPoint White Balance"
         }
     ]
 }
