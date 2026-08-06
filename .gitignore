@@ -36,6 +36,8 @@ lora*
 *.gguf
 *.engine
 *.pack
+*.lock
+*.log
 
 # --- ComfyUI_Workflows: keep the actual workflow definitions, drop generated media/assets ---
 # ComfyUI_Workflows/**/*.png
