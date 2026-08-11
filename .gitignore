@@ -24,6 +24,7 @@ ComfyUI_Custom/models/
 ComfyUI/models/*
 ComfyUI/input/*
 ComfyUI/output/*
+ComfyUI/temp/*
 lora*
 
 # --- Model / weight file types (wherever they show up, e.g. inside custom_nodes) ---
