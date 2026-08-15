@@ -1,0 +1,16 @@
+ScheduleTypes.py
+HelperNodes.py
+ScheduleFuncs.py
+pyproject.toml
+BatchFuncs.py
+ScheduledNodes.py
+LICENCE.txt
+README.md
+__init__.py
+ValueFuncs.py
+WaveNodes.py
+FrameNodes.py
+.gitignore
+requirements.txt
+javascript/Folder here to satisfy init, eventually I'll have stuff in here..txt
+.github/workflows/publish.yml
