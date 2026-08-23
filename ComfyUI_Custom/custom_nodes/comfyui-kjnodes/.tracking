@@ -15,6 +15,7 @@ kjweb_async/marked.min.js
 kjweb_async/purify.min.js
 nodes/audioscheduler_nodes.py
 nodes/batchcrop_nodes.py
+nodes/context_windows_visualizer.py
 nodes/curve_nodes.py
 nodes/hdr_preview_node.py
 nodes/ideogram4_nodes.py
@@ -23,10 +24,12 @@ nodes/image_transform_node.py
 nodes/lora_nodes.py
 nodes/ltxv_nodes.py
 nodes/mask_nodes.py
+nodes/minimax_nodes.py
 nodes/model_optimization_nodes.py
 nodes/nodes.py
 nodes/preview_override_node.py
 nodes/sharpen_nodes.py
+nodes/tiny_vae.py
 nodes/triton_vae.py
 pyproject.toml
 requirements.txt
@@ -36,6 +39,7 @@ utility/numerical.py
 utility/utility.py
 web/js/appearance.js
 web/js/canvas_background.js
+web/js/context_windows_visualizer.js
 web/js/contextmenu.js
 web/js/editors/editor_base.js
 web/js/editors/interpolation.js

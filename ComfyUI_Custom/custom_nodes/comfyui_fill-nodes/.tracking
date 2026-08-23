@@ -243,11 +243,13 @@ nodes/vfx/FL_Shader.py
 nodes/vfx/FL_TextOverlay.py
 nodes/vfx/__init__.py
 nodes/video/FL_FILM.py
+nodes/video/FL_LoadVideo.py
 nodes/video/FL_ProResVideo.py
 nodes/video/FL_RIFE.py
 nodes/video/FL_VideoBatchSplitter.py
 nodes/video/FL_VideoCadence.py
 nodes/video/FL_VideoCadenceCompile.py
+nodes/video/FL_VideoCombine.py
 nodes/video/FL_VideoCrossfade.py
 nodes/video/FL_VideoCut.py
 nodes/video/FL_VideoTrim.py
@@ -269,6 +271,12 @@ nodes/wip/FL_ZImageControlNetPatch.py
 nodes/wip/__init__.py
 pyproject.toml
 requirements.txt
+routes/__init__.py
+routes/load_video.py
+routes/video_combine.py
+tests/test_load_image.py
+tests/test_load_video.py
+tests/test_video_combine.py
 web/.DS_Store
 web/FL_SystemCheck.js
 web/PhotoPea.js
@@ -310,7 +318,9 @@ web/nodes/utility/FL_Switch_Big.js
 web/nodes/utility/fl_js.js
 web/nodes/vfx/FL_DepthBlur.js
 web/nodes/vfx/FL_PixelArtNode.js
+web/nodes/video/FL_LoadVideo.js
 web/nodes/video/FL_VideoBatchSplitter.js
+web/nodes/video/FL_VideoCombine.js
 web/nodes/wip/FL_PathAnimator.js
 web/nodes/wip/FL_TimeLine.js
 web/nodes/wip/fl_wf_agent.js

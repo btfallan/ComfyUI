@@ -489,6 +489,12 @@ export function createModelCard(model, modelType) {
     const modelId = civitaiData?.modelId ?? civitaiData?.model_id;
     if (modelId !== undefined && modelId !== null && modelId !== '') {
         card.dataset.modelId = modelId;
+    } else if (model.hf_url) {
+        // For HF-only models, derive a group key from hf_url for version grouping
+        const match = model.hf_url.match(/https?:\/\/huggingface\.co\/([^/]+\/[^/]+)/);
+        if (match) {
+            card.dataset.modelId = 'hf:' + match[1];
+        }
     }
 
     // LoRA specific data
@@ -734,6 +740,46 @@ export function createModelCard(model, modelType) {
     if (videoElement) {
         configureModelCardVideo(videoElement, autoplayOnHover);
     }
+
+    // Dropping an image/video onto the card replaces the model preview via the
+    // existing replace-preview endpoint (overwrites file on disk, refreshes card).
+    const preventDragDefaults = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+        card.addEventListener(eventName, (event) => {
+            preventDragDefaults(event);
+            card.classList.add('drag-over');
+        });
+    });
+
+    card.addEventListener('dragleave', (event) => {
+        preventDragDefaults(event);
+        card.classList.remove('drag-over');
+    });
+
+    card.addEventListener('drop', (event) => {
+        preventDragDefaults(event);
+        card.classList.remove('drag-over');
+
+        const files = event.dataTransfer?.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        // Keep in sync with the accept list of the preview file picker (image/* + video/mp4).
+        if (!file.type.startsWith('image/') && file.type !== 'video/mp4') {
+            showToast('toast.api.previewDropInvalid', { name: file.name || '' }, 'error');
+            return;
+        }
+
+        const filePath = card.dataset.filepath;
+        if (!filePath) return;
+
+        // uploadPreview handles loading state, card refresh and error toasts internally.
+        getModelApiClient().uploadPreview(filePath, file);
+    });
 
     return card;
 }

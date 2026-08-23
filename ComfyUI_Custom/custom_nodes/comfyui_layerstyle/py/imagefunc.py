@@ -91,6 +91,15 @@ def load_light_leak_images() -> list:
     file = os.path.join(folder_paths.models_dir, "layerstyle", "light_leak.pkl")
     return load_pickle(file)
 
+def check_and_download_model(model_path, repo_id):
+    model_path = os.path.join(folder_paths.models_dir, model_path)
+
+    if not os.path.exists(model_path):
+        print(f"Downloading {repo_id} model...")
+        from huggingface_hub import snapshot_download
+        snapshot_download(repo_id=repo_id, local_dir=model_path, ignore_patterns=["*.md", "*.txt", "onnx", ".git"])
+    return model_path
+
 '''Converter'''
 
 def cv22ski(cv2_image:np.ndarray) -> np.array:
@@ -128,7 +137,15 @@ def tensor2np(tensor: torch.Tensor) -> List[np.ndarray]:
         return [np.clip(255.0 * t.cpu().numpy(), 0, 255).astype(np.uint8) for t in tensor]
 
 def tensor2pil(t_image: torch.Tensor)  -> Image:
-    return Image.fromarray(np.clip(255.0 * t_image.cpu().numpy().squeeze(), 0, 255).astype(np.uint8))
+    if t_image.dtype != torch.float32:
+        t_image = t_image.float()
+    return Image.fromarray(
+        np.clip(
+            255.0 * t_image.cpu().numpy().squeeze(),
+            0,
+            255
+        ).astype(np.uint8)
+    )
 
 def tensor2cv2(image:torch.Tensor) -> np.array:
     if image.dim() == 4:
@@ -365,12 +382,9 @@ def chop_image(background_image:Image, layer_image:Image, blend_mode:str, opacit
 
 def chop_image_v2(background_image:Image, layer_image:Image, blend_mode:str, opacity:int) -> Image:
 
-    backdrop_prepped = np.asfarray(background_image.convert('RGBA'))
-    source_prepped = np.asfarray(layer_image.convert('RGBA'))
+    backdrop_prepped = np.asarray(background_image.convert('RGBA'), dtype=float)
+    source_prepped = np.asarray(layer_image.convert('RGBA'), dtype=float)
     blended_np = BLEND_MODES[blend_mode](backdrop_prepped, source_prepped, opacity / 100)
-
-    # final_tensor = (torch.from_numpy(blended_np / 255)).unsqueeze(0)
-    # return tensor2pil(_tensor)
 
     return Image.fromarray(np.uint8(blended_np)).convert('RGB')
 
@@ -739,6 +753,31 @@ def gradient(start_color_inhex:str, end_color_inhex:str, width:int, height:int, 
     ret_image = ret_image.resize((width, height))
     return ret_image
 
+def draw_rounded_rectangle(image:Image, radius:int, bboxes:list, scale_factor:int=2, color:str="white") -> Image:
+        """
+        绘制圆角矩形图像。
+        image:输入图片
+        radius: 半径，100为纯椭圆
+        bboxes: (x1,y1,x2,y2)列表
+        scale_factor: 放大倍数
+        :return: 绘制好的pillow图像
+        """
+        if scale_factor < 1 : scale_factor = 1
+
+        img = image.resize((image.width * scale_factor, image.height * scale_factor), Image.LANCZOS)
+        draw = ImageDraw.Draw(img)
+
+        for (x1, y1, x2, y2) in bboxes:
+            r = radius * min(x2-x1, y2-y1) * 0.005
+            x1, y1, x2, y2 = x1 * scale_factor, y1 * scale_factor, x2 * scale_factor, y2 * scale_factor
+            # 计算圆角矩形的四个角的圆弧
+            draw.rounded_rectangle([x1, y1, x2, y2], radius=r * scale_factor, fill=color)
+
+        img = img.filter(ImageFilter.SMOOTH_MORE)
+        img = img.resize((image.width, image.height), Image.LANCZOS)
+
+        return img
+
 def draw_rect(image:Image, x:int, y:int, width:int, height:int, line_color:str, line_width:int,
               box_color:str=None) -> Image:
     draw = ImageDraw.Draw(image)
@@ -1050,46 +1089,25 @@ def image_channel_merge(channels:tuple, mode = 'RGB' ) -> Image:
 
 def image_gray_offset(image:Image, offset:int) -> Image:
     image = image.convert('L')
-    width = image.width
-    height = image.height
-    ret_image = Image.new('L', size=(width, height), color='black')
-    for x in range(width):
-        for y in range(height):
-                pixel = image.getpixel((x, y))
-                _pixel = pixel + offset
-                if _pixel > 255:
-                    _pixel = 255
-                if _pixel < 0:
-                    _pixel = 0
-                ret_image.putpixel((x, y), _pixel)
+    image_array = np.array(image, dtype=np.int16)
+    image_array = np.clip(image_array + offset, 0, 255).astype(np.uint8)
+    ret_image = Image.fromarray(image_array, mode='L')
     return ret_image
 
 def image_gray_ratio(image:Image, ratio:float) -> Image:
     image = image.convert('L')
-    width = image.width
-    height = image.height
-    ret_image = Image.new('L', size=(width, height), color='black')
-    for x in range(width):
-        for y in range(height):
-                pixel = image.getpixel((x, y))
-                _pixel = int(pixel * ratio)
-                ret_image.putpixel((x, y), _pixel)
+    image_array = np.array(image, dtype=np.float32)
+    image_array = np.clip(image_array * ratio, 0, 255).astype(np.uint8)
+    ret_image = Image.fromarray(image_array, mode='L')
     return ret_image
 
 def image_hue_offset(image:Image, offset:int) -> Image:
     image = image.convert('L')
-    width = image.width
-    height = image.height
-    ret_image = Image.new('L', size=(width, height), color='black')
-    for x in range(width):
-        for y in range(height):
-                pixel = image.getpixel((x, y))
-                _pixel = pixel + offset
-                if _pixel > 255:
-                    _pixel -= 256
-                if _pixel < 0:
-                    _pixel += 256
-                ret_image.putpixel((x, y), _pixel)
+    image_array = np.array(image, dtype=np.int16)
+    image_array = (image_array + offset) % 256
+    image_array = image_array.astype(np.uint8)
+    ret_image = Image.fromarray(image_array, mode='L')
+
     return ret_image
 
 def gamma_trans(image:Image, gamma:float) -> Image:
@@ -1251,8 +1269,8 @@ def image_beauty(image:Image, level:int=50) -> Image:
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     factor = (level / 50.0)**2
     d = int((image.width + image.height) / 256 * factor)
-    sigmaColor = int((image.width + image.height) / 256 * factor)
-    sigmaSpace = int((image.width + image.height) / 160 * factor)
+    sigmaColor = max(1, float((image.width + image.height) / 256 * factor))
+    sigmaSpace = max(1, float((image.width + image.height) / 160 * factor))
     img_bit = cv2.bilateralFilter(src=img, d=d, sigmaColor=sigmaColor, sigmaSpace=sigmaSpace)
     ret_image = cv2.cvtColor(img_bit, cv2.COLOR_BGR2RGB)
     return cv22pil(ret_image)
@@ -1273,58 +1291,6 @@ def pixel_spread(image:Image, mask:Image) -> Image:
 
     return tensor2pil(torch.from_numpy(fg.astype(np.float32)))
 
-
-def generate_text_image(text:str, font_path:str, font_size:int, text_color:str="#FFFFFF",
-                        vertical:bool=True, stroke_width:int=1, stroke_color:str="#000000",
-                         spacing:int=0, leading:int=0) -> tuple:
-
-    lines = text.split("\n")
-    if vertical:
-        layout = "vertical"
-    else:
-        layout = "horizontal"
-    char_coordinates = []
-    if layout == "vertical":
-        x = 0
-        y = 0
-        for i in range(len(lines)):
-            line = lines[i]
-            for char in line:
-                char_coordinates.append((x, y))
-                y += font_size + spacing
-            x += font_size + leading
-            y = 0
-    else:
-        x = 0
-        y = 0
-        for line in lines:
-            for char in line:
-                char_coordinates.append((x, y))
-                x += font_size + spacing
-            y += font_size + leading
-            x = 0
-    if layout == "vertical":
-        width = (len(lines) * (font_size + spacing)) - spacing
-        height = ((len(max(lines, key=len)) + 1) * (font_size + spacing)) + spacing
-    else:
-        width = (len(max(lines, key=len)) * (font_size + spacing)) - spacing
-        height = ((len(lines) - 1) * (font_size + spacing)) + font_size
-
-    image = Image.new('RGBA', size=(width, height), color=stroke_color)
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype(font_path, font_size)
-    index = 0
-    for i, line in enumerate(lines):
-        for j, char in enumerate(line):
-            x, y = char_coordinates[index]
-            if stroke_width > 0:
-                draw.text((x - stroke_width, y), char, font=font, fill=stroke_color)
-                draw.text((x + stroke_width, y), char, font=font, fill=stroke_color)
-                draw.text((x, y - stroke_width), char, font=font, fill=stroke_color)
-                draw.text((x, y + stroke_width), char, font=font, fill=stroke_color)
-            draw.text((x, y), char, font=font, fill=text_color)
-            index += 1
-    return (image.convert('RGB'), image.split()[3])
 
 def watermark_image_size(image:Image) -> int:
     size = int(math.sqrt(image.width * image.height * 0.015625) * 0.9)
@@ -1425,6 +1391,61 @@ def generate_text_image(width:int, height:int, text:str, font_file:str, text_sca
     y = int((height - text_height) / 2) - int(font_size / 2)
     draw.text((x, y), text, font=font, fill=font_color)
     return image
+
+def displacement_image(image: Image, displacement_map: Image, strength: float, smoothness: int, anti_aliasing: int) -> Image:
+
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
+    if displacement_map.mode != 'L':
+        displacement_map = displacement_map.convert('L')
+
+    orig_w, orig_h = image.size
+
+    if displacement_map.size != image.size:
+        displacement_map = displacement_map.resize(image.size, Image.LANCZOS)
+
+    if smoothness:
+        displacement_map = gaussian_blur(displacement_map, smoothness)
+
+    if anti_aliasing > 1:
+        up_size = (orig_w * anti_aliasing, orig_h * anti_aliasing)
+        image = image.resize(up_size, Image.LANCZOS)
+        displacement_map = displacement_map.resize(up_size, Image.LANCZOS)
+
+    img = np.asarray(image)
+    disp = np.asarray(displacement_map).astype(np.float32)
+
+    h, w = disp.shape
+
+    ys, xs = np.meshgrid(
+        np.arange(h, dtype=np.int32),
+        np.arange(w, dtype=np.int32),
+        indexing="ij"
+    )
+
+    offset = (disp / 255.0 * strength * anti_aliasing).astype(np.int32)
+
+    new_x = xs + offset
+    new_y = ys + offset
+
+    def mirror(coord, size):
+        coord = np.where(coord < 0, -coord, coord)
+        coord = np.where(coord >= size, 2 * size - coord - 1, coord)
+        return coord
+
+    new_x = mirror(new_x, w)
+    new_y = mirror(new_y, h)
+
+    out = img[new_y, new_x]
+
+    ret = Image.fromarray(out, mode="RGB")
+
+    if anti_aliasing > 1:
+        ret = gaussian_blur(ret, int(anti_aliasing / 3))
+        ret = ret.resize((orig_w, orig_h), Image.LANCZOS)
+
+    return ret
+
 
 '''Mask Functions'''
 
@@ -1539,16 +1560,28 @@ class VITMatteModel:
         self.processor = processor
 
 def load_VITMatte_model(model_name:str, local_files_only:bool=False) -> object:
-    if local_files_only:
-        model_name = Path(os.path.join(folder_paths.models_dir, "vitmatte"))
-    # model_name = Path(os.path.join(folder_paths.models_dir, "vitmatte"))
+    model_name = "vitmatte"
+    model_repo = "hustvl/vitmatte-small-composition-1k"
+    model_path  = check_and_download_model(model_name, model_repo)
     from transformers import VitMatteImageProcessor, VitMatteForImageMatting
-    model = VitMatteForImageMatting.from_pretrained(model_name, local_files_only=local_files_only)
-    processor = VitMatteImageProcessor.from_pretrained(model_name, local_files_only=local_files_only)
+    model = VitMatteForImageMatting.from_pretrained(model_path, local_files_only=local_files_only)
+    processor = VitMatteImageProcessor.from_pretrained(model_path, local_files_only=local_files_only)
     vitmatte = VITMatteModel(model, processor)
     return vitmatte
 
-def generate_VITMatte(image:Image, trimap:Image, local_files_only:bool=False, device:str="cpu", max_megapixels:float=2.0) -> Image:
+
+def load_VITMatte_base_model(model_name:str, local_files_only:bool=False) -> object:
+    model_name = "vitmatte-base-composition-1k"
+    model_repo = "hustvl/vitmatte-base-composition-1k"
+    model_path  = check_and_download_model(model_name, model_repo)
+    from transformers import VitMatteImageProcessor, VitMatteForImageMatting
+    model = VitMatteForImageMatting.from_pretrained(model_path, local_files_only=local_files_only)
+    processor = VitMatteImageProcessor.from_pretrained(model_path, local_files_only=local_files_only)
+    vitmatte = VITMatteModel(model, processor)
+    return vitmatte
+
+def generate_VITMatte(image:Image, trimap:Image, local_files_only:bool=False, device:str="cpu",
+                      max_megapixels:float=2.0, method:str="VITMatte") -> Image:
     if image.mode != 'RGB':
         image = image.convert('RGB')
     if trimap.mode != 'L':
@@ -1564,7 +1597,7 @@ def generate_VITMatte(image:Image, trimap:Image, local_files_only:bool=False, de
         image = image.resize((target_width, target_height), Image.BILINEAR)
         trimap = trimap.resize((target_width, target_height), Image.BILINEAR)
         # log(f"vitmatte image size {width}x{height} too large, resize to {target_width}x{target_height} for processing.")
-    model_name = "hustvl/vitmatte-small-composition-1k"
+
     if device=="cpu":
         device = torch.device('cpu')
     else:
@@ -1573,7 +1606,12 @@ def generate_VITMatte(image:Image, trimap:Image, local_files_only:bool=False, de
         else:
             log("vitmatte device is set to cuda, but not available, using cpu instead.")
             device = torch.device('cpu')
-    vit_matte_model = load_VITMatte_model(model_name=model_name, local_files_only=local_files_only)
+    if method == "vitmatte-base-composition-1k":
+        model_name = "hustvl/vitmatte-base-composition-1k"
+        vit_matte_model = load_VITMatte_base_model(model_name=model_name, local_files_only=local_files_only)
+    else:
+        model_name = "hustvl/vitmatte-small-composition-1k"
+        vit_matte_model = load_VITMatte_model(model_name=model_name, local_files_only=local_files_only)
     vit_matte_model.model.to(device)
     # log(f"vitmatte processing, image size = {image.width}x{image.height}, device = {device}.")
     inputs = vit_matte_model.processor(images=image, trimaps=trimap, return_tensors="pt")
@@ -1705,10 +1743,13 @@ def mask_area(image:Image) -> tuple:
     gray = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2GRAY)
     _, thresh = cv2.threshold(gray, 127, 255, 0)
     locs = np.where(thresh == 255)
-    x1 = np.min(locs[1]) if len(locs[1]) > 0 else 0
-    x2 = np.max(locs[1]) if len(locs[1]) > 0 else image.width
-    y1 = np.min(locs[0]) if len(locs[0]) > 0 else 0
-    y2 = np.max(locs[0]) if len(locs[0]) > 0 else image.height
+    try:
+        x1 = np.min(locs[1])
+        x2 = np.max(locs[1])
+        y1 = np.min(locs[0])
+        y2 = np.max(locs[0])
+    except ValueError:
+        x1, y1, x2, y2 = -1, -1, 0, 0
     x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
     return (x1, y1, x2 - x1, y2 - y1)
 
@@ -1846,6 +1887,8 @@ def Hex_to_RGB(inhex:str) -> tuple:
     if not inhex.startswith('#'):
         raise ValueError(f'Invalid Hex Code in {inhex}')
     else:
+        if len(inhex) == 4:
+            inhex = "#" + "".join([char * 2 for char in inhex[1:]])
         rval = inhex[1:3]
         gval = inhex[3:5]
         bval = inhex[5:]
@@ -1860,6 +1903,8 @@ def Hex_to_HSV_255level(inhex:str) -> list:
     if not inhex.startswith('#'):
         raise ValueError(f'Invalid Hex Code in {inhex}')
     else:
+        if len(inhex) == 4:
+            inhex = "#" + "".join([char * 2 for char in inhex[1:]])
         rval = inhex[1:3]
         gval = inhex[3:5]
         bval = inhex[5:]
@@ -2045,6 +2090,63 @@ def extract_all_numbers_from_str(string, checkint:bool=False):
 # 提取字符串中用"," ";" " "分开的字符串, 返回为列表
 def extract_substr_from_str(string) -> list:
     return re.split(r'[,\s;，；]+', string)
+
+# lcs匹配算法，计算最长公共子序列 (LCS)：子字符串顺序：以相同顺序出现，权重更高。额外字符惩罚：多余字符会降低相似度。
+def lcs_with_order(s1, s2):
+    """Calculate the length of the longest common subsequence (LCS) with the same order."""
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    return dp[m][n]
+
+# 使用正则表达式将字符串拆分为单词（token），对比的同时忽略大小写和非字母数字字符。
+def tokenize_string(s):
+    """Tokenize a string by splitting on non-alphanumeric characters and normalizing case."""
+    return re.findall(r'\b\w+\b', s.lower())
+
+# 在列表中找到字符串的最佳匹配
+def find_best_match_by_similarity(target, candidates):
+    """
+    Find the best matching string based on substring order, extra character penalties, and tokenization.
+
+    Parameters:
+        target (str): The target string.
+        candidates (list of str): List of candidate strings.
+
+    Returns:
+        str: The best matching string.
+    """
+    target_tokens = tokenize_string(target)
+    best_match = None
+    highest_score = float('-inf')
+
+    for candidate in candidates:
+        candidate_tokens = tokenize_string(candidate)
+
+        # Calculate LCS on tokens
+        target_str = ''.join(target_tokens)
+        candidate_str = ''.join(candidate_tokens)
+        lcs = lcs_with_order(target_str, candidate_str)
+
+        # Calculate similarity score
+        match_ratio = lcs / len(target_str)  # Ratio of matched characters
+        extra_char_penalty = len(candidate_str) - lcs  # Penalty for extra characters
+        unmatched_tokens_penalty = len(set(candidate_tokens) - set(target_tokens))  # Penalty for unmatched tokens
+        score = match_ratio - 0.1 * extra_char_penalty - 0.2 * unmatched_tokens_penalty  # Weighted score
+
+        if score > highest_score:
+            highest_score = score
+            best_match = candidate
+
+    return best_match
+
 
 def clear_memory():
     import gc
@@ -2308,43 +2410,16 @@ def get_resource_dir() -> list:
 
     return (LUT_DICT, FONT_DICT)
 
-# (LUT_DICT, FONT_DICT) = get_resource_dir()
-# FONT_LIST = list(FONT_DICT.keys())
-# LUT_LIST = list(LUT_DICT.keys())
-
-# def get_models_dir() -> dict:
-#     models_dir_ini_file = os.path.join(os.path.dirname(os.path.dirname(os.path.normpath(__file__))), "models_dir.ini")
-#     MODELS_DIR = {}
-#     model_dir_list = [
-#         "birefnet_dir",
-#         "evf-sam_dir",
-#         "florence2_dir",
-#         "lama_dir",
-#         "rmbg_dir",
-#         "segformerB2_dir",
-#         "segformerB3_clothes_dir",
-#         "segformerB3_fashion_dir",
-#         "sam2_dir",
-#         "transparent-background_dir",
-#         "yolo8_dir",
-#         "yolo_world_dir"
-#     ]
-#     try:
-#         with open(models_dir_ini_file, 'r') as f:
-#             ini = f.readlines()
-#             for line in ini:
-#                 for model_dir in model_dir_list:
-#                     if line.startswith(model_dir):
-#                         path = line[line.find('=') + 1:].rstrip().lstrip()
-#                         if os.path.exists(path):
-#                             MODELS_DIR[model_dir] = path
-#         log(f'Find {len(MODELS_DIR)} path(s) in {models_dir_ini_file}.')
-#     except Exception as e:
-#         log(f'Warning: {models_dir_ini_file} not found' + f', default directory to be used.')
-#
-#     return MODELS_DIR
-#
-# MODELS_DIR = get_models_dir()
+# 规范bbox，保证x1 < x2, y1 < y2, 并返回int
+def standardize_bbox(bboxes:list) -> list:
+    ret_bboxes = []
+    for bbox in bboxes:
+        x1 = int(min(bbox[0], bbox[2]))
+        y1 = int(min(bbox[1], bbox[3]))
+        x2 = int(max(bbox[0], bbox[2]))
+        y2 = int(max(bbox[1], bbox[3]))
+        ret_bboxes.append([x1, y1, x2, y2])
+    return ret_bboxes
 
 def draw_bounding_boxes(image: Image, bboxes: list, color: str = "#FF0000", line_width: int = 5) -> Image:
     """

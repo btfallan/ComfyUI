@@ -5,11 +5,11 @@
     "Comfy.Toast.DisableReconnectingToast": true,
     "pysssss.ModelInfo.CheckpointNodes": "CheckpointLoader.ckpt_name,CheckpointLoaderSimple,CheckpointLoader|pysssss,Efficient Loader,Eff. Loader SDXL,ttN pipeLoader_v2,ttN pipeLoaderSDXL_v2,ttN tinyLoader",
     "pysssss.ModelInfo.LoraNodes": "LoraLoader.lora_name,LoraLoader|pysssss,LoraLoaderModelOnly.lora_name,LoRA Stacker.lora_name.*,ttN KSampler_v2,ttN pipeKSampler_v2,ttN pipeKSamplerAdvanced_v2,ttN pipeKSamplerSDXL_v2",
-    "Comfy.Queue.History.Expanded": false,
+    "Comfy.Queue.History.Expanded": true,
     "Comfy.Templates.SelectedUseCases": [
         "Image Edit"
     ],
-    "Comfy.Templates.SortBy": "popular",
+    "Comfy.Templates.SortBy": "default",
     "Comfy.CustomColorPalettes": {
         "obsidian": {
             "version": 112,

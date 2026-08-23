@@ -1,4 +1,5 @@
 import os
+import secrets
 import torch
 import numpy as np
 import folder_paths
@@ -43,11 +44,11 @@ class SaveAudioWithPath:
                 ),
                 "subfolder_name": (
                     "STRING",
-                    {"default": "audio", "tooltip": "Subfolder to create within the base folder."},
+                    {"default": "audio", "tooltip": "Subfolder to create within the base folder. Leave empty to save directly into the base folder."},
                 ),
                 "filename": (
                     "STRING",
-                    {"default": "output", "tooltip": "File name for the audio file (without extension)."},
+                    {"default": "output", "tooltip": "File name for the audio file (without extension). Leave empty for an auto-generated unique name."},
                 ),
                 "suffix": ("STRING", {"default": "", "tooltip": "Optional suffix to append to the filename."}),
                 "sample_rate": (
@@ -99,7 +100,7 @@ class SaveAudioWithPath:
         normalize_clipping=True,
     ):
         if audio is None:
-            print("❌ ERROR: No input audio provided to SaveAudioWithPath.")
+            print("[ERROR] ERROR: No input audio provided to SaveAudioWithPath.")
             return ()
 
         try:
@@ -107,7 +108,7 @@ class SaveAudioWithPath:
             if os.path.isfile(folder_path):
                 # If the input is a file, use its parent directory
                 base_path = os.path.dirname(folder_path)
-                print(f"💡 Input 'folder_path' was a file. Using its parent directory: {base_path}")
+                print(f"[INFO] Input 'folder_path' was a file. Using its parent directory: {base_path}")
             else:
                 # Otherwise, use the input path as is
                 base_path = folder_path
@@ -118,14 +119,20 @@ class SaveAudioWithPath:
             filename_clean = filename.strip().lstrip('/\\')
             suffix_clean = suffix.strip()
 
-            if not subfolder_clean or not filename_clean:
-                raise ValueError("Subfolder and Filename fields cannot be empty.")
+            # Empty filename: auto-generate a unique name (never block the save).
+            if not filename_clean:
+                filename_clean = f"audio_{secrets.token_hex(16)}"
+                print(f"[INFO] No filename given. Using auto-generated name: {filename_clean}")
 
             # Combine filename and the custom suffix
             filename_with_suffix = f"{filename_clean}{suffix_clean}"
 
-            # Construct the full directory path using the corrected base_path
-            final_dir = os.path.join(base_path, subfolder_clean)
+            # Empty subfolder: save directly into the base folder.
+            final_dir = (
+                os.path.join(base_path, subfolder_clean)
+                if subfolder_clean
+                else base_path
+            )
             os.makedirs(final_dir, exist_ok=True)
 
             # Handle file naming and overwriting
@@ -148,7 +155,7 @@ class SaveAudioWithPath:
             sr_to_use = int(audio.get('sample_rate', sample_rate))
 
             if waveform_tensor is None or waveform_tensor.nelement() == 0:
-                print("❌ ERROR: The 'waveform' tensor in the audio input is empty.")
+                print("[ERROR] ERROR: The 'waveform' tensor in the audio input is empty.")
                 return ()
 
             audio_data = waveform_tensor[0].cpu().numpy()
@@ -157,12 +164,12 @@ class SaveAudioWithPath:
             peak = np.max(np.abs(audio_data))
             if peak > 1.0:
                 if normalize_clipping:
-                    print("⚠️ Warning: Audio data is clipping. It will be normalized.")
+                    print("[WARN] Warning: Audio data is clipping. It will be normalized.")
                     audio_data /= peak
                 elif bit_depth == "32-bit float":
-                    print("⚠️ Warning: Audio data is clipping. Saving over-full-scale samples as 32-bit float.")
+                    print("[WARN] Warning: Audio data is clipping. Saving over-full-scale samples as 32-bit float.")
                 else:
-                    print("⚠️ Warning: Audio data is clipping. Hard-clipping peaks to -1 dBFS.")
+                    print("[WARN] Warning: Audio data is clipping. Hard-clipping peaks to -1 dBFS.")
                     audio_data = np.clip(audio_data, -CLIP_CEILING, CLIP_CEILING)
 
             if bit_depth == "32-bit float":
@@ -170,11 +177,11 @@ class SaveAudioWithPath:
             else:
                 audio_data = np.clip(audio_data, -1.0, 1.0)
                 _write_pcm24_wav(final_filepath, sr_to_use, audio_data)
-            print(f"✅ Saved audio successfully to: {final_filepath}")
+            print(f"[OK] Saved audio successfully to: {final_filepath}")
             return ()
 
         except Exception as e:
-            print(f"❌ ERROR in SaveAudioWithPath: {str(e)}")
+            print(f"[ERROR] ERROR in SaveAudioWithPath: {str(e)}")
             raise e
 
 

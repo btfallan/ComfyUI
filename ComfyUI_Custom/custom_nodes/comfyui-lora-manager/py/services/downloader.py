@@ -1,3 +1,7 @@
+# pyright: reportImportCycles=false
+# Lazy (function-local) imports still count as static edges in basedpyright's
+# reportImportCycles, so the ServiceRegistry singleton pattern necessarily forms
+# import cycles. Breaking them would require an architectural refactor.
 """
 Unified download manager for all HTTP/HTTPS downloads in the application.
 
@@ -20,7 +24,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
-from typing import Optional, Dict, Tuple, Callable, Union, Awaitable
+from typing import Optional, Dict, Tuple, Callable, Union, Awaitable, Any, cast
 from ..services.settings_manager import get_settings_manager
 from .connectivity_guard import (
     OFFLINE_COOLDOWN_ERROR,
@@ -204,6 +208,7 @@ class Downloader:
                 # Double check after acquiring lock
                 if self._session is None or self._should_refresh_session():
                     await self._create_session()
+        assert self._session is not None
         return self._session
 
     @property
@@ -231,7 +236,7 @@ class Downloader:
         )
 
         try:
-            timeout_value = float(raw_value)
+            timeout_value = float(cast(Any, raw_value))
         except (TypeError, ValueError):
             timeout_value = default_timeout
 
@@ -243,7 +248,7 @@ class Downloader:
         raw_value = os.environ.get("COMFYUI_DOWNLOAD_MAX_RETRIES")
 
         try:
-            retries = int(raw_value)
+            retries = int(cast(Any, raw_value))
         except (TypeError, ValueError):
             retries = default_retries
 
@@ -270,14 +275,14 @@ class Downloader:
 
         Note: This is private and caller MUST hold self._session_lock.
         """
-        # Close existing session if any
-        if self._session is not None:
-            try:
-                await self._session.close()
-            except Exception as e:  # pragma: no cover
-                logger.warning(f"Error closing previous session: {e}")
-            finally:
-                self._session = None
+        # Snapshot and clear old session reference before creating the new
+        # one.  This ensures self._session is always valid (or None, which
+        # triggers a fresh creation) and avoids a race where concurrent
+        # requests hold a reference to a session whose connector has been
+        # torn down by a premature close() call — the root cause of the
+        # intermittent "NoneType has no attribute connect" crash.
+        old_session = self._session
+        self._session = None
 
         # Check for app-level proxy settings
         proxy_url = None  # http(s) proxy, passed via the per-request `proxy=` kwarg
@@ -320,7 +325,7 @@ class Downloader:
         # CA coverage across different Python environments (especially
         # embedded/compatibility Python builds).
         try:
-            import certifi  # type: ignore[import-untyped]
+            import certifi  # pyright: ignore[reportMissingTypeStubs]
 
             ca_path = certifi.where()
             ssl_context = ssl.create_default_context(cafile=ca_path)
@@ -330,7 +335,7 @@ class Downloader:
             logger.debug("SSL: certifi unavailable; using system default CA bundle")
 
         # Optimize TCP connection parameters
-        connector_kwargs = dict(
+        connector_kwargs: Dict[str, Any] = dict(
             ssl=ssl_context,
             limit=8,  # Concurrent connections
             ttl_dns_cache=300,  # DNS cache timeout
@@ -371,6 +376,13 @@ class Downloader:
         # would re-trigger the original aiohttp parse error.
         self._proxy_url = proxy_url
         self._session_created_at = datetime.now()
+
+        # Close the previous session now that the replacement is live.
+        if old_session is not None:
+            try:
+                await old_session.close()
+            except Exception as e:  # pragma: no cover
+                logger.warning(f"Error closing previous session: {e}")
 
         logger.debug(
             "Created new HTTP session with proxy settings. App-level proxy: %s, System-level proxy (trust_env): %s",
@@ -753,7 +765,8 @@ class Downloader:
                             else:
                                 resume_offset = 0
                                 total_size = 0
-                            await self._create_session()
+                            async with self._session_lock:
+                                await self._create_session()
                             continue
 
                         return False, integrity_error
@@ -843,7 +856,8 @@ class Downloader:
                         logger.info(f"Will resume from byte {resume_offset}")
 
                     # Refresh session to get new connection
-                    await self._create_session()
+                    async with self._session_lock:
+                        await self._create_session()
                     continue
                 else:
                     logger.error(f"Max retries exceeded for download: {e}")
@@ -881,7 +895,7 @@ class Downloader:
         use_auth: bool = False,
         custom_headers: Optional[Dict[str, str]] = None,
         return_headers: bool = False,
-    ) -> Tuple[bool, Union[bytes, str], Optional[Dict]]:
+    ) -> Tuple[bool, Union[bytes, str], Optional[Dict[str, Any]]]:
         """
         Download a file to memory (for small files like preview images)
 
@@ -967,7 +981,7 @@ class Downloader:
         url: str,
         use_auth: bool = False,
         custom_headers: Optional[Dict[str, str]] = None,
-    ) -> Tuple[bool, Union[Dict, str]]:
+    ) -> Tuple[bool, Union[Dict[str, Any], str]]:
         """
         Get response headers without downloading the full content
 
@@ -1027,7 +1041,7 @@ class Downloader:
         use_auth: bool = False,
         custom_headers: Optional[Dict[str, str]] = None,
         **kwargs,
-    ) -> Tuple[bool, Union[Dict, str]]:
+    ) -> Tuple[bool, Union[Dict[str, Any], str, RateLimitError]]:
         """
         Make a generic HTTP request and return JSON response
 

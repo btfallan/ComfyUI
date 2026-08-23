@@ -1,7 +1,7 @@
 """
 @author: CRT
 @title: CRT-Nodes
-@version: 2.5.4
+@version: 2.7.1
 @project: "https://github.com/PGCRT/CRT-Nodes",
 @description: Set of nodes for ComfyUI
 https://discord.gg/8wYS9MBQqp
@@ -71,6 +71,8 @@ if True:
     from .py.Save_Video_With_Path import SaveVideoWithPath
     from .py.Save_Latent_With_Path import SaveLatentWithPath
     from .py.Load_Last_Latent import LoadLastLatent
+    from .py.Save_Latents_Conditioning import SaveLatentsConditioning
+    from .py.Load_Latents_Conditioning import LoadLatentsConditioning
     from .py.Enable_Latent import EnableLatent
     from .py.Boolean_Invert import BooleanInvert
     from .py.Strength_To_Steps_Node import StrengthToStepsNode
@@ -91,6 +93,9 @@ if True:
     from .py.Wan_Batch_Sampler import CRT_WAN_BatchSampler
     from .py.Dynamic_Prompt_Scheduler import CRT_DynamicPromptScheduler
     from .py.File_Batch_Prompt_Scheduler import CRT_FileBatchPromptScheduler
+    from .py.File_Batch_Prompt_Scheduler_KREA2 import (
+        CRT_FileBatchPromptSchedulerKREA2,
+    )
     from .py.Text_Loader_Crawl_Batch import TextLoaderCrawlBatch
     from .py.Audio_Data_To_Frame_Count import AudioOrManualFrameCount
     from .py.Quantize_And_Crop import CRT_QuantizeAndCropImage
@@ -107,7 +112,9 @@ if True:
     from .py.Join_Strings import CRT_JoinStrings
     from .py.Remove_Lines import CRT_RemoveLines
     from .py.Int_Value import CRT_IntValue
+    from .py.Minimax_Length import CRT_MinimaxLength
     from .py.Mono_To_Stereo_Converter import MonoToStereoConverter
+    from .py.Seeded_Persona_Lora_Loader import SeededPersonaLoraLoader
     from .py.Any_Trigger import AnyTrigger
     from .py.Depth_Anything_Tensorrt_Format import DepthAnythingTensorrtFormat
     from .py.Audio_Frame_Adjuster import AudioFrameAdjuster
@@ -130,6 +137,8 @@ if True:
         CRT_IsolateOutput,
     )
     from .py.Isolate_CLIPSeg import CRT_IsolateInputCLIPSeg
+    from .py.ERNIE_Image_Aesthetic_Scorer import ErnieImageAestheticScore
+    from .py.Unsloth_Studio_Bridge import UnslothLLM
     from .py.AutoDL_Nodes import (
         NODE_CLASS_MAPPINGS as CRT_AUTODL_NODE_CLASS_MAPPINGS,
         NODE_DISPLAY_NAME_MAPPINGS as CRT_AUTODL_NODE_DISPLAY_NAME_MAPPINGS,
@@ -265,6 +274,8 @@ NODE_CLASS_MAPPINGS = {
     "SaveVideoWithPath": SaveVideoWithPath,
     "SaveLatentWithPath": SaveLatentWithPath,
     "LoadLastLatent": LoadLastLatent,
+    "SaveLatentsConditioning": SaveLatentsConditioning,
+    "LoadLatentsConditioning": LoadLatentsConditioning,
     "EnableLatent": EnableLatent,
     "BooleanInvert": BooleanInvert,
     "Strength To Steps": StrengthToStepsNode,
@@ -285,6 +296,7 @@ NODE_CLASS_MAPPINGS = {
     "CRT_WAN_BatchSampler": CRT_WAN_BatchSampler,
     "CRT_DynamicPromptScheduler": CRT_DynamicPromptScheduler,
     "CRT_FileBatchPromptScheduler": CRT_FileBatchPromptScheduler,
+    "CRT_FileBatchPromptSchedulerKREA2": CRT_FileBatchPromptSchedulerKREA2,
     "TextLoaderCrawlBatch": TextLoaderCrawlBatch,
     "AudioOrManualFrameCount": AudioOrManualFrameCount,
     "CRT_QuantizeAndCropImage": CRT_QuantizeAndCropImage,
@@ -301,7 +313,9 @@ NODE_CLASS_MAPPINGS = {
     "CRT_JoinStrings": CRT_JoinStrings,
     "CRT_RemoveLines": CRT_RemoveLines,
     "CRT_IntValue": CRT_IntValue,
+    "CRT_MinimaxLength": CRT_MinimaxLength,
     "MonoToStereoConverter": MonoToStereoConverter,
+    "PGC_SeededPersonaLoraLoader": SeededPersonaLoraLoader,
     "AnyTrigger": AnyTrigger,
     "DepthAnythingTensorrtFormat": DepthAnythingTensorrtFormat,
     "AudioFrameAdjuster": AudioFrameAdjuster,
@@ -321,6 +335,8 @@ NODE_CLASS_MAPPINGS = {
     "CRT_IsolateInput": CRT_IsolateInput,
     "CRT_IsolateOutput": CRT_IsolateOutput,
     "CRT_IsolateInputCLIPSeg": CRT_IsolateInputCLIPSeg,
+    "ErnieImageAestheticScore": ErnieImageAestheticScore,
+    "UnslothLLM": UnslothLLM,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -345,9 +361,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SamplerSchedulerSelector": "Sampler & Scheduler Selector (CRT)",
     "SamplerSchedulerCrawler": "Sampler & Scheduler Crawler (CRT)",
     "Resolution": "Resolution (CRT)",
+    "SolidColor": "Solid Color (CRT)",
     "SimpleKnobNode": "K",
     "SimpleToggleNode": "T",
-    "CRT_UpscaleModelAdv": "Upscale using model adv (CRT)",
+    "CRT_UpscaleModelAdv": "Upscale Model Advanced (CRT)",
     "SmartControlNetApply": "Smart ControlNet Apply (CRT)",
     "SmartStyleModelApplyDual": "Smart Style Model Apply DUAL (CRT)",
     "CLIPTextEncodeFluxMerged": "CLIP Text Encode FLUX Merged (CRT)",
@@ -374,6 +391,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SaveVideoWithPath": "Save Video With Path (CRT)",
     "SaveLatentWithPath": "Save Latent With Path (CRT)",
     "LoadLastLatent": "Load Last Latent (CRT)",
+    "SaveLatentsConditioning": "Save Latents Conditioning (CRT)",
+    "LoadLatentsConditioning": "Load Latents Conditioning (CRT)",
     "EnableLatent": "Enable Latent (CRT)",
     "BooleanInvert": "Boolean Invert (CRT)",
     "Strength To Steps": "Strength to Steps (CRT)",
@@ -388,12 +407,15 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LensDistortFX": "Lens Distort FX (CRT)",
     "SmartDeNoiseFX": "Smart DeNoise FX (CRT)",
     "ArcaneBloomFX": "Arcane Bloom FX (CRT)",
-    "FancyTimerNode": "Fancy Timer Node",
+    "FancyTimerNode": "Fancy Timer (CRT)",
     "WAN2.2 LoRA Compare Sampler": "WAN 2.2 LoRA Compare Sampler (CRT)",
     "CRT_AddSettingsAndPrompt": "Add Settings and Prompt (CRT)",
     "CRT_WAN_BatchSampler": "WAN 2.2 Batch Sampler (CRT)",
     "CRT_DynamicPromptScheduler": "Dynamic Prompt Scheduler (CRT)",
     "CRT_FileBatchPromptScheduler": "File Batch Prompt Scheduler (CRT)",
+    "CRT_FileBatchPromptSchedulerKREA2": (
+        "File Batch Prompt Scheduler KREA2 (CRT)"
+    ),
     "TextLoaderCrawlBatch": "Text Loader Crawl Batch (CRT)",
     "AudioOrManualFrameCount": "Frame Count (Audio or Manual) (CRT)",
     "CRT_QuantizeAndCropImage": "Quantize and Crop Image (CRT)",
@@ -410,7 +432,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "CRT_JoinStrings": "Join Strings (CRT)",
     "CRT_RemoveLines": "Remove Lines (CRT)",
     "CRT_IntValue": "Int Value (CRT)",
+    "CRT_MinimaxLength": "Minimax Length (CRT)",
     "MonoToStereoConverter": "Mono to Stereo Converter (CRT)",
+    "PGC_SeededPersonaLoraLoader": "Seeded Persona LoRA Loader (CRT)",
     "AnyTrigger": "Any Trigger (CRT)",
     "DepthAnythingTensorrtFormat": "Depth Anything Tensorrt Format (CRT)",
     "AudioFrameAdjuster": "Audio Frame Adjuster (CRT)",
@@ -430,6 +454,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "CRT_IsolateInput": "Isolate Input SAM3.1 (CRT)",
     "CRT_IsolateOutput": "Isolate Output (CRT)",
     "CRT_IsolateInputCLIPSeg": "Isolate Input CLIPSeg (CRT)",
+    "ErnieImageAestheticScore": "ERNIE Image Aesthetic Score (CRT)",
+    "UnslothLLM": "Unsloth Studio Bridge (CRT)",
 }
 
 NODE_CLASS_MAPPINGS.update(CRT_AUTODL_NODE_CLASS_MAPPINGS)

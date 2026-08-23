@@ -186,6 +186,16 @@
             "cancelled": "修復がキャンセルされました。{count}個のレシピが修復されました。",
             "error": "レシピの修復に失敗しました: {message}"
         },
+        "rematchRecipes": {
+            "label": "レシピをローカルモデルに再マッチング",
+            "loading": "レシピをローカルモデルに再マッチングしています...",
+            "success": "{recipes} 件のレシピで {entries} エントリをマッチングしました",
+            "successErrors": "{recipes} 件のレシピで {entries} エントリをマッチングしました（{failures} 件失敗）",
+            "allFailed": "{total} 件中 {failures} 件のレシピの再マッチングに失敗しました",
+            "noMatch": "{recipes} 件のレシピで {entries} エントリのローカルマッチが見つかりませんでした",
+            "cancelled": "再マッチングをキャンセルしました。{recipes} 件のレシピを更新（{entries} エントリ）",
+            "error": "レシピの再マッチングに失敗しました：{message}"
+        },
         "manageExcludedModels": {
             "label": "除外モデルを管理"
         },
@@ -233,7 +243,7 @@
             "presetNamePlaceholder": "プリセット名...",
             "baseModel": "ベースモデル",
             "baseModelSearchPlaceholder": "ベースモデルを検索...",
-            "modelTags": "タグ（上位20）",
+            "modelTags": "タグ",
             "modelTypes": "モデルタイプ",
             "license": "ライセンス",
             "noCreditRequired": "クレジット不要",
@@ -241,6 +251,8 @@
             "allowSellingGeneratedContentTooltip": "生成した画像の販売を許可",
             "noCreditRequiredTooltip": "クレジット表記なしでモデルを使用可能",
             "noTags": "タグなし",
+            "tagSearchPlaceholder": "タグを検索...",
+            "noTagMatches": "現在の検索に一致するタグはありません。",
             "autoTags": "自動タグ",
             "noBaseModelMatches": "現在の検索に一致するベースモデルはありません。",
             "clearAll": "すべてのフィルタをクリア",
@@ -447,6 +459,12 @@
                 "compact": "7（1080p）、8（2K）、10（4K）"
             },
             "displayDensityWarning": "警告：高密度設定は、リソースが限られたシステムでパフォーマンスの問題を引き起こす可能性があります。",
+            "recipesLayout": "レシピのレイアウト",
+            "recipesLayoutHelp": "レシピカードの配置方法を選択：均一なグリッド、または各画像のアスペクト比を保持するメイソンリー（Pinterest スタイル）レイアウト。",
+            "recipesLayoutOptions": {
+                "grid": "グリッド",
+                "masonry": "メイソンリー"
+            },
             "showFolderSidebar": "フォルダサイドバーを表示",
             "showFolderSidebarHelp": "モデルページのフォルダナビゲーションサイドバーを表示/非表示にします。無効にするとサイドバーとホバーエリアは表示されません。",
             "cardInfoDisplay": "カード情報表示",
@@ -604,6 +622,10 @@
             "label": "早期アクセス更新を非表示",
             "help": "早期アクセスのみの更新"
         },
+        "hidePaidUpdates": {
+            "label": "[TODO: Translate] Hide Paid Updates",
+            "help": "[TODO: Translate] When enabled, models with only paid updates will not show 'Update available' badge"
+        },
         "licenseIcons": {
             "useNewStyle": "更新されたライセンスアイコンを使用",
             "useNewStyleHelp": "カラーインジケーター付きでライセンス許可を表示（新スタイル）するか、制限のみのアイコンを表示（クラシックスタイル）します。現在のCivitAIデザインを反映しています。"
@@ -640,7 +662,13 @@
             "preparing": "ダウンロードを準備中...",
             "connecting": "ダウンロードサーバーに接続中...",
             "completed": "完了",
-            "downloadComplete": "ダウンロードが正常に完了しました"
+            "downloadComplete": "ダウンロードが正常に完了しました",
+            "enableCivarchiveApi": "CivArchive API をメタデータプロバイダーとして有効化",
+            "enableCivarchiveApiHelp": "有効にすると、CivArchive API がモデルメタデータの代替ソースとして使用されます（例：CivitAI から削除されたモデルの場合）。オフにすると、CivArchive のレート制限を完全に回避できます。",
+            "providerOrder": "メタデータプロバイダーのフォールバック順序",
+            "providerOrderHelp": "CivitAI API が常に最初に試行されます。メタデータ検索時の残りのプロバイダーの順序を選択してください。",
+            "providerOrderCivitaiArchiveSqlite": "CivitAI → CivArchive → Archive DB",
+            "providerOrderCivitaiSqliteArchive": "CivitAI → Archive DB → CivArchive"
         },
         "proxySettings": {
             "enableProxy": "アプリレベルのプロキシを有効化",
@@ -670,6 +698,7 @@
                 "deepseek": "DeepSeek",
                 "groq": "Groq",
                 "openrouter": "OpenRouter",
+                "google": "Gemini",
                 "opencode-go": "OpenCode Go",
                 "custom": "カスタム（OpenAI 互換）"
             },
@@ -706,7 +735,9 @@
                 "versionsCount": "ローカルバージョン数",
                 "versionsCountDesc": "バージョン数の多い順",
                 "versionsCountAsc": "バージョン数の少ない順",
-                "versionIdDesc": "最新バージョン順"
+                "versionIdDesc": "最新バージョン順",
+                "random": "ランダム",
+                "randomAction": "シャッフル（ランダム）"
             },
             "refresh": {
                 "title": "モデルリストを更新",
@@ -751,6 +782,7 @@
             "copyAll": "すべての構文をコピー",
             "refreshAll": "すべてのメタデータを更新",
             "repairMetadata": "選択したレシピのメタデータを修復",
+            "rematchMetadata": "選択したモデルをローカルモデルに再マッチング",
             "reimportMetadata": "ソースから再インポート",
             "checkUpdates": "選択項目の更新を確認",
             "moveAll": "すべてをフォルダに移動",
@@ -763,6 +795,8 @@
             "deleteAll": "選択したものを削除",
             "downloadMissingLoras": "不足している LoRA をダウンロード",
             "downloadExamples": "例画像をダウンロード",
+            "downloadMissingExamples": "不足分をダウンロード",
+            "reprocessExamples": "すべて再処理",
             "clear": "選択をクリア",
             "skipMetadataRefreshCount": "スキップ（{count}モデル）",
             "resumeMetadataRefreshCount": "再開（{count}モデル）",
@@ -798,10 +832,13 @@
             "sendToWorkflowReplace": "ワークフローに送信（置換）",
             "openExamples": "例画像フォルダを開く",
             "downloadExamples": "例画像をダウンロード",
+            "downloadMissingExamples": "不足分をダウンロード",
+            "reprocessExamples": "すべて再処理",
             "replacePreview": "プレビューを置換",
             "setContentRating": "コンテンツレーティングを設定",
             "moveToFolder": "フォルダに移動",
             "repairMetadata": "メタデータを修復",
+            "rematchMetadata": "ローカルモデルに再マッチング",
             "reimportMetadata": "ソースから再インポート",
             "excludeModel": "モデルを除外",
             "restoreModel": "モデルを復元",
@@ -887,7 +924,9 @@
                 "dateAsc": "古い順",
                 "lorasCount": "LoRA数",
                 "lorasCountDesc": "多い順",
-                "lorasCountAsc": "少ない順"
+                "lorasCountAsc": "少ない順",
+                "opened": "最近開いた",
+                "openedDesc": "最近開いた"
             },
             "refresh": {
                 "title": "レシピリストを更新",
@@ -898,12 +937,25 @@
             "favorites": {
                 "title": "お気に入りのみ表示",
                 "action": "お気に入り"
+            },
+            "layout": {
+                "title": "レシピのレイアウト",
+                "grid": "グリッドレイアウト",
+                "masonry": "メイソンリーレイアウト（Pinterest スタイル、画像のアスペクト比を保持）"
             }
         },
         "duplicates": {
             "found": "{count} 個の重複グループが見つかりました",
+            "noGroups": "現在の一致基準では重複グループが見つかりませんでした",
             "keepLatest": "最新バージョンを保持",
-            "deleteSelected": "選択したものを削除"
+            "deleteSelected": "選択したものを削除",
+            "includePromptLabel": "一致判定にプロンプトを含める",
+            "basis": {
+                "loraCombo": "一致基準: LoRA の組み合わせ",
+                "loraComboAndPrompt": "一致基準: LoRA の組み合わせ + プロンプト",
+                "hintLoraCombo": "同じ LoRA を同じ強度で使用するレシピがグループ化されます。",
+                "hintPromptIncluded": "レシピは、同じ LoRA を同じ強度で使用し、かつプロンプトが同じ場合にのみグループ化されます。"
+            }
         },
         "contextMenu": {
             "copyRecipe": {
@@ -1236,8 +1288,13 @@
             }
         },
         "deleteModel": {
+            "freesSpace": "{size} を解放します",
             "title": "モデルを削除",
-            "message": "このモデルと関連するすべてのファイルを削除してもよろしいですか？"
+            "message": "このモデルと関連するすべてのファイルを削除してもよろしいですか？",
+            "recoverableWarning": "元に戻さない場合、このファイルは20秒後に完全に削除されます。"
+        },
+        "deleteRecipe": {
+            "recoverableWarning": "この操作は20秒以内であれば元に戻せます。"
         },
         "excludeModel": {
             "title": "モデルを除外",
@@ -1502,6 +1559,8 @@
                     "newerTooltip": "このバージョンはローカルの最新バージョンより新しいです",
                     "earlyAccess": "早期アクセス",
                     "earlyAccessTooltip": "このバージョンは現在 Civitai の早期アクセスが必要です",
+                    "paid": "[TODO: Translate] Paid",
+                    "paidTooltip": "[TODO: Translate] This version requires payment to download",
                     "ignored": "無視中",
                     "ignoredTooltip": "このバージョンの更新通知は無効です",
                     "onSiteOnly": "サイト内のみ",
@@ -1511,6 +1570,7 @@
                     "download": "ダウンロード",
                     "downloadTooltip": "このバージョンをダウンロード",
                     "downloadEarlyAccessTooltip": "Civitai からこの早期アクセス版をダウンロード",
+                    "downloadPaidTooltip": "[TODO: Translate] Download this paid version from Civitai",
                     "downloadNotAllowedTooltip": "このバージョンはCivitaiサイト内でのみ利用可能で、ダウンロードはできません",
                     "delete": "削除",
                     "deleteTooltip": "このローカルバージョンを削除",
@@ -1540,6 +1600,7 @@
                 "empty": "このモデルにはまだバージョン履歴がありません。",
                 "error": "バージョンの読み込みに失敗しました。",
                 "missingModelId": "このモデルにはCivitaiのモデルIDがありません。",
+                "hfGroupInfo": "これは HuggingFace モデルグループです。ライブラリを開いてグリッドですべてのバージョンを表示してください。",
                 "confirm": {
                     "delete": "このバージョンをライブラリから削除しますか？"
                 },
@@ -1566,6 +1627,21 @@
             "downloadCsv": "CSVをダウンロード",
             "columnModelName": "モデル名",
             "columnError": "エラー"
+        },
+        "downloadBatchSummary": {
+            "title": "バッチダウンロードの概要",
+            "statSuccess": "成功",
+            "statFailed": "失敗",
+            "statTotal": "合計",
+            "successMessage": "{count} 個のモデルがすべて正常にダウンロードされました",
+            "completedWithErrors": "エラーありで完了",
+            "failed": "ダウンロードに失敗しました",
+            "failedItems": "失敗した項目（{count}）",
+            "columnName": "モデル名",
+            "columnError": "エラー",
+            "close": "閉じる",
+            "copyReport": "レポートをコピー",
+            "retryFailed": "失敗した項目を再試行（{count}）"
         }
     },
     "modelTags": {
@@ -1664,6 +1740,7 @@
             "recipeReplaced": "レシピがワークフローで置換されました",
             "recipeFailedToSend": "レシピをワークフローに送信できませんでした",
             "noMatchingNodes": "現在のワークフローには互換性のあるノードがありません",
+            "noPromptTargets": "[TODO: Translate] No compatible prompt targets in the workflow.\nRight-click a node in ComfyUI → Mark as → Send Prompt Target",
             "noTargetNodeSelected": "ターゲットノードが選択されていません",
             "modelUpdated": "モデルがワークフローで更新されました",
             "modelFailed": "モデルノードの更新に失敗しました",
@@ -1743,6 +1820,12 @@
         "checkingMessage": "最新バージョンを確認しています。お待ちください。",
         "showNotifications": "更新通知を表示",
         "latestBadge": "最新",
+        "latestMain": "Main ブランチ",
+        "channel": "更新チャンネル",
+        "channels": {
+            "release": "リリース",
+            "nightly": "ナイトリー"
+        },
         "updateProgress": {
             "preparing": "更新を準備中...",
             "installing": "更新をインストール中...",
@@ -1762,6 +1845,15 @@
         "nightly": {
             "warning": "警告：ナイトリービルドには実験的機能が含まれており、不安定な場合があります。",
             "enable": "ナイトリー更新を有効にする"
+        },
+        "channelSwitch": {
+            "nightlyTitle": "ナイトリーチャンネルに切り替え",
+            "nightlyMessage": "ナイトリーに切り替えると、Gitリポジトリが初期化され、mainブランチの最新コミットを追跡します。更新頻度は高くなりますが、不安定な場合があります。いつでもリリース版に戻せます。",
+            "releaseTitle": "リリースチャンネルに切り替え",
+            "releaseMessage": "リリースに切り替えると、最新の安定版タグにチェックアウトされます。いつでもNightlyに戻せます。",
+            "switching": "{channel} チャンネルに切り替え中...",
+            "completed": "{channel} チャンネルに切り替えました",
+            "failed": "チャンネルの切り替えに失敗しました"
         },
         "banners": {
             "recent": "最近の通知",
@@ -1899,6 +1991,12 @@
             "repairBulkComplete": "修復完了：{repaired} 件修復、{skipped} 件スキップ（合計 {total} 件）",
             "repairBulkSkipped": "選択した {total} 件のレシピは修復不要です",
             "repairBulkFailed": "選択したレシピの修復に失敗しました：{message}",
+            "rematchComplete": "{recipes} 件のレシピで {entries} エントリをマッチングしました",
+            "rematchCompleteErrors": "{recipes} 件のレシピで {entries} エントリをマッチングしました（{failures} 件失敗）",
+            "rematchAllFailed": "選択した {total} 件中 {failures} 件のレシピの再マッチングに失敗しました",
+            "rematchUnmatched": "{recipes} 件のレシピで {entries} エントリのローカルマッチが見つかりませんでした",
+            "rematchSkipped": "選択した {total} 件のレシピは再マッチングの必要がありませんでした",
+            "rematchFailed": "選択したレシピの再マッチングに失敗しました：{message}",
             "reimporting": "ソースからレシピを再インポート中...",
             "reimportSuccess": "レシピの再インポートが完了しました",
             "reimportBulkComplete": "再インポート完了：{completed} 件成功、{failed} 件失敗（合計 {total} 件）",
@@ -2007,7 +2105,6 @@
             "presetNameTooLong": "プリセット名は{max}文字以内にしてください",
             "presetNameInvalidChars": "プリセット名に使用できない文字が含まれています",
             "presetNameExists": "同じ名前のプリセットが既に存在します",
-            "maxPresetsReached": "プリセットは最大{max}個までです。追加するには既存のものを削除してください。",
             "presetNotFound": "プリセットが見つかりません",
             "invalidPreset": "無効なプリセットデータです",
             "deletePresetFailed": "プリセットの削除に失敗しました",
@@ -2035,6 +2132,14 @@
             "updateSuccess": "トリガーワードが正常に更新されました",
             "updateFailed": "トリガーワードの更新に失敗しました",
             "copyFailed": "コピーに失敗しました"
+        },
+        "undo": {
+            "action": "元に戻す",
+            "deleted": "{name} を削除しました",
+            "deletedBulk": "{count} 個のアイテムを削除しました",
+            "expired": "元に戻せる時間が経過しました。アイテムは完全に削除されました。",
+            "failed": "元に戻せませんでした: {error}",
+            "restored": "アイテムを復元しました"
         },
         "virtual": {
             "loadFailed": "アイテムの読み込みに失敗しました",
@@ -2099,6 +2204,7 @@
             "fileRenameFailed": "ファイル名の変更に失敗しました：{error}",
             "previewUpdated": "プレビューが正常に更新されました",
             "previewUploadFailed": "プレビュー画像のアップロードに失敗しました",
+            "previewDropInvalid": "サポートされていないファイル形式：{name}。画像またはMP4ビデオをドロップしてください。",
             "refreshComplete": "{action} 完了",
             "refreshFailed": "{type}の{action}に失敗しました",
             "metadataRefreshed": "メタデータが正常に更新されました",

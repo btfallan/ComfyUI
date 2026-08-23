@@ -12,3 +12,4 @@ example_workflows/SDXL txt2img-DetailDaemon.json
 example_workflows/Z-Image txt2img-DetailDaemon.json
 pyproject.toml
 requirements.txt
+web/detailDaemonSamplerGUI.js

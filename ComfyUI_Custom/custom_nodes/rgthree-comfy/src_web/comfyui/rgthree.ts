@@ -23,6 +23,7 @@ import {WorkflowLinkFixer} from "rgthree/common/link_fixer.js";
 import {injectCss, wait} from "rgthree/common/shared_utils.js";
 import {replaceNode, waitForCanvas, waitForGraph} from "./utils.js";
 import {NodeTypesString, addRgthree, getNodeTypeStrings} from "./constants.js";
+import {rgthreeApi} from "rgthree/common/rgthree_api.js";
 import {RgthreeProgressBar} from "rgthree/common/progress_bar.js";
 import {RgthreeConfigDialog} from "./config.js";
 import {
@@ -296,6 +297,42 @@ class Rgthree extends EventTarget {
       KEY_EVENT_SERVICE.addEventListener("keydown", updateDebugKeyDown);
       KEY_EVENT_SERVICE.addEventListener("keyup", updateDebugKeyDown);
     }
+
+    this.checkForStartupMessages();
+  }
+
+  /**
+   * Handles tasks to show any alerts when rgthree starts up.
+   */
+  async checkForStartupMessages() {
+    // Check for ComfyUI_Swwann. I can't seem to tell from the JS alone, so we'll need the server
+    // side to check if ComfyUI_Swwann is in the extensions.
+    const response = await rgthreeApi.fetchJson("/incompatible-extensions")
+    console.log(response);
+    if (response?.extensions?.includes('ComfyUI_Swwan')) {
+      setTimeout(() => {
+        rgthreeApi.print('COMFYUI_SWWAN');
+        rgthree.showMessage({
+          id: "bad-ComfyUI_Swwan",
+          type: "warn",
+          message:
+            `The installed custom node "ComfyUI_Swwan" conflicts with "rgthree-comfy" by crudely
+            copying its code causing it to no longer function correctly when both are installed. To
+            restore "rgthree-comfy" you may need to remove "ComfyUI_Swwan," restart your server and
+            refresh the browser.`,
+          actions: [
+            {
+              label: "Okay",
+              callback: (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                rgthree.hideMessage("bad-ComfyUI_Swwan");
+              }
+            }
+          ],
+        });
+      }, 5000);
+    }
   }
 
   /**
@@ -320,11 +357,18 @@ class Rgthree extends EventTarget {
           LiteGraph.closeAllContextMenus();
           if (e.button == 2) {
             const canvas = await waitForCanvas();
-            new LiteGraph.ContextMenu(this.getRgthreeIContextMenuValues(), {
-              title: `<div class="rgthree-contextmenu-item rgthree-contextmenu-title-rgthree-comfy">${logoRgthree} rgthree-comfy</div>`,
+            // Newer ComfyUI frontends render the ContextMenu title with textContent (no HTML
+            // parsing), which would show an HTML title as raw markup. Pass a plain-text title,
+            // then swap in our logo markup afterwards.
+            const menu = new LiteGraph.ContextMenu(this.getRgthreeIContextMenuValues(), {
+              title: "rgthree-comfy",
               left: e.clientX,
               top: 5,
             });
+            const titleEl = query<HTMLDivElement>(".litemenu-title", menu.root);
+            if (titleEl) {
+              titleEl.innerHTML = `<div class="rgthree-contextmenu-item rgthree-contextmenu-title-rgthree-comfy">${logoRgthree} rgthree-comfy</div>`;
+            }
             return;
           }
           if (e.button == 0) {

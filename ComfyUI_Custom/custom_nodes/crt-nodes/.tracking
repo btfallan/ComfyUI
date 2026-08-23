@@ -1,3 +1,4 @@
+.gitattributes
 .github/workflows/publish_action.yml
 .gitignore
 .tracking
@@ -37,11 +38,11 @@ js/Simple_Toggle_Widget.js
 js/String_Batcher.js
 js/String_Splitter.js
 js/Text_Loader_Crawl_Batch.js
+js/Textbox.js
 js/Textbox_Line_Spot.js
 js/Tube_Compressor.js
 js/WAN_Compare.js
 js/Wan_Video_Lora_Select_Multi.js
-model-whitelist.txt
 py/Add_Settings_And_Prompt.py
 py/Advanced_Bloom_FX.py
 py/Advanced_String_Replace.py
@@ -68,6 +69,8 @@ py/Contour_FX.py
 py/Crop_By_Percent.py
 py/Depth_Anything_Tensorrt_Format.py
 py/Dynamic_Prompt_Scheduler.py
+py/ERNIE_Image_Aes_Compat.py
+py/ERNIE_Image_Aesthetic_Scorer.py
 py/Enable_Latent.py
 py/Eq_Node.py
 py/Even_Batch_Picker.py
@@ -75,6 +78,7 @@ py/Face_Enhancement_Pipeline_With_Injection.py
 py/Fancy_Note_Node.py
 py/Fancy_Timer_Node.py
 py/File_Batch_Prompt_Scheduler.py
+py/File_Batch_Prompt_Scheduler_KREA2.py
 py/Film_Grain_FX.py
 py/Flux_Lora_Blocks_Patcher.py
 py/Get_First_Last_Frame.py
@@ -100,11 +104,13 @@ py/Load_Image_Resize.py
 py/Load_Last_Image.py
 py/Load_Last_Latent.py
 py/Load_Last_Video.py
+py/Load_Latents_Conditioning.py
 py/Magic_Lora_Loader.py
 py/Mask_Censor.py
 py/Mask_Empty_Float_Node.py
 py/Mask_Pass_Or_Placeholder.py
 py/Mask_Temporal_Enhancer.py
+py/Minimax_Length.py
 py/Mono_To_Stereo_Converter.py
 py/Pony_Upscale_Sampler_With_Injection.py
 py/Post_Process_Node.py
@@ -122,11 +128,13 @@ py/Save_Image_Base64.py
 py/Save_Image_With_Path.py
 py/Save_Jpeg_Websocket.py
 py/Save_Latent_With_Path.py
+py/Save_Latents_Conditioning.py
 py/Save_Text_With_Path.py
 py/Save_Video_With_Path.py
 py/Scale_Latent_To_Megapixels.py
 py/Seamless_Loop_Blender.py
 py/Seamless_Tile.py
+py/Seeded_Persona_Lora_Loader.py
 py/Simple_Knob.py
 py/Simple_Toggle.py
 py/Smart_Controlnet_Apply.py
@@ -145,6 +153,7 @@ py/Text_Loader_Crawl_Batch.py
 py/Textbox.py
 py/Tile_Checker.py
 py/Tiny_Flux2_VAE.py
+py/Unsloth_Studio_Bridge.py
 py/Upscale_Model_Adv.py
 py/Video_Duration_Calculator.py
 py/Video_Loader_Crawl.py
@@ -152,6 +161,8 @@ py/Wan_Batch_Sampler.py
 py/Wan_Compare_Sampler.py
 py/Wan_Video_Lora_Select_Multi_Improved.py
 py/_cache_fingerprint.py
+py/_latent_conditioning_codec.py
+py/_ltx23_inference.py
 py/audio_transcript_runtime/__init__.py
 py/audio_transcript_runtime/download.py
 py/audio_transcript_runtime/llama_runtime.py
@@ -159,20 +170,19 @@ py/audio_transcript_runtime/mel_band_roformer.py
 py/audio_transcript_runtime/mel_converter.py
 py/audio_transcript_runtime/melband_runtime.py
 py/audio_transcript_runtime/omnivoice_runtime.py
+py/download_progress.py
 pyproject.toml
 requirements.txt
+tests/test_ltx23_inference.py
 workflows/Batch Processing/Batch AnyProcess VIDEO.png
 workflows/Batch Processing/Batch AnyProcess.png
 workflows/Batch Processing/Batch Caption.png
 workflows/Batch Processing/Batch DetectAndCrop.png
-workflows/ISOLATE WAN 2.2 Face Upscale.png
+workflows/ChronoEdit_Upscale.png
+workflows/FLUX2KLEIN.png
+workflows/KREA2.png
 workflows/LTX2.3 Unified Sampler I2V.png
 workflows/LTX2.3 Unified Sampler.png
 workflows/LTX2.3 Unified Sampler_V2V_EDIT.png
-workflows/LTX2.3 Unified Sampler_V2V_ISOLATE.png
 workflows/LTX2.3 Unified Sampler_V2V_ISOLATE_TRANSLATE.png
-workflows/SAM3_Enhancer_Multi_KLEIN.png
-workflows/SAM3_Enhancer_Multi_ZIT.png
-workflows/Ultralytics_Enhancer_Multi_KLEIN.png
-workflows/Ultralytics_Enhancer_Multi_ZIT.png
 workflows/WAN 2.2 LORA COMPARE.png

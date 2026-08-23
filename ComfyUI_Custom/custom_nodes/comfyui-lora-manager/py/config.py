@@ -1,9 +1,13 @@
+# pyright: reportImportCycles=false
+# Lazy (function-local) imports still count as static edges in basedpyright's
+# reportImportCycles, so the ServiceRegistry singleton pattern necessarily forms
+# import cycles. Breaking them would require an architectural refactor.
 import os
 import platform
 import posixpath
 import threading
 from pathlib import Path
-import folder_paths  # type: ignore
+import folder_paths  # pyright: ignore[reportMissingImports]
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Set, Tuple
 import logging
 import json
@@ -90,7 +94,7 @@ def _resolve_valid_default_root(
 
 
 def _normalize_folder_paths_for_comparison(
-    folder_paths: Mapping[str, Iterable[str]],
+    folder_paths: Mapping[str, Any],
 ) -> Dict[str, Set[str]]:
     """Normalize folder paths for comparison across libraries."""
 
@@ -208,6 +212,12 @@ class Config:
             if not isinstance(library_config, dict):
                 return
 
+            # Always read recipes_path — it is independent of extra folder paths
+            # and must be set before any early returns below.
+            recipes_path = library_config.get("recipes_path", "")
+            if isinstance(recipes_path, str) and recipes_path:
+                self.recipes_path = recipes_path
+
             extra_folder_paths = library_config.get("extra_folder_paths")
             if not isinstance(extra_folder_paths, dict):
                 return
@@ -232,10 +242,6 @@ class Config:
             self.extra_embeddings_roots = self._prepare_embedding_paths(
                 extra_embedding
             )
-
-            recipes_path = library_config.get("recipes_path", "")
-            if isinstance(recipes_path, str) and recipes_path:
-                self.recipes_path = recipes_path
 
             if self.extra_loras_roots:
                 logger.info(
@@ -357,6 +363,47 @@ class Config:
                         "Failed to rename legacy 'default' library: %s", rename_error
                     )
 
+            # Clean up a stale "default" library entry that has no meaningful
+            # paths configured (e.g. leftover bootstrap artifact).  This only
+            # fires when "comfyui" already exists so we never delete the last
+            # remaining library.
+            if (
+                "default" in libraries
+                and "comfyui" in libraries
+                and isinstance(default_library, Mapping)
+            ):
+                default_folder_paths = _normalize_library_folder_paths(
+                    default_library
+                )
+                default_extra_paths = default_library.get("extra_folder_paths", {})
+                has_meaningful_paths = bool(default_folder_paths) or bool(
+                    default_extra_paths
+                ) or any(
+                    default_library.get(key)
+                    for key in (
+                        "default_lora_root",
+                        "default_checkpoint_root",
+                        "default_unet_root",
+                        "default_embedding_root",
+                        "recipes_path",
+                    )
+                )
+                if not has_meaningful_paths:
+                    try:
+                        settings_service.delete_library("default")
+                        libraries_changed = True
+                        logger.info(
+                            "Removed stale 'default' library entry "
+                            "with no meaningful paths configured"
+                        )
+                        libraries = settings_service.get_libraries()
+                        comfy_library = libraries.get("comfyui", {})
+                    except Exception as delete_error:
+                        logger.debug(
+                            "Failed to remove stale 'default' library: %s",
+                            delete_error,
+                        )
+
             default_lora_root = _resolve_valid_default_root(
                 comfy_library.get("default_lora_root", ""),
                 list(self.loras_roots or []),
@@ -439,7 +486,7 @@ class Config:
                     import ctypes
 
                     FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-                    attrs = ctypes.windll.kernel32.GetFileAttributesW(str(path))  # type: ignore[attr-defined]
+                    attrs = ctypes.windll.kernel32.GetFileAttributesW(str(path))  # pyright: ignore[reportAttributeAccessIssue]
                     return attrs != -1 and (attrs & FILE_ATTRIBUTE_REPARSE_POINT)
                 except Exception as e:
                     logger.error(f"Error checking Windows reparse point: {e}")
@@ -448,7 +495,7 @@ class Config:
             logger.error(f"Error checking link status for {path}: {e}")
             return False
 
-    def _entry_is_symlink(self, entry: os.DirEntry) -> bool:
+    def _entry_is_symlink(self, entry: os.DirEntry[str]) -> bool:
         """Check if a directory entry is a symlink, including Windows junctions."""
         if entry.is_symlink():
             return True
@@ -457,7 +504,7 @@ class Config:
                 import ctypes
 
                 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-                attrs = ctypes.windll.kernel32.GetFileAttributesW(entry.path)  # type: ignore[attr-defined]
+                attrs = ctypes.windll.kernel32.GetFileAttributesW(entry.path)  # pyright: ignore[reportAttributeAccessIssue]
                 return attrs != -1 and (attrs & FILE_ATTRIBUTE_REPARSE_POINT)
             except Exception:
                 pass
@@ -1083,8 +1130,8 @@ class Config:
 
     def _apply_library_paths(
         self,
-        folder_paths: Mapping[str, Iterable[str]],
-        extra_folder_paths: Optional[Mapping[str, Iterable[str]]] = None,
+        folder_paths: Mapping[str, Any],
+        extra_folder_paths: Optional[Mapping[str, Any]] = None,
         recipes_path: str = "",
     ) -> None:
         self._path_mappings.clear()
@@ -1389,12 +1436,13 @@ class Config:
 # ('_lm_config_cache') that is NEVER removed from sys.modules (its key does
 # NOT start with 'py.'), so it survives re-imports of py.* modules.
 _CONFIG_SENTINEL = "_lm_config_cache"
+config: Config
 if _CONFIG_SENTINEL in _sys.modules:
     # Re-import: reuse the existing singleton from the sentinel.
-    config: Config = _sys.modules[_CONFIG_SENTINEL].config  # type: ignore[valid-type]
+    config = _sys.modules[_CONFIG_SENTINEL].config
 else:
-    config: Config = Config()
+    config = Config()
     # Register the sentinel so re-imports of py.config find us.
     _sentinel_mod = _types.ModuleType(_CONFIG_SENTINEL)
-    _sentinel_mod.config = config
+    setattr(_sentinel_mod, "config", config)
     _sys.modules[_CONFIG_SENTINEL] = _sentinel_mod

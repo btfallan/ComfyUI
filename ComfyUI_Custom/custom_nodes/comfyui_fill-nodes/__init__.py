@@ -2,6 +2,8 @@ import logging
 
 logger = logging.getLogger("fl_fill_nodes")
 
+from . import routes
+
 # AI NODES
 from .nodes.ai.FL_Fal_Gemini_ImageEdit import FL_Fal_Gemini_ImageEdit
 from .nodes.ai.FL_Fal_GPTImage2_Edit import FL_Fal_GPTImage2_Edit
@@ -20,7 +22,7 @@ from .nodes.ai.FL_PixVerseAPI import FL_PixVerseAPI
 from .nodes.ai.FL_RunwayAct2 import FL_RunwayAct2
 from .nodes.ai.FL_RunwayImageAPI import FL_RunwayImageAPI
 
-# google-genai nodes — wrapped so a websockets version conflict doesn't kill the entire pack
+# google-genai nodes — wrapped so SDK import errors don't kill the entire pack
 _GENAI_NODES_AVAILABLE = True
 try:
     from .nodes.ai.FL_GeminiImageEditor import FL_GeminiImageEditor
@@ -28,10 +30,10 @@ try:
     from .nodes.ai.FL_GeminiTextAPI import FL_GeminiTextAPI
     from .nodes.ai.FL_VertexGemini25FlashImage import FL_VertexGemini25FlashImage
     from .nodes.ai.FL_VertexVeo3 import FL_Veo3VideoGen
-except ImportError as e:
+except Exception as e:
     _GENAI_NODES_AVAILABLE = False
-    logger.warning("Could not load Google Gemini/Vertex nodes: %s", e)
-    logger.info("Install google-genai with a compatible websockets version to enable these nodes.")
+    logger.warning("Skipping Google Gemini/Vertex nodes due to SDK/import incompatibility: %s", e)
+    logger.info("Install a compatible google-genai version to enable these nodes.")
 
 # API_TOOLS NODES
 from .nodes.api_tools.FL_API_Base64_ImageLoader import FL_API_Base64_ImageLoader
@@ -236,6 +238,8 @@ from .nodes.video.FL_VideoCadence import FL_VideoCadence
 from .nodes.video.FL_VideoCadenceCompile import FL_VideoCadenceCompile
 from .nodes.video.FL_VideoCrossfade import FL_VideoCrossfade
 from .nodes.video.FL_VideoCut import FL_VideoCut
+from .nodes.video.FL_LoadVideo import FL_LoadVideo
+from .nodes.video.FL_VideoCombine import FL_VideoCombine
 from .nodes.video.FL_VideoTrim import FL_VideoTrim
 
 # WIP NODES
@@ -367,6 +371,8 @@ NODE_CLASS_MAPPINGS = {
     "FL_ImageBatchToGrid": FL_ImageBatchToGrid,
     "FL_ApplyMask": FL_ApplyMask,
     "FL_ProResVideo": FL_ProResVideo,
+    "FL_LoadVideo": FL_LoadVideo,
+    "FL_VideoCombine": FL_VideoCombine,
     "FL_Padding": FL_Padding,
     "FL_GoogleDriveDownloader": FL_GoogleDriveDownloader,
     "FL_NodeLoader": FL_NodeLoader,
@@ -569,6 +575,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "FL_ImageBatchToGrid": "FL Image Batch To Grid",
     "FL_ApplyMask": "FL Apply Mask",
     "FL_ProResVideo": "FL ProRes Video",
+    "FL_LoadVideo": "FL Load Video",
+    "FL_VideoCombine": "FL Video Combine",
     "FL_Padding": "FL Padding",
     "FL_GoogleDriveDownloader": "FL Google Drive Downloader",
     "FL_NodeLoader": "FL Node Loader",

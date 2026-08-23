@@ -3,7 +3,7 @@ import { api } from "../../scripts/api.js";
 
 const NODE_NAME = "CRT_LTX23UnifiedSampler";
 const NODE_ALIASES = new Set(["LTX 2.3 Unified Sampler (CRT)", "CRT_LTX23UnifiedSampler"]);
-const STYLE_ID = "crt-ltx23-unified-sampler-v8";
+const STYLE_ID = "crt-ltx23-unified-sampler-v12";
 const MIN_WIDTH = 450;
 const MIN_HEIGHT = 1;
 const DEBUG = false;
@@ -21,11 +21,13 @@ const V2V_MODE_FIELDS = {
   "Outpaint": ["v2v_aspect_ratio"],
   "Upscale": [],
 };
+const V2V_DYNAMIC_FIELDS = new Set(Object.values(V2V_MODE_FIELDS).flat());
+
 
 const ADVANCED_GROUPS = [
   {
     title: "Generation",
-    fields: ["megapixels_target", "frame_count", "steps", "sampler_main", "sampler_refine"],
+    fields: ["megapixels_target", "frame_count"],
   },
   {
     title: "Audio",
@@ -33,7 +35,7 @@ const ADVANCED_GROUPS = [
   },
   {
     title: "Output",
-    fields: ["vae_decode_tiled", "unload_model_before_vae_decode", "low_vram"],
+    fields: ["vae_decode_tiled", "unload_model_before_vae_decode", "low_vram", "depth_cache_mode"],
   },
 ];
 
@@ -41,11 +43,8 @@ const FIELD_LABELS = {
   megapixels_target: "Megapixels",
   depth_megapixels: "Depth MP",
   frame_count: "Frames",
-  steps: "Steps",
   aspect_ratio: "Aspect",
   firstframe_strength: "Reference Strength",
-  sampler_main: "Sampler",
-  sampler_refine: "Refiner (LD)",
   v2v_mode: "V2V Mode",
   v2v_guide_strength: "Guide",
   v2v_aspect_ratio: "Aspect",
@@ -53,10 +52,8 @@ const FIELD_LABELS = {
   vae_decode_tiled: "VAE Decode (Tiled)",
   unload_model_before_vae_decode: "Unload Model Before VAE",
   low_vram: "Low VRAM",
+  depth_cache_mode: "Depth Cache",
   generated_audio_gain_db: "Gain (dB)",
-  depth_mouth_mask: "Mouth Mask",
-  mouth_mask_expand: "Mouth Expand",
-  mouth_mask_blur: "Mouth Blur",
 };
 
 function log(...args) {
@@ -278,6 +275,11 @@ function ensureStyles() {
       color: var(--text-secondary);
     }
     
+    .crt-ltx23-hq:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+
     .crt-ltx23-hq.on {
       border-color: var(--success);
       background: var(--success-soft);
@@ -750,6 +752,9 @@ class LTX23UnifiedSamplerUI {
     this.tabs = new Map();
     this.resizeTimer = null;
     this.previewUrl = null;
+    this.depthPreviewUrl = null;
+    this.depthPreviewAbortController = null;
+    this.depthPreviewShown = false;
     this.previewHandler = null;
     this.previewMetaHandler = null;
     this.livePreviewButton = null;
@@ -892,6 +897,7 @@ class LTX23UnifiedSamplerUI {
 
   buildPanels() {
     this.panelHost.innerHTML = "";
+    this.disposeDepthPreviewResources();
     this.panels.clear();
 
     for (const mode of WORKFLOW_MODES) {
@@ -920,17 +926,7 @@ class LTX23UnifiedSamplerUI {
           if (row) panel.appendChild(row);
         }
 
-        // Depth Control extras
         if (currentV2vMode === "Depth Control") {
-          const mmRow = this.buildFieldRow("depth_mouth_mask");
-          if (mmRow) panel.appendChild(mmRow);
-          const mouthOn = Boolean(getWidget(this.node, "depth_mouth_mask")?.value);
-          if (mouthOn) {
-            const expandRow = this.buildFieldRow("mouth_mask_expand");
-            if (expandRow) panel.appendChild(expandRow);
-            const blurRow = this.buildFieldRow("mouth_mask_blur");
-            if (blurRow) panel.appendChild(blurRow);
-          }
           panel.appendChild(this.buildDepthPreviewSection());
         }
       }
@@ -946,8 +942,8 @@ class LTX23UnifiedSamplerUI {
       title.className = "crt-ltx23-section-title";
       title.textContent = group.title;
       advPanel.appendChild(title);
-      
       for (const name of group.fields) {
+        if (!this.isAdvancedFieldVisible(name)) continue;
         const row = this.buildFieldRow(name);
         if (row) advPanel.appendChild(row);
       }
@@ -970,6 +966,18 @@ class LTX23UnifiedSamplerUI {
     previewPanel.appendChild(this.buildPreviewPanel());
     this.panelHost.appendChild(previewPanel);
     this.panels.set("PREVIEW", previewPanel);
+  }
+
+  isAdvancedFieldVisible(name) {
+    if (name === "steps") return false;
+    if (name === "frame_count" || name === "frame_count_from_audio") {
+      return this.mode !== "V2V";
+    }
+    if (name === "depth_cache_mode") {
+      const v2vMode = String(getWidget(this.node, "v2v_mode")?.value || "Depth Control");
+      return this.mode === "V2V" && v2vMode === "Depth Control";
+    }
+    return true;
   }
 
   buildPreviewPanel() {
@@ -995,6 +1003,11 @@ class LTX23UnifiedSamplerUI {
 
     const row = document.createElement("div");
     row.className = "crt-ltx23-field";
+    const tooltip = widget?.options?.tooltip;
+    if (tooltip) {
+      row.title = String(tooltip);
+      row.setAttribute("aria-label", `${fieldLabel(name)}: ${tooltip}`);
+    }
 
     const label = document.createElement("div");
     label.className = "crt-ltx23-label";
@@ -1077,8 +1090,6 @@ class LTX23UnifiedSamplerUI {
         // Update UI
         toggleWrap.querySelectorAll(".crt-ltx23-v2v-mode-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        // Rebuild panels to show/hide mode-specific fields
-        this.rebuildPanels();
       });
       toggleWrap.appendChild(btn);
     }
@@ -1097,6 +1108,11 @@ class LTX23UnifiedSamplerUI {
     if (!v2vPanel) return;
 
     // Clear V2V panel
+    this.disposeDepthPreviewResources();
+    for (const name of V2V_DYNAMIC_FIELDS) {
+      this.controls.delete(name);
+    }
+
     v2vPanel.innerHTML = "";
 
     // Rebuild V2V panel with current mode
@@ -1113,17 +1129,7 @@ class LTX23UnifiedSamplerUI {
       if (row) v2vPanel.appendChild(row);
     }
 
-    // Depth Control extras
     if (currentV2vMode === "Depth Control") {
-      const mmRow = this.buildFieldRow("depth_mouth_mask");
-      if (mmRow) v2vPanel.appendChild(mmRow);
-      const mouthOn = Boolean(getWidget(this.node, "depth_mouth_mask")?.value);
-      if (mouthOn) {
-        const expandRow = this.buildFieldRow("mouth_mask_expand");
-        if (expandRow) v2vPanel.appendChild(expandRow);
-        const blurRow = this.buildFieldRow("mouth_mask_blur");
-        if (blurRow) v2vPanel.appendChild(blurRow);
-      }
       v2vPanel.appendChild(this.buildDepthPreviewSection());
     }
   }
@@ -1349,6 +1355,18 @@ class LTX23UnifiedSamplerUI {
     return wrap;
   }
 
+  disposeDepthPreviewResources() {
+    if (this.depthPreviewAbortController) {
+      this.depthPreviewAbortController.abort();
+      this.depthPreviewAbortController = null;
+    }
+    if (this.depthPreviewUrl) {
+      URL.revokeObjectURL(this.depthPreviewUrl);
+      this.depthPreviewUrl = null;
+    }
+    this.depthPreviewShown = false;
+  }
+
   buildDepthPreviewSection() {
     const section = document.createElement("div");
     section.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:6px;width:100%;";
@@ -1362,36 +1380,58 @@ class LTX23UnifiedSamplerUI {
     img.style.cssText = "display:none;max-width:100%;border-radius:8px;border:1px solid var(--border-subtle);";
     img.alt = "Depth Preview";
 
-    let shown = false;
-    let blobUrl = null;
-
     btn.addEventListener("click", async () => {
-      shown = !shown;
-      if (shown) {
-        try {
-          const res = await fetch(`/crt/ltx23/depth_preview?t=${Date.now()}`);
-          if (res.ok) {
-            const blob = await res.blob();
-            if (blobUrl) URL.revokeObjectURL(blobUrl);
-            blobUrl = URL.createObjectURL(blob);
-            img.src = blobUrl;
-            img.style.display = "block";
-            btn.textContent = "Depth Preview: ON";
-            btn.classList.add("on");
-          } else {
-            shown = false;
-            btn.textContent = "Depth Preview: No data yet";
-            setTimeout(() => { btn.textContent = "Depth Preview: OFF"; }, 2000);
-          }
-        } catch {
-          shown = false;
-        }
-      } else {
+      if (this.depthPreviewShown) {
+        this.disposeDepthPreviewResources();
+        img.removeAttribute("src");
         img.style.display = "none";
         btn.textContent = "Depth Preview: OFF";
         btn.classList.remove("on");
+        this.scheduleResize();
+        return;
       }
-      this.scheduleResize();
+
+      this.disposeDepthPreviewResources();
+      this.depthPreviewShown = true;
+      const controller = new AbortController();
+      this.depthPreviewAbortController = controller;
+      btn.textContent = "Depth Preview: Loading...";
+      btn.disabled = true;
+
+      try {
+        const response = await api.fetchApi(
+          `/crt/ltx23/depth_preview?t=${Date.now()}`,
+          { signal: controller.signal },
+        );
+        if (controller !== this.depthPreviewAbortController || !this.depthPreviewShown) return;
+
+        if (!response.ok) {
+          this.depthPreviewShown = false;
+          btn.textContent = "Depth Preview: No data yet";
+          return;
+        }
+
+        const blob = await response.blob();
+        if (controller !== this.depthPreviewAbortController || !this.depthPreviewShown) return;
+
+        this.depthPreviewUrl = URL.createObjectURL(blob);
+        img.src = this.depthPreviewUrl;
+        img.style.display = "block";
+        btn.textContent = "Depth Preview: ON";
+        btn.classList.add("on");
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          this.depthPreviewShown = false;
+          btn.textContent = "Depth Preview: Failed";
+          log("depth preview request failed", error);
+        }
+      } finally {
+        if (controller === this.depthPreviewAbortController) {
+          this.depthPreviewAbortController = null;
+        }
+        btn.disabled = false;
+        this.scheduleResize();
+      }
     });
 
     section.appendChild(btn);
@@ -1418,19 +1458,13 @@ class LTX23UnifiedSamplerUI {
         this.activeView = this.mode;
       }
       this.persistView();
-      this.refresh();
+      this.rebuild();
     }
     if (name === "v2v_mode") {
-      this.rebuildPanels();
-      this.refresh();
-    }
-    if (name === "depth_mouth_mask") {
-      this.rebuildPanels();
-      this.scheduleResize();
+      this.rebuild();
     }
     if (name === "hq") {
-      this.updateHQButton();
-      this.scheduleResize();
+      this.rebuild();
     }
   }
 
@@ -1446,6 +1480,7 @@ class LTX23UnifiedSamplerUI {
   }
 
   toggleHQ() {
+    if (this.mode === "V2V") return;
     const widget = getWidget(this.node, "hq");
     if (!widget) return;
     this.writeWidget("hq", widget, !Boolean(widget.value));
@@ -1538,8 +1573,16 @@ class LTX23UnifiedSamplerUI {
   }
 
   updateHQButton() {
-    const enabled = Boolean(getWidget(this.node, "hq")?.value);
+    const forcedForV2V = this.mode === "V2V";
+    const enabled = forcedForV2V || Boolean(getWidget(this.node, "hq")?.value);
+    this.hqButton.disabled = forcedForV2V;
     this.hqButton.classList.toggle("on", enabled);
+    this.hqButton.setAttribute("aria-pressed", String(enabled));
+    this.hqButton.title = forcedForV2V
+      ? "V2V always uses the full-resolution HQ single-pass path."
+      : enabled
+        ? "HQ enabled: full-resolution single-pass inference."
+        : "HQ disabled: faster half-resolution generation followed by latent upscale and refinement.";
     this.hqButton.textContent = "HQ";
   }
 
@@ -1764,6 +1807,7 @@ class LTX23UnifiedSamplerUI {
   }
 
   destroy() {
+    this.disposeDepthPreviewResources();
     this._unbindNodeImgs();
     window.clearTimeout(this.resizeTimer);
     this.resizeTimer = null;

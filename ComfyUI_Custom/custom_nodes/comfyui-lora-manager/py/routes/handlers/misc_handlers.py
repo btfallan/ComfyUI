@@ -276,7 +276,7 @@ def _collect_comfyui_session_logs(
 ) -> dict[str, Any]:
     if log_entries is None:
         try:
-            import app.logger as comfy_logger
+            import app.logger as comfy_logger  # pyright: ignore[reportMissingImports]
 
             log_entries = list(comfy_logger.get_logs() or [])
         except Exception as exc:  # pragma: no cover - environment dependent
@@ -422,10 +422,10 @@ class PromptServerProtocol(Protocol):
     """Subset of PromptServer used by the handlers."""
 
     instance: "PromptServerProtocol"
-    sockets: dict  # maps clientId (sid) → WebSocketResponse
+    sockets: dict[str, Any]  # maps clientId (sid) → WebSocketResponse
 
     def send_sync(
-        self, event: str, payload: dict | None = None, sid: str | None = None
+        self, event: str, payload: dict[str, Any] | None = None, sid: str | None = None
     ) -> None:  # pragma: no cover - protocol
         ...
 
@@ -443,7 +443,12 @@ class UsageStatsFactory(Protocol):
 class MetadataProviderProtocol(Protocol):
     async def get_model_versions(
         self, model_id: int
-    ) -> dict | None:  # pragma: no cover - protocol
+    ) -> dict[str, Any] | None:  # pragma: no cover - protocol
+        ...
+
+    async def get_user_models(
+        self, username: str, cursor: str | None = None
+    ) -> Any:  # pragma: no cover - protocol
         ...
 
 
@@ -466,16 +471,16 @@ class MetadataArchiveManagerProtocol(Protocol):
 class BackupServiceProtocol(Protocol):
     async def create_snapshot(
         self, *, snapshot_type: str = "manual", persist: bool = False
-    ) -> dict:  # pragma: no cover - protocol
+    ) -> dict[str, Any]:  # pragma: no cover - protocol
         ...
 
-    async def restore_snapshot(self, archive_path: str) -> dict:  # pragma: no cover - protocol
+    async def restore_snapshot(self, archive_path: str) -> dict[str, Any]:  # pragma: no cover - protocol
         ...
 
-    def get_status(self) -> dict:  # pragma: no cover - protocol
+    def get_status(self) -> dict[str, Any]:  # pragma: no cover - protocol
         ...
 
-    def get_available_snapshots(self) -> list[dict]:  # pragma: no cover - protocol
+    def get_available_snapshots(self) -> list[dict[str, Any]]:  # pragma: no cover - protocol
         ...
 
 
@@ -491,7 +496,7 @@ class NodeRegistry:
     def __init__(self) -> None:
         self._lock = asyncio.Lock()
         # sid → {unique_id → node_info}
-        self._tab_nodes: Dict[str, Dict[str, dict]] = {}
+        self._tab_nodes: Dict[str, Dict[str, dict[str, Any]]] = {}
         self._ready = asyncio.Event()
         self._waiting_clients: set[str] = set()
 
@@ -504,7 +509,7 @@ class NodeRegistry:
     # Helpers to build one node dict (extracted so it's reused for each tab)
     # ------------------------------------------------------------------
     @staticmethod
-    def _build_node_dict(node: dict) -> dict:
+    def _build_node_dict(node: dict[str, Any]) -> dict[str, Any]:
         node_id = node["node_id"]
         graph_id = str(node["graph_id"])
         unique_id = f"{graph_id}:{node_id}"
@@ -513,11 +518,11 @@ class NodeRegistry:
         bgcolor = node.get("bgcolor") or DEFAULT_NODE_COLOR
 
         raw_capabilities = node.get("capabilities")
-        capabilities: dict = {}
+        capabilities: dict[str, Any] = {}
         if isinstance(raw_capabilities, dict):
             capabilities = dict(raw_capabilities)
 
-        raw_widget_names: list | None = node.get("widget_names")
+        raw_widget_names: list[Any] | None = node.get("widget_names")
         if not isinstance(raw_widget_names, list):
             capability_widget_names = capabilities.get("widget_names")
             raw_widget_names = (
@@ -565,9 +570,9 @@ class NodeRegistry:
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    async def register_nodes(self, sid: str, nodes: list[dict]) -> None:
+    async def register_nodes(self, sid: str, nodes: list[dict[str, Any]]) -> None:
         """Register/replace the node list for a single ComfyUI tab (identified by *sid*)."""
-        tab_nodes: dict[str, dict] = {}
+        tab_nodes: dict[str, dict[str, Any]] = {}
         for node in nodes:
             nd = self._build_node_dict(node)
             tab_nodes[nd["unique_id"]] = nd
@@ -602,7 +607,7 @@ class NodeRegistry:
         except asyncio.TimeoutError:
             return False
 
-    async def get_merged_registry(self, active_sids: set[str] | None = None) -> dict:
+    async def get_merged_registry(self, active_sids: set[str] | None = None) -> dict[str, Any]:
         """Return the union of all known tab nodes, pruning any tab that is no
         longer connected."""
         async with self._lock:
@@ -619,8 +624,8 @@ class NodeRegistry:
                     len(stale_sids), stale_sids,
                 )
 
-            merged: dict[str, dict] = {}
-            tab_info: dict[str, dict] = {}
+            merged: dict[str, dict[str, Any]] = {}
+            tab_info: dict[str, dict[str, Any]] = {}
             for sid, nodes in self._tab_nodes.items():
                 tab_info[sid] = {
                     "node_count": len(nodes),
@@ -653,7 +658,7 @@ class SupportersHandler:
     def __init__(self, logger: logging.Logger | None = None) -> None:
         self._logger = logger or logging.getLogger(__name__)
 
-    def _load_supporters(self) -> dict:
+    def _load_supporters(self) -> dict[str, Any]:
         """Load supporters data from JSON file."""
         try:
             current_file = os.path.abspath(__file__)
@@ -1229,10 +1234,8 @@ class DoctorHandler:
         settings_snapshot = _sanitize_sensitive_data(
             getattr(self._settings, "settings", {}) or {}
         )
-        startup_messages_getter = getattr(self._settings, "get_startup_messages", None)
-        startup_messages = (
-            list(startup_messages_getter()) if callable(startup_messages_getter) else []
-        )
+        startup_messages_getter: Any = getattr(self._settings, "get_startup_messages", None)
+        startup_messages = list(startup_messages_getter()) if startup_messages_getter else []
 
         environment = {
             "app_version": app_version,
@@ -1439,7 +1442,7 @@ class SettingsHandler:
         *,
         settings_service=None,
         metadata_provider_updater: Callable[
-            [], Awaitable[None]
+            [], Awaitable[Any]
         ] = update_metadata_providers,
         downloader_factory: Callable[
             [], Awaitable[DownloaderProtocol]
@@ -1484,8 +1487,8 @@ class SettingsHandler:
             settings_file = getattr(self._settings, "settings_file", None)
             if settings_file:
                 response_data["settings_file"] = settings_file
-            messages_getter = getattr(self._settings, "get_startup_messages", None)
-            messages = list(messages_getter()) if callable(messages_getter) else []
+            messages_getter: Any = getattr(self._settings, "get_startup_messages", None)
+            messages = list(messages_getter()) if messages_getter else []
             return web.json_response(
                 {
                     "success": True,
@@ -1562,6 +1565,11 @@ class SettingsHandler:
                             {"success": False, "error": validation_error}
                         )
 
+                if key == "update_channel" and value not in ("release", "nightly"):
+                    return web.json_response(
+                        {"success": False, "error": "update_channel must be 'release' or 'nightly'"}
+                    )
+
                 if value == "__DELETE__" and key in (
                     "proxy_username",
                     "proxy_password",
@@ -1570,7 +1578,11 @@ class SettingsHandler:
                 else:
                     self._settings.set(key, value)
 
-                if key == "enable_metadata_archive_db":
+                if key in (
+                    "enable_metadata_archive_db",
+                    "enable_civarchive_api",
+                    "metadata_provider_order",
+                ):
                     await self._metadata_provider_updater()
 
                 if key in self._PROXY_KEYS:
@@ -1784,6 +1796,124 @@ class LoraCodeHandler:
             logger.error("Failed to update lora code: %s", exc, exc_info=True)
             return web.json_response({"success": False, "error": str(exc)}, status=500)
 
+    async def get_update_lora_code(self, request: web.Request) -> web.Response:
+        """GET version of update_lora_code — reads parameters from query string.
+
+        Query params:
+          lora_code (required)  — the LoRA syntax to send
+          mode     (optional)   — "append" (default) or "replace"
+          node_id  (repeatable) — target node id(s), e.g. node_id=3&node_id=5
+          node_ids (optional)   — JSON-encoded array for complex references with graph_id:
+                                   [{"node_id":3,"graph_id":"g1"}, ...]
+        """
+        try:
+            node_ids_raw = request.query.get("node_ids")
+            node_id_list = request.query.getall("node_id", [])
+            lora_code = request.query.get("lora_code", "")
+            mode = request.query.get("mode", "append")
+
+            if not lora_code:
+                return web.json_response(
+                    {"success": False, "error": "Missing lora_code parameter"},
+                    status=400,
+                )
+
+            node_ids = None
+            if node_ids_raw:
+                try:
+                    node_ids = json.loads(node_ids_raw)
+                except (json.JSONDecodeError, TypeError):
+                    return web.json_response(
+                        {"success": False, "error": "node_ids must be a valid JSON array"},
+                        status=400,
+                    )
+                if not isinstance(node_ids, list) or not node_ids:
+                    return web.json_response(
+                        {"success": False, "error": "node_ids must be a non-empty JSON array"},
+                        status=400,
+                    )
+            elif node_id_list:
+                node_ids = node_id_list
+
+            results = []
+            if node_ids is None:
+                try:
+                    self._prompt_server.instance.send_sync(
+                        "lora_code_update",
+                        {"id": -1, "lora_code": lora_code, "mode": mode},
+                    )
+                    results.append({"node_id": "broadcast", "success": True})
+                except Exception as exc:  # pragma: no cover - defensive logging
+                    logger.error("Error broadcasting lora code: %s", exc)
+                    results.append(
+                        {"node_id": "broadcast", "success": False, "error": str(exc)}
+                    )
+            else:
+                for entry in node_ids:
+                    node_identifier = entry
+                    graph_identifier = None
+                    if isinstance(entry, dict):
+                        node_identifier = entry.get("node_id")
+                        graph_identifier = entry.get("graph_id")
+
+                    if node_identifier is None:
+                        results.append(
+                            {
+                                "node_id": node_identifier,
+                                "graph_id": graph_identifier,
+                                "success": False,
+                                "error": "Missing node_id parameter",
+                            }
+                        )
+                        continue
+
+                    try:
+                        parsed_node_id = int(node_identifier)
+                    except (TypeError, ValueError):
+                        parsed_node_id = node_identifier
+
+                    payload = {
+                        "id": parsed_node_id,
+                        "lora_code": lora_code,
+                        "mode": mode,
+                    }
+
+                    if graph_identifier is not None:
+                        payload["graph_id"] = str(graph_identifier)
+
+                    try:
+                        self._prompt_server.instance.send_sync(
+                            "lora_code_update",
+                            payload,
+                        )
+                        results.append(
+                            {
+                                "node_id": parsed_node_id,
+                                "graph_id": payload.get("graph_id"),
+                                "success": True,
+                            }
+                        )
+                    except Exception as exc:  # pragma: no cover - defensive logging
+                        logger.error(
+                            "Error sending lora code to node %s (graph %s): %s",
+                            parsed_node_id,
+                            graph_identifier,
+                            exc,
+                        )
+                        results.append(
+                            {
+                                "node_id": parsed_node_id,
+                                "graph_id": payload.get("graph_id"),
+                                "success": False,
+                                "error": str(exc),
+                            }
+                        )
+
+            return web.json_response({"success": True, "results": results})
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.error("Failed to update lora code (GET): %s", exc, exc_info=True)
+            return web.json_response({"success": False, "error": str(exc)}, status=500)
+
 
 class TrainedWordsHandler:
     async def get_trained_words(self, request: web.Request) -> web.Response:
@@ -1878,11 +2008,11 @@ async def _noop_backup_service() -> None:
 
 @dataclass
 class ServiceRegistryAdapter:
-    get_lora_scanner: Callable[[], Awaitable]
-    get_checkpoint_scanner: Callable[[], Awaitable]
-    get_embedding_scanner: Callable[[], Awaitable]
-    get_downloaded_version_history_service: Callable[[], Awaitable]
-    get_backup_service: Callable[[], Awaitable] = _noop_backup_service
+    get_lora_scanner: Callable[[], Awaitable[Any]]
+    get_checkpoint_scanner: Callable[[], Awaitable[Any]]
+    get_embedding_scanner: Callable[[], Awaitable[Any]]
+    get_downloaded_version_history_service: Callable[[], Awaitable[Any]]
+    get_backup_service: Callable[[], Awaitable[Any]] = _noop_backup_service
 
 
 class ModelLibraryHandler:
@@ -1923,8 +2053,8 @@ class ModelLibraryHandler:
         return await self._service_registry.get_downloaded_version_history_service()
 
     @staticmethod
-    def _with_downloaded_flag(versions: list[dict]) -> list[dict]:
-        enriched: list[dict] = []
+    def _with_downloaded_flag(versions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        enriched: list[dict[str, Any]] = []
         for version in versions:
             entry = dict(version)
             entry.setdefault("hasBeenDownloaded", True)
@@ -2117,7 +2247,7 @@ class ModelLibraryHandler:
             checkpoint_scanner = await self._service_registry.get_checkpoint_scanner()
             embedding_scanner = await self._service_registry.get_embedding_scanner()
 
-            results: list[dict] = []
+            results: list[dict[str, Any]] = []
             for model_id in model_ids:
                 lora_versions = await lora_scanner.get_model_versions_by_id(model_id)
                 if lora_versions:
@@ -2226,7 +2356,7 @@ class ModelLibraryHandler:
                 )
 
             try:
-                model_version_id = int(data.get("modelVersionId"))
+                model_version_id = int(data.get("modelVersionId"))  # pyright: ignore[reportArgumentType]
             except (TypeError, ValueError):
                 return web.json_response(
                     {"success": False, "error": "Parameter modelVersionId must be an integer"},
@@ -2338,10 +2468,11 @@ class ModelLibraryHandler:
                 "checkpoint": checkpoint_scanner,
                 "embedding": embedding_scanner,
             }
-            scanner = scanner_map.get(found_type)
+            scanner = scanner_map.get(found_type or "")
             if scanner:
-                persist = getattr(scanner, "_persist_current_cache", None)
-                if callable(persist):
+                scanner.bump_cache_version()
+                persist: Any = getattr(scanner, "_persist_current_cache", None)
+                if persist:
                     await persist()
 
             history_service = await self._get_download_history_service()
@@ -2463,6 +2594,8 @@ class ModelLibraryHandler:
                     status=400,
                 )
 
+            cursor = request.query.get("cursor")
+
             metadata_provider = await self._metadata_provider_factory()
             if not metadata_provider:
                 return web.json_response(
@@ -2471,7 +2604,7 @@ class ModelLibraryHandler:
                 )
 
             try:
-                models = await metadata_provider.get_user_models(username)
+                result = await metadata_provider.get_user_models(username, cursor)
             except NotImplementedError:
                 return web.json_response(
                     {
@@ -2481,14 +2614,35 @@ class ModelLibraryHandler:
                     status=501,
                 )
 
-            if models is None:
+            if result is None:
                 return web.json_response(
                     {"success": False, "error": "Failed to fetch user models"},
                     status=502,
                 )
 
+            if isinstance(result, dict):
+                models = result.get("items")
+                next_cursor = result.get("nextCursor")
+            else:
+                # Defensive: tolerate providers that still return a raw list
+                models = result
+                next_cursor = None
+
             if not isinstance(models, list):
                 models = []
+            if next_cursor is not None and not isinstance(next_cursor, str):
+                next_cursor = str(next_cursor)
+
+            estimated_total = None
+            if cursor is None:
+                get_count = getattr(metadata_provider, "get_creator_model_count", None)
+                if get_count is not None:
+                    try:
+                        estimated_total = await get_count(username)
+                    except Exception:  # best-effort only
+                        estimated_total = None
+                if not isinstance(estimated_total, int):
+                    estimated_total = None
 
             lora_scanner = await self._service_registry.get_lora_scanner()
             checkpoint_scanner = await self._service_registry.get_checkpoint_scanner()
@@ -2499,15 +2653,16 @@ class ModelLibraryHandler:
             }
             lora_type_aliases = {model_type.lower() for model_type in VALID_LORA_TYPES}
 
-            type_scanner_map: Dict[str, object | None] = {
+            type_scanner_map: Dict[str, Any] = {
                 **{alias: lora_scanner for alias in lora_type_aliases},
                 "checkpoint": checkpoint_scanner,
                 "textualinversion": embedding_scanner,
             }
 
-            versions: list[dict] = []
+            versions: list[dict[str, Any]] = []
             history_service = await self._get_download_history_service()
             model_ids: list[int] = []
+            model_count = 0
             for model in models:
                 try:
                     model_ids.append(int(model.get("id")))
@@ -2541,6 +2696,8 @@ class ModelLibraryHandler:
                 if model_type not in normalized_allowed_types:
                     continue
 
+                model_count += 1
+
                 scanner = type_scanner_map.get(model_type)
                 if scanner is None:
                     return web.json_response(
@@ -2554,6 +2711,8 @@ class ModelLibraryHandler:
                 tags_value = model.get("tags")
                 tags = tags_value if isinstance(tags_value, list) else []
                 model_id = model.get("id")
+                if model_id is None:
+                    continue
                 try:
                     model_id_int = int(model_id)
                 except (TypeError, ValueError):
@@ -2569,6 +2728,8 @@ class ModelLibraryHandler:
                         continue
 
                     version_id = version.get("id")
+                    if version_id is None:
+                        continue
                     try:
                         version_id_int = int(version_id)
                     except (TypeError, ValueError):
@@ -2606,7 +2767,15 @@ class ModelLibraryHandler:
                     )
 
             return web.json_response(
-                {"success": True, "username": username, "versions": versions}
+                {
+                    "success": True,
+                    "username": username,
+                    "versions": versions,
+                    "modelCount": model_count,
+                    "nextCursor": next_cursor,
+                    "hasMore": next_cursor is not None,
+                    "estimatedTotal": estimated_total,
+                }
             )
         except Exception as exc:  # pragma: no cover - defensive logging
             logger.error("Failed to get Civitai user models: %s", exc, exc_info=True)
@@ -2622,7 +2791,7 @@ class MetadataArchiveHandler:
         ] = get_metadata_archive_manager,
         settings_service=None,
         metadata_provider_updater: Callable[
-            [], Awaitable[None]
+            [], Awaitable[Any]
         ] = update_metadata_providers,
     ) -> None:
         self._metadata_archive_manager_factory = metadata_archive_manager_factory
@@ -2769,7 +2938,7 @@ class BackupHandler:
 
             if request.content_type.startswith("multipart/"):
                 reader = await request.multipart()
-                field = await reader.next()
+                field: Any = await reader.next()
                 uploaded = False
                 while field is not None:
                     if getattr(field, "filename", None):
@@ -3353,7 +3522,7 @@ class NodeRegistryHandler:
                     status=400,
                 )
 
-            if not isinstance(value, str) or not value:
+            if value is None or (isinstance(value, str) and not value):
                 return web.json_response(
                     {"success": False, "error": "Missing value parameter"}, status=400
                 )
@@ -3388,7 +3557,7 @@ class NodeRegistryHandler:
                 except (TypeError, ValueError):
                     parsed_node_id = node_identifier
 
-                payload: dict = {
+                payload: dict[str, Any] = {
                     "id": parsed_node_id,
                     "value": value,
                     "mode": mode,
@@ -3431,6 +3600,130 @@ class NodeRegistryHandler:
             logger.error("Failed to update node widget: %s", exc, exc_info=True)
             return web.json_response({"success": False, "error": str(exc)}, status=500)
 
+    async def get_update_node_widget(self, request: web.Request) -> web.Response:
+        """GET version of update_node_widget — reads parameters from query string.
+
+        Query params:
+          widget_name  (optional)   — the widget name to update (required unless action is set)
+          action       (optional)   — alternative action, e.g. "inject_text" (required unless widget_name is set)
+          value        (required)   — the value to set
+          mode         (optional)   — "replace" (default) or "append"
+          node_id      (repeatable) — target node id(s), e.g. node_id=3&node_id=5
+          node_ids     (optional)   — JSON-encoded array for complex references:
+                                       [{"node_id":3,"graph_id":"g1"}, ...]
+        """
+        try:
+            widget_name = request.query.get("widget_name")
+            action = request.query.get("action")
+            value = request.query.get("value")
+            mode = request.query.get("mode", "replace")
+            node_ids_raw = request.query.get("node_ids")
+            node_id_list = request.query.getall("node_id", [])
+
+            if not action and (not isinstance(widget_name, str) or not widget_name):
+                return web.json_response(
+                    {
+                        "success": False,
+                        "error": "Missing parameter: provide either 'action' or 'widget_name'",
+                    },
+                    status=400,
+                )
+
+            if value is None or (isinstance(value, str) and not value):
+                return web.json_response(
+                    {"success": False, "error": "Missing value parameter"}, status=400
+                )
+
+            node_ids = None
+            if node_ids_raw:
+                try:
+                    node_ids = json.loads(node_ids_raw)
+                except (json.JSONDecodeError, TypeError):
+                    return web.json_response(
+                        {"success": False, "error": "node_ids must be a valid JSON array"},
+                        status=400,
+                    )
+                if not isinstance(node_ids, list) or not node_ids:
+                    return web.json_response(
+                        {"success": False, "error": "node_ids must be a non-empty JSON array"},
+                        status=400,
+                    )
+            elif node_id_list:
+                node_ids = node_id_list
+
+            if not isinstance(node_ids, list) or not node_ids:
+                return web.json_response(
+                    {"success": False, "error": "node_ids must be a non-empty list"},
+                    status=400,
+                )
+
+            results = []
+            for entry in node_ids:
+                node_identifier = entry
+                graph_identifier = None
+                if isinstance(entry, dict):
+                    node_identifier = entry.get("node_id")
+                    graph_identifier = entry.get("graph_id")
+
+                if node_identifier is None:
+                    results.append(
+                        {
+                            "node_id": node_identifier,
+                            "graph_id": graph_identifier,
+                            "success": False,
+                            "error": "Missing node_id parameter",
+                        }
+                    )
+                    continue
+
+                try:
+                    parsed_node_id = int(node_identifier)
+                except (TypeError, ValueError):
+                    parsed_node_id = node_identifier
+
+                payload: dict[str, Any] = {
+                    "id": parsed_node_id,
+                    "value": value,
+                    "mode": mode,
+                }
+                if action:
+                    payload["action"] = action
+                if widget_name:
+                    payload["widget_name"] = widget_name
+
+                if graph_identifier is not None:
+                    payload["graph_id"] = str(graph_identifier)
+
+                try:
+                    self._prompt_server.instance.send_sync("lm_widget_update", payload)
+                    results.append(
+                        {
+                            "node_id": parsed_node_id,
+                            "graph_id": payload.get("graph_id"),
+                            "success": True,
+                        }
+                    )
+                except Exception as exc:  # pragma: no cover - defensive logging
+                    logger.error(
+                        "Error sending widget update to node %s (graph %s): %s",
+                        parsed_node_id,
+                        graph_identifier,
+                        exc,
+                    )
+                    results.append(
+                        {
+                            "node_id": parsed_node_id,
+                            "graph_id": payload.get("graph_id"),
+                            "success": False,
+                            "error": str(exc),
+                        }
+                    )
+
+            return web.json_response({"success": True, "results": results})
+        except Exception as exc:  # pragma: no cover - defensive logging
+            logger.error("Failed to update node widget (GET): %s", exc, exc_info=True)
+            return web.json_response({"success": False, "error": str(exc)}, status=500)
+
 
 class MiscHandlerSet:
     """Aggregate handlers into a lookup compatible with the registrar."""
@@ -3455,8 +3748,8 @@ class MiscHandlerSet:
         doctor: DoctorHandler,
         example_workflows: ExampleWorkflowsHandler,
         base_model: BaseModelHandlerSet,
-        hf_handler: HfHandler | None = None,
-        agent_handler: AgentHandler | None = None,
+        hf_handler: Any = None,
+        agent_handler: Any = None,
     ) -> None:
         self.health = health
         self.settings = settings
@@ -3497,10 +3790,12 @@ class MiscHandlerSet:
             "update_usage_stats": self.usage_stats.update_usage_stats,
             "get_usage_stats": self.usage_stats.get_usage_stats,
             "update_lora_code": self.lora_code.update_lora_code,
+            "get_update_lora_code": self.lora_code.get_update_lora_code,
             "get_trained_words": self.trained_words.get_trained_words,
             "get_model_example_files": self.model_examples.get_model_example_files,
             "register_nodes": self.node_registry.register_nodes,
             "update_node_widget": self.node_registry.update_node_widget,
+            "get_update_node_widget": self.node_registry.get_update_node_widget,
             "get_registry": self.node_registry.get_registry,
             "check_model_exists": self.model_library.check_model_exists,
             "check_models_exist": self.model_library.check_models_exist,

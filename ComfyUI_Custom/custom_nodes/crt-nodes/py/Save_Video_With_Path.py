@@ -1,4 +1,5 @@
 import os
+import secrets
 import torch
 import cv2
 import numpy as np
@@ -46,11 +47,11 @@ class SaveVideoWithPath:
         extra_pnginfo=None,
     ):
         if not activate:
-            print("💡 SaveVideoWithPath is deactivated. Skipping video save.")
+            print("[INFO] SaveVideoWithPath is deactivated. Skipping video save.")
             return ()
 
         if image is None:
-            print("❌ ERROR: No input image provided to SaveVideoWithPath.")
+            print("[ERROR] ERROR: No input image provided to SaveVideoWithPath.")
             return ()
 
         try:
@@ -58,7 +59,17 @@ class SaveVideoWithPath:
             filename_clean = filename.strip().lstrip('/\\')
             suffix_clean = suffix.strip()
 
-            final_dir = os.path.join(folder_path, subfolder_clean)
+            # Empty filename: auto-generate a unique name (never block the save).
+            if not filename_clean:
+                filename_clean = f"video_{secrets.token_hex(16)}"
+                print(f"[INFO] No filename given. Using auto-generated name: {filename_clean}")
+
+            # Empty subfolder: save directly into the base folder.
+            final_dir = (
+                os.path.join(folder_path, subfolder_clean)
+                if subfolder_clean
+                else folder_path
+            )
             os.makedirs(final_dir, exist_ok=True)
             final_filepath = os.path.join(final_dir, filename_clean + suffix_clean + ".mp4")
 
@@ -131,9 +142,9 @@ class SaveVideoWithPath:
                 if result.returncode != 0:
                     raise RuntimeError(f"FFmpeg failed: {result.stderr}")
 
-            print(f"✅ Video saved successfully to: {final_filepath}")
+            print(f"[OK] Video saved successfully to: {final_filepath}")
             return ({"ui": {"text": ["Video saved (Lossless)."]}},)
 
         except Exception as e:
-            print(f"❌ ERROR in SaveVideoWithPath: {str(e)}")
+            print(f"[ERROR] ERROR in SaveVideoWithPath: {str(e)}")
             raise e

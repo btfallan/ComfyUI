@@ -3,11 +3,13 @@ import { showToast, setupAutoNewlineOnPaste } from '../utils/uiHelpers.js';
 import { state } from '../state/index.js';
 import { LoadingManager } from './LoadingManager.js';
 import { getModelApiClient, resetAndReload } from '../api/modelApiFactory.js';
+import { isModelWeightFile } from '../utils/modelFileTypes.js';
 import { getStorageItem, setStorageItem } from '../utils/storageHelpers.js';
 import { FolderTreeManager } from '../components/FolderTreeManager.js';
 import { translate } from '../utils/i18nHelpers.js';
-import { extractCivitaiModelUrlParts } from '../utils/civitaiUtils.js';
+import { buildCivitaiUrl, extractCivitaiModelUrlParts, normalizeCivitaiPageHost } from '../utils/civitaiUtils.js';
 import { formatFileSize } from '../utils/formatters.js';
+import { showDownloadBatchSummary } from '../components/DownloadBatchSummaryModal.js';
 
 export class DownloadManager {
     constructor() {
@@ -158,6 +160,7 @@ export class DownloadManager {
         this.modelVersionId = null;
         this.source = null;
         this.selectedFile = null;
+        this._isDiffusionModel = false;
 
         this.selectedFolder = '';
         this.batchModels = [];
@@ -233,6 +236,9 @@ export class DownloadManager {
 
                 if (this.modelVersionId) {
                     this.currentVersion = this.versions.find(v => v.id.toString() === this.modelVersionId);
+                } else {
+                    // No explicit version id in the URL → default to the latest version (Civitai returns newest first)
+                    this.currentVersion = this.versions[0];
                 }
 
                 this.showVersionStep();
@@ -426,6 +432,9 @@ export class DownloadManager {
             await this.retrieveVersionsForModel(this.modelId, this.source);
             if (this.modelVersionId) {
                 this.currentVersion = this.versions.find(v => v.id.toString() === this.modelVersionId);
+            } else {
+                // No explicit version id → default to the latest version (Civitai returns newest first)
+                this.currentVersion = this.versions[0];
             }
             this.showVersionStep();
         } catch (error) {
@@ -549,8 +558,7 @@ export class DownloadManager {
             const firstImage = version.images?.find(img => !img.url.endsWith('.mp4'));
             const thumbnailUrl = firstImage ? firstImage.url : '/loras_static/images/no-preview.png';
 
-            // Count model-type files per version
-            const modelFiles = (version.files || []).filter(f => f.type === 'Model' || f.type === 'UNet' || f.type === 'Diffusion Model');
+            const modelFiles = (version.files || []).filter(f => isModelWeightFile(f.type));
             const primaryFile = modelFiles.find(f => f.primary) || modelFiles[0] || {};
             const fileSize = version.modelSizeKB ?
                 (version.modelSizeKB / 1024).toFixed(2) :
@@ -677,7 +685,7 @@ export class DownloadManager {
         if (!version) return;
 
         this.currentVersion = version;
-        const modelFiles = (version.files || []).filter(f => f.type === 'Model' || f.type === 'UNet' || f.type === 'Diffusion Model');
+        const modelFiles = (version.files || []).filter(f => isModelWeightFile(f.type));
 
         document.getElementById('versionStep').style.display = 'none';
         document.getElementById('fileSelectionStep').style.display = 'block';
@@ -739,14 +747,14 @@ export class DownloadManager {
             return;
         }
 
-        const modelFiles = (version.files || []).filter(f => f.type === 'Model' || f.type === 'UNet' || f.type === 'Diffusion Model');
+        const modelFiles = (version.files || []).filter(f => isModelWeightFile(f.type));
         this.selectedFile = modelFiles.find(f => f.id.toString() === selectedRadio.value);
 
         console.log('[download] confirmFileSelection: selected file id=%s, name="%s", type="%s", metadata=%o',
             this.selectedFile?.id, this.selectedFile?.name, this.selectedFile?.type, this.selectedFile?.metadata);
 
         document.getElementById('fileSelectionStep').style.display = 'none';
-        document.getElementById('locationStep').style.display = 'block';
+        document.getElementById('downloadLocationStep').style.display = 'block';
         this.proceedToLocationContent();
     }
 
@@ -780,30 +788,46 @@ export class DownloadManager {
         }
 
         document.querySelectorAll('.download-step').forEach(step => step.style.display = 'none');
-        document.getElementById('locationStep').style.display = 'block';
+        document.getElementById('downloadLocationStep').style.display = 'block';
         await this.proceedToLocationContent();
     }
 
     async proceedToLocationContent() {
 
         try {
-            // Fetch model roots
-            const rootsData = await this.apiClient.fetchModelRoots();
+            const _isDiffusionModel = this.selectedFile
+                ? (this.selectedFile.type === 'UNet' || this.selectedFile.type === 'Diffusion Model')
+                : (this.currentVersion?.files || []).some(
+                    f => f.type === 'UNet' || f.type === 'Diffusion Model'
+                );
+            this._isDiffusionModel = _isDiffusionModel;
+
+            let rootsData;
+            if (this._isDiffusionModel && this.apiClient.modelType === 'checkpoints') {
+                rootsData = await this.apiClient.fetchModelRoots('diffusion_model');
+            } else {
+                rootsData = await this.apiClient.fetchModelRoots();
+            }
             const modelRoot = document.getElementById('modelRoot');
             modelRoot.innerHTML = rootsData.roots.map(root =>
                 `<option value="${root}">${root}</option>`
             ).join('');
 
-            // Set default root if available
-            const singularType = this.apiClient.modelType.replace(/s$/, '');
+            const singularType = this._isDiffusionModel
+                ? 'unet'
+                : this.apiClient.modelType.replace(/s$/, '');
             const defaultRootKey = `default_${singularType}_root`;
             const defaultRoot = state.global.settings[defaultRootKey];
-            console.log(`Default root for ${this.apiClient.modelType}:`, defaultRoot);
+            console.log(`Default root for ${singularType}:`, defaultRoot);
             console.log('Available roots:', rootsData.roots);
             if (defaultRoot && rootsData.roots.includes(defaultRoot)) {
                 console.log(`Setting default root: ${defaultRoot}`);
                 modelRoot.value = defaultRoot;
             }
+
+            const subtypeDisplay = this._isDiffusionModel ? 'Diffusion Model' : this.apiClient.apiConfig.config.displayName;
+            document.getElementById('modelRootLabel').textContent =
+                translate('modals.download.selectTypeRoot', { type: subtypeDisplay });
 
             // Set autocomplete="off" on folderPath input
             const folderPathInput = document.getElementById('folderPath');
@@ -861,6 +885,26 @@ export class DownloadManager {
         this.updateTargetPath();
     }
 
+    /**
+     * Synthesize a clickable URL for a single-download failure entry.
+     * Single downloads have no pasted URL, so the modal link is derived from
+     * the model/version ids (CivitAI) or the HF repo/file (HuggingFace).
+     */
+    _buildSingleItemUrl({ modelId, versionId, source, repo = null, filename = null }) {
+        if (source === 'huggingface' && repo) {
+            const base = `https://huggingface.co/${encodeURI(repo)}`;
+            return filename ? `${base}/blob/${encodeURI('main')}/${encodeURI(filename)}` : base;
+        }
+        if (modelId) {
+            return buildCivitaiUrl({
+                modelId,
+                versionId,
+                host: normalizeCivitaiPageHost(state?.global?.settings?.civitai_host),
+            });
+        }
+        return null;
+    }
+
     async executeDownloadWithProgress({
         modelId,
         versionId,
@@ -868,6 +912,7 @@ export class DownloadManager {
         modelRoot = '',
         targetFolder = '',
         useDefaultPaths = false,
+        useSaveDirAsRoot = false,
         source = null,
         fileParams = null,
         closeModal = false,
@@ -879,6 +924,7 @@ export class DownloadManager {
         }
 
         const displayName = versionName || `#${versionId}`;
+        const retryParams = { modelId, versionId, versionName, modelRoot, targetFolder, useDefaultPaths, useSaveDirAsRoot, source, fileParams, closeModal: false };
         let ws = null;
         let updateProgress = () => { };
         let cancelled = false;
@@ -950,7 +996,8 @@ export class DownloadManager {
                 useDefaultPaths,
                 downloadId,
                 source,
-                fileParams
+                fileParams,
+                useSaveDirAsRoot
             );
 
             if (cancelled) {
@@ -965,6 +1012,26 @@ export class DownloadManager {
                     modalManager.closeModal('downloadModal');
                 }
                 return true;
+            }
+
+            if (!response?.success) {
+                this.loadingManager.setStatus(translate('modals.download.status.finalizing'));
+                showDownloadBatchSummary({
+                    total: 1,
+                    completed: 0,
+                    failedItems: [{
+                        item: {
+                            modelId,
+                            versionId,
+                            source,
+                            url: this._buildSingleItemUrl({ modelId, versionId, source }),
+                        },
+                        error: response?.error || 'Unknown error',
+                        name: displayName,
+                    }],
+                    onRetry: () => this.executeDownloadWithProgress(retryParams),
+                });
+                return false;
             }
 
             showToast('toast.loras.downloadCompleted', {}, 'success');
@@ -1001,7 +1068,21 @@ export class DownloadManager {
                 console.log('Download cancelled by user:', downloadId);
             } else {
                 console.error('Failed to download model version:', error);
-                showToast('toast.downloads.downloadError', { message: error?.message }, 'error');
+                showDownloadBatchSummary({
+                    total: 1,
+                    completed: 0,
+                    failedItems: [{
+                        item: {
+                            modelId,
+                            versionId,
+                            source,
+                            url: this._buildSingleItemUrl({ modelId, versionId, source }),
+                        },
+                        error: error?.message || 'Unknown error',
+                        name: displayName,
+                    }],
+                    onRetry: () => this.executeDownloadWithProgress(retryParams),
+                });
             }
             return false;
         } finally {
@@ -1016,14 +1097,16 @@ export class DownloadManager {
         }
     }
 
-    async _downloadHfSingle({ modelRoot, targetFolder, useDefaultPaths }) {
+    async _downloadHfSingle({ modelRoot, targetFolder, useDefaultPaths, files = null }) {
         modalManager.closeModal('downloadModal');
         this.loadingManager.restoreProgressBar();
-        const totalFiles = this.hfSelectedFiles.length;
+        const filesToDownload = files || this.hfSelectedFiles;
+        const totalFiles = filesToDownload.length;
         const updateProgress = this.loadingManager.showDownloadProgress(totalFiles);
 
         let cancelled = false;
         let currentDownloadId = null;
+        const failedFiles = [];
 
         this.loadingManager.showCancelButton(async () => {
             if (cancelled) return;
@@ -1042,7 +1125,7 @@ export class DownloadManager {
             for (let i = 0; i < totalFiles; i++) {
                 if (cancelled) break;
 
-                const filename = this.hfSelectedFiles[i];
+                const filename = filesToDownload[i];
                 updateProgress(0, completedDownloads, filename);
                 this.loadingManager.setStatus(`Downloading ${filename}...`);
 
@@ -1088,6 +1171,31 @@ export class DownloadManager {
                     if (response?.success) {
                         completedDownloads++;
                         updateProgress(100, completedDownloads, filename);
+                    } else {
+                        failedFiles.push({
+                            item: {
+                                source: 'huggingface',
+                                repo: this.hfRepoId,
+                                filename,
+                                url: this._buildSingleItemUrl({ source: 'huggingface', repo: this.hfRepoId, filename }),
+                            },
+                            error: response?.error || 'Unknown error',
+                            name: filename,
+                        });
+                    }
+                } catch (err) {
+                    if (!cancelled) {
+                        console.error(`Failed to download HF file ${filename}:`, err);
+                        failedFiles.push({
+                            item: {
+                                source: 'huggingface',
+                                repo: this.hfRepoId,
+                                filename,
+                                url: this._buildSingleItemUrl({ source: 'huggingface', repo: this.hfRepoId, filename }),
+                            },
+                            error: err?.message || 'Unknown error',
+                            name: filename,
+                        });
                     }
                 } finally {
                     ws.close();
@@ -1097,11 +1205,27 @@ export class DownloadManager {
             if (cancelled) {
                 showToast('toast.downloads.downloadStopped', {}, 'info',
                     `Download cancelled. ${completedDownloads} item(s) completed.`);
-            } else {
-                showToast('toast.loras.downloadCompleted', {}, 'success');
+                await resetAndReload(true);
+                return true;
             }
+            if (failedFiles.length === 0) {
+                showToast('toast.loras.downloadCompleted', {}, 'success');
+                await resetAndReload(true);
+                return true;
+            }
+            showDownloadBatchSummary({
+                total: totalFiles,
+                completed: completedDownloads,
+                failedItems: failedFiles,
+                onRetry: () => this._downloadHfSingle({
+                    modelRoot,
+                    targetFolder,
+                    useDefaultPaths,
+                    files: failedFiles.map((f) => f.item.filename),
+                }),
+            });
             await resetAndReload(true);
-            return true;
+            return false;
         } catch (error) {
             if (!cancelled) {
                 console.error('Failed to download HF model:', error);
@@ -1441,7 +1565,7 @@ export class DownloadManager {
     }
 
     backToVersions() {
-        document.getElementById('locationStep').style.display = 'none';
+        document.getElementById('downloadLocationStep').style.display = 'none';
         if (this.isBatchMode) {
             document.getElementById('batchPreviewStep').style.display = 'block';
         } else {
@@ -1531,6 +1655,10 @@ export class DownloadManager {
 
         modalManager.closeModal('downloadModal');
 
+        return this.executeBatchDownload(downloadItems, { modelRoot, targetFolder, useDefaultPaths });
+    }
+
+    async executeBatchDownload(downloadItems, { modelRoot, targetFolder, useDefaultPaths }) {
         const batchDownloadId = Date.now().toString();
         const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
         const ws = new WebSocket(`${wsProtocol}${window.location.host}/ws/download-progress?id=${batchDownloadId}`);
@@ -1541,6 +1669,7 @@ export class DownloadManager {
         let completedDownloads = 0;
         let failedDownloads = 0;
         let cancelled = false;
+        const failedItems = [];
 
         loadingManager.showCancelButton(async () => {
             if (cancelled) return;
@@ -1641,6 +1770,7 @@ export class DownloadManager {
 
                 if (!response.success) {
                     failedDownloads++;
+                    failedItems.push({ item, error: response.error || 'Unknown error', name });
                 } else {
                     completedDownloads++;
                     updateProgress(100, completedDownloads, '');
@@ -1649,6 +1779,7 @@ export class DownloadManager {
                 if (!cancelled) {
                     console.error(`Failed to download ${name}:`, err);
                     failedDownloads++;
+                    failedItems.push({ item, error: err?.message || 'Unknown error', name });
                 }
             }
         }
@@ -1662,10 +1793,15 @@ export class DownloadManager {
         } else if (failedDownloads === 0) {
             showToast('toast.loras.allDownloadSuccessful', { count: completedDownloads }, 'success');
         } else {
-            showToast('toast.loras.downloadPartialSuccess', {
-                completed: completedDownloads,
+            showDownloadBatchSummary({
                 total: downloadItems.length,
-            }, 'warning');
+                completed: completedDownloads,
+                failedItems,
+                onRetry: (failed) => this.executeBatchDownload(
+                    failed.map((f) => f.item),
+                    { modelRoot, targetFolder, useDefaultPaths }
+                ),
+            });
         }
 
         await resetAndReload(true);
@@ -1675,7 +1811,9 @@ export class DownloadManager {
         versionName = '', 
         source = null,
         modelRoot = '',
-        targetFolder = ''
+        targetFolder = '',
+        useDefaultPaths = null,
+        useSaveDirAsRoot = false
     } = {}) {
         console.warn('[download] downloadVersionWithDefaults: NO fileParams will be sent — backend will always use primary file. '
             + 'modelType=%s, modelId=%s, versionId=%s, versionName="%s"',
@@ -1690,14 +1828,14 @@ export class DownloadManager {
         this.modelId = modelId ? modelId.toString() : null;
         this.source = source;
 
-        const useDefaultPaths = !modelRoot;
         return this.executeDownloadWithProgress({
             modelId,
             versionId,
             versionName,
             modelRoot: modelRoot || '',
             targetFolder: targetFolder || '',
-            useDefaultPaths,
+            useDefaultPaths: useDefaultPaths ?? !modelRoot,
+            useSaveDirAsRoot,
             source,
             closeModal: false,
         });
@@ -1776,13 +1914,15 @@ export class DownloadManager {
         const modelRoot = document.getElementById('modelRoot').value;
         const config = this.apiClient.apiConfig.config;
 
-        let fullPath = modelRoot || translate('modals.download.selectTypeRoot', { type: config.displayName });
+        const subtypeDisplay = this._isDiffusionModel ? 'Diffusion Model' : config.displayName;
+        let fullPath = modelRoot || translate('modals.download.selectTypeRoot', { type: subtypeDisplay });
 
         if (modelRoot) {
             if (this.useDefaultPath) {
-                // Show actual template path
                 try {
-                    const singularType = this.apiClient.modelType.replace(/s$/, '');
+                    const singularType = this._isDiffusionModel
+                        ? 'unet'
+                        : this.apiClient.modelType.replace(/s$/, '');
                     const templates = state.global.settings.download_path_templates;
                     const template = templates[singularType];
                     fullPath += `/${template}`;

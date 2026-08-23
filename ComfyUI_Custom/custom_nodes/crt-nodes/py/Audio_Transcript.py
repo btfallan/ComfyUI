@@ -145,7 +145,6 @@ def _get_whisper_model(model_name):
 
 
 class CRT_AudioTranscript:
-    TRANSLATED_PREFIX = "The subject says : "
     @classmethod
     def IS_CHANGED(
         cls,
@@ -159,8 +158,8 @@ class CRT_AudioTranscript:
         auto_download_melband=True,
         language="auto",
         prompt="",
-        prefix='The subject says: "',
-        suffix='"',
+        prefix="",
+        suffix="",
     ):
         return stable_fingerprint(
             audio,
@@ -183,8 +182,20 @@ class CRT_AudioTranscript:
             "required": {
                 "audio": ("AUDIO",),
                 "isolate_voice": ("BOOLEAN", {"default": False}),
-                "enable_translation": ("BOOLEAN", {"default": False}),
-                "translation_language": (OMNIVOICE_LANGUAGES, {"default": "French"}),
+                "enable_translation": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Translate the Whisper transcript with the optional local llama.cpp runtime. Requires a separately installed llama-cpp-python package.",
+                    },
+                ),
+                "translation_language": (
+                    OMNIVOICE_LANGUAGES,
+                    {
+                        "default": "French",
+                        "tooltip": "Target language used when translation is enabled and for translated OmniVoice output.",
+                    },
+                ),
                 "enable_omnivoice": ("BOOLEAN", {"default": False}),
             },
             "hidden": {
@@ -207,9 +218,9 @@ class CRT_AudioTranscript:
                 "prompt": ("STRING", {"default": ""}),
                 "prefix": (
                     "STRING",
-                    {"default": 'The subject says: "'},
+                    {"default": ""},
                 ),
-                "suffix": ("STRING", {"default": '"'}),
+                "suffix": ("STRING", {"default": ""}),
             },
         }
 
@@ -381,8 +392,8 @@ class CRT_AudioTranscript:
         auto_download_melband=True,
         language="auto",
         prompt="",
-        prefix='The subject says: "',
-        suffix='"',
+        prefix="",
+        suffix="",
     ):
         _apply_fixed_seed()
         offload_device = mm.unet_offload_device()
@@ -424,7 +435,7 @@ class CRT_AudioTranscript:
                     raw_text,
                     translation_language,
                 )
-                translated_text = f"{self.TRANSLATED_PREFIX}{translated_for_voice}".strip()
+                translated_text = translated_for_voice.strip()
                 status_parts.append(
                     f"translated to {translation_language.lower()}"
                 )

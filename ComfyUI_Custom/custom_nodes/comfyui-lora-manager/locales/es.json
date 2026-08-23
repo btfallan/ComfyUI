@@ -186,6 +186,16 @@
             "cancelled": "Reparación cancelada. {count} recetas fueron reparadas.",
             "error": "Error al reparar recetas: {message}"
         },
+        "rematchRecipes": {
+            "label": "Reasociar recetas con modelos locales",
+            "loading": "Reasociando recetas con modelos locales...",
+            "success": "{entries} entradas asociadas en {recipes} recetas",
+            "successErrors": "{entries} entradas asociadas en {recipes} recetas, {failures} fallidas",
+            "allFailed": "Falló la reasociación de {failures} de {total} recetas",
+            "noMatch": "No se encontró coincidencia local para {entries} entradas en {recipes} recetas",
+            "cancelled": "Reasociación cancelada. {recipes} recetas actualizadas ({entries} entradas)",
+            "error": "Falló la reasociación de recetas: {message}"
+        },
         "manageExcludedModels": {
             "label": "Gestionar modelos excluidos"
         },
@@ -233,7 +243,7 @@
             "presetNamePlaceholder": "Nombre del preajuste...",
             "baseModel": "Modelo base",
             "baseModelSearchPlaceholder": "Buscar modelos base...",
-            "modelTags": "Etiquetas (Top 20)",
+            "modelTags": "Etiquetas",
             "modelTypes": "Tipos de modelos",
             "license": "Licencia",
             "noCreditRequired": "Sin crédito requerido",
@@ -241,6 +251,8 @@
             "allowSellingGeneratedContentTooltip": "Permitir la venta de imágenes generadas",
             "noCreditRequiredTooltip": "Usar el modelo sin atribuir al creador",
             "noTags": "Sin etiquetas",
+            "tagSearchPlaceholder": "Buscar etiquetas...",
+            "noTagMatches": "Ninguna etiqueta coincide con la búsqueda actual.",
             "autoTags": "Etiquetas automáticas",
             "noBaseModelMatches": "Ningún modelo base coincide con la búsqueda actual.",
             "clearAll": "Limpiar todos los filtros",
@@ -447,6 +459,12 @@
                 "compact": "7 (1080p), 8 (2K), 10 (4K)"
             },
             "displayDensityWarning": "Advertencia: Densidades más altas pueden causar problemas de rendimiento en sistemas con recursos limitados.",
+            "recipesLayout": "Diseño de recetas",
+            "recipesLayoutHelp": "Elige cómo se organizan las tarjetas de recetas: una cuadrícula uniforme o un diseño masonry (estilo Pinterest) que conserva la proporción de aspecto de cada imagen.",
+            "recipesLayoutOptions": {
+                "grid": "Cuadrícula",
+                "masonry": "Masonry"
+            },
             "showFolderSidebar": "Mostrar barra lateral de carpetas",
             "showFolderSidebarHelp": "Activa o desactiva la barra lateral de navegación de carpetas en las páginas de modelos. Cuando está desactivada, la barra lateral y el área de desplazamiento permanecen ocultas.",
             "cardInfoDisplay": "Visualización de información de tarjeta",
@@ -604,6 +622,10 @@
             "label": "Ocultar actualizaciones de acceso temprano",
             "help": "Solo actualizaciones de acceso temprano"
         },
+        "hidePaidUpdates": {
+            "label": "[TODO: Translate] Hide Paid Updates",
+            "help": "[TODO: Translate] When enabled, models with only paid updates will not show 'Update available' badge"
+        },
         "licenseIcons": {
             "useNewStyle": "Usar iconos de licencia actualizados",
             "useNewStyleHelp": "Mostrar permisos de licencia con indicadores de color (nuevo estilo) o solo iconos de restricción (estilo clásico). Refleja el diseño actual de CivitAI."
@@ -640,7 +662,13 @@
             "preparing": "Preparando descarga...",
             "connecting": "Conectando al servidor de descarga...",
             "completed": "Completado",
-            "downloadComplete": "Descarga completada exitosamente"
+            "downloadComplete": "Descarga completada exitosamente",
+            "enableCivarchiveApi": "Habilitar CivArchive API como proveedor de metadatos",
+            "enableCivarchiveApiHelp": "Al activarlo, la API de CivArchive se usa como fuente alternativa de metadatos de modelos (p. ej. para modelos eliminados de CivitAI). Desactívelo para evitar por completo los límites de velocidad de CivArchive.",
+            "providerOrder": "Orden de proveedores de metadatos de respaldo",
+            "providerOrderHelp": "La API de CivitAI siempre se intenta primero. Elija el orden de los demás proveedores al buscar metadatos.",
+            "providerOrderCivitaiArchiveSqlite": "CivitAI → CivArchive → Archive DB",
+            "providerOrderCivitaiSqliteArchive": "CivitAI → Archive DB → CivArchive"
         },
         "proxySettings": {
             "enableProxy": "Habilitar proxy a nivel de aplicación",
@@ -670,6 +698,7 @@
                 "deepseek": "DeepSeek",
                 "groq": "Groq",
                 "openrouter": "OpenRouter",
+                "google": "Gemini",
                 "opencode-go": "OpenCode Go",
                 "custom": "Personalizado (compatible con OpenAI)"
             },
@@ -706,7 +735,9 @@
                 "versionsCount": "Versiones locales",
                 "versionsCountDesc": "Más versiones primero",
                 "versionsCountAsc": "Menos versiones primero",
-                "versionIdDesc": "Versión más nueva primero"
+                "versionIdDesc": "Versión más nueva primero",
+                "random": "Aleatorio",
+                "randomAction": "Aleatorizar (barajar)"
             },
             "refresh": {
                 "title": "Actualizar lista de modelos",
@@ -751,6 +782,7 @@
             "copyAll": "Copiar toda la sintaxis",
             "refreshAll": "Actualizar todos los metadatos",
             "repairMetadata": "Reparar metadatos de la selección",
+            "rematchMetadata": "Reasociar los seleccionados con modelos locales",
             "reimportMetadata": "Reimportar desde origen",
             "checkUpdates": "Comprobar actualizaciones para la selección",
             "moveAll": "Mover todos a carpeta",
@@ -763,6 +795,8 @@
             "deleteAll": "Eliminar seleccionados",
             "downloadMissingLoras": "Descargar LoRAs faltantes",
             "downloadExamples": "Descargar imágenes de ejemplo",
+            "downloadMissingExamples": "Descargar faltantes",
+            "reprocessExamples": "Reprocesar todo",
             "clear": "Limpiar selección",
             "skipMetadataRefreshCount": "Omitir（{count} modelos）",
             "resumeMetadataRefreshCount": "Reanudar（{count} modelos）",
@@ -798,10 +832,13 @@
             "sendToWorkflowReplace": "Enviar al flujo de trabajo (Reemplazar)",
             "openExamples": "Abrir carpeta de ejemplos",
             "downloadExamples": "Descargar imágenes de ejemplo",
+            "downloadMissingExamples": "Descargar faltantes",
+            "reprocessExamples": "Reprocesar todo",
             "replacePreview": "Reemplazar vista previa",
             "setContentRating": "Establecer clasificación de contenido",
             "moveToFolder": "Mover a carpeta",
             "repairMetadata": "Reparar metadatos",
+            "rematchMetadata": "Reasociar con modelos locales",
             "reimportMetadata": "Reimportar desde origen",
             "excludeModel": "Excluir modelo",
             "restoreModel": "Restaurar modelo",
@@ -887,7 +924,9 @@
                 "dateAsc": "Más antiguo",
                 "lorasCount": "Cant. de LoRAs",
                 "lorasCountDesc": "Más",
-                "lorasCountAsc": "Menos"
+                "lorasCountAsc": "Menos",
+                "opened": "Abiertos recientemente",
+                "openedDesc": "Abiertos recientemente"
             },
             "refresh": {
                 "title": "Actualizar lista de recetas",
@@ -898,12 +937,25 @@
             "favorites": {
                 "title": "Mostrar solo favoritos",
                 "action": "Favoritos"
+            },
+            "layout": {
+                "title": "Diseño de recetas",
+                "grid": "Vista de cuadrícula",
+                "masonry": "Vista masonry (estilo Pinterest, conserva la proporción de aspecto de la imagen)"
             }
         },
         "duplicates": {
             "found": "Se encontraron {count} grupos de duplicados",
+            "noGroups": "No se encontraron grupos de duplicados con el criterio de coincidencia actual",
             "keepLatest": "Mantener versiones más recientes",
-            "deleteSelected": "Eliminar seleccionados"
+            "deleteSelected": "Eliminar seleccionados",
+            "includePromptLabel": "Incluir prompt en la coincidencia",
+            "basis": {
+                "loraCombo": "Coincidencia por: combinación de LoRA",
+                "loraComboAndPrompt": "Coincidencia por: combinación de LoRA + prompt",
+                "hintLoraCombo": "Se agrupan las recetas con los mismos LoRAs y las mismas intensidades.",
+                "hintPromptIncluded": "Las recetas solo se agrupan cuando usan los mismos LoRAs con intensidades idénticas Y tienen el mismo prompt."
+            }
         },
         "contextMenu": {
             "copyRecipe": {
@@ -1236,8 +1288,13 @@
             }
         },
         "deleteModel": {
+            "freesSpace": "Libera {size}",
             "title": "Eliminar modelo",
-            "message": "¿Estás seguro de que quieres eliminar este modelo y todos los archivos asociados?"
+            "message": "¿Estás seguro de que quieres eliminar este modelo y todos los archivos asociados?",
+            "recoverableWarning": "El archivo se eliminará permanentemente después de 20 segundos a menos que deshaga la acción."
+        },
+        "deleteRecipe": {
+            "recoverableWarning": "Esta acción se puede deshacer durante 20 segundos."
         },
         "excludeModel": {
             "title": "Excluir modelo",
@@ -1502,6 +1559,8 @@
                     "newerTooltip": "Esta versión es más reciente que tu última versión local",
                     "earlyAccess": "Acceso temprano",
                     "earlyAccessTooltip": "Esta versión requiere actualmente acceso temprano de Civitai",
+                    "paid": "[TODO: Translate] Paid",
+                    "paidTooltip": "[TODO: Translate] This version requires payment to download",
                     "ignored": "Ignorada",
                     "ignoredTooltip": "Las notificaciones de actualización están desactivadas para esta versión",
                     "onSiteOnly": "Solo en Sitio",
@@ -1511,6 +1570,7 @@
                     "download": "Descargar",
                     "downloadTooltip": "Descargar esta versión",
                     "downloadEarlyAccessTooltip": "Descargar esta versión de acceso temprano desde Civitai",
+                    "downloadPaidTooltip": "[TODO: Translate] Download this paid version from Civitai",
                     "downloadNotAllowedTooltip": "Esta versión solo está disponible para generación en el sitio de Civitai",
                     "delete": "Eliminar",
                     "deleteTooltip": "Eliminar esta versión local",
@@ -1540,6 +1600,7 @@
                 "empty": "Aún no hay historial de versiones para este modelo.",
                 "error": "No se pudieron cargar las versiones.",
                 "missingModelId": "Este modelo no tiene un ID de modelo de Civitai.",
+                "hfGroupInfo": "Este es un grupo de modelos de HuggingFace. Abra la biblioteca para ver todas las versiones en la cuadrícula.",
                 "confirm": {
                     "delete": "¿Eliminar esta versión de tu biblioteca?"
                 },
@@ -1566,6 +1627,21 @@
             "downloadCsv": "Descargar CSV",
             "columnModelName": "Nombre del modelo",
             "columnError": "Error"
+        },
+        "downloadBatchSummary": {
+            "title": "Resumen de descarga por lotes",
+            "statSuccess": "Correctos",
+            "statFailed": "Fallidos",
+            "statTotal": "Total",
+            "successMessage": "Todos los {count} modelos se descargaron correctamente",
+            "completedWithErrors": "Completado con errores",
+            "failed": "Descarga fallida",
+            "failedItems": "Elementos fallidos ({count})",
+            "columnName": "Nombre del modelo",
+            "columnError": "Error",
+            "close": "Cerrar",
+            "copyReport": "Copiar informe",
+            "retryFailed": "Reintentar fallidos ({count})"
         }
     },
     "modelTags": {
@@ -1664,6 +1740,7 @@
             "recipeReplaced": "Receta reemplazada en el flujo de trabajo",
             "recipeFailedToSend": "Error al enviar receta al flujo de trabajo",
             "noMatchingNodes": "No hay nodos compatibles disponibles en el flujo de trabajo actual",
+            "noPromptTargets": "[TODO: Translate] No compatible prompt targets in the workflow.\nRight-click a node in ComfyUI → Mark as → Send Prompt Target",
             "noTargetNodeSelected": "No se ha seleccionado ningún nodo de destino",
             "modelUpdated": "Modelo actualizado en el flujo de trabajo",
             "modelFailed": "Error al actualizar nodo de modelo",
@@ -1742,7 +1819,13 @@
         "checkingUpdates": "Comprobando actualizaciones...",
         "checkingMessage": "Por favor espera mientras comprobamos la última versión.",
         "showNotifications": "Mostrar notificaciones de actualización",
-        "latestBadge": "Último",
+        "latestBadge": "Última",
+        "latestMain": "Rama main",
+        "channel": "Canal de actualizacion",
+        "channels": {
+            "release": "Release",
+            "nightly": "Nightly"
+        },
         "updateProgress": {
             "preparing": "Preparando actualización...",
             "installing": "Instalando actualización...",
@@ -1762,6 +1845,15 @@
         "nightly": {
             "warning": "Advertencia: Las compilaciones nocturnas pueden contener características experimentales y podrían ser inestables.",
             "enable": "Habilitar actualizaciones nocturnas"
+        },
+        "channelSwitch": {
+            "nightlyTitle": "Cambiar a canal Nightly",
+            "nightlyMessage": "Cambiar a Nightly inicializara un repositorio Git y seguira los ultimos commits de la rama main. Las actualizaciones son mas frecuentes pero pueden ser inestables. Puede volver a Release en cualquier momento.",
+            "releaseTitle": "Cambiar a canal Release",
+            "releaseMessage": "Cambiar a Release hara checkout de la ultima etiqueta de version estable. Puede volver a Nightly en cualquier momento.",
+            "switching": "Cambiando a canal {channel}...",
+            "completed": "Cambio a canal {channel} exitoso",
+            "failed": "Error al cambiar de canal"
         },
         "banners": {
             "recent": "Notificaciones recientes",
@@ -1899,6 +1991,12 @@
             "repairBulkComplete": "Reparación completa: {repaired} reparadas, {skipped} omitidas (de {total})",
             "repairBulkSkipped": "No se necesita reparación para ninguna de las {total} recetas seleccionadas",
             "repairBulkFailed": "Error al reparar las recetas seleccionadas: {message}",
+            "rematchComplete": "{entries} entradas asociadas en {recipes} recetas",
+            "rematchCompleteErrors": "{entries} entradas asociadas en {recipes} recetas, {failures} fallidas",
+            "rematchAllFailed": "Falló la reasociación de {failures} de {total} recetas seleccionadas",
+            "rematchUnmatched": "No se encontró coincidencia local para {entries} entradas en {recipes} recetas",
+            "rematchSkipped": "Ninguna de las {total} recetas seleccionadas necesita reasociación",
+            "rematchFailed": "Falló la reasociación de las recetas seleccionadas: {message}",
             "reimporting": "Reimportando receta desde origen...",
             "reimportSuccess": "Receta reimportada exitosamente",
             "reimportBulkComplete": "Reimportación completa: {completed} reimportadas, {failed} fallidas (de {total})",
@@ -2007,7 +2105,6 @@
             "presetNameTooLong": "El nombre del preajuste debe tener {max} caracteres o menos",
             "presetNameInvalidChars": "El nombre del preajuste contiene caracteres inválidos",
             "presetNameExists": "Ya existe un preajuste con este nombre",
-            "maxPresetsReached": "Máximo {max} preajustes permitidos. Elimine uno para agregar más.",
             "presetNotFound": "Preajuste no encontrado",
             "invalidPreset": "Datos de preajuste inválidos",
             "deletePresetFailed": "Error al eliminar el preajuste",
@@ -2035,6 +2132,14 @@
             "updateSuccess": "Palabras clave actualizadas exitosamente",
             "updateFailed": "Error al actualizar palabras clave",
             "copyFailed": "Error al copiar"
+        },
+        "undo": {
+            "action": "Deshacer",
+            "deleted": "Eliminado: {name}",
+            "deletedBulk": "{count} elemento(s) eliminado(s)",
+            "expired": "La ventana de deshacer ha caducado. El elemento se eliminó permanentemente.",
+            "failed": "No se pudo deshacer: {error}",
+            "restored": "Elemento restaurado"
         },
         "virtual": {
             "loadFailed": "Error al cargar elementos",
@@ -2099,6 +2204,7 @@
             "fileRenameFailed": "Error al renombrar archivo: {error}",
             "previewUpdated": "Vista previa actualizada exitosamente",
             "previewUploadFailed": "Error al subir imagen de vista previa",
+            "previewDropInvalid": "Tipo de archivo no admitido: {name}. Arrastra una imagen o un video MP4 en su lugar.",
             "refreshComplete": "{action} completada",
             "refreshFailed": "Error al {action} {type}s",
             "metadataRefreshed": "Metadatos actualizados exitosamente",

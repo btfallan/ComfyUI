@@ -29,6 +29,11 @@ test.py
 test_vfi_schedule.gif
 vfi_models/amt/__init__.py
 vfi_models/amt/amt_arch.py
+vfi_models/atm/__init__.py
+vfi_models/atm/attention.py
+vfi_models/atm/flow_warp.py
+vfi_models/atm/network_base.py
+vfi_models/atm/network_lite.py
 vfi_models/cain/__init__.py
 vfi_models/cain/cain_arch.py
 vfi_models/cain/cain_encdec_arch.py
@@ -53,6 +58,11 @@ vfi_models/ifunet/IFUNet_arch.py
 vfi_models/ifunet/__init__.py
 vfi_models/m2m/M2M_arch.py
 vfi_models/m2m/__init__.py
+vfi_models/momo/__init__.py
+vfi_models/momo/flow.py
+vfi_models/momo/momo.py
+vfi_models/momo/synthesis.py
+vfi_models/momo/unet.py
 vfi_models/ops/__init__.py
 vfi_models/ops/cupy_ops/__init__.py
 vfi_models/ops/cupy_ops/adacof.py

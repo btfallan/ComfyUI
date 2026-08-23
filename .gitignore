@@ -51,3 +51,6 @@ ComfyUI_Workflows/**/*.webm
 ComfyUI_Workflows/**/*.zip
 ComfyUI_Workflows/**/*.7z
 ComfyUI_Workflows/**/*.rar
+
+# Large files
+ComfyUI_Workflows/Flux 1/Images/ComfyUI_00001_.png
