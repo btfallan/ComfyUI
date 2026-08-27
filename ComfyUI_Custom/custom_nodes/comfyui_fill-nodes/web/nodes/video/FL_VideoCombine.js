@@ -1,5 +1,6 @@
 import { app } from "../../../../scripts/app.js";
 import { api } from "../../../../scripts/api.js";
+import { addCanvasNavigation } from "./canvas_navigation.js";
 
 const DEFAULT_SETTINGS = {
   version: 1,
@@ -20,8 +21,15 @@ const DEFAULT_SETTINGS = {
 const MIN_NODE_WIDTH = 420;
 const MIN_NODE_HEIGHT = 360;
 const MIN_PANEL_HEIGHT = 280;
-const COMBINE_PROGRESS_LABEL = "encoding MP4";
+const COMBINE_PROGRESS_PHASES = [
+  { value: 0, label: "preparing" },
+  { value: 10, label: "encoding MP4" },
+  { value: 95, label: "finalizing" },
+];
+const videoCombinePanels = new Set();
 const videoCombinePanelsByNode = new Map();
+const synchronizedPanels = new Set();
+let synchronizationFrame = null;
 
 function nodeKey(value) {
   return value === null || value === undefined ? "" : String(value);
@@ -30,6 +38,69 @@ function nodeKey(value) {
 function eventNode(detail) {
   if (detail && typeof detail === "object") return detail.node ?? detail.node_id;
   return detail;
+}
+
+function progressPhase(phases, value) {
+  let phase = phases[0];
+  for (const candidate of phases) {
+    if (value < candidate.value) break;
+    phase = candidate;
+  }
+  return phase.label;
+}
+
+function stopSynchronization() {
+  if (synchronizationFrame !== null) {
+    cancelAnimationFrame(synchronizationFrame);
+    synchronizationFrame = null;
+  }
+  synchronizedPanels.clear();
+}
+
+function removeSynchronizedPanel(panel) {
+  synchronizedPanels.delete(panel);
+  if (synchronizedPanels.size < 2 && synchronizationFrame !== null) {
+    cancelAnimationFrame(synchronizationFrame);
+    synchronizationFrame = null;
+  }
+}
+
+function maintainSynchronization() {
+  synchronizationFrame = null;
+  const panels = [...synchronizedPanels].filter((panel) => panel.isPlaying());
+  for (const panel of synchronizedPanels) {
+    if (!panels.includes(panel)) synchronizedPanels.delete(panel);
+  }
+  if (panels.length < 2 || document.hidden) return;
+
+  const leaderTime = panels[0].video.currentTime;
+  for (const panel of panels.slice(1)) {
+    const video = panel.video;
+    if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) continue;
+    if (Number.isFinite(video.duration) && leaderTime >= video.duration) continue;
+    if (Math.abs(video.currentTime - leaderTime) > 0.08) {
+      video.currentTime = leaderTime;
+    }
+  }
+  synchronizationFrame = requestAnimationFrame(maintainSynchronization);
+}
+
+function synchronizeVideoCombinePreviews() {
+  const panels = [...videoCombinePanels].filter((panel) => panel.hasPreview());
+  if (!panels.length) return;
+
+  stopSynchronization();
+  for (const panel of panels) panel.prepareForSynchronization();
+  for (const panel of panels) synchronizedPanels.add(panel);
+  for (const panel of panels) panel.requestPlayback(true);
+  if (panels.length > 1) {
+    synchronizationFrame = requestAnimationFrame(maintainSynchronization);
+  }
+}
+
+function pauseAllVideoCombinePreviews() {
+  stopSynchronization();
+  for (const panel of videoCombinePanels) panel.pausePlayback(false);
 }
 
 const STYLES = `
@@ -139,7 +210,6 @@ const STYLES = `
   .flvc-toggle[data-enabled="true"] .flvc-toggle-value { color: #86efac; }
   .flvc-more-button,
   .flvc-icon-button,
-  .flvc-sync-button,
   .flvc-menu-close,
   .flvc-reset-button {
     background: var(--flvc-control);
@@ -157,7 +227,6 @@ const STYLES = `
   }
   .flvc-more-button:hover,
   .flvc-icon-button:hover,
-  .flvc-sync-button:hover,
   .flvc-menu-close:hover,
   .flvc-reset-button:hover {
     border-color: var(--flvc-accent);
@@ -168,7 +237,6 @@ const STYLES = `
   }
   .flvc-more-button:focus-visible,
   .flvc-icon-button:focus-visible,
-  .flvc-sync-button:focus-visible,
   .flvc-menu-close:focus-visible,
   .flvc-reset-button:focus-visible {
     outline: 2px solid var(--flvc-accent);
@@ -297,12 +365,9 @@ const STYLES = `
     padding: 0;
   }
   .flvc-sync-button {
-    border-radius: 4px;
-    flex: 0 0 38px;
+    flex-basis: 40px;
     font-size: 9px;
     font-weight: 700;
-    height: 25px;
-    padding: 0 5px;
   }
   .flvc-time {
     color: #e4e4e7;
@@ -466,72 +531,6 @@ function formatTime(value) {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-const synchronizedPanels = new Set();
-let synchronizationFrame = null;
-
-function getVideoCombinePanels() {
-  return (app.graph?._nodes || [])
-    .filter((node) => node.comfyClass === "FL_VideoCombine")
-    .map((node) => node._flVideoCombinePanel)
-    .filter(Boolean);
-}
-
-function stopSynchronization() {
-  if (synchronizationFrame !== null) {
-    cancelAnimationFrame(synchronizationFrame);
-    synchronizationFrame = null;
-  }
-  synchronizedPanels.clear();
-}
-
-function removeSynchronizedPanel(panel) {
-  synchronizedPanels.delete(panel);
-  if (synchronizedPanels.size < 2 && synchronizationFrame !== null) {
-    cancelAnimationFrame(synchronizationFrame);
-    synchronizationFrame = null;
-  }
-}
-
-function maintainSynchronization() {
-  synchronizationFrame = null;
-  for (const panel of synchronizedPanels) {
-    if (!panel.isSynchronizationActive()) synchronizedPanels.delete(panel);
-  }
-  const panels = [...synchronizedPanels];
-  if (panels.length < 2 || document.hidden) return;
-
-  const leader = panels[0].video;
-  if (!leader.paused && leader.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-    for (const panel of panels.slice(1)) {
-      const video = panel.video;
-      if (video.paused || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) continue;
-      if (Number.isFinite(video.duration) && leader.currentTime >= video.duration) continue;
-      if (Math.abs(video.currentTime - leader.currentTime) > 0.08) {
-        video.currentTime = leader.currentTime;
-      }
-    }
-  }
-  synchronizationFrame = requestAnimationFrame(maintainSynchronization);
-}
-
-function syncVideoCombinePreviews() {
-  const panels = getVideoCombinePanels().filter((panel) => panel.hasPreview());
-  if (!panels.length) return;
-
-  stopSynchronization();
-  for (const panel of panels) panel.prepareForSynchronization();
-  for (const panel of panels) synchronizedPanels.add(panel);
-  for (const panel of panels) panel.requestPlayback(true);
-  if (panels.length > 1) {
-    synchronizationFrame = requestAnimationFrame(maintainSynchronization);
-  }
-}
-
-function pauseAllVideoCombinePreviews() {
-  stopSynchronization();
-  for (const panel of getVideoCombinePanels()) panel.pausePlayback(false);
-}
-
 class VideoCombinePanel {
   constructor(node, settingsWidget, container) {
     this.node = node;
@@ -548,6 +547,7 @@ class VideoCombinePanel {
     this.progressToken = 0;
     this.progressHideTimer = null;
     this.previewLoadToken = null;
+    this.previewLoading = false;
 
     this.node.properties ||= {};
     if (!Number.isFinite(this.node.properties.previewVolume)) {
@@ -568,6 +568,7 @@ class VideoCombinePanel {
     if (this.configError) {
       this.showConfigError();
     }
+    videoCombinePanels.add(this);
   }
 
   readSettings() {
@@ -639,10 +640,10 @@ class VideoCombinePanel {
             <button class="flvc-icon-button" data-role="play" type="button" title="Play or pause preview">▶</button>
             <span class="flvc-time" data-role="time">00:00 / 00:00</span>
             <span class="flvc-control-spacer"></span>
+            <button class="flvc-icon-button flvc-sync-button" data-role="sync" type="button" title="Restart and synchronize all FL Video Combine previews">Sync</button>
             <button class="flvc-icon-button" data-role="preview-mute" type="button" title="Mute preview">🔇</button>
             <input class="flvc-preview-volume" data-role="preview-volume" aria-label="Preview volume" type="range" min="0" max="100" step="1">
             <span class="flvc-preview-value" data-role="preview-volume-value">80%</span>
-            <button class="flvc-sync-button" data-role="sync" type="button" title="Restart all FL Video Combine previews together">Sync</button>
           </div>
         </div>
 
@@ -683,6 +684,7 @@ class VideoCombinePanel {
       </div>
     `;
 
+    this.previewRegion = this.container.querySelector(".flvc-preview");
     this.video = this.container.querySelector('[data-role="video"]');
     this.placeholder = this.container.querySelector('[data-role="placeholder"]');
     this.status = this.container.querySelector('[data-role="status"]');
@@ -691,10 +693,10 @@ class VideoCombinePanel {
     this.progress = this.container.querySelector('[data-role="progress"]');
     this.progressFill = this.container.querySelector('[data-role="progress-fill"]');
     this.playButton = this.container.querySelector('[data-role="play"]');
+    this.syncButton = this.container.querySelector('[data-role="sync"]');
     this.previewMuteButton = this.container.querySelector('[data-role="preview-mute"]');
     this.previewVolume = this.container.querySelector('[data-role="preview-volume"]');
     this.previewVolumeValue = this.container.querySelector('[data-role="preview-volume-value"]');
-    this.syncButton = this.container.querySelector('[data-role="sync"]');
     this.time = this.container.querySelector('[data-role="time"]');
     this.audioToggle = this.container.querySelector('[data-role="audio-toggle"]');
     this.audioToggleValue = this.container.querySelector('[data-role="audio-toggle-value"]');
@@ -760,6 +762,7 @@ class VideoCombinePanel {
         this.pausePlayback();
       }
     });
+    this.syncButton.addEventListener("click", synchronizeVideoCombinePreviews);
     this.video.addEventListener("play", () => {
       if (!this.playbackRequested || document.hidden) {
         this.pausePlayback();
@@ -771,7 +774,15 @@ class VideoCombinePanel {
       this.playButton.textContent = "▶";
     });
     this.video.addEventListener("timeupdate", () => this.updateTime());
+    this.video.addEventListener("loadstart", () => {
+      if (!this.video.src) return;
+      this.previewLoading = true;
+      if (!this.executionActive && this.previewLoadToken !== this.progressToken) {
+        this.previewLoadToken = this.beginTransientProgress("loading preview");
+      }
+    });
     this.video.addEventListener("loadedmetadata", () => {
+      this.previewLoading = false;
       if (this.restartAtStart) {
         this.video.currentTime = 0;
         this.restartAtStart = false;
@@ -782,9 +793,19 @@ class VideoCombinePanel {
     });
     this.video.addEventListener("error", () => {
       if (!this.video.src) return;
+      this.previewLoading = false;
       this.placeholder.textContent = "Preview unavailable. The rendered file may still be valid.";
       this.placeholder.style.display = "flex";
       this.failTransientProgress(this.previewLoadToken, "preview failed");
+    });
+    this.video.addEventListener("stalled", () => {
+      if (!this.previewLoading || this.executionActive) return;
+      this.showProgress(0, 1, "loading preview", "active", true);
+    });
+    this.video.addEventListener("abort", () => {
+      if (this.video.src) return;
+      this.previewLoading = false;
+      if (!this.executionActive) this.hideProgress();
     });
 
     this.previewMuteButton.addEventListener("click", () => {
@@ -795,15 +816,14 @@ class VideoCombinePanel {
       this.node.properties.previewVolume = Number(this.previewVolume.value) / 100;
       this.applyPreviewAudio();
     });
-    this.syncButton.addEventListener("click", syncVideoCombinePreviews);
   }
 
   hasPreview() {
     return Boolean(this.preview && this.video.src);
   }
 
-  isSynchronizationActive() {
-    return this.playbackRequested && !this.video.ended;
+  isPlaying() {
+    return this.playbackRequested && !this.video.paused && !this.video.ended;
   }
 
   requestPlayback(keepSynchronized = false) {
@@ -933,8 +953,11 @@ class VideoCombinePanel {
     this.progress.dataset.indeterminate = String(indeterminate);
     this.progress.setAttribute("aria-valuemin", "0");
     this.progress.setAttribute("aria-valuemax", String(total));
-    this.progress.setAttribute("aria-valuenow", String(current));
+    this.progress.setAttribute("aria-valuetext", label);
+    if (indeterminate) this.progress.removeAttribute("aria-valuenow");
+    else this.progress.setAttribute("aria-valuenow", String(current));
     this.progressFill.style.width = `${current / total * 100}%`;
+    this.previewRegion.setAttribute("aria-busy", String(state === "active"));
     if (state === "error") this.setStatus("error", label);
     else if (state === "complete") this.setStatus("ready", label);
     else this.setStatus("busy", label);
@@ -945,6 +968,7 @@ class VideoCombinePanel {
     this.progressHideTimer = null;
     this.progress.hidden = true;
     this.progressFill.style.width = "0%";
+    this.previewRegion.setAttribute("aria-busy", "false");
   }
 
   scheduleProgressHide() {
@@ -975,19 +999,18 @@ class VideoCombinePanel {
   beginExecution() {
     this.progressToken += 1;
     this.executionActive = true;
-    this.showProgress(0, 1, "preparing", "active", true);
+    this.showProgress(0, 100, COMBINE_PROGRESS_PHASES[0].label, "active", true);
   }
 
   updateExecutionProgress(value, max) {
     this.executionActive = true;
-    const total = Math.max(1, Number(max) || 1);
+    const total = Math.max(1, Number(max) || 100);
     const current = Math.max(0, Math.min(total, Number(value) || 0));
     if (current >= total) {
       this.finishExecution("rendered");
       return;
     }
-    const frameTotal = Math.max(1, total - 1);
-    const label = current > 0 ? `encoding ${Math.min(current, frameTotal)}/${frameTotal}` : COMBINE_PROGRESS_LABEL;
+    const label = progressPhase(COMBINE_PROGRESS_PHASES, current / total * 100);
     this.showProgress(current, total, label, "active");
   }
 
@@ -1027,6 +1050,7 @@ class VideoCombinePanel {
     }
     this.placeholder.textContent = "Loading preview…";
     this.placeholder.style.display = "flex";
+    this.previewLoading = true;
     this.previewLoadToken = this.beginTransientProgress("loading preview");
     this.video.load();
 
@@ -1065,6 +1089,7 @@ class VideoCombinePanel {
   }
 
   dispose() {
+    videoCombinePanels.delete(this);
     videoCombinePanelsByNode.delete(nodeKey(this.node.id));
     removeSynchronizedPanel(this);
     if (this.progressHideTimer !== null) clearTimeout(this.progressHideTimer);
@@ -1077,9 +1102,6 @@ class VideoCombinePanel {
     this.pausePlayback(false);
     this.video.removeAttribute("src");
     this.video.load();
-    if (this.node._flVideoCombinePanel === this) {
-      delete this.node._flVideoCombinePanel;
-    }
     this.container.replaceChildren();
   }
 }
@@ -1104,6 +1126,7 @@ app.registerExtension({
     container.style.height = "100%";
     container.style.minHeight = `${MIN_PANEL_HEIGHT}px`;
     container.style.overflow = "hidden";
+    addCanvasNavigation(container, app.canvas);
 
     const domWidget = node.addDOMWidget("fl_video_combine_panel", "fl-video-combine", container, {
       getMinHeight: () => MIN_PANEL_HEIGHT,
@@ -1114,7 +1137,6 @@ app.registerExtension({
     requestAnimationFrame(() => enforceMinimumNodeSize(node));
 
     const panel = new VideoCombinePanel(node, settingsWidget, container);
-    node._flVideoCombinePanel = panel;
     videoCombinePanelsByNode.set(nodeKey(node.id), panel);
 
     const originalOnExecuted = node.onExecuted;
