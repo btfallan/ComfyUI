@@ -564,6 +564,7 @@ class WanVideoSampler:
 
         # MultiTalk
         multitalk_audio_embeds = audio_emb_slice = audio_features_in = None
+        multitalk_audio_stride = None
         multitalk_embeds = image_embeds.get("multitalk_embeds", multitalk_embeds)
 
         if multitalk_embeds is not None:
@@ -584,6 +585,7 @@ class WanVideoSampler:
             audio_scale = multitalk_embeds.get("audio_scale", 1.0)
             audio_cfg_scale = multitalk_embeds.get("audio_cfg_scale", 1.0)
             ref_target_masks = multitalk_embeds.get("ref_target_masks", None)
+            multitalk_audio_stride = multitalk_embeds.get("audio_stride", None)
             if not isinstance(audio_cfg_scale, list):
                 audio_cfg_scale = [audio_cfg_scale] * (steps + 1)
 
@@ -817,7 +819,11 @@ class WanVideoSampler:
                 latent_video_length += insert_len
             longcat_num_cond_latents = len(clean_latent_indices)
             log.info(f"LongCat num_cond_latents: {longcat_num_cond_latents} num_ref_latents: {longcat_num_ref_latents}")
-        audio_stride = 2 if transformer.is_longcat else 1
+        # v1.5 (Whisper) embeds set audio_stride=1; v1.0 (wav2vec2) uses 2 for LongCat
+        if multitalk_audio_stride is not None:
+            audio_stride = multitalk_audio_stride
+        else:
+            audio_stride = 2 if transformer.is_longcat else 1
 
         #controlnet
         controlnet_latents = controlnet = None
@@ -1730,7 +1736,7 @@ class WanVideoSampler:
         gc.collect()
         try:
             torch.cuda.reset_peak_memory_stats(device)
-        except:
+        except Exception:
             pass
 
         # Main sampling loop with FreeInit iterations
@@ -2182,7 +2188,7 @@ class WanVideoSampler:
                         try:
                             print_memory(device)
                             torch.cuda.reset_peak_memory_stats(device)
-                        except:
+                        except Exception:
                             pass
                         return {"video": gen_video_samples},
                     # region wananimate loop
@@ -2206,7 +2212,11 @@ class WanVideoSampler:
                         bg_images = image_embeds.get("bg_images", None)
                         pose_images = image_embeds.get("pose_images", None)
 
-                        current_ref_images = face_images = face_images_in = None
+                        current_ref_images = image_embeds.get("start_ref_image", None)
+                        if current_ref_images is not None:
+                            log.info(
+                                "WanAnimate: Detected manual start reference image, enabling continuous generation across windows.")
+                        face_images = face_images_in = None
 
                         if wananim_face_pixels is not None:
                             face_images = tensor_pingpong_pad(wananim_face_pixels, target_len)
@@ -2245,7 +2255,10 @@ class WanVideoSampler:
 
                             mm.soft_empty_cache()
 
-                            mask_reft_len = 0 if start == 0 else refert_num
+                            if current_ref_images is not None:
+                                mask_reft_len = refert_num
+                            else:
+                                mask_reft_len = 0 if start == 0 else refert_num
 
                             self.cache_state = [None, None]
 
@@ -2424,7 +2437,7 @@ class WanVideoSampler:
                             videos = vae.decode(latent[:, 1:].unsqueeze(0).to(device, vae.dtype), device=device, tiled=tiled_vae, pbar=False)[0].cpu()
                             del latent
 
-                            if start != 0:
+                            if start != 0 or current_ref_images is not None:
                                 videos = videos[:, refert_num:]
 
                             sampling_pbar.close()
@@ -2476,7 +2489,7 @@ class WanVideoSampler:
                         try:
                             print_memory(device)
                             torch.cuda.reset_peak_memory_stats(device)
-                        except:
+                        except Exception:
                             pass
                         return {"video": gen_video_samples.permute(1, 2, 3, 0), "output_path": output_path},
 
@@ -2586,10 +2599,10 @@ class WanVideoSampler:
 
             except Exception as e:
                 log.error(f"Error during sampling: {e}")
-                if force_offload:
-                    if not model["auto_cpu_offload"]:
-                        offload_transformer(transformer)
-                raise e
+                raise
+            finally:
+                if force_offload and not model["auto_cpu_offload"]:
+                    offload_transformer(transformer)
 
         if phantom_latents is not None:
             latent = latent[:,:-phantom_latents.shape[1]]
@@ -2613,14 +2626,10 @@ class WanVideoSampler:
                     "magcache_state": transformer.magcache_state,
                 }
 
-        if force_offload:
-            if not model["auto_cpu_offload"]:
-                offload_transformer(transformer)
-
         try:
             print_memory(device)
             torch.cuda.reset_peak_memory_stats(device)
-        except:
+        except Exception:
             pass
         return ({
             "samples": latent.unsqueeze(0).cpu(),
@@ -2764,7 +2773,7 @@ class WanVideoScheduler:
             import io
             import base64
             import matplotlib.pyplot as plt
-        except:
+        except Exception:
             PromptServer = None
         if unique_id and PromptServer is not None:
             try:

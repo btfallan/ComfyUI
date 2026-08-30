@@ -283,6 +283,9 @@ if was_config and was_config.__contains__('use_legacy_ascii_text'):
         TEXT_TYPE = "ASCII"
         cstr("use_legacy_ascii_text is `True` in `was_suite_config.json`. `ASCII` type is deprecated and the default will be `STRING` in the future.").warning.print()
 
+def is_force_input():
+    return True if TEXT_TYPE == 'STRING' else False
+
 # Convert WebUI Styles - TODO: Convert to PromptStyles class
 if was_config.__contains__('webui_styles'):
 
@@ -2831,7 +2834,7 @@ class WAS_Image_Filters:
                     pil_image = pil_image.filter(ImageFilter.DETAIL)
 
                 # Output image
-                out_image = (pil2tensor(pil_image) if pil_image else img)
+                out_image = (pil2tensor(pil_image) if pil_image else img.unsqueeze(0))
 
                 tensors.append(out_image)
 
@@ -3495,6 +3498,7 @@ class WAS_Image_Paste_Crop:
             }
 
     RETURN_TYPES = ("IMAGE", "IMAGE")
+    RETURN_NAMES = ("IMAGE", "MASK")
     FUNCTION = "image_paste_crop"
 
     CATEGORY = "WAS Suite/Image/Process"
@@ -3603,6 +3607,7 @@ class WAS_Image_Paste_Crop_Location:
             }
 
     RETURN_TYPES = ("IMAGE", "IMAGE")
+    RETURN_NAMES = ("IMAGE", "MASK")
     FUNCTION = "image_paste_crop_location"
 
     CATEGORY = "WAS Suite/Image/Process"
@@ -5270,6 +5275,7 @@ class WAS_Load_Image_Batch:
         return {
             "required": {
                 "mode": (["single_image", "incremental_image", "random"],),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
                 "index": ("INT", {"default": 0, "min": 0, "max": 150000, "step": 1}),
                 "label": ("STRING", {"default": 'Batch 001', "multiline": False}),
                 "path": ("STRING", {"default": '', "multiline": False}),
@@ -5287,7 +5293,7 @@ class WAS_Load_Image_Batch:
 
     CATEGORY = "WAS Suite/IO"
 
-    def load_batch_images(self, path, pattern='*', index=0, mode="single_image", label='Batch 001', allow_RGBA_output='false', filename_text_extension='true'):
+    def load_batch_images(self, path, pattern='*', index=0, mode="single_image", seed=0, label='Batch 001', allow_RGBA_output='false', filename_text_extension='true'):
 
         allow_RGBA_output = (allow_RGBA_output == 'true')
 
@@ -5306,6 +5312,7 @@ class WAS_Load_Image_Batch:
                 cstr(f"No valid image was found for the next ID. Did you remove images from the source directory?").error.print()
                 return (None, None)
         else:
+            random.seed(seed)
             newindex = int(random.random() * len(fl.image_paths))
             image, filename = fl.get_image_by_id(newindex)
             if image == None:
@@ -5494,6 +5501,7 @@ class WAS_Image_Padding:
         }
 
     RETURN_TYPES = ("IMAGE", "IMAGE")
+    RETURN_NAMES = ("IMAGE", "MASK")
     FUNCTION = "image_padding"
 
     CATEGORY = "WAS Suite/Image/Transform"
@@ -5596,7 +5604,10 @@ class WAS_Image_Threshold:
     CATEGORY = "WAS Suite/Image/Process"
 
     def image_threshold(self, image, threshold=0.5):
-        return (pil2tensor(self.apply_threshold(tensor2pil(image), threshold)), )
+        images = []
+        for img in image:
+            images.append(pil2tensor(self.apply_threshold(tensor2pil(img), threshold)))
+        return (torch.cat(images, dim=0), )
 
     def apply_threshold(self, input_image, threshold=0.5):
         # Convert the input image to grayscale
@@ -6212,16 +6223,22 @@ class WAS_Image_Levels:
 
         def adjust(self, im):
 
-            im_arr = np.array(im)
+            im_arr = np.array(im).astype(np.float32)
             im_arr[im_arr < self.min_level] = self.min_level
             im_arr = (im_arr - self.min_level) * \
                 (255 / (self.max_level - self.min_level))
-            im_arr[im_arr < 0] = 0
-            im_arr[im_arr > 255] = 255
+            im_arr = np.clip(im_arr, 0, 255)
+
+            # mid-level adjustment
+            if self.mid_level <= self.min_level:  
+                gamma = 1.0
+            else:
+                gamma = math.log(0.5) / math.log((self.mid_level - self.min_level) / (self.max_level - self.min_level))
+            im_arr = np.power(im_arr / 255, gamma) * 255
+
             im_arr = im_arr.astype(np.uint8)
 
             im = Image.fromarray(im_arr)
-            im = ImageOps.autocontrast(im, cutoff=self.max_level)
 
             return im
 
@@ -7338,7 +7355,7 @@ class WAS_Image_Save:
         if not os.path.isabs(output_path):
             output_path = os.path.join(self.output_dir, output_path)
         base_output = os.path.basename(output_path)
-        if output_path.endswith("ComfyUI/output") or output_path.endswith("ComfyUI\output"):
+        if output_path.endswith("ComfyUI/output") or output_path.endswith(r"ComfyUI\output"):
             base_output = ""
 
         # Check output destination
@@ -7431,7 +7448,7 @@ class WAS_Image_Save:
                              quality=quality, lossless=lossless_webp, exif=exif_data)
                 elif extension == 'png':
                     img.save(output_file,
-                             pnginfo=exif_data, optimize=optimize_image)
+                             pnginfo=exif_data, optimize=optimize_image, dpi=(dpi, dpi))
                 elif extension == 'bmp':
                     img.save(output_file)
                 elif extension == 'tiff':
@@ -7941,6 +7958,7 @@ class WAS_Mask_Paste_Region:
         }
 
     RETURN_TYPES = ("MASK", "MASK")
+    RETURN_NAMES = ("RESULT_MASK", "CROP_MASK")
     FUNCTION = "mask_paste_region"
 
     CATEGORY = "WAS Suite/Image/Masking"
@@ -8114,6 +8132,140 @@ class WAS_Mask_Minority_Region:
             region_tensor = pil2mask(region_mask).unsqueeze(0).unsqueeze(1)
             return (region_tensor,)
 
+
+# MASK RECT AREA
+
+class WAS_Mask_Rect_Area:
+    # Creates a rectangle mask using percentage.
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "x": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
+                "y": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
+                "width": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "height": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "blur_radius": ("INT", {"default": 0, "min": 0, "max": 255, "step": 1}),
+            },
+            "hidden": {"extra_pnginfo": "EXTRA_PNGINFO", "unique_id": "UNIQUE_ID"}
+        }
+
+    CATEGORY = "WAS Suite/Image/Masking"
+
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("MASKS",)
+
+    FUNCTION = "rect_mask"
+
+    def rect_mask(self, extra_pnginfo, unique_id, **kwargs):
+        # Get node values
+        min_x = kwargs["x"] / 100
+        min_y = kwargs["y"] / 100
+        width = kwargs["width"] / 100
+        height = kwargs["height"] / 100
+        blur_radius = kwargs["blur_radius"]
+
+        # Create a mask with standard resolution (e.g., 512x512)
+        resolution = 512
+        mask = torch.zeros((resolution, resolution))
+
+        # Calculate pixel coordinates
+        min_x_px = int(min_x * resolution)
+        min_y_px = int(min_y * resolution)
+        max_x_px = int((min_x + width) * resolution)
+        max_y_px = int((min_y + height) * resolution)
+
+        # Draw the rectangle on the mask
+        mask[min_y_px:max_y_px, min_x_px:max_x_px] = 1
+
+        # Apply blur if the radii are greater than 0
+        if blur_radius > 0:
+            dx = blur_radius * 2 + 1
+            dy = blur_radius * 2 + 1
+
+            # Convert the mask to a format compatible with OpenCV (numpy array)
+            mask_np = mask.cpu().numpy().astype("float32")
+
+            # Apply Gaussian Blur
+            blurred_mask = cv2.GaussianBlur(mask_np, (dx, dy), 0)
+
+            # Convert back to tensor
+            mask = torch.from_numpy(blurred_mask)
+
+        # Return the mask as a tensor with an additional channel
+        return (mask.unsqueeze(0),)
+
+
+# MASK RECT AREA ADVANCED
+
+class WAS_Mask_Rect_Area_Advanced:
+    # Creates a rectangle mask using pixels relative to image size.
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "x": ("INT", {"default": 0, "min": 0, "max": 4096, "step": 64}),
+                "y": ("INT", {"default": 0, "min": 0, "max": 4096, "step": 64}),
+                "width": ("INT", {"default": 256, "min": 0, "max": 4096, "step": 64}),
+                "height": ("INT", {"default": 256, "min": 0, "max": 4096, "step": 64}),
+                "image_width": ("INT", {"default": 512, "min": 64, "max": 4096, "step": 64}),
+                "image_height": ("INT", {"default": 512, "min": 64, "max": 4096, "step": 64}),
+                "blur_radius": ("INT", {"default": 0, "min": 0, "max": 255, "step": 1}),
+            },
+            "hidden": {"extra_pnginfo": "EXTRA_PNGINFO", "unique_id": "UNIQUE_ID"}
+        }
+
+    CATEGORY = "WAS Suite/Image/Masking"
+
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("MASKS",)
+
+    FUNCTION = "rect_mask_adv"
+
+    def rect_mask_adv(self, extra_pnginfo, unique_id, **kwargs):
+         # Get node values
+        min_x = kwargs["x"]
+        min_y = kwargs["y"]
+        width = kwargs["width"]
+        height = kwargs["height"]
+        image_width = kwargs["image_width"]
+        image_height = kwargs["image_height"]
+        blur_radius = kwargs["blur_radius"]
+
+        # Calculate maximum coordinates
+        max_x = min_x + width
+        max_y = min_y + height
+
+        # Create a mask with the image dimensions
+        mask = torch.zeros((image_height, image_width))
+
+        # Draw the rectangle on the mask
+        mask[int(min_y):int(max_y), int(min_x):int(max_x)] = 1
+
+        # Apply blur if the radii are greater than 0
+        if blur_radius > 0:
+            dx = blur_radius * 2 + 1
+            dy = blur_radius * 2 + 1
+
+            # Convert the mask to a format compatible with OpenCV (numpy array)
+            mask_np = mask.cpu().numpy().astype("float32")
+
+            # Apply Gaussian Blur
+            blurred_mask = cv2.GaussianBlur(mask_np, (dx, dy), 0)
+
+            # Convert back to tensor
+            mask = torch.from_numpy(blurred_mask)
+
+        # Return the mask as a tensor with an additional channel
+        return (mask.unsqueeze(0),)
 
 
 # MASK ARBITRARY REGION
@@ -8603,18 +8755,29 @@ class WAS_Mask_Combine:
     FUNCTION = "combine_masks"
 
     def combine_masks(self, mask_a, mask_b, mask_c=None, mask_d=None, mask_e=None, mask_f=None):
-        masks = [mask_a, mask_b]
-        if mask_c:
-            masks.append(mask_c)
-        if mask_d:
-            masks.append(mask_d)
-        if mask_e:
-            masks.append(mask_e)
-        if mask_f:
-            masks.append(mask_f)
-        combined_mask = torch.sum(torch.stack(masks, dim=0), dim=0)
-        combined_mask = torch.clamp(combined_mask, 0, 1)  # Ensure values are between 0 and 1
-        return (combined_mask, )
+        # Gather all masks in a list
+        masks = [m for m in [mask_a, mask_b, mask_c, mask_d, mask_e, mask_f] if m is not None]
+
+        # Skip any masks that are the known "empty" shape [1, 64, 64] from "Preview" etc
+        # (You can also use a sum-of-pixels check, or other logic.)
+        valid_masks = [m for m in masks if m.shape != (1, 64, 64)]
+        # cstr(f"mask shapes: ... `{valid_masks}`").msg.print()
+
+        # If no valid masks, decide on a fallback
+        if len(valid_masks) == 0:
+            # Could return a zeroed-out mask, or just return mask_a, or raise a warning
+            # Return mask_a so we don't break the graph
+            return (mask_a, )
+
+        # If there is exactly one valid mask, no combine needed
+        if len(valid_masks) == 1:
+            return (valid_masks[0], )
+
+        # Otherwise stack, sum, clamp
+        combined_mask = torch.sum(torch.stack(valid_masks, dim=0), dim=0)
+        combined_mask = torch.clamp(combined_mask, 0, 1)  # Keep values in 0..1
+
+        return (combined_mask,)
 
 class WAS_Mask_Combine_Batch:
 
@@ -8907,6 +9070,7 @@ class MiDaS_Background_Foreground_Removal:
         }
 
     RETURN_TYPES = ("IMAGE", "IMAGE")
+    RETURN_NAMES = ("RESULT", "DEPTH")
     FUNCTION = "midas_remove"
 
     CATEGORY = "WAS Suite/Image/AI"
@@ -9861,7 +10025,7 @@ class WAS_Text_Parse_Embeddings_By_Name:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
     RETURN_TYPES = (TEXT_TYPE,)
@@ -9923,7 +10087,7 @@ class WAS_Dictionary_Convert:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "dictionary_text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)})
+                "dictionary_text": (TEXT_TYPE, {"forceInput": is_force_input()})
             },
         }
     RETURN_TYPES = ("DICT",)
@@ -10070,6 +10234,7 @@ class WAS_Text_String:
             }
         }
     RETURN_TYPES = (TEXT_TYPE,TEXT_TYPE,TEXT_TYPE,TEXT_TYPE)
+    RETURN_NAMES = ("TEXT", "TEXT_B", "TEXT_C", "TEXT_D")
     FUNCTION = "text_string"
 
     CATEGORY = "WAS Suite/Text"
@@ -10108,6 +10273,7 @@ class WAS_Text_String_Truncate:
             }
         }
     RETURN_TYPES = (TEXT_TYPE,TEXT_TYPE,TEXT_TYPE,TEXT_TYPE)
+    RETURN_NAMES = ("TEXT", "TEXT_B", "TEXT_C", "TEXT_D")
     FUNCTION = "truncate_string"
 
     CATEGORY = "WAS Suite/Text/Operations"
@@ -10150,8 +10316,8 @@ class WAS_Text_Compare:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text_a": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
-                "text_b": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text_a": (TEXT_TYPE, {"forceInput": is_force_input()}),
+                "text_b": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "mode": (["similarity","difference"],),
                 "tolerance": ("FLOAT", {"default":0.0,"min":0.0,"max":1.0,"step":0.01}),
             }
@@ -10274,7 +10440,7 @@ class WAS_Text_Random_Line:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             }
         }
@@ -10289,10 +10455,6 @@ class WAS_Text_Random_Line:
         random.seed(seed)
         choice = random.choice(lines)
         return (choice, )
-
-    @classmethod
-    def IS_CHANGED(cls, **kwargs):
-        return float("NaN")
 
 
 # Text Concatenate
@@ -10364,23 +10526,23 @@ class WAS_Find:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "substring": ("STRING", {"default": '', "multiline": False}),
                 "pattern": ("STRING", {"default": '', "multiline": False}),
             }
         }
 
-    RETURN_TYPES = ("BOOLEAN")
-    RETURN_NAMES = ("found")
+    RETURN_TYPES = ("BOOLEAN",)
+    RETURN_NAMES = ("found",)
     FUNCTION = "execute"
 
     CATEGORY = "WAS Suite/Text/Search"
 
     def execute(self, text, substring, pattern):
         if substring:
-            return substring in text
+            return (substring in text, )
 
-        return bool(re.search(pattern, text))
+        return (bool(re.search(pattern, text)), )
 
 
 
@@ -10394,7 +10556,7 @@ class WAS_Search_and_Replace:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "find": ("STRING", {"default": '', "multiline": False}),
                 "replace": ("STRING", {"default": '', "multiline": False}),
             }
@@ -10425,7 +10587,7 @@ class WAS_Text_Shuffle:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "separator": ("STRING", {"default": ',', "multiline": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             }
@@ -10458,7 +10620,7 @@ class WAS_Text_Sort:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "separator": ("STRING", {"default": ', ', "multiline": False}),
             }
         }
@@ -10504,9 +10666,9 @@ class WAS_Search_and_Replace_Input:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
-                "find": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
-                "replace": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
+                "find": (TEXT_TYPE, {"forceInput": is_force_input()}),
+                "replace": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -10539,10 +10701,10 @@ class WAS_Search_and_Replace_Dictionary:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "dictionary": ("DICT",),
                 "replacement_key": ("STRING", {"default": "__", "multiline": False}),
-                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "seed": ("INT", {"default": 1, "min": 0, "max": 0xffffffffffffffff}),
             }
         }
 
@@ -10552,21 +10714,18 @@ class WAS_Search_and_Replace_Dictionary:
     CATEGORY = "WAS Suite/Text/Search"
 
     def text_search_and_replace_dict(self, text, dictionary, replacement_key, seed):
-
         random.seed(seed)
-
-        # Parse Text
         new_text = text
 
         for term in dictionary.keys():
             tkey = f'{replacement_key}{term}{replacement_key}'
             tcount = new_text.count(tkey)
             for _ in range(tcount):
-                new_text = new_text.replace(tkey, random.choice(dictionary[term]), 1)
-                if seed > 0 or seed < 0:
-                    seed = seed + 1
+                new_text = new_text.replace(tkey, dictionary[term], 1)
+                if seed != 0:
+                    seed += 1
                     random.seed(seed)
-
+                    
         return (new_text, )
 
     @classmethod
@@ -10587,7 +10746,7 @@ class WAS_Text_Parse_NSP:
                 "mode": (["Noodle Soup Prompts", "Wildcards"],),
                 "noodle_key": ("STRING", {"default": '__', "multiline": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -10630,7 +10789,8 @@ class WAS_Text_Save:
             },
             "optional": {
                 "file_extension": ("STRING", {"default": ".txt"}),
-                "encoding": ("STRING", {"default": "utf-8"})
+                "encoding": ("STRING", {"default": "utf-8"}),
+                "filename_suffix": ("STRING", {"default": ""})
             }
         }
 
@@ -10639,7 +10799,8 @@ class WAS_Text_Save:
     FUNCTION = "save_text_file"
     CATEGORY = "WAS Suite/IO"
 
-    def save_text_file(self, text, path, filename_prefix='ComfyUI', filename_delimiter='_', filename_number_padding=4, file_extension='.txt', encoding='utf-8'):
+    def save_text_file(self, text, path, filename_prefix='ComfyUI', filename_delimiter='_', 
+                       filename_number_padding=4, file_extension='.txt', encoding='utf-8', filename_suffix=''):
         tokens = TextTokens()
         path = tokens.parseTokens(path)
         filename_prefix = tokens.parseTokens(filename_prefix)
@@ -10656,32 +10817,44 @@ class WAS_Text_Save:
 
         delimiter = filename_delimiter
         number_padding = int(filename_number_padding)
-        filename = self.generate_filename(path, filename_prefix, delimiter, number_padding, file_extension)
+        filename = self.generate_filename(path, filename_prefix, delimiter, number_padding, file_extension, filename_suffix)
         file_path = os.path.join(path, filename)
         self.write_text_file(file_path, text, encoding)
         update_history_text_files(file_path)
         return (text, {"ui": {"string": text}})
 
-    def generate_filename(self, path, prefix, delimiter, number_padding, extension):
+    def generate_filename(self, path, prefix, delimiter, number_padding, extension, suffix):
         if number_padding == 0:
             # If number_padding is 0, don't use a numerical suffix
-            filename = f"{prefix}{extension}"
+            filename = f"{prefix}{suffix}{extension}"
         else:
-            pattern = f"{re.escape(prefix)}{re.escape(delimiter)}(\\d{{{number_padding}}})"
+            if delimiter:
+                pattern = f"{re.escape(prefix)}{re.escape(delimiter)}(\\d{{{number_padding}}}){re.escape(suffix)}{re.escape(extension)}"
+            else:
+                pattern = f"{re.escape(prefix)}(\\d{{{number_padding}}}){re.escape(suffix)}{re.escape(extension)}"
+
             existing_counters = [
                 int(re.search(pattern, filename).group(1))
                 for filename in os.listdir(path)
-                if re.match(pattern, filename)
+                if re.match(pattern, filename) and filename.endswith(extension)
             ]
-            existing_counters.sort(reverse=True)
+            existing_counters.sort()
             if existing_counters:
-                counter = existing_counters[0] + 1
+                counter = existing_counters[-1] + 1
             else:
                 counter = 1
-            filename = f"{prefix}{delimiter}{counter:0{number_padding}}{extension}"
+            if delimiter:
+                filename = f"{prefix}{delimiter}{counter:0{number_padding}}{suffix}{extension}"
+            else:
+                filename = f"{prefix}{counter:0{number_padding}}{suffix}{extension}"
+            
             while os.path.exists(os.path.join(path, filename)):
                 counter += 1
-                filename = f"{prefix}{delimiter}{counter:0{number_padding}}{extension}"
+                if delimiter:
+                    filename = f"{prefix}{delimiter}{counter:0{number_padding}}{suffix}{extension}"
+                else:
+                    filename = f"{prefix}{counter:0{number_padding}}{suffix}{extension}"
+                    
         return filename
 
     def write_text_file(self, file, content, encoding):
@@ -10763,7 +10936,7 @@ class WAS_Text_to_Conditioning:
         return {
             "required": {
                 "clip": ("CLIP",),
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -10789,7 +10962,7 @@ class WAS_Text_Parse_Tokens:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -10865,8 +11038,8 @@ class WAS_Text_Add_Token_Input:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "token_name": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
-                "token_value": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "token_name": (TEXT_TYPE, {"forceInput": is_force_input()}),
+                "token_value": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "print_current_tokens": (["false", "true"],),
             }
         }
@@ -10911,7 +11084,7 @@ class WAS_Text_to_Console:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "label": ("STRING", {"default": f'Text Output', "multiline": False}),
             }
         }
@@ -11147,7 +11320,7 @@ class WAS_Text_To_String:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -11167,7 +11340,7 @@ class WAS_Text_To_Number:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -11309,6 +11482,7 @@ class WAS_BLIP_Analyze_Image:
         }
 
     RETURN_TYPES = (TEXT_TYPE, TEXT_TYPE)
+    RETURN_NAMES = ("FULL_CAPTIONS", "CAPTIONS")
     OUTPUT_IS_LIST = (False, True)
 
     FUNCTION = "blip_caption_image"
@@ -11427,6 +11601,168 @@ class WAS_CLIPSeg:
                 mask: torch.tensor = mask.unsqueeze(-1)
                 mask_img = mask.repeat(1, 1, 1, 3)
             return (mask, mask_img,)
+class CLIPSeg2:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "text": ("STRING", {"default": "", "multiline": False}),
+                "use_cuda": ("BOOLEAN", {"default": False}),
+            },
+            "optional": {
+                "clipseg_model": ("CLIPSEG_MODEL",),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "apply_transform"
+
+    CATEGORY = "image/transformation"
+
+    def apply_transform(self, image, text, use_cuda, clipseg_model):
+        import torch
+        import torch.nn.functional as F
+        from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
+
+        B, H, W, C = image.shape
+        
+        if B != 1:
+            raise NotImplementedError("Batch size must be 1")
+
+        # Desired slice size and overlap
+        slice_size = 352
+        overlap = slice_size // 2
+
+        # Calculate the number of slices needed along each dimension
+        num_slices_h = (H - overlap) // (slice_size - overlap) + 1
+        num_slices_w = (W - overlap) // (slice_size - overlap) + 1
+
+        # Prepare a list to store the slices
+        slices = []
+
+        # Generate the slices
+        for i in range(num_slices_h):
+            for j in range(num_slices_w):
+                start_h = i * (slice_size - overlap)
+                start_w = j * (slice_size - overlap)
+
+                end_h = min(start_h + slice_size, H)
+                end_w = min(start_w + slice_size, W)
+
+                start_h = max(0, end_h - slice_size)
+                start_w = max(0, end_w - slice_size)
+
+                slice_ = image[:, start_h:end_h, start_w:end_w, :]
+                slices.append(slice_)
+
+        # Initialize CLIPSeg model and processor
+        if clipseg_model:
+            processor = clipseg_model[0]
+            model = clipseg_model[1]
+        else:
+            processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
+            model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+        # Move model to CUDA if requested
+        if use_cuda and torch.cuda.is_available():
+            model = model.to('cuda')
+
+        processor.image_processor.do_rescale = True
+        processor.image_processor.do_resize = False
+
+        image_global = image.permute(0, 3, 1, 2)
+        image_global = F.interpolate(image_global, size=(slice_size, slice_size), mode='bilinear', align_corners=False)
+        image_global = image_global.permute(0, 2, 3, 1)
+        _, image_global = self.CLIPSeg_image(image_global.float(), text, processor, model, use_cuda)
+        image_global = image_global.permute(0, 3, 1, 2)
+        image_global = F.interpolate(image_global, size=(H, W), mode='bilinear', align_corners=False)
+        image_global = image_global.permute(0, 2, 3, 1)
+
+        # Apply the transformation to each slice
+        transformed_slices = []
+        for slice_ in slices:
+            transformed_mask, transformed_slice = self.CLIPSeg_image(slice_, text, processor, model, use_cuda)
+            transformed_slices.append(transformed_slice)
+
+        transformed_slices = torch.cat(transformed_slices)
+
+        # Initialize tensors for reconstruction
+        reconstructed_image = torch.zeros((B, H, W, C))
+        count_map = torch.zeros((B, H, W, C))
+
+        # Create a blending mask
+        mask = np.ones((slice_size, slice_size))
+        mask[:overlap, :] *= np.linspace(0, 1, overlap)[:, None]
+        mask[-overlap:, :] *= np.linspace(1, 0, overlap)[:, None]
+        mask[:, :overlap] *= np.linspace(0, 1, overlap)[None, :]
+        mask[:, -overlap:] *= np.linspace(1, 0, overlap)[None, :]
+        mask = torch.tensor(mask, dtype=torch.float32).unsqueeze(0).unsqueeze(-1)
+
+        # Place the transformed slices back into the original image dimensions
+        for idx in range(transformed_slices.shape[0]):
+            i = idx // num_slices_w
+            j = idx % num_slices_w
+
+            start_h = i * (slice_size - overlap)
+            start_w = j * (slice_size - overlap)
+
+            end_h = min(start_h + slice_size, H)
+            end_w = min(start_w + slice_size, W)
+
+            start_h = max(0, end_h - slice_size)
+            start_w = max(0, end_w - slice_size)
+
+            reconstructed_image[:, start_h:end_h, start_w:end_w, :] += transformed_slices[idx] * mask
+            count_map[:, start_h:end_h, start_w:end_w, :] += mask
+
+        # Avoid division by zero
+        count_map[count_map == 0] = 1
+
+        # Average the overlapping regions
+        y = reconstructed_image / count_map
+
+        total_power = (y + image_global) / 2
+        just_black = image_global < 0.01
+
+        p1 = total_power > .5
+        p2 = y > .5
+        p3 = image_global > .5
+
+        condition = p1 | p2 | p3
+        condition = condition & ~just_black
+        y = torch.where(condition, 1.0, 0.0)
+
+        return (y,)
+
+    def CLIPSeg_image(self, image, text, processor, model, use_cuda):
+        import torch
+        import torchvision.transforms.functional as TF
+        B, H, W, C = image.shape
+
+        import torchvision
+        with torch.no_grad():
+            image = image.permute(0, 3, 1, 2).to(torch.float32) * 255
+
+            inputs = processor(text=[text] * B, images=image, padding=True, return_tensors="pt")
+
+            # Move model and image tensors to CUDA if requested
+            if use_cuda and torch.cuda.is_available():
+                model = model.to('cuda')
+                inputs = {k: v.to('cuda') if isinstance(v, torch.Tensor) else v for k, v in inputs.items()}
+
+            result = model(**inputs)
+            t = torch.sigmoid(result[0])
+            mask = (t - t.min()) / t.max()
+            mask = torchvision.transforms.functional.resize(mask, (H, W))
+            mask = mask.unsqueeze(-1)
+            mask_img = mask.repeat(1, 1, 1, 3)
+
+            # Move mask and mask_img back to CPU if they were moved to CUDA
+            if use_cuda and torch.cuda.is_available():
+                mask = mask.cpu()
+                mask_img = mask_img.cpu()
+
+        return (mask, mask_img,)
 
 # CLIPSeg Node
 
@@ -12038,6 +12374,10 @@ class WAS_Bounded_Image_Crop_With_Mask:
                 "padding_right": ("INT", {"default": 64, "min": 0, "max": 0xffffffffffffffff}),
                 "padding_top": ("INT", {"default": 64, "min": 0, "max": 0xffffffffffffffff}),
                 "padding_bottom": ("INT", {"default": 64, "min": 0, "max": 0xffffffffffffffff}),
+                
+            },
+            "optional":{
+                "return_list": ("BOOLEAN", {"default": False}),
             }
         }
 
@@ -12046,7 +12386,7 @@ class WAS_Bounded_Image_Crop_With_Mask:
 
     CATEGORY = "WAS Suite/Image/Bound"
 
-    def bounded_image_crop_with_mask(self, image, mask, padding_left, padding_right, padding_top, padding_bottom):
+    def bounded_image_crop_with_mask(self, image, mask, padding_left, padding_right, padding_top, padding_bottom,return_list=False):
         # Ensure we are working with batches
         image = image.unsqueeze(0) if image.dim() == 3 else image
         mask = mask.unsqueeze(0) if mask.dim() == 2 else mask
@@ -12073,8 +12413,9 @@ class WAS_Bounded_Image_Crop_With_Mask:
             # Even if only a single mask, create a bounds for each cropped image
             all_bounds.append([rmin, rmax, cmin, cmax])
             cropped_images.append(image[i][rmin:rmax+1, cmin:cmax+1, :])
-
-            return torch.stack(cropped_images), all_bounds
+        if return_list:
+            return cropped_images, all_bounds
+        return torch.stack(cropped_images), all_bounds
 
 # DEBUG IMAGE BOUNDS TO CONSOLE
 
@@ -12185,7 +12526,7 @@ class WAS_True_Random_Number:
 
     CATEGORY = "WAS Suite/Number"
 
-    def return_true_randm_number(self, api_key=None, minimum=0, maximum=10):
+    def return_true_randm_number(self, api_key=None, minimum=0, maximum=10, mode="random"):
 
         # Get Random Number
         number = self.get_random_numbers(api_key=api_key, minimum=minimum, maximum=maximum)[0]
@@ -12246,7 +12587,7 @@ class WAS_Constant_Number:
                 "number": ("FLOAT", {"default": 0, "min": -18446744073709551615, "max": 18446744073709551615, "step": 0.01}),
             },
             "optional": {
-                "number_as_text": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "number_as_text": (TEXT_TYPE, {"forceInput": is_force_input()}),
             }
         }
 
@@ -12288,7 +12629,7 @@ class WAS_Number_Counter:
         return {
             "required": {
                 "number_type": (["integer", "float"],),
-                "mode": (["increment", "decrement", "increment_to_stop", "decrement_to_stop"],),
+                "mode": (["increment", "decrement", "increment_to_stop", "decrement_to_stop", "reset_after_stop"],),
                 "start": ("FLOAT", {"default": 0, "min": -18446744073709551615, "max": 18446744073709551615, "step": 0.01}),
                 "stop": ("FLOAT", {"default": 0, "min": -18446744073709551615, "max": 18446744073709551615, "step": 0.01}),
                 "step": ("FLOAT", {"default": 1, "min": 0, "max": 99999, "step": 0.01}),
@@ -12328,6 +12669,8 @@ class WAS_Number_Counter:
             counter = counter + step if counter < stop else counter
         elif mode == 'decrement_to_stop':
             counter = counter - step if counter > stop else counter
+        elif mode == 'reset_after_stop':
+            counter = counter + step if counter < stop else start + step
 
         self.counters[unique_id] = counter
 
@@ -12854,7 +13197,7 @@ class WAS_Latent_Size_To_Number:
         }
 
     RETURN_TYPES = ("NUMBER", "NUMBER", "FLOAT", "FLOAT", "INT", "INT")
-    RETURN_NAMES = ("tensor_w_num","tensor_h_num")
+    RETURN_NAMES = ("tensor_w_num","tensor_h_num","tensor_w_float","tensor_h_float","tensor_w_int","tensor_h_int")
     FUNCTION = "latent_width_height"
 
     CATEGORY = "WAS Suite/Number/Operations"
@@ -13311,8 +13654,8 @@ class WAS_Text_Input_Switch:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text_a": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
-                "text_b": (TEXT_TYPE, {"forceInput": (True if TEXT_TYPE == 'STRING' else False)}),
+                "text_a": (TEXT_TYPE, {"forceInput": is_force_input()}),
+                "text_b": (TEXT_TYPE, {"forceInput": is_force_input()}),
                 "boolean": ("BOOLEAN", {"forceInput": True}),
             }
         }
@@ -14174,6 +14517,8 @@ NODE_CLASS_MAPPINGS = {
     "Mask Gaussian Region": WAS_Mask_Gaussian_Region,
     "Mask Invert": WAS_Mask_Invert,
     "Mask Minority Region": WAS_Mask_Minority_Region,
+    "Mask Rect Area": WAS_Mask_Rect_Area,
+    "Mask Rect Area (Advanced)": WAS_Mask_Rect_Area_Advanced,
     "Mask Smooth Region": WAS_Mask_Smooth_Region,
     "Mask Threshold Region": WAS_Mask_Threshold_Region,
     "Masks Combine Regions": WAS_Mask_Combine,
@@ -14258,6 +14603,7 @@ NODE_CLASS_MAPPINGS = {
     "Write to Video": WAS_Video_Writer,
     "VAE Input Switch": WAS_VAE_Input_Switch,
     "Video Dump Frames": WAS_Video_Frame_Dump,
+    "CLIPSEG2": CLIPSeg2
 }
 
 #! EXTRA NODES
@@ -14326,7 +14672,9 @@ if os.path.exists(BKAdvCLIP_dir):
         cstr('`CLIPTextEncode (BlenderNeko Advanced + NSP)` node enabled under `WAS Suite/Conditioning` menu.').msg.print()
 
 # opencv-python-headless handling
-if 'opencv-python' in packages() or 'opencv-python-headless' in packages():
+installed_packages = packages()
+opencv_candidates = ['opencv-python', 'opencv-python-headless', 'opencv-contrib-python', 'opencv-contrib-python-headless']
+if any(package in installed_packages for package in opencv_candidates):
     try:
         import cv2
         build_info = ' '.join(cv2.getBuildInformation().split())

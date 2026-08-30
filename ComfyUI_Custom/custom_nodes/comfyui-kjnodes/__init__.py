@@ -78,6 +78,7 @@ from .nodes.model_optimization_nodes import (
 from .nodes.lora_nodes import LoraExtractKJ, LoraReduceRank
 from .nodes.image_transform_node import ImageTransformKJ, BBOXToBoundingBoxKJ
 from .nodes.sharpen_nodes import ImageSharpenKJ
+from .nodes.nodes_looping import LOOP_NODES
 from .nodes.hdr_preview_node import HDRPreviewKJ
 from .nodes.preview_override_node import ModelPreviewOverrideKJ, GetPreviewOverrideFramesKJ
 from .nodes.context_windows_visualizer import ContextWindowsVisualizerKJ
@@ -322,6 +323,8 @@ NODE_CONFIG = {
     #lora
     "LoraExtractKJ": {"class": LoraExtractKJ, "name": "LoraExtractKJ"},
     "LoraReduceRankKJ": {"class": LoraReduceRank, "name": "LoraReduceRank"},
+    #looping
+    **{n.GET_SCHEMA().node_id: {"class": n, "name": n.GET_SCHEMA().display_name} for n in LOOP_NODES},
 
     #tracks
     "GetTrackRange": {"class": GetTrackRange, "name": "Get Track Range"},
@@ -370,10 +373,11 @@ except Exception as e:
 
 #minimax
 try:
-    from .nodes.minimax_nodes import MiniMaxChunkFeedForward, MiniMaxLowVRAMAttention
+    from .nodes.minimax_nodes import MiniMaxChunkFeedForward, MiniMaxLowVRAMAttention, MiniMaxH3TokenCounter
     NODE_CONFIG.update({
     "MiniMaxChunkFeedForward": {"class": MiniMaxChunkFeedForward, "name": "MiniMax H3 ChunkFeedForward"},
     "MiniMaxLowVRAMAttention": {"class": MiniMaxLowVRAMAttention, "name": "MiniMax H3 Low VRAM Attention"},
+    "MiniMaxH3TokenCounter": {"class": MiniMaxH3TokenCounter, "name": "MiniMax H3 Token Counter"},
     })
 except Exception as e:
     logging.warning(f"KJNodes: MiniMax nodes could not be imported. MiniMax nodes will be unavailable. Error: {e}", exc_info=True)

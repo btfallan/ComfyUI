@@ -7,6 +7,7 @@ from .defs.meta import MetaField
 
 from nodes import NODE_CLASS_MAPPINGS
 from execution import get_input_data
+from comfy_execution.graph import DynamicPrompt
 
 
 class Capture:
@@ -15,14 +16,14 @@ class Capture:
         inputs = {}
         prompt = hook.current_prompt
         extra_data = hook.current_extra_data
-        outputs = hook.prompt_executer.outputs
+        outputs = hook.prompt_executer.caches.outputs
 
         for node_id, obj in prompt.items():
             class_type = obj["class_type"]
             obj_class = NODE_CLASS_MAPPINGS[class_type]
             node_inputs = prompt[node_id]["inputs"]
             input_data = get_input_data(
-                node_inputs, obj_class, node_id, outputs, prompt, extra_data
+                node_inputs, obj_class, node_id, outputs, DynamicPrompt(prompt), extra_data
             )
             for node_class, metas in CAPTURE_FIELD_LIST.items():
                 if class_type == node_class:
@@ -41,8 +42,20 @@ class Capture:
                             inputs[meta].append((node_id, value))
                             continue
 
+                        selector = field_data.get("selector")
+                        if selector is not None:
+                            v = selector(
+                                node_id, obj, prompt, extra_data, outputs, input_data
+                            )
+                            if isinstance(v, list):
+                                for x in v:
+                                    inputs[meta].append((node_id, x))
+                            elif v is not None:
+                                inputs[meta].append((node_id, v))
+                            continue
+
                         field_name = field_data["field_name"]
-                        value = input_data.get(field_name)
+                        value = input_data[0].get(field_name)
                         if value is not None:
                             format = field_data.get("format")
                             v = value
@@ -58,7 +71,7 @@ class Capture:
         return inputs
 
     @classmethod
-    def gen_pnginfo_dict(cls, inputs_before_sampler_node, inputs_before_this_node):
+    def gen_pnginfo_dict(cls, inputs_before_sampler_node, inputs_before_this_node, save_civitai_sampler = False):
         pnginfo_dict = {}
 
         def update_pnginfo_dict(inputs, metafield, key):
@@ -76,16 +89,20 @@ class Capture:
         update_pnginfo_dict(inputs_before_sampler_node, MetaField.STEPS, "Steps")
 
         sampler_names = inputs_before_sampler_node.get(MetaField.SAMPLER_NAME, [])
-        if len(sampler_names) > 0:
-            pnginfo_dict["Sampler"] = sampler_names[0][1]
+        schedulers = inputs_before_sampler_node.get(MetaField.SCHEDULER, [])
 
-            schedulers = inputs_before_sampler_node.get(MetaField.SCHEDULER, [])
-            if len(schedulers) > 0:
-                scheduler = schedulers[0][1]
-                if scheduler != "normal":
-                    pnginfo_dict["Sampler"] += "_" + scheduler
+        if (save_civitai_sampler):
+            pnginfo_dict["Sampler"] = cls.get_sampler_for_civitai(sampler_names, schedulers)
+        else:
+            if len(sampler_names) > 0:
+                pnginfo_dict["Sampler"] = sampler_names[0][1]
 
-        update_pnginfo_dict(inputs_before_sampler_node, MetaField.CFG, "CFG Scale")
+                if len(schedulers) > 0:
+                    scheduler = schedulers[0][1]
+                    if scheduler != "normal":
+                        pnginfo_dict["Sampler"] += "_" + scheduler
+
+        update_pnginfo_dict(inputs_before_sampler_node, MetaField.CFG, "CFG scale")
         update_pnginfo_dict(inputs_before_sampler_node, MetaField.SEED, "Seed")
 
         update_pnginfo_dict(
@@ -201,3 +218,77 @@ class Capture:
             index += 1
 
         return pnginfo_dict
+    
+    @classmethod
+    def get_sampler_for_civitai(cls, sampler_names, schedulers):
+        """
+        Get the pretty sampler name for Civitai in the form of `<Sampler Name> <Scheduler name>`.
+            - `dpmpp_2m` and `karras` will return `DPM++ 2M Karras`
+        
+        If there is a matching sampler name but no matching scheduler name, return only the matching sampler name.
+            - `dpmpp_2m` and `exponential` will return only `DPM++ 2M`
+
+        if there is no matching sampler and scheduler name, return `<sampler_name>_<scheduler_name>`
+            - `ipndm` and `normal` will return `ipndm`
+            - `ipndm` and `karras` will return `ipndm_karras`
+
+        Reference: https://github.com/civitai/civitai/blob/main/src/server/common/constants.ts
+        
+        Last update: https://github.com/civitai/civitai/blob/a2e6d267eefe6f44811a640c570739bcb078e4a5/src/server/common/constants.ts#L138-L165
+        """
+
+        def sampler_with_karras_exponential(sampler, scheduler):
+            match scheduler:
+                case "karras":
+                    sampler += " Karras"
+                case "exponential":
+                    sampler += " Exponential"
+            return sampler
+        
+        def sampler_with_karras(sampler, scheduler):
+            if scheduler == "karras":
+                return sampler + " Karras"
+            return sampler
+
+        if len(sampler_names) > 0:
+            sampler = sampler_names[0][1]
+        if len(schedulers) > 0:
+            scheduler = schedulers[0][1]
+
+        match sampler:
+            case "euler" | "euler_cfg_pp":
+                return "Euler"
+            case "euler_ancestral" | "euler_ancestral_cfg_pp":
+                return "Euler a"
+            case "heun" | "heunpp2":
+                return "Huen"
+            case "dpm_2":
+                return sampler_with_karras("DPM2", scheduler)
+            case "dpm_2_ancestral":
+                return sampler_with_karras("DPM2 a", scheduler)
+            case "lms":
+                return sampler_with_karras("LMS", scheduler)
+            case "dpm_fast":
+                return "DPM fast"
+            case "dpm_adaptive":
+                return "DPM adaptive"
+            case "dpmpp_2s_ancestral":
+                return sampler_with_karras("DPM++ 2S a", scheduler)
+            case "dpmpp_sde" | "dpmpp_sde_gpu":
+                return sampler_with_karras("DPM++ SDE", scheduler)
+            case "dpmpp_2m":
+                return sampler_with_karras("DPM++ 2M", scheduler)
+            case "dpmpp_2m_sde" | "dpmpp_2m_sde_gpu":
+                return sampler_with_karras("DPM++ 2M SDE", scheduler)
+            case "dpmpp_3m_sde" | "dpmpp_3m_sde_gpu":
+                return sampler_with_karras_exponential("DPM++ 3M SDE", scheduler)
+            case "lcm":
+                return "LCM"
+            case "ddim":
+                return "DDIM"
+            case "uni_pc" | "uni_pc_bh2":
+                return "UniPC"
+            
+        if scheduler == "normal":
+            return sampler
+        return sampler + "_" + scheduler

@@ -167,10 +167,15 @@ function useKVState(nodeType) {
         });
     })
 }
-var helpDOM;
-if (!app.helpDOM) {
+var helpDOM = app.VHSHelp;
+if (!app.VHSHelp) {
     helpDOM = document.createElement("div");
     app.VHSHelp = helpDOM
+} else {
+    app.extensionManager.dialog
+      .showErrorDialog('Please check your custom_nodes directory and manually remove the duplicate.',
+                       { title: 'Duplicate VHS install detected' })
+    throw new Error('Duplicate VHS install detected. Check your custom_nodes directory')
 }
 function initHelpDOM() {
     let parentDOM = document.createElement("div");
@@ -574,52 +579,6 @@ function addVAEInputToggle(nodeType, nodeData) {
         }
     });
 }
-function cloneType(nodeType, nodeData) {
-    chainCallback(nodeType.prototype, "onNodeCreated", function() {
-        this.changeOutputType = function (new_type) {
-            this.linkTimeout = setTimeout(() => {
-                this.linkTimeout = false
-                if (this.outputs[0].type != new_type) {
-                    this.outputs[0].type = new_type
-                    //check and potentially remove links
-                    if (!this.outputs[0].links) {
-                        return
-                    }
-                    let removed_links = []
-                    for (let link_id of this.outputs[0].links) {
-                        let link = app.graph.links[link_id]
-                        if (!link)
-                            debugger
-                        let target_node = app.graph.getNodeById(link.target_id)
-                        let target_input = target_node.inputs[link.target_slot]
-                        let keep = LiteGraph.isValidConnection(new_type, target_input.type)
-                        if (!keep) {
-                            link.disconnect(app.graph, 'input')
-                            removed_links.push(link_id)
-                        }
-                        target_node.onConnectionsChange?.(LiteGraph.INPUT,
-                            link.target_slot, keep, link, target_input)
-                    }
-                    this.outputs[0].links = this.outputs[0].links
-                        .filter((v) => !removed_links.includes(v))
-                }
-            }, 50)
-        }
-        this.changeOutputType("VHS_DUMMY_NONE")
-    });
-    chainCallback(nodeType.prototype, "onConnectionsChange", function(contype, slot, iscon, linf) {
-        if (contype == LiteGraph.INPUT && slot == 0) {
-            let new_type = "VHS_DUMMY_NONE"
-            if (iscon && linf) {
-                new_type = app.graph.getNodeById(linf.origin_id).outputs[linf.origin_slot].type
-            }
-            if (this.linkTimeout) {
-                clearTimeout(this.linkTimeout)
-            }
-            this.changeOutputType(new_type)
-        }
-    });
-}
 
 function addDateFormatting(nodeType, field, timestamp_widget = false) {
     chainCallback(nodeType.prototype, "onNodeCreated", function() {
@@ -841,6 +800,8 @@ function addAudioPreview(nodeType, isInput=true) {
     chainCallback(nodeType.prototype, "onNodeCreated", function() {
         var element = document.createElement("audio");
         element.controls = true
+        element.style['width'] = "100%"
+        element.style['minHeight'] = "50px"
         const previewNode = this;
         var previewWidget = this.addDOMWidget("audiopreview", "preview", element, {
             serialize: false,
@@ -1545,6 +1506,7 @@ function button_action(widget) {
   return 'No Disable'
 }
 function fitText(ctx, text, maxLength) {
+    text = String(text)
     if (maxLength <= 0) {
         return ['', 0]
     }
@@ -1610,7 +1572,8 @@ function inner_value_change(widget, value, node, pos) {
 }
 function drawAnnotated(ctx, node, widget_width, y, H) {
   const litegraph_base = LiteGraph
-  const show_text = app.canvas.ds.scale >= (app.canvas.low_quality_zoom_threshold ?? 0.5)
+  // In vueNodes mode, always show text since Vue renders at 1:1 scale
+  const show_text = LiteGraph.vueNodesMode || app.canvas.ds.scale >= (app.canvas.low_quality_zoom_threshold ?? 0.5)
   const margin = 15
   ctx.strokeStyle = litegraph_base.WIDGET_OUTLINE_COLOR
   ctx.fillStyle = litegraph_base.WIDGET_BGCOLOR
@@ -2067,8 +2030,6 @@ app.registerExtension({
                     computeSize: () => {return [0,-4]},
                     afterQueued: function() {this.value++;}});
             });
-        } else if (nodeData?.name == "VHS_Unbatch") {
-            cloneType(nodeType, nodeData)
         } else if (nodeData?.name == "VHS_SelectLatest") {
             chainCallback(nodeType.prototype, "onNodeCreated", function() {
                 this.isVirtualNode = true

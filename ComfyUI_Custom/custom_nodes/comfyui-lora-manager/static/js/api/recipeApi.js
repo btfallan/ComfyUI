@@ -49,6 +49,28 @@ export async function fetchRecipeDetails(recipeId) {
     return response.json();
 }
 
+export async function sendRecipeWorkflow(recipeId) {
+    if (!recipeId) {
+        throw new Error('Unable to determine recipe ID');
+    }
+
+    const encodedRecipeId = encodeURIComponent(recipeId);
+    const response = await fetch(`${RECIPE_ENDPOINTS.detail}/${encodedRecipeId}/send-workflow`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        return { success: false, error: result.error || response.statusText };
+    }
+
+    return result;
+}
+
 /**
  * Fetch recipes with pagination for virtual scrolling
  * @param {number} page - Page number to fetch
@@ -151,6 +173,11 @@ export async function fetchRecipesPage(page = 1, pageSize = 100) {
                         params.append('tag_exclude', tag);
                     }
                 });
+            }
+
+            // Add LoRA availability filter (no statuses selected = no filtering)
+            if (pageState.filters?.loraAvailability && pageState.filters.loraAvailability.length > 0) {
+                params.append('lora_availability', pageState.filters.loraAvailability.join(','));
             }
         }
 

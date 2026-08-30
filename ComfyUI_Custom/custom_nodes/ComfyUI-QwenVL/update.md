@@ -1,10 +1,75 @@
 # ComfyUI-QwenVL Update Log
 
 ---
-# Release Notes: v2.1.1 (2025-02-08)
+# Release Notes: v2.3.0 (2026-08-26)
+
+### 🎬 Intelligent Adaptive Video Scaling & Safe Token Budget
+<img width="614" alt="image" src="https://github.com/user-attachments/assets/df99ea79-89dc-4bd9-a971-f7df33c9fa50" />
+
+- **Dynamic Context Budget Estimation**:
+  - Automatically calculates safe per-frame token budget based on the model's active context window (`ctx`) and sampled frame count (`frame_count`).
+  - Completely resolves `decode: failed to find a memory slot for batch` errors in GGUF/llama.cpp and CUDA OOM (Out Of Memory) in Transformers backends.
+- **Smart Resolution Decision**:
+  - **Low/Medium Resolution Videos**: If the native dimensions fit within the token budget, the original resolution is preserved without unnecessary downscaling or quality loss.
+  - **High Resolution Videos (1080p / 4K)**: Automatically downscales video frames using high-quality bicubic interpolation to fit safely within the token allocation, printing informative status logs.
+- **New `video_frame_size` Parameter**:
+  - Added `video_frame_size` option to all Advanced nodes (`AILab_QwenVL_GGUF_Advanced` and `AILab_QwenVL_Advanced`) supporting `"auto"`, `"384"`, `"448"`, `"512"`, `"768"`, and `"original"`.
+  - Standard/Basic nodes automatically apply intelligent auto-scaling for a seamless out-of-the-box experience.
+
+### 📦 Unified & Simplified Custom Models Architecture (`custom_models.json`)
+- **Streamlined 2-Section Design**: Consolidated model configuration into two clean sections:
+  - `hf_models`: All HuggingFace / Transformers models (used by both VL and text nodes).
+  - `gguf_models`: All GGUF models (used by vision nodes with `mmproj_file`, and text nodes like Prompt Enhancer which safely ignores `mmproj_file`).
+- **Full GGUF Custom Catalog Support**:
+  - `AILab_QwenVL_GGUF` and `AILab_QwenVL_GGUF_Advanced` dynamically load custom vision GGUF models (`gguf_models`).
+  - `AILab_QwenVL_GGUF_PromptEnhancer` dynamically loads custom text GGUF models (`gguf_models`).
+- **Backward Compatibility**: Fully preserves backward compatibility for legacy split sections (`hf_vl_models`, `hf_text_models`, `gguf_vl_models`, `gguf_text_models`, `qwenVL_model`, `Qwen_model`).
+- **Updated Documentation**: Added detailed guides in [`docs/custom_models.md`](./docs/custom_models.md) and [`custom_models_example.json`](./custom_models_example.json).
+
+### 📥 Enhanced HuggingFace Downloader (`AILab_HuggingFaceDownloader`)
+<img width="614" alt="image" src="https://github.com/user-attachments/assets/7857b525-9dd9-4b7e-9425-f9c1aa7bccf2" />
+
+- **Fixed Standalone Execution**: Added `OUTPUT_NODE = True` so the downloader runs independently in workflows without triggering `[WARNING] invalid prompt: {'type': 'prompt_no_outputs'}`.
+- **Smart `mmproj` Auto-Discovery & Download**:
+  - Automatically queries the HuggingFace repository to identify and download matching `mmproj*.gguf` visual projector files (prioritizing `F16`/`BF16`).
+  - Added optional `mmproj_filename` input for users who want to specify a custom/specific projector file.
+- **Smart Auto-Routing (`save_folder: "auto"`)**:
+  - `save_folder` now defaults to `"auto"`. The downloader automatically inspects the model type and routes GGUF models directly to `models/LLM/GGUF/{author}/{repo_name}/` and Transformers models to `models/LLM/hf/{author}/{repo_name}/`, preventing manual folder misconfiguration.
+- **Clean UI with `model_info` Output**:
+  - Exposes `model_info` output pin (`RETURN_TYPES = ("STRING",)`) allowing downstream workflows to capture the summary text if desired.
+  - Automatically renders a rich, color-coded HTML status card directly inside the node's UI (`web/js/downloader.js`) featuring bold titles, colored labels, status badges, syntax-highlighted registration JSON, dynamic auto-expansion on execution, and responsive flexbox resizing.
+
+### 🔌 Modular Inference Engine & CLI (`qwenvl_engine.py` & `qwenvl_cli.py`)
+- **Cross-Plugin Ecosystem Support**: Exposes `is_qwenvl_available()`, `run_qwenvl_vision()`, and `run_qwenvl_text()` for seamless zero-friction integration with external scripts and custom node packages.
+- **Standalone CLI**: Added `qwenvl_cli.py` for direct command-line inference and status inspection.
+
+### 🛠️ Codebase Optimization & Centralized Media Utilities (`AILab_Utils.py`)
+- **Shared Vision & Video Utilities**: Consolidated tensor-to-PIL conversion, Base64 encoding, uniform video frame sampling, and dynamic budget estimation into a unified [`AILab_Utils.py`](./py/AILab_Utils.py) module.
+- **Dynamic Input Validation**: Added dynamic `VALIDATE_INPUTS` across all nodes so newly added/downloaded models pass ComfyUI prompt validation without restart.
+- **Cleaned Deprecations**: Removed deprecated fallback chains and legacy references to `custom_gguf_models.json`.
+
+> **💡 Note for ComfyUI Users**: After downloading a new model, simply **refresh your browser (F5 / Ctrl+R)** to update the model dropdown lists in the UI!
+
+---
+# Release Notes: v2.2.0 (2026-08-20)
+
+### 🌟 Qwen3.5, Qwen3.6 (MoE) & Qwen3.8 Native GGUF Support
+- **Expanded Model Catalog**: Added direct support for Qwen3.5-VL-7B, Qwen3.6-VL-MoE, and Qwen3.8-VL-14B within the GGUF nodes.
+- **Native Memory Management**: Implemented `comfy.model_management` to gracefully handle cache clearing (`soft_empty_cache` and `unload_all_models`) directly within the ComfyUI ecosystem, eliminating VRAM leaks when models are unloaded.
+- **Simplified Installation Guide**: Updated `llama-cpp-python` dependency to `>=0.3.40` which natively supports all new vision chat handlers and MoE offloading without complex version matrices. Added clear console warnings pointing users to `docs/LLAMA_CPP_PYTHON_VISION_INSTALL.md` if the vision bindings are missing.
+<img alt="image" src="https://github.com/user-attachments/assets/b257ad2e-b639-4b55-ac00-07a11955c187" />
+
+### 🛠️ Feature Additions & Bug Fixes
+- **VRAM Leak Fix (Issue #182)**: Fixed a critical issue where VRAM was not released after inference when `keep_model_loaded=False`. The GGUF nodes now explicitly call `self.llm.close()` to free the GGML C++ backend memory, and the Transformer nodes now properly clear `torch._dynamo` cache and force PyTorch garbage collection.
+- **New HuggingFace Downloader Node**: Added `AILab_HuggingFaceDownloader` to allow users to directly download GGUF/HF models or entire repositories from HuggingFace directly into ComfyUI's model directories.
+- **Prompt Enhancer Fix (PR #179)**: Fixed a critical bug in `AILab_QwenVL_PromptEnhancer` (Transformers) where instruct models (like Qwen3-4B) would ignore system instructions and act as text-continuations. The node now correctly applies the tokenizer's chat template (`apply_chat_template`).
+- **GGUF Prompt Enhancer Optimization**: Removed hardcoded `"chat_format": "qwen"` in `AILab_QwenVL_GGUF_PromptEnhancer.py`. The node now dynamically reads the native chat template embedded directly within the GGUF file (e.g., ChatML for Qwen3), ensuring perfect special-token formatting for newer architectures.
+
+---
+# Release Notes: v2.1.1 (2026-02-08)
 - Fixed Transformers compatibility: works on both **Transformers 4.x** and **5.x** (thanks to **Sepolian** for identifying the issue and sharing the fix in [PR #130](https://github.com/1038lab/ComfyUI-QwenVL/pull/130); we adjusted the implementation to keep it compatible across both versions).
 
-# Release Notes: v2.1.0 (2025-02-05)
+# Release Notes: v2.1.0 (2026-02-05)
 
 ### 🚀 SageAttention Support
 

@@ -1735,28 +1735,21 @@ app.registerExtension({
 
       // 把json往里 拖
       document.addEventListener('drop', async event => {
-        // Dragging from Chrome->Firefox there is a file but its a bmp, so ignore that
+        // Only intercept the JSON files handled here. Calling preventDefault()
+        // unconditionally swallowed every drop, so ComfyUI's native drag&drop
+        // (guarded by event.defaultPrevented) never loaded dropped workflows
+        // (PNG / JSON / etc.). Keep preventDefault scoped to the handled case.
         if (
           event.dataTransfer.files.length &&
           event.dataTransfer.files[0].type == 'application/json'
         ) {
-          const file = event.dataTransfer.files[0]
-          const text = await file.text()
-
-          // Only handle mixlab's own {app, output, workflow} export format.
-          // Anything else (regular ComfyUI workflow JSON) must fall through
-          // untouched so ComfyUI's native drop handler can load it.
-          let isMixlabAppJson = false
-          try {
-            const w = JSON.parse(text)
-            isMixlabAppJson = !!(w.app && w.output)
-          } catch (err) {}
-
-          if (isMixlabAppJson) {
-            event.preventDefault()
-            event.stopPropagation()
-            loadAppJson(text)
+          event.preventDefault()
+          event.stopPropagation()
+          const reader = new FileReader()
+          reader.onload = async () => {
+            loadAppJson(reader.result)
           }
+          reader.readAsText(event.dataTransfer.files[0])
         }
       })
     }
@@ -2180,6 +2173,10 @@ app.registerExtension({
 
     fetch('manager/badge_mode').then(r => {
       if (r.status === 404) {
+        // 已有ComfyUI自带的badge
+        if(node.badges?.[0]?.()){
+          return
+        }
         // 右上角的badge是否已经绘制
         if (!node.badge_enabled) {
           if (!node.getNickname) {

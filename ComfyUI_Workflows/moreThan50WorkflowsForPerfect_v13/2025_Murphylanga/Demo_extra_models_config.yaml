@@ -1,0 +1,67 @@
+# ComfyUI extra_model_paths.yaml for win32
+comfyui_desktop:
+  #is_default: "true"
+  #custom_nodes: D:\Spezial\KI_Models\
+  #download_model_base: models
+  #base_path: C:\Users\<your username>\Documents\ComfyUI
+desktop_extensions:
+  custom_nodes: D:\ComfyUI-App\resources\ComfyUI\custom_nodes    ## nur Manager? ##   
+comfyui:
+     is_default: "true"
+     download_model_base: D:\Spezial\KI_Models\   ## funzt nicht ##  
+     base_path: D:\Spezial\KI_Models\
+     checkpoints: checkpoints
+     loras: loras\
+     vae: vae\
+     ace_step: ace_step
+     adetailer: adetailer
+     audio_encoders: audio_encoders
+     annotator: annotator
+     blip: blip
+     chatterbox: chatterbox
+     ckpts: ckpts
+     clip: clip
+     clip_vision: clip_vision
+     clipseg: clipseg
+     configs: configs
+     controlnet: controlnet
+     diffusers: diffusers
+     diffusion_models: diffusion_models
+     Eigene_Node_Styler: Eigene_Node_Styler
+     embeddings: embeddings
+     F5-TTS: F5-TTS
+     face_restore: face_restore
+     facedetection: facedetection
+     facerestore_models: facerestore_models
+     gligen: gligen
+     hub: hub
+     hypernetworks: hypernetworks
+     inpaint: inpaint
+     insightface: insightface
+     ipadapter: ipadapter
+     lama: lama
+     liveportrait: liveportrait
+     LLM: LLM
+     liveportrait: liveportrait
+     mmaudio: mmaudio
+     mmdets: mmdets
+     nsfw_detector: nsfw_detector
+     onnx: onnx
+     photomaker: photomaker
+     pulid: pulid
+     reactor: reactor
+     rembg: rembg
+     SadTalker: SadTalker
+     sam2: sam2
+     sams: sams
+     #sonic: sonic
+     style_models: style_models
+     text_encoders: text_encoders
+     transformers: transformers
+     TTS: TTS
+     ultralytics: ultralytics
+     unet: unet
+     upscale_models: upscale_models
+     vae_approx: vae_approx
+     voices: voices
+     xlabs: xlabs

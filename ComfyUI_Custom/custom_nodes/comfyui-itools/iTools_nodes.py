@@ -3,17 +3,16 @@ import os
 import time
 from pathlib import Path
 import random
-from PIL.PngImagePlugin import PngInfo # type: ignore
-import comfy.samplers # type: ignore
-import folder_paths # type: ignore
-import node_helpers # type: ignore
-import numpy as np # type: ignore
-import torch # type: ignore
-from PIL import Image, ImageSequence, ImageOps # type: ignore
+from PIL.PngImagePlugin import PngInfo  # type: ignore
+import comfy.samplers  # type: ignore
+import folder_paths  # type: ignore
+import node_helpers  # type: ignore
+import numpy as np  # type: ignore
+import torch  # type: ignore
+from PIL import Image, ImageSequence, ImageOps, ImageEnhance  # type: ignore
 from .backend.checker_board import ChessTensor, ChessPattern
-from nodes import common_ksampler, SaveImage, PreviewImage # type: ignore
+from nodes import common_ksampler, SaveImage, PreviewImage  # type: ignore
 import json
-from .backend.file_handeler import FileHandler
 from .backend.grid_filler import (
     fill_grid_with_images_new,
     tensor_to_images,
@@ -29,9 +28,24 @@ from .backend.prompter_multi import (
     templates_extra2,
     templates_extra3,
 )
-from .backend.shared import styles, tensor2pil, pil2tensor, project_dir
+from .backend.shared import (
+    FileHandler,
+    styles,
+    tensor2pil,
+    pil2tensor,
+    project_dir,
+    FlexibleOptionalInputType,
+    any_type,
+    get_user_node_display_name_preferences,
+    get_user_dev_mode,
+    get_user_dev_mode2,
+)
+from .backend import iserver
 from comfy.cli_args import args  # type: ignore
 import re
+import base64
+import io as py_io
+from comfy_api.latest import io
 
 
 class IToolsLoadImagePlus:
@@ -297,6 +311,7 @@ class IToolsLoadImages:
                 ),
                 "start_index": ("INT", {"default": 0, "min": 0, "max": 200}),
                 "load_limit": ("INT", {"default": 4, "min": 2, "max": 200}),
+                "output_mode": (["list", "batch"], {"default": "list"}),
             }
         }
 
@@ -311,7 +326,9 @@ class IToolsLoadImages:
         "names."
     )
 
-    def load_images(self, images_directory, load_limit, start_index):
+    def load_images(
+        self, images_directory, load_limit, start_index, output_mode="list"
+    ):
         image_extensions = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif"}
         images_path = Path(images_directory.replace('"', ""))
 
@@ -333,7 +350,11 @@ class IToolsLoadImages:
                 if len(images) >= load_limit:
                     break
 
-        return images, images_names, len(images)
+        count = len(images)
+        if output_mode == "batch" and images:
+            images = [torch.cat(images, dim=0)]
+
+        return images, images_names, count
 
 
 class IToolsPromptStylerExtra:
@@ -487,7 +508,7 @@ class IToolsLineLoader:
                     "INT",
                     {
                         "default": 0,
-                        "control_after_generate": "increment",
+                        "control_after_generate": True,
                         "min": 0,
                         "max": 0xFFF,
                     },
@@ -814,7 +835,16 @@ class IToolsVaePreview:
         prompt=None,
         extra_pnginfo=None,
     ):
-        return_options = (vae.decode(samples["samples"]),)
+
+        def decode(vae, samples):
+            images = vae.decode(samples["samples"])
+            if len(images.shape) == 5:  # Combine batches
+                images = images.reshape(
+                    -1, images.shape[-3], images.shape[-2], images.shape[-1]
+                )
+            return (images,)
+
+        return_options = decode(vae, samples)
         images = return_options[0]
         filename_prefix += self.prefix_append
         full_output_folder, filename, counter, subfolder, filename_prefix = (
@@ -895,7 +925,6 @@ class IToolsCheckerBoard:
 
 
 class IToolsLoadRandomImage:
-
     @classmethod
     def INPUT_TYPES(s):
         default_dir = folder_paths.output_directory
@@ -1061,7 +1090,8 @@ class IToolsPromptRecord:
                     "STRING",
                     {"default": "", "multiline": True, "placeholder": "text"},
                 ),
-            }
+                "timeline_data": ("STRING", {"default": ""}),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -1075,8 +1105,194 @@ class IToolsPromptRecord:
         "Includes a history system that saves your favorite prompts."
     )
 
-    def text_entry(self, text):
+    def text_entry(self, text, timeline_data=""):
         return {"ui": {"text": text}, "result": (text,)}
+
+
+class IToolsInstructorNode:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {},
+            "optional": FlexibleOptionalInputType(any_type),
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("instruction",)
+    FUNCTION = "process_instructions"
+    CATEGORY = "iTools"
+    OUTPUT_NODE = True
+
+    def process_instructions(self, **kwargs):
+        final_text = ""
+        if "InstructorWidget" in kwargs:
+            data = kwargs["InstructorWidget"]
+            # Use the pre-assembled text from JS
+            final_text = data.get("finalText", "")
+
+        return (final_text,)
+
+
+class IToolsPromptBuilder:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {},
+            "optional": FlexibleOptionalInputType(any_type),
+        }
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("prompt", "negative")
+    FUNCTION = "process"
+    CATEGORY = "iTools"
+    OUTPUT_NODE = True
+
+    def process(self, **kwargs):
+        final_text = ""
+        negative_text = ""
+        if "PromptBuilderWidget" in kwargs:
+            data = kwargs["PromptBuilderWidget"]
+            prompt = data.get("prompt", "")
+            negative = data.get("negative", "")
+            category = data.get("category")
+            style = data.get("style", "none")
+
+            if style != "none" and category:
+                # Merge if style is selected
+                final_text, negative_text, _ = read_replace_and_combine(
+                    style, prompt, negative, category
+                )
+                return {
+                    "ui": {
+                        "prompt": final_text,
+                        "negative": negative_text,
+                        "style": "none",
+                    },
+                    "result": (final_text, negative_text),
+                }
+            else:
+                final_text = prompt
+                negative_text = negative
+        return {
+            "ui": {"prompt": final_text, "negative": negative_text},
+            "result": (final_text, negative_text),
+        }
+
+    def IS_CHANGED(**kwargs):
+        if "PromptBuilderWidget" in kwargs:
+            data = kwargs["PromptBuilderWidget"]
+            style = data.get("style", "none")
+            print("ITOOLS_PROMPT_BUILDER_STYLE",style)
+            if style == "random":
+                return float("nan")  # Force re-execution if template is "random"
+            return False
+
+# V3 Nodes
+class IToolsImageAdjust(io.ComfyNode):
+    # related imports
+    """
+    import base64
+    import io as py_io
+    import json
+    import torch
+    import numpy as np
+    from PIL import Image, ImageEnhance, ImageFilter
+    from comfy_api.latest import io
+    """
+
+    @classmethod
+    def define_schema(cls) -> io.Schema:
+        return io.Schema(
+            node_id="iToolsImageAdjust", # same as node mapping
+            display_name="Image Adjustments 🎛️", # same as node mapping
+            category="iTools",
+            description=(
+                "Upload an image, right click to paste image from clipboard, or connect one from the workflow, then use the "
+                "brightness and contrast sliders to adjust it. A connected IMAGE "
+                "input takes priority over a manually uploaded image."
+            ),
+            inputs=[
+                io.Image.Input(
+                    "image",
+                    optional=True,
+                    tooltip="Optional IMAGE from another node. Takes priority over the uploaded image.",
+                ),
+                # widget_state stores all DOM widget values as a JSON string.
+                # The JS extension removes the default text widget and replaces
+                # it with the custom DOM widget (upload area + sliders).
+                io.String.Input(
+                    "widget_state",
+                    default='{"brightness":0,"contrast":100,"saturation":100,"temperature":0,"gamma":100,"sharpness":100,"hue":0,"imagePath":""}',
+                ),
+            ],
+            outputs=[
+                io.Image.Output(display_name="image"),
+            ],
+        )
+
+    @classmethod
+    def execute(
+        cls,
+        widget_state: str = '{"brightness":0,"contrast":100,"saturation":100,"temperature":0,"gamma":100,"sharpness":100,"hue":0,"imagePath":""}',
+        image=None,
+    ) -> io.NodeOutput:
+        state = json.loads(widget_state)
+        processed_data = state.get("processedImageData", "")
+        image_data     = state.get("imageData", "")
+        image_path     = state.get("imagePath", "")
+
+        # Primary path: JS has already rendered all adjustments into processedImageData.
+        # We just decode it — preview and output are guaranteed to match.
+        if processed_data:
+            if "," in processed_data:
+                processed_data = processed_data.split(",", 1)[1]
+            pil_img = Image.open(py_io.BytesIO(base64.b64decode(processed_data))).convert("RGB")
+
+        # Fallback: API / headless mode / optimal workflow path — JS does not send processedImageData bloat
+        elif image is not None or image_data or image_path:
+            if image is not None:
+                arr = (image[0].cpu().numpy() * 255).clip(0, 255).astype(np.uint8)
+                pil_img = Image.fromarray(arr).convert("RGB")
+            elif image_data:
+                raw = image_data.split(",", 1)[1] if "," in image_data else image_data
+                pil_img = Image.open(py_io.BytesIO(base64.b64decode(raw))).convert("RGB")
+            elif image_path:
+                full_path = folder_paths.get_annotated_filepath(image_path)
+                pil_img = node_helpers.pillow(Image.open, full_path).convert("RGB")
+
+            brightness  = state.get("brightness",  0)   / 100.0
+            contrast    = state.get("contrast",   100)  / 100.0
+            saturation  = state.get("saturation", 100)  / 100.0
+            temperature = state.get("temperature", 0)
+            gamma       = state.get("gamma",      100)  / 100.0
+            sharpness   = state.get("sharpness",  100)  / 100.0
+            hue_shift   = state.get("hue",          0)
+
+            pil_img = ImageEnhance.Brightness(pil_img).enhance(max(0.0, 1.0 + brightness))
+            pil_img = ImageEnhance.Contrast(pil_img).enhance(max(0.0, contrast))
+            pil_img = ImageEnhance.Color(pil_img).enhance(max(0.0, saturation))
+            if temperature != 0:
+                arr = np.array(pil_img).astype(np.float32)
+                s = temperature / 100.0
+                arr[:, :, 0] = np.clip(arr[:, :, 0] * (1.0 + s * 0.3), 0, 255)
+                arr[:, :, 2] = np.clip(arr[:, :, 2] * (1.0 - s * 0.3), 0, 255)
+                pil_img = Image.fromarray(arr.astype(np.uint8))
+            if gamma != 1.0:
+                arr = np.array(pil_img).astype(np.float32) / 255.0
+                arr = np.power(np.clip(arr, 0, 1), 1.0 / max(gamma, 0.01))
+                pil_img = Image.fromarray((arr * 255).astype(np.uint8))
+            pil_img = ImageEnhance.Sharpness(pil_img).enhance(max(0.0, sharpness))
+            if hue_shift != 0:
+                hsv = np.array(pil_img.convert("HSV")).astype(np.int32)
+                hsv[:, :, 0] = (hsv[:, :, 0] + int(hue_shift / 360.0 * 255)) % 256
+                pil_img = Image.fromarray(hsv.astype(np.uint8), "HSV").convert("RGB")
+
+        else:
+            pil_img = Image.new("RGB", (512, 512), (64, 64, 64))
+
+        out_arr = np.array(pil_img).astype(np.float32) / 255.0
+        out_tensor = torch.from_numpy(out_arr).unsqueeze(0)
+        return io.NodeOutput(out_tensor)
 
 
 # A dictionary that contains all nodes you want to export with their names
@@ -1101,27 +1317,115 @@ NODE_CLASS_MAPPINGS = {
     "iToolsPreviewImage": IToolsPreviewImage,
     "iToolsCompareImage": IToolsCompareImage,
     "iToolsPromptRecord": IToolsPromptRecord,
+    "iToolsInstructorNode": IToolsInstructorNode,
+    "iToolsPromptBuilder": IToolsPromptBuilder,
+    "iToolsImageAdjust": IToolsImageAdjust,
 }
 
-# A dictionary that contains the friendly/humanly readable titles for the nodes
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "iToolsLoadImagePlus": "iTools Load Image 🏕️",
-    "iToolsPromptLoader": "iTools Prompt Loader",
-    "iToolsPromptSaver": "iTools Prompt Saver",
-    "iToolsAddOverlay": "iTools Add Text Overlay",
-    "iToolsLoadImages": "iTools Load Images 📦",
-    "iToolsPromptStyler": "iTools Prompt Styler 🖌️",
-    "iToolsPromptStylerExtra": "iTools Prompt Styler Extra 🖌️",
-    "iToolsGridFiller": "iTools Grid Filler 📲",
-    "iToolsLineLoader": "iTools Line Loader",
-    "iToolsTextReplacer": "iTools Text Replacer",
-    "iToolsKSampler": "iTools KSampler",
-    "iToolsVaePreview": "iTools Vae Preview ⛳",
-    "iToolsCheckerBoard": "iTools Checkerboard 🏁",
-    "iToolsLoadRandomImage": "iTools Load Random Image 🎲",
-    "iToolsPreviewText": "iTools Text Preview",
-    "iToolsRegexNode": "iTools Regex Editor",
-    "iToolsPreviewImage": "iTools Image Preview 🍿",
-    "iToolsCompareImage": "iTools Image Compare 🔍",
-    "iToolsPromptRecord": "iTools Prompt Record 🪶",
+BASE_MAPPINGS = {
+    "iToolsLoadImagePlus": "Load Image 🏕️",
+    "iToolsPromptLoader": "Prompt Loader",
+    "iToolsPromptSaver": "Prompt Saver",
+    "iToolsAddOverlay": "Add Text Overlay",
+    "iToolsLoadImages": "Load Images 📦",
+    "iToolsPromptStyler": "Prompt Styler 🖌️",
+    "iToolsPromptStylerExtra": "Prompt Styler Extra 🖌️",
+    "iToolsGridFiller": "Grid Filler 📲",
+    "iToolsLineLoader": "Line Loader",
+    "iToolsTextReplacer": "Text Replacer",
+    "iToolsKSampler": "KSampler",
+    "iToolsVaePreview": "Preview Bridge ⛳",
+    "iToolsCheckerBoard": "Checkerboard 🏁",
+    "iToolsLoadRandomImage": "Load Random Image 🎲",
+    "iToolsPreviewText": "Text Preview",
+    "iToolsRegexNode": "Regex Editor",
+    "iToolsPreviewImage": "Image Preview 🍿",
+    "iToolsCompareImage": "Image Compare 🔍",
+    "iToolsPromptRecord": "Prompt Record 🪶",
+    "iToolsInstructorNode": "Instructor 👨🏻‍🏫",
+    "iToolsPromptBuilder": "Prompt Builder 🛖",
+    "iToolsImageAdjust": "Image Adjustments", # V3 node so name is overriden by node display name
 }
+
+
+# INIT NODE DISPLAY NAME MAPPINGS
+def get_node_display_name_mappings():
+    use_simple_names = get_user_node_display_name_preferences()
+    if use_simple_names:
+        return BASE_MAPPINGS
+
+    # Add "iTools " prefix dynamically if simple names are not preferred
+    return {k: f"iTools {v}" for k, v in BASE_MAPPINGS.items()}
+
+
+# A dictionary that contains the friendly/humanly readable titles for the nodes
+NODE_DISPLAY_NAME_MAPPINGS = get_node_display_name_mappings()
+
+
+def append_extra_nodes():
+    use_simple_names = get_user_node_display_name_preferences()
+    allow_beta_nodes = get_user_dev_mode()
+    allow_dev_nodes = get_user_dev_mode2()
+    allow_experimental_nodes = False
+    if allow_beta_nodes:
+        try:
+            from .experimental.experimental_nodes import (
+                IToolsPaintNode,
+                IToolsCropImage,
+            )
+
+            NODE_CLASS_MAPPINGS["iToolsPaintNode"] = IToolsPaintNode
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsPaintNode"] = (
+                "Paint Node (Beta)" if use_simple_names else "iTools Paint Node (Beta)"
+            )
+
+            NODE_CLASS_MAPPINGS["iToolsCropImage"] = IToolsCropImage
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsCropImage"] = (
+                "Crop Image (Beta)" if use_simple_names else "iTools Crop Image (Beta)"
+            )
+
+        except ModuleNotFoundError as e:
+            pass
+            # print(e)
+
+    if allow_dev_nodes:
+        try:
+            from .experimental.experimental_nodes import IToolsTestNode, IToolsDomNode
+
+            NODE_CLASS_MAPPINGS["iToolsTestNode"] = IToolsTestNode
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsTestNode"] = (
+                "Test Node (Dev)" if use_simple_names else "iTools Test Node (Dev)"
+            )
+
+            NODE_CLASS_MAPPINGS["iToolsDomNode"] = IToolsDomNode
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsDomNode"] = (
+                "Dom Node (Dev)" if use_simple_names else "iTools Dom Node (Dev)"
+            )
+
+        except ModuleNotFoundError as e:
+            pass
+
+    if allow_experimental_nodes:
+        try:
+            from .experimental.experimental_nodes import (
+                IToolsFreeChat,
+                IToolsFreeSchnell,
+            )
+
+            NODE_CLASS_MAPPINGS["iToolsFreeChat"] = IToolsFreeChat
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsFreeChat"] = (
+                "Free Chat (API)" if use_simple_names else "iTools Free Chat (API)"
+            )
+
+            NODE_CLASS_MAPPINGS["iToolsFreeSchnell"] = IToolsFreeSchnell
+            NODE_DISPLAY_NAME_MAPPINGS["iToolsFreeSchnell"] = (
+                "Free Schnell (API)"
+                if use_simple_names
+                else "iTools Free Schnell (API)"
+            )
+
+        except ModuleNotFoundError as e:
+            pass
+
+
+append_extra_nodes()

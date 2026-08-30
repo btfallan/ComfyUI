@@ -123,8 +123,13 @@ def composite_images(foreground, background, mask, is_multiply_blend=False, posi
         }
 
     # Resize the foreground image with antialiasing
-    layer_image = layer['image'].resize((layer['width'], layer['height']), Image.ANTIALIAS)
-    layer_mask = layer['mask'].resize((layer['width'], layer['height']), Image.ANTIALIAS)
+    try:
+        resampling_method = Image.Resampling.LANCZOS
+    except AttributeError:
+        resampling_method = Image.ANTIALIAS
+
+    layer_image = layer['image'].resize((layer['width'], layer['height']), resampling_method)
+    layer_mask = layer['mask'].resize((layer['width'], layer['height']), resampling_method)
 
     bg_image.paste(layer_image, (layer['x'], layer['y']), layer_mask)
 
@@ -1041,29 +1046,33 @@ def generate_text_image(text,
 
     if layout == "vertical":
         for line in lines:
-            max_char_width = max(font.getsize(char)[0] for char in line)
+            max_char_width = max(font.getbbox(char)[2] - font.getbbox(char)[0] for char in line)
             for char in line:
-                char_width, char_height = font.getsize(char)
+                left, top, right, bottom = font.getbbox(char)
+                char_width = right - left
+                char_height = bottom - top
                 char_coordinates.append((x, y))
                 y += char_height + spacing
                 max_height = max(max_height, y + padding)
             x += max_char_width + line_spacing
             y = padding
         max_width = x
-        total_line_width = sum(font.getsize(line)[1] for line in lines)
+        total_line_width = sum(font.getbbox(line)[2] - font.getbbox(line)[0] for line in lines)
         total_spacing = line_spacing * (len(lines) - 1)
         max_width = total_line_width + total_spacing + padding * 2
     else:
         for line in lines:
-            line_width, line_height = font.getsize(line)
+            line_width, line_height = font.getbbox(line)[2] - font.getbbox(line)[0], font.getbbox(line)[3] - font.getbbox(line)[1]
             for char in line:
-                char_width, char_height = font.getsize(char)
+                left, top, right, bottom = font.getbbox(char)
+                char_width = right - left
+                char_height = bottom - top
                 char_coordinates.append((x, y))
                 x += char_width + spacing
                 max_width = max(max_width, x + padding)
             y += line_height + line_spacing
             x = padding
-        total_line_heights = sum(font.getsize(line)[1] for line in lines)
+        total_line_heights = sum(font.getbbox(line)[3] - font.getbbox(line)[1] for line in lines)
         total_spacing = line_spacing * (len(lines) - 1)
         max_height = total_line_heights + total_spacing + padding * 2
 
@@ -2951,11 +2960,14 @@ class ResizeImage:
                     im=tensor2pil(im)
 
                     im=im.convert('RGB')
-                    a_im,hex=get_average_color_image(im)
 
+                    a_im,hex=get_average_color_image(im)
+                    
                     if average_color=='on':
                         fill_color=hex
-                        
+
+                    a_im=resize_image(a_im,scale_option,w,h,fill_color)
+
                     im=resize_image(im,scale_option,w,h,fill_color)
 
                     im=pil2tensor(im)

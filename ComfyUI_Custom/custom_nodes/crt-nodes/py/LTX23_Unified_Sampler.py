@@ -2,6 +2,7 @@ import copy
 import gc
 import math
 import time
+import threading
 import builtins
 import logging
 import os
@@ -15,13 +16,11 @@ import torch.nn as nn
 
 import comfy.model_management as mm
 import comfy.utils
-import latent_preview
 import nodes
 import node_helpers
 import folder_paths
 from PIL import Image
 from comfy.sd import VAE
-from comfy.taesd.taehv import TAEHV
 
 from comfy_extras.nodes_custom_sampler import (
     CFGGuider,
@@ -52,9 +51,16 @@ from comfy_extras.nodes_lt_upsampler import LTXVLatentUpsampler
 from ._cache_fingerprint import stable_fingerprint
 from ._ltx23_inference import (
     DISTILLED_MAIN_SIGMAS_TEXT,
+    DISTILLED_POLISH_SIGMAS_TEXT,
     DISTILLED_REFINEMENT_SIGMAS_TEXT,
     normalize_dimension,
     normalize_frame_count as normalize_ltx_frame_count,
+)
+from ._ltx23_preview import (
+    _download_preview_model as _crt_download_preview_model,
+    _preview_model_present as _crt_preview_model_present,
+    apply_ltx23_preview_override,
+    kickoff_ltx23_preview_model_download,
 )
 
 _LTX23_DEPTH_PREVIEW_ROUTE_REGISTERED = globals().get("_LTX23_DEPTH_PREVIEW_ROUTE_REGISTERED", False)
@@ -77,188 +83,19 @@ try:
             buf.seek(0)
             return _aiohttp_web.Response(body=buf.read(), content_type="image/png")
 
+        @PromptServer.instance.routes.get("/crt/ltx23/ensure_preview_model")
+        async def _ltx23_ensure_preview_model_route(request):
+            if _crt_preview_model_present():
+                return _aiohttp_web.json_response({"status": "ready"})
+            path = await request.app.loop.run_in_executor(
+                None, _crt_download_preview_model
+            )
+            status = "ready" if path else "unavailable"
+            return _aiohttp_web.json_response({"status": status})
+
         _LTX23_DEPTH_PREVIEW_ROUTE_REGISTERED = True
 except Exception as _route_e:
     print(f"[CRT LTX23] depth_preview route not registered: {_route_e}")
-
-
-class _CRTPreviewState:
-    last_latent_shapes = None
-    fps_override = None
-
-
-class _CRTPreviewFixGuider:
-    def __init__(self, guider, fps_override=None):
-        self._guider = guider
-        self._fps_override = fps_override
-
-    def __getattr__(self, key):
-        return getattr(self._guider, key)
-
-    def sample(self, noise, latent_image, *args, **kwargs):
-        latent_shapes = (
-            (tuple(latent_image.shape),)
-            if not getattr(latent_image, "is_nested", False)
-            else tuple(tuple(t.shape) for t in latent_image.unbind())
-        )
-        _CRT_PREVIEW_STATE.last_latent_shapes = latent_shapes
-
-        if self._fps_override:
-            _CRT_PREVIEW_STATE.fps_override = float(self._fps_override)
-
-        try:
-            return self._guider.sample(noise, latent_image, *args, **kwargs)
-        finally:
-            _CRT_PREVIEW_STATE.last_latent_shapes = None
-            _CRT_PREVIEW_STATE.fps_override = None
-
-
-def _crt_build_taehv(model_path):
-    """Build standard TAEHV(latent_channels=128) and load state dict directly."""
-    taehv = TAEHV(latent_channels=128)
-    sd = comfy.utils.load_torch_file(model_path)
-    taehv.load_state_dict(sd, strict=True)
-    taehv.eval()
-    taehv.show_progress_bar = False
-    return taehv
-
-
-class _CRTLTXPreviewer(latent_preview.TAEHVPreviewerImpl):
-    _blank = Image.new("RGB", (256, 256), (8, 8, 8))
-
-    def __init__(self, wide_model):
-        # TAEHVPreviewerImpl just does self.taesd = taesd; we bypass VAE and use model directly
-        self.taesd = None
-        self._wide_model = wide_model
-
-    @staticmethod
-    def _ensure_video_latent_shape(x0):
-        if not hasattr(x0, "shape"):
-            return None
-        if getattr(x0, "is_nested", False):
-            try:
-                x0 = x0.unbind()[0]
-            except Exception:
-                return None
-
-        if x0.ndim == 5 and x0.shape[0] > 0:
-            return x0
-        if x0.ndim == 4 and x0.shape[0] > 0:
-            return x0.unsqueeze(2)
-
-        last_shapes = _CRT_PREVIEW_STATE.last_latent_shapes
-        if not last_shapes or not hasattr(comfy.utils, "unpack_latents"):
-            return None
-
-        try:
-            last_numel = sum(math.prod(shape) for shape in last_shapes)
-            if int(last_numel) != int(x0.numel()):
-                return None
-            unpacked = comfy.utils.unpack_latents(x0, last_shapes)
-            if not unpacked:
-                return None
-            target = unpacked[0]
-            if target.ndim == 4:
-                target = target.unsqueeze(2)
-            if target.ndim == 5 and target.shape[0] > 0:
-                return target
-        except Exception:
-            return None
-
-        return None
-
-    def decode_latent_to_preview(self, x0):
-        fixed = self._ensure_video_latent_shape(x0)
-        if fixed is None:
-            return self._blank
-        try:
-            inp = fixed[:1]  # (1, C, F, H, W)
-            # Decode the middle frame as a single representative preview
-            mid = inp.shape[2] // 2
-            with torch.no_grad():
-                out = self._wide_model.to(inp.device).decode(inp[:, :, mid : mid + 1])
-            frame = out[0, :, 0].float().cpu().movedim(0, -1)  # (H, W, 3)
-            return latent_preview.preview_to_image(frame, do_scale=False)
-        except Exception as e:
-            import traceback
-
-            print(f"[CRT-preview] decode error: {e}")
-            traceback.print_exc()
-            return self._blank
-
-
-_CRT_PREVIEW_STATE = _CRTPreviewState()
-_CRT_ORIG_GET_PREVIEWER = latent_preview.get_previewer
-_CRT_PREVIEW_PATCHED = False
-_CRT_PREVIEWER_CACHE = {}
-
-
-def _crt_is_ltx_format(latent_format):
-    format_name = latent_format.__class__.__name__.lower()
-    decoder_name = str(getattr(latent_format, "taesd_decoder_name", "") or "").lower()
-    return ("ltx" in format_name) or decoder_name.startswith("taeltx")
-
-
-def _crt_find_ltx_preview_models(latent_format):
-    """Return ordered list of candidate model paths to try. Standard arch before wide."""
-    files = folder_paths.get_filename_list("vae_approx")
-    lower_files = [(fn, fn.lower()) for fn in files]
-    decoder_name = str(getattr(latent_format, "taesd_decoder_name", "") or "").lower()
-
-    # Non-wide standard TAEHV first (loads with unmodified TAEHV class),
-    # wide/fallbacks after. Each prefix matches the first filename starting with it.
-    prefixes = [
-        "taeltx2_3",  # matches taeltx2_3.safetensors (alphabetically before _wide)
-        "taeltx_2_3",
-        "taeltx2_3_wide",
-        "taeltx_2_3_wide",
-        "taeltx2",
-        "taeltx_2",
-    ]
-    if decoder_name:
-        prefixes.insert(0, decoder_name)
-
-    seen_paths = set()
-    result = []
-    for prefix in prefixes:
-        for fn, lower in lower_files:
-            if lower.startswith(prefix.lower()):
-                full = folder_paths.get_full_path("vae_approx", fn)
-                if full and full not in seen_paths:
-                    seen_paths.add(full)
-                    result.append(full)
-                break
-    return result
-
-
-def _crt_get_previewer(device, latent_format, *args, **kwargs):
-    fallback = _CRT_ORIG_GET_PREVIEWER(device, latent_format, *args, **kwargs)
-    if not _crt_is_ltx_format(latent_format):
-        return fallback
-
-    for model_path in _crt_find_ltx_preview_models(latent_format):
-        cached = _CRT_PREVIEWER_CACHE.get(model_path)
-        if cached is not None:
-            return _CRTLTXPreviewer(cached)
-        try:
-            model = _crt_build_taehv(model_path)
-            _CRT_PREVIEWER_CACHE[model_path] = model
-            return _CRTLTXPreviewer(model)
-        except Exception as e:
-            print(f"[CRT-preview] skipping {model_path}: {e}")
-            continue
-
-    return fallback
-
-
-def ensure_crt_previewer():
-    global _CRT_PREVIEW_PATCHED
-    if _CRT_PREVIEW_PATCHED:
-        return
-    latent_preview.get_previewer = _crt_get_previewer
-    _CRT_PREVIEW_PATCHED = True
-    print("[CRT-preview] patched latent_preview.get_previewer")
-
 
 def _append_guide_attention_entry(
     positive, negative, pre_filter_count, latent_shape, strength=1.0
@@ -285,7 +122,6 @@ def _append_guide_attention_entry(
             )
         )
     return results[0], results[1]
-
 
 class CRT_LTX23USModelsPipe:
     @classmethod
@@ -320,10 +156,6 @@ class CRT_LTX23USModelsPipe:
                     "LATENT_UPSCALE_MODEL",
                     {"tooltip": "Optional latent upscaler used by HQ generation and V2V Upscale mode."},
                 ),
-                "da3_model": (
-                    "DA3MODEL",
-                    {"tooltip": "Depth Anything V3 model used to build V2V depth guides when no precomputed depth override is connected."},
-                ),
                 "latent_downscale_factor": (
                     "FLOAT",
                     {
@@ -341,7 +173,7 @@ class CRT_LTX23USModelsPipe:
     RETURN_TYPES = ("LTX23_US_MODELS_PIPE",)
     RETURN_NAMES = ("models_pipe",)
     FUNCTION = "build_pipe"
-    CATEGORY = "CRT/LTX2.3"
+    CATEGORY = "CRT/LTX2.5"
     DESCRIPTION = "Bundles the LTX 2.3 model, video/audio VAEs, CLIP, and optional mode-specific models for the unified sampler."
 
     def build_pipe(
@@ -354,7 +186,6 @@ class CRT_LTX23USModelsPipe:
         model_outpaint=None,
         model_upscale=None,
         spatial_upscale_model=None,
-        da3_model=None,
         latent_downscale_factor=1.0,
     ):
         pipe = {
@@ -363,14 +194,12 @@ class CRT_LTX23USModelsPipe:
             "audio_vae": audio_vae,
             "clip": clip,
             "spatial_upscale_model": spatial_upscale_model,
-            "da3_model": da3_model,
             "model_union_control": model_union_control,
             "model_outpaint": model_outpaint,
             "model_upscale": model_upscale,
             "latent_downscale_factor": float(latent_downscale_factor),
         }
         return (pipe,)
-
 
 class CRT_LTX23USConfig:
     @classmethod
@@ -404,9 +233,9 @@ class CRT_LTX23USConfig:
                     "IMAGE",
                     {"tooltip": "Input video represented as an IMAGE batch. Required for V2V modes."},
                 ),
-                "V2V Depth (override)": (
+                "V2V Depth": (
                     "IMAGE",
-                    {"tooltip": "Optional precomputed depth guide for V2V Depth Control. When connected, skips DepthAnything inference."},
+                    {"tooltip": "Depth guide for V2V Depth Control. Connect the output of DepthAnything3 (CRT)."},
                 ),
                 "source_audio": (
                     "AUDIO",
@@ -438,7 +267,7 @@ class CRT_LTX23USConfig:
     RETURN_TYPES = ("LTX23_US_CONFIG_PIPE",)
     RETURN_NAMES = ("config_pipe",)
     FUNCTION = "build_pipe"
-    CATEGORY = "CRT/LTX2.3"
+    CATEGORY = "CRT/LTX2.5"
     DESCRIPTION = "Collects the prompt, seed, optional image/video/audio inputs, and per-workflow overrides for the unified sampler."
 
     def build_pipe(self, prompt, seed, source_audio=None, **kwargs):
@@ -446,7 +275,7 @@ class CRT_LTX23USConfig:
 
         image = kwargs.get("Image I2V / V2V FirstFrame", None)
         video = kwargs.get("Video (V2V image batch)", None)
-        v2v_depth_override = kwargs.get("V2V Depth (override)", None)
+        v2v_depth_override = kwargs.get("V2V Depth", kwargs.get("V2V Depth (override)", None))
         override_megapixels = kwargs.get("MegaPixels (override)", None)
         override_frames = kwargs.get("Frames (override)", None)
         override_t2v_width = kwargs.get("Width T2V (override)", None)
@@ -492,7 +321,6 @@ class CRT_LTX23USConfig:
         }
         return (pipe,)
 
-
 class CRT_LTX23UnifiedSampler:
     COLOR_INFO = "\033[38;5;117m"
     COLOR_WARN = "\033[38;5;208m"
@@ -523,24 +351,34 @@ class CRT_LTX23UnifiedSampler:
 
     SIGMAS_MAIN_DEFAULT = DISTILLED_MAIN_SIGMAS_TEXT
     SIGMAS_REFINE_DEFAULT = DISTILLED_REFINEMENT_SIGMAS_TEXT
-    SAMPLER_NAME = "euler"
+    SIGMAS_POLISH_DEFAULT = DISTILLED_POLISH_SIGMAS_TEXT
+    # Matches the official LTX distilled graphs: euler_ancestral for the main
+    # pass, plain euler for the refinement pass after latent upsampling.
+    SAMPLER_MAIN_NAME = "euler_ancestral"
+    SAMPLER_REFINE_NAME = "euler"
+    QUALITY_MODES = ("Draft", "Standard", "Max")
     CFG_DEFAULT = 1.0
-    I2V_STRENGTH = 1.0
-    I2V_PREPROCESS_COMPRESSION = 25
+    I2V_PREPROCESS_COMPRESSION = 18
 
     # Conditioning caches to avoid re-encoding the same prompt
     _CLIP_TEXT_CACHE = {}
     _CLIP_TEXT_CACHE_MAX_SIZE = 5
     _CONDITIONING_CACHE = {}
     _CONDITIONING_CACHE_MAX_SIZE = 5
-    DEPTH_CACHE_MODES = (
-        "No depth cache",
-        "Cache to RAM",
-        "Cache to temp disk",
-    )
-    _DEPTH_FRAME_CACHE_KEY = None
-    _DEPTH_FRAME_CACHE_VALUE = None
-    _DEPTH_DISK_CACHE_PATH = None
+    @classmethod
+    def _normalize_quality(cls, quality):
+        """Map widget values (including legacy booleans) to a quality mode."""
+        if isinstance(quality, bool) or quality in (0, 1):
+            return "Standard" if bool(quality) else "Draft"
+        text = str(quality).strip().title()
+        for mode in cls.QUALITY_MODES:
+            if text.startswith(mode):
+                return mode
+        if text.lower() in ("true", "on", "yes"):
+            return "Standard"
+        if text.lower() in ("false", "off", "no"):
+            return "Draft"
+        return "Standard"
 
     @classmethod
     def IS_CHANGED(
@@ -548,19 +386,16 @@ class CRT_LTX23UnifiedSampler:
         models_pipe,
         config_pipe,
         workflow_mode,
-        hq,
+        quality,
         live_preview,
-        frame_count_from_audio,
-        vae_decode_tiled,
+        frame_count_from_audio,        vae_decode_tiled,
         unload_model_before_vae_decode,
         low_vram,
-        depth_cache_mode,
         megapixels_target,
         aspect_ratio,
         frame_count,
         v2v_mode,
         v2v_guide_strength,
-        depth_megapixels,
         v2v_aspect_ratio,
         legacy_sampler_main,
         legacy_sampler_refine,
@@ -573,24 +408,23 @@ class CRT_LTX23UnifiedSampler:
         legacy_compat_4,
         legacy_compat_5,
         legacy_compat_6,
+        **_kwargs,
     ):
         return stable_fingerprint(
             models_pipe,
             config_pipe,
             workflow_mode,
-            bool(hq),
+            cls._normalize_quality(quality),
             bool(live_preview),
             bool(frame_count_from_audio),
             bool(vae_decode_tiled),
             bool(unload_model_before_vae_decode),
             bool(low_vram),
-            str(depth_cache_mode),
             float(megapixels_target),
             aspect_ratio,
             int(frame_count),
             v2v_mode,
             float(v2v_guide_strength),
-            float(depth_megapixels),
             v2v_aspect_ratio,
             float(generated_audio_gain_db),
             float(firstframe_strength),
@@ -606,13 +440,16 @@ class CRT_LTX23UnifiedSampler:
                     ["I2V", "T2V", "V2V"],
                     {"default": "I2V", "tooltip": "Select image-to-video, text-to-video, or video-to-video execution. Required config inputs depend on this mode."},
                 ),
-                "hq": (
-                    "BOOLEAN",
-                    {"default": False, "tooltip": "Generate directly at full resolution in one sampling pass for maximum quality. Disable HQ to use the faster two-stage path: half-resolution generation followed by latent upscale and refinement."},
+                "quality": (
+                    cls.QUALITY_MODES,
+                    {
+                        "default": "Standard",
+                        "tooltip": "Draft: half-resolution pass + latent upscale + refinement (fastest). Standard: full-resolution single pass. Max: full-resolution pass plus a short self-refinement pass for extra detail.",
+                    },
                 ),
                 "live_preview": (
                     "BOOLEAN",
-                    {"default": False, "tooltip": "Decode intermediate previews during sampling. Useful for monitoring but adds decode overhead."},
+                    {"default": False, "tooltip": "Animated true-pace video preview during sampling via the auto-downloaded taeltx approximation. Adds per-step decode overhead - disabled by default."},
                 ),
                 "frame_count_from_audio": (
                     "BOOLEAN",
@@ -620,7 +457,7 @@ class CRT_LTX23UnifiedSampler:
                 ),
                 "vae_decode_tiled": (
                     "BOOLEAN",
-                    {"default": False, "tooltip": "Decode video latents in tiles to reduce peak VRAM at the cost of additional processing time."},
+                    {"default": True, "tooltip": "Decode video latents in tiles to reduce peak VRAM at the cost of additional processing time."},
                 ),
                 "unload_model_before_vae_decode": (
                     "BOOLEAN",
@@ -676,16 +513,6 @@ class CRT_LTX23UnifiedSampler:
                         "tooltip": "Strength of the V2V depth guide. Higher values follow the source structure more closely.",
                     },
                 ),
-                "depth_megapixels": (
-                    "FLOAT",
-                    {
-                        "default": 0.3,
-                        "min": 0.05,
-                        "max": 8.0,
-                        "step": 0.05,
-                        "tooltip": "Resolution used only for DA3 depth estimation. DA3 is offloaded before the main V2V sampler starts.",
-                    },
-                ),
                 "v2v_aspect_ratio": (
                     cls.ASPECT_RATIOS,
                     {"default": "16:9 (Landscape)"},
@@ -726,11 +553,11 @@ class CRT_LTX23UnifiedSampler:
                 "firstframe_strength": (
                     "FLOAT",
                     {
-                        "default": 1.0,
+                        "default": 0.7,
                         "min": 0.0,
                         "max": 1.0,
                         "step": 0.01,
-                        "tooltip": "Influence of the connected first-frame anchor. Zero disables anchoring; one applies full strength.",
+                        "tooltip": "Influence of the connected first-frame anchor during generation. Zero disables anchoring. The two-stage refinement pass always re-anchors the raw image at full strength.",
                     },
                 ),
                 # Inert positional slots retained only so workflows saved
@@ -741,20 +568,16 @@ class CRT_LTX23UnifiedSampler:
                 "legacy_compat_4": ("INT", {"default": 10, "min": 10, "max": 10, "step": 1, "tooltip": "Reserved compatibility value; ignored."}),
                 "legacy_compat_5": ("INT", {"default": 8, "min": 8, "max": 8, "step": 1, "tooltip": "Reserved compatibility value; ignored."}),
                 "legacy_compat_6": ("FLOAT", {"default": 8.0, "min": 8.0, "max": 8.0, "step": 0.1, "tooltip": "Reserved compatibility value; ignored."}),
-                "depth_cache_mode": (
-                    cls.DEPTH_CACHE_MODES,
-                    {
-                        "default": "Cache to temp disk",
-                        "tooltip": "V2V Depth Control only. Disable reuse, keep the latest DA3 depth frames in RAM, or store them in ComfyUI's session temp directory. Temp files are cleared by ComfyUI at startup and graceful shutdown.",
-                    },
-                ),
-            }
+            },
+            "hidden": {
+                "unique_id": "UNIQUE_ID",
+            },
         }
 
     RETURN_TYPES = ("IMAGE", "AUDIO")
     RETURN_NAMES = ("images", "audio")
     FUNCTION = "sample"
-    CATEGORY = "CRT/LTX2.3"
+    CATEGORY = "CRT/LTX2.5"
 
     @staticmethod
     def _result_tuple(result):
@@ -780,52 +603,6 @@ class CRT_LTX23UnifiedSampler:
             pass
 
         return (result,)
-
-    _DA3_SUPPRESS_PREFIXES = (
-        "[DepthAnythingV3]",
-        "[VRAM",
-        "[build]",
-        "Model input size",
-        "Input image size",
-    )
-
-    @staticmethod
-    @contextmanager
-    def _quiet_depthanything_logs():
-        original_print = builtins.print
-        tracked = []
-
-        def filtered_print(*args, **kwargs):
-            text = " ".join(str(a) for a in args)
-            for pfx in CRT_LTX23UnifiedSampler._DA3_SUPPRESS_PREFIXES:
-                if pfx in text:
-                    return
-            return original_print(*args, **kwargs)
-
-        builtins.print = filtered_print
-        previous_disable = logging.root.manager.disable
-        try:
-            logging.disable(logging.CRITICAL)
-            depth_logger = logging.getLogger("DepthAnythingV3")
-            tracked.append((depth_logger, depth_logger.level, depth_logger.propagate))
-            depth_logger.setLevel(logging.CRITICAL + 1)
-            depth_logger.propagate = False
-
-            for name in list(logging.root.manager.loggerDict.keys()):
-                if "depthanything" not in str(name).lower():
-                    continue
-                logger = logging.getLogger(name)
-                tracked.append((logger, logger.level, logger.propagate))
-                logger.setLevel(logging.CRITICAL + 1)
-                logger.propagate = False
-
-            yield
-        finally:
-            logging.disable(previous_disable)
-            builtins.print = original_print
-            for logger, level, propagate in tracked:
-                logger.setLevel(level)
-                logger.propagate = propagate
 
     @staticmethod
     def _unload_patchers_from_vram(patchers):
@@ -872,279 +649,6 @@ class CRT_LTX23UnifiedSampler:
             errors.append(f"cache cleanup: {e}")
 
         return unloaded, errors
-
-    @classmethod
-    def _offload_da3_model(cls, da3_model):
-        """Unload the real cached DA3 patcher used by current DA3 integrations.
-
-        Current DepthAnything V3 loaders pass a JSON-safe config dict and keep the
-        actual ModelPatcher in their own module cache. Find that patcher in
-        ComfyUI's loaded-model registry instead of expecting config["model"].
-        """
-        candidates = []
-        errors = []
-
-        # Legacy integrations may still pass a model or patcher directly.
-        direct = da3_model.get("model") if isinstance(da3_model, dict) else da3_model
-        if direct is not None:
-            candidates.append(direct)
-
-        try:
-            for patcher in list(mm.loaded_models()):
-                options = getattr(patcher, "model_options", {}) or {}
-                model_obj = getattr(patcher, "model", None)
-                identity = (
-                    f"{type(model_obj).__module__}.{type(model_obj).__name__}"
-                    .replace("_", "")
-                    .lower()
-                )
-                if (
-                    "da3_model_key" in options
-                    or "depthanything3" in identity
-                    or "depthanythingv3" in identity
-                ):
-                    candidates.append(patcher)
-        except Exception as e:
-            errors.append(f"loaded-model lookup: {e}")
-
-        unloaded, unload_errors = cls._unload_patchers_from_vram(candidates)
-        errors.extend(unload_errors)
-        return unloaded, errors
-
-    @classmethod
-    def _clear_ram_depth_cache(cls):
-        cls._DEPTH_FRAME_CACHE_KEY = None
-        cls._DEPTH_FRAME_CACHE_VALUE = None
-
-    @classmethod
-    def _depth_disk_cache_directory(cls):
-        return os.path.join(folder_paths.get_temp_directory(), "crt_ltx23")
-
-    @classmethod
-    def _clear_disk_depth_cache(cls, keep_path=None):
-        cache_dir = cls._depth_disk_cache_directory()
-        if not os.path.isdir(cache_dir):
-            cls._DEPTH_DISK_CACHE_PATH = None
-            return
-
-        keep_path = os.path.abspath(keep_path) if keep_path else None
-        for name in os.listdir(cache_dir):
-            if not (name.startswith("depth_") and name.endswith(".pt")):
-                continue
-            path = os.path.abspath(os.path.join(cache_dir, name))
-            if keep_path is not None and path == keep_path:
-                continue
-            try:
-                os.remove(path)
-            except FileNotFoundError:
-                pass
-            except OSError as error:
-                cls._log(
-                    f"Could not remove old depth temp cache {name}: {error}",
-                    level="warn",
-                )
-        cls._DEPTH_DISK_CACHE_PATH = keep_path
-
-    @classmethod
-    def _load_disk_depth_cache(cls, cache_key):
-        cache_dir = cls._depth_disk_cache_directory()
-        cache_path = os.path.join(cache_dir, f"depth_{cache_key}.pt")
-        if not os.path.isfile(cache_path):
-            return None
-
-        try:
-            try:
-                payload = torch.load(
-                    cache_path,
-                    map_location="cpu",
-                    weights_only=True,
-                    mmap=True,
-                )
-                mapped = True
-            except TypeError:
-                payload = torch.load(
-                    cache_path,
-                    map_location="cpu",
-                    weights_only=True,
-                )
-                mapped = False
-
-            depth_image = payload.get("depth") if isinstance(payload, dict) else None
-            if not isinstance(depth_image, torch.Tensor):
-                raise ValueError("cache file contains no depth tensor")
-            if depth_image.ndim != 4 or int(depth_image.shape[0]) <= 0:
-                raise ValueError(f"invalid cached depth shape: {tuple(depth_image.shape)}")
-
-            cls._DEPTH_DISK_CACHE_PATH = cache_path
-            size_mib = os.path.getsize(cache_path) / (1024.0 * 1024.0)
-            load_mode = "memory-mapped" if mapped else "loaded"
-            cls._log(
-                (
-                    f"Depth temp-disk cache HIT - {load_mode} "
-                    f"{int(depth_image.shape[0])} frame(s), {size_mib:.1f} MiB; "
-                    "Depth Anything V3 load/inference skipped"
-                ),
-                level="ok",
-            )
-            return depth_image
-        except Exception as error:
-            cls._log(
-                f"Depth temp-disk cache could not be loaded; recomputing: {error}",
-                level="warn",
-            )
-            try:
-                os.remove(cache_path)
-            except OSError:
-                pass
-            return None
-
-    @classmethod
-    def _store_disk_depth_cache(cls, cache_key, depth_image):
-        cache_dir = cls._depth_disk_cache_directory()
-        os.makedirs(cache_dir, exist_ok=True)
-        cache_path = os.path.join(cache_dir, f"depth_{cache_key}.pt")
-        temp_path = f"{cache_path}.{os.getpid()}.{time.time_ns()}.tmp"
-        try:
-            torch.save({"depth": depth_image}, temp_path)
-            os.replace(temp_path, cache_path)
-        finally:
-            try:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
-            except OSError:
-                pass
-
-        cls._clear_disk_depth_cache(keep_path=cache_path)
-        size_mib = os.path.getsize(cache_path) / (1024.0 * 1024.0)
-        cls._log(
-            (
-                f"Depth temp-disk cache stored {int(depth_image.shape[0])} "
-                f"frame(s), {size_mib:.1f} MiB"
-            ),
-            level="ok",
-        )
-
-    @classmethod
-    def _estimate_depth(cls, da3_model, depth_input, cache_mode):
-        """Run DA3 with optional single-entry RAM or ComfyUI temp-disk reuse."""
-        cache_mode = str(cache_mode)
-        if cache_mode not in cls.DEPTH_CACHE_MODES:
-            cls._log(
-                f"Unknown depth cache mode {cache_mode!r}; disabling cache",
-                level="warn",
-            )
-            cache_mode = "No depth cache"
-
-        cache_key = None
-        if cache_mode == "No depth cache":
-            cls._clear_ram_depth_cache()
-            cls._clear_disk_depth_cache()
-            cls._log("Depth cache disabled - running Depth Anything V3 inference")
-        else:
-            cache_key = stable_fingerprint(
-                "ltx23-da3-depth-v2",
-                da3_model,
-                depth_input,
-                "V2-Style",
-                "resize",
-                False,
-                False,
-            )
-
-            if cache_mode == "Cache to RAM":
-                cls._clear_disk_depth_cache()
-                cached = cls._DEPTH_FRAME_CACHE_VALUE
-                if (
-                    cache_key == cls._DEPTH_FRAME_CACHE_KEY
-                    and isinstance(cached, torch.Tensor)
-                ):
-                    size_mib = (
-                        cached.numel()
-                        * cached.element_size()
-                        / (1024.0 * 1024.0)
-                    )
-                    cls._log(
-                        (
-                            "Depth RAM cache HIT - reusing "
-                            f"{int(cached.shape[0])} frame(s), {size_mib:.1f} MiB; "
-                            "Depth Anything V3 load/inference skipped"
-                        ),
-                        level="ok",
-                    )
-                    return cached
-            else:
-                cls._clear_ram_depth_cache()
-                cached = cls._load_disk_depth_cache(cache_key)
-                if cached is not None:
-                    return cached
-
-            cls._log(
-                f"Depth {cache_mode.removeprefix('Cache to ').lower()} cache MISS "
-                "- running Depth Anything V3 inference"
-            )
-
-        depth_result = None
-        try:
-            depth_result = cls._run_external_node(
-                "DepthAnything_V3",
-                suppress_output=True,
-                da3_model=da3_model,
-                images=depth_input,
-                normalization_mode="V2-Style",
-                resize_method="resize",
-                invert_depth=False,
-                keep_model_size=False,
-            )
-            depth_outputs = cls._result_tuple(depth_result)
-            if not depth_outputs or not isinstance(depth_outputs[0], torch.Tensor):
-                raise RuntimeError("DepthAnything V3 returned no depth image.")
-            depth_image = depth_outputs[0].detach().cpu().contiguous()
-            del depth_outputs
-        finally:
-            del depth_result
-            unloaded, unload_errors = cls._offload_da3_model(da3_model)
-            if unloaded:
-                cls._log(
-                    f"DepthAnything V3 offloaded from VRAM ({unloaded} model patcher(s))",
-                    level="ok",
-                )
-            elif not unload_errors:
-                cls._log(
-                    "DepthAnything V3 cleanup found no loaded patcher",
-                    level="warn",
-                )
-            if unload_errors:
-                cls._log(
-                    "DepthAnything V3 cleanup warnings: "
-                    + " | ".join(unload_errors),
-                    level="warn",
-                )
-
-        if cache_mode == "Cache to RAM":
-            cls._DEPTH_FRAME_CACHE_KEY = cache_key
-            cls._DEPTH_FRAME_CACHE_VALUE = depth_image
-            size_mib = (
-                depth_image.numel()
-                * depth_image.element_size()
-                / (1024.0 * 1024.0)
-            )
-            cls._log(
-                (
-                    f"Depth RAM cache stored {int(depth_image.shape[0])} "
-                    f"frame(s), {size_mib:.1f} MiB"
-                ),
-                level="ok",
-            )
-        elif cache_mode == "Cache to temp disk":
-            try:
-                cls._store_disk_depth_cache(cache_key, depth_image)
-            except Exception as error:
-                cls._log(
-                    f"Depth temp-disk cache write failed; continuing without cache: {error}",
-                    level="warn",
-                )
-
-        return depth_image
 
     @staticmethod
     def _offload_sampling_model(model):
@@ -1383,12 +887,6 @@ class CRT_LTX23UnifiedSampler:
                 raise RuntimeError(f"Could not resolve callable for node: {node_name}")
 
         fn = getattr(node_obj, fn_name)
-        if suppress_output:
-            with (
-                CRT_LTX23UnifiedSampler._quiet_depthanything_logs(),
-                redirect_stderr(io.StringIO()),
-            ):
-                return fn(**kwargs)
         return fn(**kwargs)
 
     @staticmethod
@@ -1809,11 +1307,19 @@ class CRT_LTX23UnifiedSampler:
         output_index=0,
     ):
         if preview_enabled:
-            ensure_crt_previewer()
+            # Animated-WebP override rides the model; core binary previews
+            # render as a still per step in the modern frontend.
+            model = apply_ltx23_preview_override(
+                model, getattr(self, "_preview_node_id", None), frame_rate
+            )
+            if not getattr(self, "_pov_logged", False):
+                self._pov_logged = True
+                print(
+                    f"[CRT-preview] LTX animated preview active "
+                    f"(node={getattr(self, '_preview_node_id', None)!r}, {frame_rate or 24:.0f} fps)"
+                )
 
         guider = self._result_tuple(CFGGuider.execute(model, positive, negative, cfg))[0]
-        if preview_enabled:
-            guider = _CRTPreviewFixGuider(guider, fps_override=frame_rate)
 
         sampled = SamplerCustomAdvanced.execute(noise, guider, sampler, sigmas, latent)
         sampled = self._result_tuple(sampled)
@@ -1821,6 +1327,39 @@ class CRT_LTX23UnifiedSampler:
         if len(sampled) > output_index:
             return sampled[output_index]
         return sampled[0] if len(sampled) > 0 else latent
+
+    def _apply_refiner(
+        self,
+        model,
+        positive,
+        negative,
+        video_latent,
+        audio_latent,
+        cfg,
+        noise_obj,
+        frame_rate,
+        preview_enabled,
+    ):
+        """Short full-resolution self-refinement pass on a denoised AV latent."""
+        sampler = self._make_sampler(self.SAMPLER_REFINE_NAME)
+        sigmas = self._make_sigmas(self.SIGMAS_POLISH_DEFAULT)
+        av_latent = self._result_tuple(
+            LTXVConcatAVLatent.execute(video_latent, audio_latent)
+        )[0]
+        sampled = self._sample_latent(
+            model=model,
+            positive=positive,
+            negative=negative,
+            cfg=float(cfg),
+            noise=noise_obj,
+            sampler=sampler,
+            sigmas=sigmas,
+            latent=av_latent,
+            frame_rate=frame_rate,
+            preview_enabled=preview_enabled,
+        )
+        separated = self._result_tuple(LTXVSeparateAVLatent.execute(sampled))
+        return separated[0], separated[1]
 
     @staticmethod
     def _decode_video_latent(video_latent, vae, use_tiled_decode=False):
@@ -1831,7 +1370,7 @@ class CRT_LTX23UnifiedSampler:
                 512,
                 64,
                 64,
-                8,
+                16,
             )[0]
         return nodes.VAEDecode().decode(vae, video_latent)[0]
 
@@ -2278,9 +1817,7 @@ class CRT_LTX23UnifiedSampler:
         guide_image,
         guide_strength,
         latent_downscale_factor,
-        model_union_control=None,
     ):
-        _ = model_union_control
         effective_downscale = self._compatible_downscale_factor(
             latent,
             latent_downscale_factor,
@@ -2333,8 +1870,9 @@ class CRT_LTX23UnifiedSampler:
         t2v_width_override=None,
         t2v_height_override=None,
         low_vram=False,
+        enable_refiner=False,
     ):
-        total_steps = 5 if not use_two_stage else 7
+        total_steps = 7 if use_two_stage else (6 if enable_refiner else 5)
         self._progress(1, total_steps, f"Preparing {mode} inputs")
 
         is_i2v = mode == "I2V"
@@ -2450,11 +1988,25 @@ class CRT_LTX23UnifiedSampler:
             separated = self._result_tuple(LTXVSeparateAVLatent.execute(sampled))
             final_video_latent = separated[0]
             final_audio_latent = separated[1]
+            ref_positive, ref_negative = positive, negative
             if is_i2v and i2v_ref_batch_size > 1:
-                _, _, final_video_latent = self._result_tuple(
+                ref_positive, ref_negative, final_video_latent = self._result_tuple(
                     LTXVCropGuides.execute(positive, negative, final_video_latent)
                 )
-            self._progress(4, total_steps, "Decoding video/audio")
+            if enable_refiner:
+                self._progress(4, total_steps, "Self-refinement pass")
+                final_video_latent, final_audio_latent = self._apply_refiner(
+                    model=model,
+                    positive=ref_positive,
+                    negative=ref_negative,
+                    video_latent=final_video_latent,
+                    audio_latent=final_audio_latent,
+                    cfg=cfg,
+                    noise_obj=noise_obj,
+                    frame_rate=frame_rate,
+                    preview_enabled=preview_enabled,
+                )
+            self._progress(total_steps - 1, total_steps, "Decoding video/audio")
         else:
             self._progress(3, total_steps, "Sampling stage 1")
             if spatial_upscale_model is None:
@@ -2536,12 +2088,15 @@ class CRT_LTX23UnifiedSampler:
             )[0]
 
             if is_i2v:
+                # Official reference: re-anchor the raw full-resolution image at
+                # full strength after upsampling; no extra compression here.
                 upsampled_video = self._inject_i2v_inplace(
                     vae,
                     target_image[:1] if use_i2v_guides else target_image,
                     upsampled_video,
-                    firstframe_strength,
+                    1.0,
                     self.I2V_PREPROCESS_COMPRESSION,
+                    use_preprocess=False,
                 )
 
             refine_audio_latent = stage1_audio_out
@@ -2621,13 +2176,10 @@ class CRT_LTX23UnifiedSampler:
         sampler_refine,
         sigmas_refine,
         megapixels_target,
-        depth_megapixels,
-        depth_cache_mode,
         v2v_guide_strength,
         latent_downscale_factor,
         generated_audio_gain_db,
         spatial_upscale_model,
-        da3_model,
         video,
         v2v_depth_override=None,
         firstframe_image=None,
@@ -2640,15 +2192,9 @@ class CRT_LTX23UnifiedSampler:
         v2v_aspect_ratio="16:9 (Landscape)",
         firstframe_strength=1.0,
         low_vram=False,
+        enable_refiner=False,
     ):
-        if use_two_stage:
-            self._log(
-                "V2V two-stage mode is unavailable; using the full-resolution HQ single-pass IC-LoRA workflow.",
-                level="warn",
-            )
-            use_two_stage = False
-
-        total_steps = 6 if not use_two_stage else 8
+        total_steps = 8 if use_two_stage else (7 if enable_refiner else 6)
         self._progress(1, total_steps, "Preparing V2V inputs")
 
         # Outpaint and Upscale modes don't use depth or first frame
@@ -2659,20 +2205,15 @@ class CRT_LTX23UnifiedSampler:
                 level="ok",
             )
         else:
-            if da3_model is None:
-                if v2v_depth_override is None:
-                    raise ValueError(
-                        "V2V Depth Control mode requires da3_model in models_pipe unless 'V2V Depth (override)' is connected."
-                    )
-                self._log(
-                    "V2V Depth override connected -> skipping DepthAnything model requirement/inference.",
-                    level="ok",
+            if v2v_depth_override is None:
+                raise ValueError(
+                    "V2V Depth Control mode requires 'V2V Depth' to be connected in the Config node. Use DepthAnything3 (CRT) to generate it."
                 )
 
         # Video is optional when depth override is provided
         if video is None and v2v_depth_override is None:
             raise ValueError(
-                "V2V mode requires either 'Video (V2V image batch)' or 'V2V Depth (override)' connected in the Config node."
+                "V2V mode requires either 'Video (V2V image batch)' or 'V2V Depth' connected in the Config node."
             )
 
         if video is not None:
@@ -2746,6 +2287,7 @@ class CRT_LTX23UnifiedSampler:
                 preview_enabled=preview_enabled,
                 total_steps=total_steps,
                 low_vram=low_vram,
+                enable_refiner=enable_refiner,
             )
 
         if is_outpaint_mode:
@@ -2777,6 +2319,7 @@ class CRT_LTX23UnifiedSampler:
                 v2v_aspect_ratio=v2v_aspect_ratio,
                 total_steps=total_steps,
                 low_vram=low_vram,
+                enable_refiner=enable_refiner,
             )
 
         # Original Depth Control mode
@@ -2784,32 +2327,18 @@ class CRT_LTX23UnifiedSampler:
 
         if video_frames is not None:
             target_image = self._scale_total_pixels(video_frames, megapixels_target)
-            depth_input = None if v2v_depth_override is not None else self._scale_total_pixels(video_frames, depth_megapixels)
         else:
-            # Depth override only: use override dimensions as target
             target_image = v2v_depth_override
-            depth_input = None
 
-        if v2v_depth_override is not None:
-            self._progress(2, total_steps, "Using connected V2V depth override")
-            depth_image = v2v_depth_override
-            depth_frames = int(depth_image.shape[0])
-            if depth_frames <= 0:
-                raise ValueError("V2V Depth (override) must contain at least one image.")
-            if depth_frames < frame_count:
-                repeat_count = math.ceil(frame_count / depth_frames)
-                depth_image = depth_image.repeat(repeat_count, 1, 1, 1)
-            depth_image = depth_image[:frame_count]
-        else:
-            self._progress(2, total_steps, "Resolving depth guide")
-            try:
-                depth_image = self._estimate_depth(
-                    da3_model,
-                    depth_input,
-                    depth_cache_mode,
-                )
-            finally:
-                del depth_input
+        self._progress(2, total_steps, "Using V2V Depth")
+        depth_image = v2v_depth_override
+        depth_frames = int(depth_image.shape[0])
+        if depth_frames <= 0:
+            raise ValueError("V2V Depth must contain at least one image.")
+        if depth_frames < frame_count:
+            repeat_count = math.ceil(frame_count / depth_frames)
+            depth_image = depth_image.repeat(repeat_count, 1, 1, 1)
+        depth_image = depth_image[:frame_count]
 
         # Match the reference V2V graph: resize DA3 output back to the target
         # guide resolution using a plain nearest/stretch resize before snapping
@@ -2877,7 +2406,6 @@ class CRT_LTX23UnifiedSampler:
                     guide_full,
                     v2v_guide_strength,
                     latent_downscale_factor,
-                    model_union_control,
                 )
             )
 
@@ -2924,7 +2452,20 @@ class CRT_LTX23UnifiedSampler:
             )
             final_video_latent = cropped[2]
             final_audio_latent = sampled_audio_latent
-            self._progress(5, total_steps, "Decoding video/audio")
+            if enable_refiner:
+                self._progress(5, total_steps, "Self-refinement pass")
+                final_video_latent, final_audio_latent = self._apply_refiner(
+                    model=model,
+                    positive=cropped[0],
+                    negative=cropped[1],
+                    video_latent=final_video_latent,
+                    audio_latent=final_audio_latent,
+                    cfg=cfg,
+                    noise_obj=noise_obj,
+                    frame_rate=frame_rate,
+                    preview_enabled=preview_enabled,
+                )
+            self._progress(total_steps - 1, total_steps, "Decoding video/audio")
         else:
             self._progress(4, total_steps, "Running V2V stage 1")
             if spatial_upscale_model is None:
@@ -2932,13 +2473,21 @@ class CRT_LTX23UnifiedSampler:
                     "Two-stage mode requires spatial_upscale_model in models_pipe."
                 )
 
-            stage1_width = max(64, int(guide_full.shape[2]) // 2)
-            stage1_height = max(64, int(guide_full.shape[1]) // 2)
+            # Snap stage 1 to the /32 latent grid; stage 2 then operates at
+            # exactly twice those dims so the upsampled latent and guide match.
+            stage1_width = max(64, normalize_dimension(int(guide_full.shape[2]) // 2, 32))
+            stage1_height = max(64, normalize_dimension(int(guide_full.shape[1]) // 2, 32))
 
             stage1_guide = self._resize_image(
                 guide_full,
                 stage1_width,
                 stage1_height,
+                method="lanczos",
+            )
+            guide_full = self._resize_image(
+                guide_full,
+                stage1_width * 2,
+                stage1_height * 2,
                 method="lanczos",
             )
             stage1_video_latent = self._result_tuple(
@@ -2977,7 +2526,6 @@ class CRT_LTX23UnifiedSampler:
                 stage1_guide,
                 v2v_guide_strength,
                 latent_downscale_factor,
-                model_union_control,
             )
 
             stage1_audio_latent = self._build_audio_latent(
@@ -3041,7 +2589,7 @@ class CRT_LTX23UnifiedSampler:
                     vae,
                     ff_s2,
                     upsampled_video,
-                    firstframe_strength,
+                    1.0,
                     self.I2V_PREPROCESS_COMPRESSION,
                     use_preprocess=False,
                 )
@@ -3058,7 +2606,6 @@ class CRT_LTX23UnifiedSampler:
                 guide_full,
                 v2v_guide_strength,
                 latent_downscale_factor,
-                model_union_control,
             )
 
             refine_audio_latent = stage1_audio_out
@@ -3165,17 +2712,38 @@ class CRT_LTX23UnifiedSampler:
         preview_enabled,
         total_steps,
         low_vram=False,
+        enable_refiner=False,
     ):
         """Upscale V2V workflow: use input video as guide for upscaling."""
+        if use_two_stage:
+            self._log(
+                "HQ two-stage refinement is not available for V2V Upscale mode; running the single-pass IC-LoRA workflow.",
+                level="warn",
+            )
         self._progress(1, total_steps, "Preparing Upscale inputs")
 
-        # Scale and align the guide with ComfyUI's 32-pixel LTX latent grid.
+        factor = max(1, int(round(float(latent_downscale_factor))))
+        multiple = max(32, factor * 32)
+
+        # Official pixel-upscaler recipe: snap the output to a multiple of the
+        # reference factor's latent grid so the small-grid guide stays exact.
         scaled_video = self._scale_total_pixels(video_frames, megapixels_target)
-        scaled_video = self._scale_to_multiple_cover(scaled_video, 32)
+        scaled_video = self._scale_to_multiple_cover(scaled_video, multiple)
         target_height, target_width = scaled_video.shape[1], scaled_video.shape[2]
 
+        _, src_h, src_w, _ = video_frames.shape
+        if src_w >= target_width and src_h >= target_height:
+            self._log(
+                (
+                    f"Upscale target {target_width}x{target_height} does not exceed the "
+                    f"source ({src_w}x{src_h}); raise MegaPixels so the x{factor} "
+                    "upscaler has resolution headroom."
+                ),
+                level="warn",
+            )
+
         self._log(
-            f"Upscale target dimensions: {target_width}x{target_height}",
+            f"Upscale target dimensions: {target_width}x{target_height} (reference factor x{factor})",
             level="ok",
         )
 
@@ -3202,7 +2770,6 @@ class CRT_LTX23UnifiedSampler:
             scaled_video,
             v2v_guide_strength,
             latent_downscale_factor,
-            model,
         )
 
         self._progress(3, total_steps, "Building audio latent")
@@ -3253,7 +2820,20 @@ class CRT_LTX23UnifiedSampler:
         final_video_latent = cropped[2]
         final_audio_latent = sampled_audio_latent
 
-        self._progress(5, total_steps, "Decoding video/audio")
+        if enable_refiner:
+            self._progress(5, total_steps, "Self-refinement pass")
+            final_video_latent, final_audio_latent = self._apply_refiner(
+                model=model,
+                positive=cropped[0],
+                negative=cropped[1],
+                video_latent=final_video_latent,
+                audio_latent=final_audio_latent,
+                cfg=self.CFG_DEFAULT,
+                noise_obj=noise_obj,
+                frame_rate=frame_rate,
+                preview_enabled=preview_enabled,
+            )
+        self._progress(total_steps - 1, total_steps, "Decoding video/audio")
 
         if unload_model_before_vae_decode:
             self._log("Unload-before-decode enabled: attempting model unload", level="ok")
@@ -3312,8 +2892,14 @@ class CRT_LTX23UnifiedSampler:
         v2v_aspect_ratio,
         total_steps,
         low_vram=False,
+        enable_refiner=False,
     ):
         """Outpaint V2V workflow: pad video to target aspect ratio instead of using depth."""
+        if use_two_stage:
+            self._log(
+                "HQ two-stage refinement is not available for V2V Outpaint mode; running the single-pass IC-LoRA workflow.",
+                level="warn",
+            )
         self._progress(1, total_steps, "Preparing Outpaint inputs")
 
         # Calculate target dimensions based on aspect ratio
@@ -3349,7 +2935,9 @@ class CRT_LTX23UnifiedSampler:
             method="lanczos",
         )
 
-        # Pad to target dimensions (centered)
+        # Pad to target dimensions (centered) with black bars. The IC-LoRA
+        # outpaint model generates into the empty regions; edge-replicate
+        # removes that signal and breaks generation.
         pad_left = (target_width - new_w) // 2
         pad_top = (target_height - new_h) // 2
         pad_right = target_width - new_w - pad_left
@@ -3390,7 +2978,6 @@ class CRT_LTX23UnifiedSampler:
             padded_video,
             v2v_guide_strength,
             latent_downscale_factor,
-            model,
         )
 
         self._progress(3, total_steps, "Building audio latent")
@@ -3441,7 +3028,20 @@ class CRT_LTX23UnifiedSampler:
         final_video_latent = cropped[2]
         final_audio_latent = sampled_audio_latent
 
-        self._progress(5, total_steps, "Decoding video/audio")
+        if enable_refiner:
+            self._progress(5, total_steps, "Self-refinement pass")
+            final_video_latent, final_audio_latent = self._apply_refiner(
+                model=model,
+                positive=cropped[0],
+                negative=cropped[1],
+                video_latent=final_video_latent,
+                audio_latent=final_audio_latent,
+                cfg=self.CFG_DEFAULT,
+                noise_obj=noise_obj,
+                frame_rate=frame_rate,
+                preview_enabled=preview_enabled,
+            )
+        self._progress(total_steps - 1, total_steps, "Decoding video/audio")
 
         if unload_model_before_vae_decode:
             self._log("Unload-before-decode enabled: attempting model unload", level="ok")
@@ -3477,19 +3077,17 @@ class CRT_LTX23UnifiedSampler:
         models_pipe,
         config_pipe,
         workflow_mode,
-        hq,
+        quality,
         live_preview,
         frame_count_from_audio,
         vae_decode_tiled,
         unload_model_before_vae_decode,
         low_vram,
-        depth_cache_mode,
         megapixels_target,
         aspect_ratio,
         frame_count,
         v2v_mode,
         v2v_guide_strength,
-        depth_megapixels,
         v2v_aspect_ratio,
         legacy_sampler_main,
         legacy_sampler_refine,
@@ -3502,23 +3100,29 @@ class CRT_LTX23UnifiedSampler:
         legacy_compat_4,
         legacy_compat_5,
         legacy_compat_6,
+        unique_id=None,
     ):
         mode = str(workflow_mode)
         if mode not in ("I2V", "T2V", "V2V"):
             raise ValueError(f"Unknown workflow_mode: {mode}")
         mode_internal = mode
+
+        # First node use: fetch the live-preview decoder once in the
+        # background, independent of the preview toggle.
+        kickoff_ltx23_preview_model_download()
+
         self._log(f"Starting mode: {mode}")
         live_preview = bool(live_preview)
-        if live_preview:
-            ensure_crt_previewer()
-            latent_preview.set_preview_method("taesd")
-        else:
-            latent_preview.set_preview_method("none")
+        # Core binary previews are suppressed inside the override wrapper only,
+        # so the user's global preview method is left untouched.
+        self._preview_node_id = unique_id if live_preview else None
 
-        # Public semantics: HQ ON is a full-resolution single pass.
-        # The faster path generates at half resolution, then upscales/refines.
-        hq_enabled = bool(hq)
-        use_two_stage = not hq_enabled
+        # Public semantics: Draft is the fast half-resolution + refinement path,
+        # Standard is a full-resolution single pass, Max adds a short
+        # self-refinement pass on top of the Standard result.
+        quality_mode = self._normalize_quality(quality)
+        enable_refiner = quality_mode == "Max"
+        use_two_stage = quality_mode == "Draft"
         megapixels_target = round(float(megapixels_target) * 10.0) / 10.0
         frame_count = int(frame_count)
 
@@ -3527,12 +3131,15 @@ class CRT_LTX23UnifiedSampler:
 
         override_hq = config.get("override_hq", None)
         if override_hq is not None:
-            hq_enabled = bool(override_hq)
-            use_two_stage = not hq_enabled
+            quality_mode = "Standard" if bool(override_hq) else "Draft"
+            enable_refiner = False
+            use_two_stage = not bool(override_hq)
             self._log(
-                f"Overriding HQ from US Config -> {hq_enabled}",
+                f"Overriding quality from US Config (HQ) -> {quality_mode}",
                 level="ok",
             )
+        else:
+            self._log(f"Quality mode: {quality_mode}", level="ok")
 
         model = models["model"]
         vae = models["vae"]
@@ -3658,8 +3265,10 @@ class CRT_LTX23UnifiedSampler:
 
         sigmas_main, sigmas_refine = self._fixed_sigma_texts()
         schedule_label = "8-step main"
-        if use_two_stage and mode_internal in ("I2V", "T2V"):
+        if use_two_stage:
             schedule_label += " + fixed refinement"
+        elif enable_refiner:
+            schedule_label += " + self-refinement"
         self._log(
             f"Using fixed LTX 2.3 distilled schedule ({schedule_label})",
             level="ok",
@@ -3680,9 +3289,9 @@ class CRT_LTX23UnifiedSampler:
                 aspect_ratio=aspect_ratio,
                 frame_count=frame_count,
                 frame_rate=target_fps,
-                sampler_main=self.SAMPLER_NAME,
+                sampler_main=self.SAMPLER_MAIN_NAME,
                 sigmas_main=sigmas_main,
-                sampler_refine=self.SAMPLER_NAME,
+                sampler_refine=self.SAMPLER_REFINE_NAME,
                 sigmas_refine=sigmas_refine,
                 generated_audio_gain_db=float(generated_audio_gain_db),
                 spatial_upscale_model=spatial_upscale_model,
@@ -3695,6 +3304,7 @@ class CRT_LTX23UnifiedSampler:
                 t2v_width_override=override_t2v_width,
                 t2v_height_override=override_t2v_height,
                 low_vram=bool(low_vram),
+                enable_refiner=enable_refiner,
             )
         else:
             if is_upscale_mode:
@@ -3724,18 +3334,15 @@ class CRT_LTX23UnifiedSampler:
                 cfg=cfg,
                 frame_count_limit=target_output_frames,
                 frame_rate=target_fps,
-                sampler_main=self.SAMPLER_NAME,
+                sampler_main=self.SAMPLER_MAIN_NAME,
                 sigmas_main=sigmas_main,
-                sampler_refine=self.SAMPLER_NAME,
+                sampler_refine=self.SAMPLER_REFINE_NAME,
                 sigmas_refine=sigmas_refine,
                 megapixels_target=megapixels_target,
-                depth_megapixels=float(depth_megapixels),
-                depth_cache_mode=str(depth_cache_mode),
                 v2v_guide_strength=1.0 if (is_outpaint_mode or is_upscale_mode) else float(v2v_guide_strength),
                 latent_downscale_factor=latent_downscale_factor,
                 generated_audio_gain_db=float(generated_audio_gain_db),
                 spatial_upscale_model=spatial_upscale_model,
-                da3_model=da3_model,
                 video=video,
                 v2v_depth_override=v2v_depth_override,
                 firstframe_image=image_v2v_firstframe,
@@ -3748,6 +3355,7 @@ class CRT_LTX23UnifiedSampler:
                 v2v_aspect_ratio=v2v_aspect_ratio,
                 firstframe_strength=float(firstframe_strength),
                 low_vram=bool(low_vram),
+                enable_refiner=enable_refiner,
             )
 
         if effective_source_audio is not None:

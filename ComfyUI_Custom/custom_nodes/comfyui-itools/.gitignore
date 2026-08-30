@@ -1,6 +1,7 @@
 __pycache__
 .vscode
 .idea
+.claude
 ignore
 excluded
 
@@ -10,6 +11,7 @@ Ignore all .yaml files
 !basic.yaml
 !camera.yaml
 !mood.yaml
+!nexus.yaml
 !original.yaml
 
 # ignore painted image

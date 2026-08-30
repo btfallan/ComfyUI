@@ -7,6 +7,7 @@ import os
 import folder_paths 
 import node_helpers
 import hashlib
+from uuid import uuid4
 
 # Tensor to PIL
 def tensor2pil(image):
@@ -26,7 +27,7 @@ def tensor_to_hash(tensor):
     return hash_value
 
 
-def create_temp_file(image):
+def create_temp_file(image, uuid):
     output_dir = folder_paths.get_temp_directory()
 
     (
@@ -35,7 +36,7 @@ def create_temp_file(image):
             counter,
             subfolder,
             _,
-        ) = folder_paths.get_save_image_path('material', output_dir)
+        ) = folder_paths.get_save_image_path(f'material_{uuid}', output_dir)
 
     
     image=tensor2pil(image)
@@ -59,6 +60,7 @@ class EditMask:
 
     def __init__(self):
         self.image_id = None
+        self.uuid = str(uuid4())
 
     @classmethod
     def INPUT_TYPES(s):
@@ -117,13 +119,13 @@ class EditMask:
                 image_path = os.path.join(base_dir,subfolder, name)
         
         if image_path==None:
-            image_path,images=create_temp_file(image)
+            image_path,images=create_temp_file(image, self.uuid)
 
         print('#image_path',os.path.exists(image_path),image_path)
         # image_path = folder_paths.get_annotated_filepath(image) #文件名
         
         if not os.path.exists(image_path):
-            image_path,images=create_temp_file(image)
+            image_path,images=create_temp_file(image, self.uuid)
 
 
         img = node_helpers.pillow(Image.open, image_path)

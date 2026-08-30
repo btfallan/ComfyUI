@@ -25,6 +25,7 @@ from .utils import ffmpeg_path, get_audio, hash_path, validate_path, requeue_wor
         imageOrLatent, BIGMAX, merge_filter_args, ENCODE_ARGS, floatOrInt, cached, \
         ContainsAll
 from comfy.utils import ProgressBar
+from comfy_api.v0_0_2 import IO
 
 if 'VHS_video_formats' not in folder_paths.folder_names_and_paths:
     folder_paths.folder_names_and_paths["VHS_video_formats"] = ((),{".json"})
@@ -104,7 +105,7 @@ def apply_format_widgets(format_name, kwargs):
                     #NOTE: This doesn't respect max/min, but should be good enough as a fallback to a fallback to a fallback
                     default = {"BOOLEAN": False, "INT": 0, "FLOAT": 0, "STRING": ""}[w[1]]
             kwargs[w[0]] = default
-            logger.warn(f"Missing input for {w[0][0]} has been set to {default}")
+            logger.warn(f"Missing input for {w[0]} has been set to {default}")
     wit = iterate_format(video_format, False)
     for w in wit:
         while isinstance(w, list):
@@ -136,19 +137,28 @@ def ffmpeg_process(args, video_format, video_metadata, file_path, env):
     total_frames_output = 0
     if video_format.get('save_metadata', 'False') != 'False':
         os.makedirs(folder_paths.get_temp_directory(), exist_ok=True)
-        metadata = json.dumps(video_metadata)
         metadata_path = os.path.join(folder_paths.get_temp_directory(), "metadata.txt")
         #metadata from file should  escape = ; # \ and newline
-        metadata = metadata.replace("\\","\\\\")
-        metadata = metadata.replace(";","\\;")
-        metadata = metadata.replace("#","\\#")
-        metadata = metadata.replace("=","\\=")
-        metadata = metadata.replace("\n","\\\n")
-        metadata = "comment=" + metadata
+        def escape_ffmpeg_metadata(key, value):
+            value = str(value)
+            value = value.replace("\\","\\\\")
+            value = value.replace(";","\\;")
+            value = value.replace("#","\\#")
+            value = value.replace("=","\\=")
+            value = value.replace("\n","\\\n")
+            return f"{key}={value}"
+
         with open(metadata_path, "w") as f:
             f.write(";FFMETADATA1\n")
-            f.write(metadata)
-        m_args = args[:1] + ["-i", metadata_path] + args[1:] + ["-metadata", "creation_time=now"]
+            if "prompt" in video_metadata:
+                f.write(escape_ffmpeg_metadata("prompt", json.dumps(video_metadata["prompt"])) + "\n")
+            if "workflow" in video_metadata:
+                f.write(escape_ffmpeg_metadata("workflow", json.dumps(video_metadata["workflow"])) + "\n")
+            for k, v in video_metadata.items():
+                if k not in ["prompt", "workflow"]:
+                    f.write(escape_ffmpeg_metadata(k, json.dumps(v)) + "\n")
+
+        m_args = args[:1] + ["-i", metadata_path] + args[1:] + ["-metadata", "creation_time=now", "-movflags", "use_metadata_tags"]
         with subprocess.Popen(m_args + [file_path], stderr=subprocess.PIPE,
                               stdin=subprocess.PIPE, env=env) as proc:
             try:
@@ -343,7 +353,7 @@ class VideoCombine:
         video_metadata = {}
         if prompt is not None:
             metadata.add_text("prompt", json.dumps(prompt))
-            video_metadata["prompt"] = json.dumps(prompt)
+            video_metadata["prompt"] = prompt
         if extra_pnginfo is not None:
             for x in extra_pnginfo:
                 metadata.add_text(x, json.dumps(extra_pnginfo[x]))
@@ -689,7 +699,7 @@ class LoadAudioUpload:
         audio_file = folder_paths.get_annotated_filepath(strip_path(kwargs['audio']))
         if audio_file is None or validate_path(audio_file) != True:
             raise Exception("audio_file is not a valid path: " + audio_file)
-        
+
         audio = get_audio(audio_file, start_time, duration)
         loaded_duration = audio['waveform'].size(2)/audio['sample_rate']
         return (audio, loaded_duration)
@@ -895,7 +905,7 @@ class VideoInfo:
 
     def get_video_info(self, video_info):
         keys = ["fps", "frame_count", "duration", "width", "height"]
-        
+
         source_info = []
         loaded_info = []
 
@@ -929,7 +939,7 @@ class VideoInfoSource:
 
     def get_video_info(self, video_info):
         keys = ["fps", "frame_count", "duration", "width", "height"]
-        
+
         source_info = []
 
         for key in keys:
@@ -961,7 +971,7 @@ class VideoInfoLoaded:
 
     def get_video_info(self, video_info):
         keys = ["fps", "frame_count", "duration", "width", "height"]
-        
+
         loaded_info = []
 
         for key in keys:
@@ -980,19 +990,26 @@ class SelectFilename:
 
     def select_filename(self, filenames, index):
         return (filenames[1][index],)
-class Unbatch:
-    class Any(str):
-        def __ne__(self, other):
-            return False
+
+class Unbatch(IO.ComfyNode):
     @classmethod
-    def INPUT_TYPES(s):
-        return {"required": {"batched": ("*",)}}
-    RETURN_TYPES = (Any('*'),)
-    INPUT_IS_LIST = True
-    RETURN_NAMES =("unbatched",)
-    CATEGORY = "Video Helper Suite 🎥🅥🅗🅢"
-    FUNCTION = "unbatch"
-    def unbatch(self, batched):
+    def define_schema(cls):
+        template = IO.MatchType.Template("type")
+        return IO.Schema(
+            node_id="VHS_Unbatch",
+            display_name="Unbatch 🎥🅥🅗🅢",
+            category = "Video Helper Suite 🎥🅥🅗🅢",
+            is_input_list = True,
+            inputs=[
+                IO.MatchType.Input("batched", template=template),
+            ],
+            outputs=[
+                IO.MatchType.Output(template=template, display_name="unbatched"),
+            ],
+        )
+
+    @classmethod
+    async def execute(cls, batched):
         if isinstance(batched[0], torch.Tensor):
             return (torch.cat(batched),)
         if isinstance(batched[0], dict):
@@ -1004,9 +1021,7 @@ class Unbatch:
             out.pop('batch_index', None)
             return (out,)
         return (functools.reduce(lambda x,y: x+y, batched),)
-    @classmethod
-    def VALIDATE_INPUTS(cls, input_types):
-        return True
+
 class SelectLatest:
     @classmethod
     def INPUT_TYPES(s):

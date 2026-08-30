@@ -13,10 +13,17 @@ import time
 from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple, Union, cast
 from ..config import config
 from ..utils.constants import VALID_CHECKPOINT_SUB_TYPES, VALID_LORA_TYPES
+from ..utils.exif_utils import ExifUtils
 from ..utils.file_utils import calculate_autov3
 from ..utils.recipe_open_stats import RecipeOpenStats
+from .model_scanner import WEIGHT_FILE_EXTENSIONS
 from .recipe_cache import RecipeCache
-from .recipes.errors import RecipeNotFoundError, RecipePersistenceError
+from .recipes.errors import (
+    RecipeNotFoundError,
+    RecipePersistenceError,
+    RecipeValidationError,
+)
+from .websocket_manager import ws_manager
 from natsort import natsorted
 import sys
 import re
@@ -36,10 +43,8 @@ logger = logging.getLogger(__name__)
 # explicitly to "diffusion_model" (mirrors Oracle R2-F1).
 _CHECKPOINT_MODEL_TYPE_ALIASES = {"diffusionmodel": "diffusion_model"}
 
-# Known weight-file extensions stripped by _normalize_filename_key. Names are
-# stored extensionless on both sides, so splitext would misread dotted stems
-# ("my.mix" -> "my") and silently collide distinct models.
-_WEIGHT_FILE_EXTS = (".safetensors", ".ckpt", ".pt", ".pth", ".gguf", ".bin", ".safebin", ".sft")
+# Valid LoRA availability statuses for the recipe listing filter.
+_VALID_LORA_AVAILABILITY_STATUSES = frozenset({"ready", "missing", "deleted"})
 
 
 class RecipeScanner:
@@ -179,13 +184,15 @@ class RecipeScanner:
 
         Only known weight-file extensions are stripped — names are stored
         extensionless on both sides, so splitext would misread dotted stems
-        ("my.mix" -> "my") and collide distinct models.
+        ("my.mix" -> "my") and collide distinct models. The extension set is
+        shared with ModelScanner.find_matching_models, and is iterated longest
+        first to keep the strip ordering identical to that function.
         """
         if not name:
             return ""
         basename = os.path.basename(name.replace("\\", "/"))
         lower = basename.lower()
-        for ext in _WEIGHT_FILE_EXTS:
+        for ext in sorted(WEIGHT_FILE_EXTENSIONS, key=len, reverse=True):
             if lower.endswith(ext):
                 basename = basename[: -len(ext)]
                 break
@@ -238,11 +245,23 @@ class RecipeScanner:
             return cache
 
     def _is_rematch_candidate(self, entry: dict[str, Any]) -> bool:
-        """Return True when a recipe entry is eligible for local re-matching."""
+        """Return True when a recipe entry is eligible for local re-matching.
+
+        An entry counts as unresolved when its identity is known to be
+        broken (``isDeleted`` or ``hashInvalid``) or when it is missing
+        identity fields (``hash``/``file_name``). A healthy entry whose
+        hash is simply not present in the local library is NOT a candidate:
+        it may be a recipe imported without downloading the model yet, and
+        its CivitAI-valid hash must never be overwritten by the imprecise
+        filename fallback.
+        """
         if not isinstance(entry, dict):
             return False
         unresolved = (
-            entry.get("isDeleted") or not entry.get("hash") or not entry.get("file_name")
+            entry.get("isDeleted")
+            or entry.get("hashInvalid")
+            or not entry.get("hash")
+            or not entry.get("file_name")
         )
         has_identifier = (
             entry.get("hash")
@@ -481,6 +500,10 @@ class RecipeScanner:
             if value:
                 return str(value)
         return "unknown"
+
+    def is_initializing(self) -> bool:
+        """Check if the scanner is currently initializing"""
+        return self._is_initializing
 
     def on_library_changed(self) -> None:
         """Reset cached state when the active library changes."""
@@ -1255,6 +1278,7 @@ class RecipeScanner:
     ) -> None:
         """Write back a matched local model to a lora recipe entry."""
         entry["isDeleted"] = False
+        entry["hashInvalid"] = False
 
         # Only truthy hashes are written — pending/failed items carry an empty
         # sha256 and an unconditional write would wipe a valid stored hash.
@@ -1405,7 +1429,20 @@ class RecipeScanner:
 
     async def initialize_in_background(self) -> None:
         """Initialize cache in background using thread pool"""
+        # Mark as initializing before any await so concurrent callers can
+        # wait on this task instead of observing the placeholder empty cache
+        # (the LoRA scanner wait below can take a while at startup).
+        self._is_initializing = True
+        self._initialization_task = asyncio.current_task()
         try:
+            await ws_manager.broadcast_init_progress({
+                'stage': 'loading_cache',
+                'progress': 0,
+                'details': 'Loading recipe cache...',
+                'scanner_type': 'recipe',
+                'pageType': 'recipes',
+            })
+
             await self._wait_for_lora_scanner()
 
             # Set initial empty cache to avoid None reference errors
@@ -1418,39 +1455,61 @@ class RecipeScanner:
                     folder_tree={},
                 )
 
-            # Mark as initializing to prevent concurrent initializations
-            self._is_initializing = True
-            self._initialization_task = asyncio.current_task()
+            # Start timer
+            start_time = time.time()
 
-            try:
-                # Start timer
-                start_time = time.time()
+            # Use thread pool to execute CPU-intensive operations
+            loop = asyncio.get_event_loop()
+            cache = await loop.run_in_executor(
+                None,  # Use default thread pool
+                self._initialize_recipe_cache_sync,  # Run synchronous version in thread
+            )
+            if cache is not None:
+                self._cache = cache
 
-                # Use thread pool to execute CPU-intensive operations
-                loop = asyncio.get_event_loop()
-                cache = await loop.run_in_executor(
-                    None,  # Use default thread pool
-                    self._initialize_recipe_cache_sync,  # Run synchronous version in thread
-                )
-                if cache is not None:
-                    self._cache = cache
-
-                # Calculate elapsed time and log it
-                elapsed_time = time.time() - start_time
-                recipe_count = (
-                    len(cache.raw_data) if cache and hasattr(cache, "raw_data") else 0
-                )
-                logger.info(
-                    f"Recipe cache initialized in {elapsed_time:.2f} seconds. Found {recipe_count} recipes"
-                )
-                self._schedule_post_scan_enrichment()
-                # Schedule FTS index build in background (non-blocking)
-                self._schedule_fts_index_build()
-            finally:
-                # Mark initialization as complete regardless of outcome
-                self._is_initializing = False
+            # Calculate elapsed time and log it
+            elapsed_time = time.time() - start_time
+            recipe_count = (
+                len(cache.raw_data) if cache and hasattr(cache, "raw_data") else 0
+            )
+            logger.info(
+                f"Recipe cache initialized in {elapsed_time:.2f} seconds. Found {recipe_count} recipes"
+            )
+            await ws_manager.broadcast_init_progress({
+                'stage': 'finalizing',
+                'progress': 100,
+                'status': 'complete',
+                'details': f'Found {recipe_count} recipes.',
+                'scanner_type': 'recipe',
+                'pageType': 'recipes',
+            })
+            self._schedule_post_scan_enrichment()
+            # Schedule FTS index build in background (non-blocking)
+            self._schedule_fts_index_build()
         except Exception as e:
             logger.error(f"Recipe Scanner: Error initializing cache in background: {e}")
+            # Ensure the cache is never None so the page stops showing the
+            # initialization screen, and let waiting clients reload into the
+            # regular (possibly empty) view instead of stalling.
+            if self._cache is None:
+                self._cache = RecipeCache(
+                    raw_data=[],
+                    sorted_by_name=[],
+                    sorted_by_date=[],
+                    folders=[],
+                    folder_tree={},
+                )
+            await ws_manager.broadcast_init_progress({
+                'stage': 'finalizing',
+                'progress': 100,
+                'status': 'complete',
+                'details': 'Recipe cache initialization failed.',
+                'scanner_type': 'recipe',
+                'pageType': 'recipes',
+            })
+        finally:
+            # Mark initialization as complete regardless of outcome
+            self._is_initializing = False
 
     def _initialize_recipe_cache_sync(self):
         """Synchronous version of recipe cache initialization for thread pool execution.
@@ -1505,7 +1564,7 @@ class RecipeScanner:
                     self._cache.raw_data = recipes
                     self._update_folder_metadata(self._cache)
                     self._sort_cache_sync()
-                    # Backfill source_path from JSON files if missing (schema migration)
+                    # Backfill source_path from JSON files if missing (one-shot schema migration)
                     if self._backfill_source_path_if_needed(recipes, json_paths):
                         self._cache.image_id_map = self._build_image_id_map()
                         self._persistent_cache.save_cache(
@@ -1532,7 +1591,7 @@ class RecipeScanner:
                     self._cache.raw_data = recipes
                     self._update_folder_metadata(self._cache)
                     self._sort_cache_sync()
-                    # Backfill source_path from JSON files if missing (schema migration)
+                    # Backfill source_path from JSON files if missing (one-shot schema migration)
                     self._backfill_source_path_if_needed(recipes, json_paths)
                     self._cache.image_id_map = self._build_image_id_map()
                     # Persist updated cache
@@ -1669,6 +1728,9 @@ class RecipeScanner:
 
         return recipes, changed, json_paths
 
+    # Metadata key recording that the one-shot source_path backfill has run.
+    _SOURCE_PATH_BACKFILL_MARKER = "source_path_backfilled"
+
     def _backfill_source_path_if_needed(
         self,
         recipes: List[Dict[str, Any]],
@@ -1676,8 +1738,21 @@ class RecipeScanner:
     ) -> bool:
         """Backfill source_path from recipe JSON files if missing from cache.
 
+        This is a one-shot schema migration: once it has run, a completion
+        marker is stored in the persistent cache metadata and later startups
+        skip it entirely. Recipes without a source_path in their JSON file
+        would otherwise be re-read and re-parsed on every startup. New or
+        changed recipe files still get source_path from the normal parse path
+        during reconciliation.
+
         Returns True if any recipes were updated (caller should persist cache).
         """
+        cache = self._persistent_cache
+        if (
+            cache is not None
+            and cache.get_metadata_value(self._SOURCE_PATH_BACKFILL_MARKER) == "1"
+        ):
+            return False
         updated = False
         for recipe in recipes:
             if recipe.get("source_path"):
@@ -1695,6 +1770,8 @@ class RecipeScanner:
                     updated = True
             except Exception:
                 pass
+        if cache is not None:
+            cache.set_metadata_value(self._SOURCE_PATH_BACKFILL_MARKER, "1")
         return updated
 
     def _full_directory_scan_sync(
@@ -1730,6 +1807,23 @@ class RecipeScanner:
                 time.sleep(0)
 
         return recipes, json_paths
+
+    @staticmethod
+    def _detect_has_workflow(image_path: Optional[str]) -> bool:
+        """Detect whether the recipe image embeds a ComfyUI workflow.
+
+        Reuses ``ExifUtils._load_structured_metadata`` so the metadata parsing
+        stays in one place. Any failure (missing/corrupt image, unsupported
+        format, unexpected exception) maps to ``False`` and never propagates —
+        recipe loading must remain resilient.
+        """
+        if not image_path or not os.path.exists(image_path):
+            return False
+        try:
+            metadata = ExifUtils._load_structured_metadata(image_path)
+            return bool(metadata.get("workflow"))
+        except Exception:
+            return False
 
     def _load_recipe_file_sync(self, recipe_path: str) -> Optional[Dict[str, Any]]:
         """Load a single recipe file synchronously.
@@ -1786,6 +1880,19 @@ class RecipeScanner:
                         json.dump(recipe_data, f, indent=4, ensure_ascii=False)
                 except Exception as e:
                     logger.warning(f"Failed to persist repair for {recipe_path}: {e}")
+
+            # Detect embedded ComfyUI workflow and persist when it changed
+            if "has_workflow" not in recipe_data:
+                has_workflow = self._detect_has_workflow(recipe_data.get("file_path"))
+                if has_workflow != recipe_data.get("has_workflow"):
+                    recipe_data["has_workflow"] = has_workflow
+                    try:
+                        with open(recipe_path, "w", encoding="utf-8") as f:
+                            json.dump(recipe_data, f, indent=4, ensure_ascii=False)
+                    except Exception as e:
+                        logger.warning(
+                            f"Failed to persist has_workflow for {recipe_path}: {e}"
+                        )
 
             # Track folder placement relative to recipes directory
             recipe_data["folder"] = recipe_data.get("folder") or self._calculate_folder(
@@ -2225,20 +2332,27 @@ class RecipeScanner:
 
     async def get_cached_data(self, force_refresh: bool = False) -> RecipeCache:
         """Get cached recipe data, refresh if needed"""
+        # If a background initialization is in progress, wait for it to
+        # complete so callers never observe the placeholder empty cache.
+        initialization_task = self._initialization_task
+        if (
+            self._is_initializing
+            and not force_refresh
+            and initialization_task is not None
+            and initialization_task is not asyncio.current_task()
+            and not initialization_task.done()
+        ):
+            try:
+                await initialization_task
+            except Exception:
+                # Initialization failures are logged by the task itself; fall
+                # through and return whatever cache state we have.
+                pass
+
         # If cache is already initialized and no refresh is needed, return it immediately
         if self._cache is not None and not force_refresh:
             self._update_folder_metadata()
             return cast(RecipeCache, self._cache)
-
-        # If another initialization is already in progress, wait for it to complete
-        if self._is_initializing and not force_refresh:
-            return self._cache or RecipeCache(
-                raw_data=[],
-                sorted_by_name=[],
-                sorted_by_date=[],
-                folders=[],
-                folder_tree={},
-            )
 
         # If force refresh is requested, re-scan in a thread pool to avoid
         # blocking the event loop (which is shared with ComfyUI).
@@ -2471,6 +2585,13 @@ class RecipeScanner:
 
             if path_updated:
                 self._write_recipe_file(recipe_path, recipe_data)
+
+            # Detect embedded ComfyUI workflow and persist when it changed
+            if "has_workflow" not in recipe_data:
+                has_workflow = self._detect_has_workflow(recipe_data.get("file_path"))
+                if has_workflow != recipe_data.get("has_workflow"):
+                    recipe_data["has_workflow"] = has_workflow
+                    self._write_recipe_file(recipe_path, recipe_data)
 
             # Track folder placement relative to recipes directory
             recipe_data["folder"] = recipe_data.get("folder") or self._calculate_folder(
@@ -2911,6 +3032,43 @@ class RecipeScanner:
 
         return lora
 
+    def _compute_availability_statuses(self, recipe: Dict[str, Any]) -> Set[str]:
+        """Compute the LoRA availability status set for a recipe.
+
+        Returns ``{"ready"}`` when every non-excluded LoRA resolves to the
+        local library (recipes without LoRAs count as ready); otherwise a
+        subset of ``{"missing", "deleted"}``. Uses the same inLibrary
+        resolution as ``_enrich_lora_entry`` (hash index with modelVersionId
+        fallback) but performs only in-memory lookups.
+        """
+
+        statuses: Set[str] = set()
+        for lora in recipe.get("loras") or []:
+            if not isinstance(lora, dict) or lora.get("exclude"):
+                continue
+
+            in_library = False
+            if self._lora_scanner:
+                hash_value = (lora.get("hash") or "").lower()
+                if hash_value:
+                    in_library = self._lora_scanner.has_hash(hash_value)
+                elif lora.get("modelVersionId") is not None:
+                    in_library = (
+                        self._get_lora_from_version_index(lora.get("modelVersionId"))
+                        is not None
+                    )
+
+            if in_library:
+                continue
+            if lora.get("isDeleted"):
+                statuses.add("deleted")
+            else:
+                statuses.add("missing")
+
+        if not statuses:
+            statuses.add("ready")
+        return statuses
+
     def _normalize_preview_url(self, preview_url: Optional[str]) -> Optional[str]:
         """Return a preview URL that is reachable from the browser."""
 
@@ -2926,13 +3084,45 @@ class RecipeScanner:
 
         return normalized
 
-    async def get_local_lora(self, name: str) -> Optional[Dict[str, Any]]:
-        """Lookup a local LoRA model by name."""
+    async def get_local_lora(
+        self, name: str, base_model: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
+        """Lookup an unambiguous local LoRA by name and optional base model."""
 
         if not self._lora_scanner or not name:
             return None
 
-        return await self._lora_scanner.get_model_info_by_name(name)
+        return await self._lora_scanner.get_model_info_by_name(
+            name, require_unique=True, base_model=base_model
+        )
+
+    async def find_local_loras_by_name(
+        self, name: str, base_model: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        """Return every local LoRA matching ``name`` (used to explain lookup misses)."""
+
+        if not self._lora_scanner or not name:
+            return []
+
+        return await self._lora_scanner.find_models_by_name(name, base_model=base_model)
+
+    async def get_local_lora_by_hash(self, hash_value: str) -> Optional[Dict[str, Any]]:
+        """Lookup a local LoRA through the scanner's hash index."""
+
+        if not self._lora_scanner or not hash_value:
+            return None
+
+        file_path = self._lora_scanner.get_path_by_hash(hash_value)
+        if not file_path:
+            return None
+
+        target_path = os.path.normcase(os.path.abspath(file_path))
+        cached_data = await self._lora_scanner.get_cached_data()
+        for model in cached_data.raw_data:
+            model_path = model.get("file_path")
+            if model_path and os.path.normcase(os.path.abspath(model_path)) == target_path:
+                return model
+        return None
 
     async def get_local_checkpoint(self, name: str) -> Optional[Dict[str, Any]]:
         """Lookup a local checkpoint model by name."""
@@ -3146,6 +3336,22 @@ class RecipeScanner:
                             if not matches_exclude(item.get("tags"))
                         ]
 
+                # Filter by LoRA availability status
+                availability = filters.get("lora_availability")
+                if availability:
+                    selected = {
+                        status
+                        for status in availability
+                        if status in _VALID_LORA_AVAILABILITY_STATUSES
+                    }
+                    # Selecting every status (or none) means no filtering.
+                    if 0 < len(selected) < len(_VALID_LORA_AVAILABILITY_STATUSES):
+                        filtered_data = [
+                            item
+                            for item in filtered_data
+                            if self._compute_availability_statuses(item) & selected
+                        ]
+
         # Apply sorting if not already handled by pre-sorted cache
         if ":" in sort_by or sort_field in ("loras_count", "random", "opened"):
             field, order = (sort_by.split(":") + ["desc"])[:2]
@@ -3271,6 +3477,13 @@ class RecipeScanner:
 
         # Format the recipe with all needed information
         formatted_recipe = {**merged_recipe}
+
+        # Fallback for recipes saved before has_workflow existed: detect once
+        # on demand so the modal button works without a rescan.
+        if "has_workflow" not in formatted_recipe:
+            formatted_recipe["has_workflow"] = self._detect_has_workflow(
+                formatted_recipe.get("file_path")
+            )
 
         # Format file path to URL
         if "file_path" in formatted_recipe:
@@ -3465,6 +3678,7 @@ class RecipeScanner:
 
             lora_entry = loras[lora_index]
             lora_entry["isDeleted"] = False
+            lora_entry["hashInvalid"] = False
             lora_entry["exclude"] = False
             lora_entry["file_name"] = target_name
 
@@ -3514,6 +3728,57 @@ class RecipeScanner:
                 updated_lora["localPath"] = target_lora["file_path"]
 
         updated_lora = self._enrich_lora_entry(updated_lora)
+        return recipe_data, updated_lora
+
+    async def set_lora_entry_hash_invalid(
+        self,
+        recipe_id: str,
+        lora_index: int,
+        hash_invalid: bool,
+    ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        """Set the ``hashInvalid`` flag on a specific LoRA entry.
+
+        ``hashInvalid`` records that the entry's hash could not be resolved
+        on CivitAI (e.g. a download attempt returned "Model not found").
+        Marking it makes the entry an unresolved rematch candidate without
+        touching its stored hash/file_name.
+
+        Returns:
+            The updated recipe data and the refreshed LoRA metadata.
+        """
+        recipe_json_path = await self.get_recipe_json_path(recipe_id)
+        if not recipe_json_path or not os.path.exists(recipe_json_path):
+            raise RecipeNotFoundError("Recipe not found")
+
+        async with self._mutation_lock:
+            with open(recipe_json_path, "r", encoding="utf-8") as file_obj:
+                recipe_data = json.load(file_obj)
+
+            loras = recipe_data.get("loras", [])
+            if lora_index >= len(loras):
+                raise RecipeNotFoundError("LoRA index out of range in recipe")
+
+            lora_entry = loras[lora_index]
+            if not isinstance(lora_entry, dict):
+                raise RecipeValidationError("LoRA entry is not a dict")
+
+            lora_entry["hashInvalid"] = bool(hash_invalid)
+            recipe_data["modified"] = time.time()
+
+            with open(recipe_json_path, "w", encoding="utf-8") as file_obj:
+                json.dump(recipe_data, file_obj, indent=4, ensure_ascii=False)
+
+        cache = await self.get_cached_data()
+        replaced = await cache.replace_recipe(recipe_id, recipe_data, resort=False)
+        if not replaced:
+            await cache.add_recipe(recipe_data, resort=False)
+        self._schedule_resort()
+
+        if self._persistent_cache:
+            self._persistent_cache.update_recipe(recipe_data, recipe_json_path)
+            self._json_path_map[recipe_id] = recipe_json_path
+
+        updated_lora = self._enrich_lora_entry(dict(lora_entry))
         return recipe_data, updated_lora
 
     async def get_recipes_for_lora(self, lora_hash: str) -> List[Dict[str, Any]]:
@@ -3590,9 +3855,6 @@ class RecipeScanner:
 
         syntax_parts: List[str] = []
         for lora in loras:
-            if lora.get("isDeleted", False):
-                continue
-
             file_name = None
             folder = ""
             hash_value = (lora.get("hash") or "").lower()
@@ -3627,6 +3889,11 @@ class RecipeScanner:
                         break
 
             if not file_name:
+                # LoRAs deleted from the source or with an unresolvable hash
+                # cannot be downloaded; skip them instead of emitting a token
+                # pointing at a file that does not exist locally.
+                if lora.get("isDeleted", False) or lora.get("hashInvalid", False):
+                    continue
                 file_name = lora.get("file_name", "unknown-lora")
                 folder = lora.get("folder", "")
 

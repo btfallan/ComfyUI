@@ -8,8 +8,12 @@ class Attn2Replace:
     def __init__(self, callback=None, **kwargs):
         self.callback = [callback]
         self.kwargs = [kwargs]
-    
-    def add(self, callback, **kwargs):          
+        self.multigpu_kwargs = {}
+
+    def get_multigpu_kwargs(self, device):
+        return self.multigpu_kwargs.get(device, self.kwargs)
+
+    def add(self, callback, **kwargs):
         self.callback.append(callback)
         self.kwargs.append(kwargs)
 
@@ -21,13 +25,46 @@ class Attn2Replace:
         out = optimized_attention(q, k, v, extra_options["n_heads"])
         sigma = extra_options["sigmas"].detach().cpu()[0].item() if 'sigmas' in extra_options else 999999999.9
 
+        device_kwargs = self.get_multigpu_kwargs(q.device)
+
         for i, callback in enumerate(self.callback):
             if sigma <= self.kwargs[i]["sigma_start"] and sigma >= self.kwargs[i]["sigma_end"]:
-                out = out + callback(out, q, k, v, extra_options, **self.kwargs[i])
-        
+                out = out + callback(out, q, k, v, extra_options, **device_kwargs[i])
+
         return out.to(dtype=dtype)
+    
+    def to(self, device, *args, **kwargs):
+        if not isinstance(device, torch.device):
+            return self
+        # if casted versions already taken care of, do nothing
+        if device in self.multigpu_kwargs:
+            return self
+        # ignore casts to CPU, as IPAdapter currently always sticks to load device(s)
+        if device == "cpu" or device == torch.device("cpu"):
+            return self
+        # for now, assume cond must be present
+        if self.kwargs[0]["cond"] is None:
+            return self
+        if self.kwargs[0]["cond"].device == device:
+            return self
+        
+        new_kwargs = []
+        for kwargs_dict in self.kwargs:
+            new_kwargs.append(kwargs_dict.copy())
+        
+        for kwargs_dict in new_kwargs:
+            for key, value in kwargs_dict.items():
+                if key == "ipadapter":
+                    value.create_multigpu_clone(device)
+                elif type(kwargs_dict[key]) == torch.Tensor:
+                    kwargs_dict[key] = value.to(device)
+
+        self.multigpu_kwargs[device] = new_kwargs
+        return self
 
 def ipadapter_attention(out, q, k, v, extra_options, module_key='', ipadapter=None, weight=1.0, cond=None, cond_alt=None, uncond=None, weight_type="linear", mask=None, sigma_start=0.0, sigma_end=1.0, unfold_batch=False, embeds_scaling='V only', **kwargs):
+    ipadapter = ipadapter.get_multigpu_clone(q.device)
+    
     dtype = q.dtype
     cond_or_uncond = extra_options["cond_or_uncond"]
     block_type = extra_options["block"][0]
@@ -64,6 +101,21 @@ def ipadapter_attention(out, q, k, v, extra_options, module_key='', ipadapter=No
     elif isinstance(weight, dict):
         if t_idx not in weight:
             return 0
+
+        if weight_type == "style transfer precise":
+            if layers == 11 and t_idx == 3:
+                uncond = cond
+                cond = cond * 0
+            elif layers == 16 and (t_idx == 4 or t_idx == 5):
+                uncond = cond
+                cond = cond * 0
+        elif weight_type == "composition precise":
+            if layers == 11 and t_idx != 3:
+                uncond = cond
+                cond = cond * 0
+            elif layers == 16 and (t_idx != 4 and t_idx != 5):
+                uncond = cond
+                cond = cond * 0
 
         weight = weight[t_idx]
 
@@ -118,15 +170,19 @@ def ipadapter_attention(out, q, k, v, extra_options, module_key='', ipadapter=No
             weight = weight.repeat(len(cond_or_uncond), 1, 1) # repeat for cond and uncond
         elif weight == 0:
             return 0
-
+        
         k_cond = ipadapter.ip_layers.to_kvs[k_key](cond).repeat(batch_prompt, 1, 1)
         k_uncond = ipadapter.ip_layers.to_kvs[k_key](uncond).repeat(batch_prompt, 1, 1)
         v_cond = ipadapter.ip_layers.to_kvs[v_key](cond).repeat(batch_prompt, 1, 1)
         v_uncond = ipadapter.ip_layers.to_kvs[v_key](uncond).repeat(batch_prompt, 1, 1)
 
-    ip_k = torch.cat([(k_cond, k_uncond)[i] for i in cond_or_uncond], dim=0)
-    ip_v = torch.cat([(v_cond, v_uncond)[i] for i in cond_or_uncond], dim=0)
-    
+    if len(cond_or_uncond) == 3: # TODO: cosxl, I need to check this
+        ip_k = torch.cat([(k_cond, k_uncond, k_cond)[i] for i in cond_or_uncond], dim=0)
+        ip_v = torch.cat([(v_cond, v_uncond, v_cond)[i] for i in cond_or_uncond], dim=0)
+    else:
+        ip_k = torch.cat([(k_cond, k_uncond)[i] for i in cond_or_uncond], dim=0)
+        ip_v = torch.cat([(v_cond, v_uncond)[i] for i in cond_or_uncond], dim=0)
+
     if embeds_scaling == 'K+mean(V) w/ C penalty':
         scaling = float(ip_k.shape[2]) / 1280.0
         weight = weight * scaling

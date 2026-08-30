@@ -1,0 +1,10 @@
+## Under C:\Users\<your username>\AppData\Roaming\ComfyUI
+
+# ComfyUI extra_model_paths.yaml for win32
+comfyui_desktop:
+  is_default: "true"
+  custom_nodes: custom_nodes/
+  download_model_base: models
+  base_path: C:\Users\mrfka\Documents\ComfyUI
+desktop_extensions:
+  custom_nodes: D:\ComfyUI-App\resources\ComfyUI\custom_nodes

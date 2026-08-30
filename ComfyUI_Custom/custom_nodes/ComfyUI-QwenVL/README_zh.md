@@ -6,6 +6,14 @@ ComfyUI-QwenVL 是一款自定义节点，它集成了来自阿里云的强大 Q
 
 ## **📰 新闻与更新**
 
+* **2026/08/26**: **v2.3.0** 智能视频自适应缩放与自定义模型架构重大升级！
+  * **智能视频自适应缩放与 Token 预算守护**：彻底解决视频抽帧分析时的上下文槽位溢出（`failed to find a memory slot`）与显存爆炸（CUDA OOM）。自动根据 `ctx` 与 `frame_count` 探查计算单帧安全预算；小尺寸视频保持原画质直通，超限高画质视频（1080p/4K）自动等比缩小。所有高级节点新增 `video_frame_size` 控制项。
+  * **精简统一的自定义模型架构 (`custom_models.json`)**：统一为 `hf_models` 与 `gguf_models` 两大板块，视觉与文本节点无缝加载自定义 GGUF / HF 模型。
+  * **强化版模型下载器 (`AILab_HuggingFaceDownloader`)**：支持独立无输出执行（`OUTPUT_NODE = True`）、智能自动分流（`save_folder: "auto"`）、`mmproj` 视觉投影文件自动发现下载及色彩丰富的 UI 状态卡片。
+  * **共享推理引擎与独立 CLI (`qwenvl_engine.py` / `qwenvl_cli.py`)**：提供便捷的 Python 外部接口与命令行工具。
+  * **统一公共媒体工具库 (`AILab_Utils.py`)**：集中管理张量转换、视频抽帧与预算决策，全面覆盖 GGUF 与 Transformers 双后端。
+  * **完整使用指南**：新增全功能技术手册 [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) 与 [`docs/USER_GUIDE_zh.md`](docs/USER_GUIDE_zh.md)。 [[更新说明](update.md#release-notes-v230-2026-08-26)]
+* **2026/08/20**: **v2.2.0** 新增对 Qwen3.5, 3.6 (MoE) 和 3.8 的原生 GGUF 支持。引入原生 `comfy.model_management` 显存清理机制。 [[更新](update.md#release-notes-v220-2026-08-19)]
 * **2025/02/05**: **v2.1.0** 新增 SageAttention 支持，优化 FP8 模型处理，改进注意力模式选择 [[更新](https://github.com/1038lab/ComfyUI-QwenVL/blob/main/update.md#version-210-20250205)]
   * **SageAttention 支持**: 新增 GPU 架构优化内核（SM80、SM89、SM90、SM120）
   * **改进 FP8 处理**: 更好的预量化 FP8 模型支持，自动回退到 SDPA
@@ -41,6 +49,7 @@ ComfyUI-QwenVL 是一款自定义节点，它集成了来自阿里云的强大 Q
 * **可复现生成**：使用 seed 参数可获得一致的输出结果。
 * **内存管理**："保持模型加载"选项可将模型保留在显存中，以加快处理速度。
 * **图像与视频支持**：接受单个图像和视频帧序列作为输入。
+* **智能视频自适应缩放**：动态计算视频输入的安全 Token 预算，小尺寸视频保持原画质，高分辨率视频自动等比缩放，彻底杜绝显存溢出与槽位溢出。
 * **强大的错误处理**：为硬件或内存问题提供清晰的错误信息。
 * **简洁的控制台输出**：在操作过程中提供最少且信息丰富的控制台日志。
 * **SageAttention 支持**：GPU 优化的注意力机制，支持多种 GPU 架构（Ampere、Ada、Hopper、Blackwell）。
@@ -74,6 +83,9 @@ pip install sageattention
 - **QwenVL (Advanced)**: 完全控制采样、设备和性能设置。
 - **QwenVL Prompt Enhancer**: 纯文本提示词增强（支持 Qwen3 文本模型和文本模式下的 QwenVL 模型）。
 
+### **实用工具节点 (Utilities)**
+- **HuggingFace Downloader**: 直接从 HuggingFace 下载 GGUF/HF 模型或整个仓库到您的 ComfyUI 目录中。
+
 ### **GGUF (llama.cpp) 节点**
 - **QwenVL (GGUF)**: GGUF 视觉语言推理。
 - **QwenVL (GGUF Advanced)**: 扩展 GGUF 控制（上下文、GPU 层等）。
@@ -94,7 +106,7 @@ pip install sageattention
   - `hf_vl_models`: 视觉语言模型（由 QwenVL 节点使用）。
   - `hf_text_models`: 纯文本模型（由提示词增强器使用）。
 - **GGUF 模型**: `gguf_models.json`
-- **系统提示词**: `AILab_System_Prompts.json`（包含 VL 提示词和提示词增强器样式）。
+- **系统提示词**: `system_prompts.json`（包含 VL 提示词和提示词增强器样式）。
 
 ## **📥 下载模型**
 
@@ -137,6 +149,9 @@ pip install sageattention
 | Qwen-VL (GGUF) | Qwen3-VL-8B-Instruct-GGUF | [Qwen/Qwen3-VL-8B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct-GGUF) |  | Qwen3VL-8B-Instruct-F16.gguf, Qwen3VL-8B-Instruct-Q4_K_M.gguf, Qwen3VL-8B-Instruct-Q8_0.gguf | mmproj-Qwen3VL-8B-Instruct-F16.gguf |
 | Qwen-VL (GGUF) | Qwen3-VL-4B-Thinking-GGUF | [Qwen/Qwen3-VL-4B-Thinking-GGUF](https://huggingface.co/Qwen/Qwen3-VL-4B-Thinking-GGUF) |  | Qwen3VL-4B-Thinking-F16.gguf, Qwen3VL-4B-Thinking-Q4_K_M.gguf, Qwen3VL-4B-Thinking-Q8_0.gguf | mmproj-Qwen3VL-4B-Thinking-F16.gguf |
 | Qwen-VL (GGUF) | Qwen3-VL-8B-Thinking-GGUF | [Qwen/Qwen3-VL-8B-Thinking-GGUF](https://huggingface.co/Qwen/Qwen3-VL-8B-Thinking-GGUF) |  | Qwen3VL-8B-Thinking-F16.gguf, Qwen3VL-8B-Thinking-Q4_K_M.gguf, Qwen3VL-8B-Thinking-Q8_0.gguf | mmproj-Qwen3VL-8B-Thinking-F16.gguf |
+| Qwen-VL (GGUF) | Qwen3.5-VL-7B-Instruct-GGUF | [Qwen/Qwen3.5-VL-7B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen3.5-VL-7B-Instruct-GGUF) |  | Qwen3.5VL-7B-Instruct-F16.gguf, Qwen3.5VL-7B-Instruct-Q4_K_M.gguf, Qwen3.5VL-7B-Instruct-Q8_0.gguf | mmproj-Qwen3.5VL-7B-Instruct-F16.gguf |
+| Qwen-VL (GGUF) | Qwen3.6-VL-MoE-Instruct-GGUF | [Qwen/Qwen3.6-VL-MoE-Instruct-GGUF](https://huggingface.co/Qwen/Qwen3.6-VL-MoE-Instruct-GGUF) |  | Qwen3.6VL-MoE-Instruct-F16.gguf, Qwen3.6VL-MoE-Instruct-Q4_K_M.gguf, Qwen3.6VL-MoE-Instruct-Q8_0.gguf | mmproj-Qwen3.6VL-MoE-Instruct-F16.gguf |
+| Qwen-VL (GGUF) | Qwen3.8-VL-14B-Instruct-GGUF | [Qwen/Qwen3.8-VL-14B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen3.8-VL-14B-Instruct-GGUF) |  | Qwen3.8VL-14B-Instruct-F16.gguf, Qwen3.8VL-14B-Instruct-Q4_K_M.gguf, Qwen3.8VL-14B-Instruct-Q8_0.gguf | mmproj-Qwen3.8VL-14B-Instruct-F16.gguf |
 
 ## **📖 使用方法**
 

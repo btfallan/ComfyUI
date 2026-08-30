@@ -17,6 +17,7 @@ from py.services.recipes.errors import (
     RecipeValidationError,
 )
 from py.services.recipes.persistence_service import RecipePersistenceService
+from py.services.model_scanner import ModelScanner
 from py.recipes.parsers.civitai_image import CivitaiApiMetadataParser
 from py.utils.exif_utils import ExifUtils
 
@@ -25,6 +26,7 @@ class DummyExifUtils:
     def __init__(self):
         self.appended = None
         self.optimized_calls = 0
+        self.workflow_value = None
 
     def optimize_image(self, image_data, target_width, format, quality, preserve_metadata):
         self.optimized_calls += 1
@@ -35,6 +37,14 @@ class DummyExifUtils:
 
     def extract_image_metadata(self, path):
         return {}
+
+    def _load_structured_metadata(self, image_path):
+        return {
+            "parameters": None,
+            "prompt": None,
+            "workflow": self.workflow_value,
+            "comment": None,
+        }
 
 
 @pytest.mark.asyncio
@@ -210,6 +220,84 @@ async def test_save_recipe_reports_duplicates(tmp_path):
     expected_image_path = os.path.normpath(result.payload["image_path"])
     assert stored["file_path"] == expected_image_path
     assert service._exif_utils.appended[0] == expected_image_path
+
+
+@pytest.mark.asyncio
+async def test_save_recipe_records_has_workflow(tmp_path):
+    exif_utils = DummyExifUtils()
+    exif_utils.workflow_value = '{"nodes": []}'
+
+    class DummyCache:
+        def __init__(self):
+            self.raw_data = []
+
+        async def resort(self):
+            pass
+
+    class DummyScanner:
+        def __init__(self, root):
+            self.recipes_dir = str(root)
+            self._cache = DummyCache()
+
+        async def find_recipes_by_fingerprint(self, fingerprint):
+            return []
+
+        async def add_recipe(self, recipe_data):
+            self._cache.raw_data.append(recipe_data)
+
+    scanner = DummyScanner(tmp_path)
+    service = RecipePersistenceService(
+        exif_utils=exif_utils,
+        card_preview_width=512,
+        logger=logging.getLogger("test"),
+    )
+
+    result = await service.save_recipe(
+        recipe_scanner=scanner,
+        image_bytes=b"image-bytes",
+        image_base64=None,
+        name="Workflow Recipe",
+        tags=[],
+        metadata={"base_model": "sd", "loras": []},
+    )
+
+    stored = json.loads(Path(result.payload["json_path"]).read_text())
+    assert stored["has_workflow"] is True
+    assert scanner._cache.raw_data[0]["has_workflow"] is True
+
+
+@pytest.mark.asyncio
+async def test_save_recipe_records_no_workflow(tmp_path):
+    exif_utils = DummyExifUtils()
+
+    class DummyScanner:
+        def __init__(self, root):
+            self.recipes_dir = str(root)
+
+        async def find_recipes_by_fingerprint(self, fingerprint):
+            return []
+
+        async def add_recipe(self, recipe_data):
+            return None
+
+    scanner = DummyScanner(tmp_path)
+    service = RecipePersistenceService(
+        exif_utils=exif_utils,
+        card_preview_width=512,
+        logger=logging.getLogger("test"),
+    )
+
+    result = await service.save_recipe(
+        recipe_scanner=scanner,
+        image_bytes=b"image-bytes",
+        image_base64=None,
+        name="Plain Recipe",
+        tags=[],
+        metadata={"base_model": "sd", "loras": []},
+    )
+
+    stored = json.loads(Path(result.payload["json_path"]).read_text())
+    assert stored["has_workflow"] is False
 
 
 @pytest.mark.asyncio
@@ -1156,3 +1244,252 @@ async def test_analyze_local_image_fingerprint_uses_sha256_normalized_hash(tmp_p
 
     assert result.payload["loras"][0]["hash"] == sha256
     assert result.payload["fingerprint"] == f"{sha256}:1.0"
+
+
+@pytest.mark.asyncio
+async def test_reconnect_lora_distinguishes_ambiguous_mismatched_and_missing(tmp_path):
+    service = RecipePersistenceService(
+        exif_utils=DummyExifUtils(),
+        card_preview_width=512,
+        logger=logging.getLogger("test"),
+    )
+
+    models = [
+        {
+            "file_name": "style.safetensors",
+            "folder": "sd15",
+            "file_path": "/models/loras/sd15/style.safetensors",
+            "base_model": "SD 1.5",
+        },
+        {
+            "file_name": "style.safetensors",
+            "folder": "sdxl",
+            "file_path": "/models/loras/sdxl/style.safetensors",
+            "base_model": "SDXL 1.0",
+        },
+    ]
+
+    class DummyScanner:
+        def __init__(self, recipe_path):
+            self._recipe_path = recipe_path
+
+        async def get_recipe_json_path(self, recipe_id):
+            return str(self._recipe_path)
+
+        async def get_local_lora(self, name, base_model=None):
+            matches = ModelScanner.find_matching_models(models, name, base_model=base_model)
+            return matches[0] if len(matches) == 1 else None
+
+        async def find_local_loras_by_name(self, name, base_model=None):
+            return ModelScanner.find_matching_models(models, name, base_model=base_model)
+
+    def write_recipe(base_model):
+        recipe_path = tmp_path / "recipe.json"
+        recipe_path.write_text(
+            json.dumps({"id": "r1", "base_model": base_model, "loras": []})
+        )
+        return DummyScanner(recipe_path)
+
+    # Ambiguous bare name: two candidates survive (recipe base model unknown)
+    scanner = write_recipe("")
+    with pytest.raises(RecipeValidationError, match="include the folder path"):
+        await service.reconnect_lora(
+            recipe_scanner=scanner, recipe_id="r1", lora_index=0, target_name="style"
+        )
+
+    # Confident base-model mismatch: the only candidate belongs to another family
+    scanner = write_recipe("SD 1.5")
+    with pytest.raises(RecipeValidationError, match="different base model"):
+        await service.reconnect_lora(
+            recipe_scanner=scanner,
+            recipe_id="r1",
+            lora_index=0,
+            target_name="sdxl/style",
+        )
+
+    # No candidate at all
+    scanner = write_recipe("SDXL 1.0")
+    with pytest.raises(RecipeNotFoundError, match="not found"):
+        await service.reconnect_lora(
+            recipe_scanner=scanner, recipe_id="r1", lora_index=0, target_name="missing"
+        )
+
+
+@pytest.mark.asyncio
+async def test_mark_lora_hash_invalid_delegates_and_reports(tmp_path):
+    service = RecipePersistenceService(
+        exif_utils=DummyExifUtils(),
+        card_preview_width=512,
+        logger=logging.getLogger("test"),
+    )
+
+    class DummyScanner:
+        async def set_lora_entry_hash_invalid(self, recipe_id, lora_index, hash_invalid):
+            assert recipe_id == "r1"
+            assert lora_index == 0
+            assert hash_invalid is True
+            return (
+                {"id": "r1", "loras": [{"file_name": "m", "hashInvalid": True}]},
+                {"file_name": "m", "hashInvalid": True},
+            )
+
+    result = await service.mark_lora_hash_invalid(
+        recipe_scanner=DummyScanner(), recipe_id="r1", lora_index=0
+    )
+
+    assert result.payload["success"] is True
+    assert result.payload["recipe_id"] == "r1"
+    assert result.payload["hash_invalid"] is True
+    assert result.payload["updated_lora"]["hashInvalid"] is True
+
+
+@pytest.mark.asyncio
+async def test_mark_lora_hash_invalid_can_clear_flag(tmp_path):
+    service = RecipePersistenceService(
+        exif_utils=DummyExifUtils(),
+        card_preview_width=512,
+        logger=logging.getLogger("test"),
+    )
+
+    class DummyScanner:
+        async def set_lora_entry_hash_invalid(self, recipe_id, lora_index, hash_invalid):
+            assert hash_invalid is False
+            return (
+                {"id": "r1", "loras": [{"file_name": "m", "hashInvalid": False}]},
+                {"file_name": "m", "hashInvalid": False},
+            )
+
+    result = await service.mark_lora_hash_invalid(
+        recipe_scanner=DummyScanner(),
+        recipe_id="r1",
+        lora_index=0,
+        hash_invalid=False,
+    )
+
+    assert result.payload["hash_invalid"] is False
+    assert result.payload["updated_lora"]["hashInvalid"] is False
+
+
+@pytest.mark.asyncio
+async def test_analyze_remote_image_meta_null_keeps_exif_loras(tmp_path, monkeypatch):
+    """When the CivitAI image API meta is null (only modelVersionIds
+    present), the EXIF-parsed LoRAs must be merged into the result — they
+    were previously dropped because the API-only parse yields a checkpoint
+    but no LoRAs."""
+    A1111_METADATA = (
+        "woman, natural blonde hair, ice blue eyes, <lora:Daphne Blake Cosplay_v1:1> daphne blake cosplay, upper body\n"
+        "Negative prompt: low quality\n"
+        "Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 7, Seed: 4140408634, "
+        "Size: 512x768, Model hash: 3c8530cb22, Model: cyberrealistic_v33, "
+        'Lora hashes: "Daphne Blake Cosplay_v1: e67ebd5e315f", '
+        'Hashes: {"lora:Daphne Blake Cosplay_v1": "a2a12bfa01"}'
+    )
+    LORA_SHA256 = "533317d3f7d269f9f504bdc432514774d3ada3738ebd80f3f1a37ff848e88276"
+
+    class FakeExif:
+        def extract_image_metadata(self, path):
+            return A1111_METADATA
+
+    class FakeDownloader:
+        async def download_file(self, url, path, use_auth=False):
+            with open(path, "wb") as fh:
+                fh.write(b"fake-image")
+            return True, None
+
+    async def downloader_factory():
+        return FakeDownloader()
+
+    class FakeCivitaiClient:
+        async def get_image_info(self, image_id, source_url=None):
+            return {
+                "id": 7076441,
+                "url": "https://image.civitai.com/x/original=true/x.jpeg",
+                "type": "image",
+                "meta": None,
+                "modelVersionIds": [138176],
+                "browsingLevel": 1,
+            }
+
+    async def fake_metadata_provider():
+        class Provider:
+            async def get_model_version_info(self, version_id):
+                if version_id == "138176":
+                    return {
+                        "id": 138176,
+                        "modelId": 15003,
+                        "model": {"name": "CyberRealistic", "type": "checkpoint"},
+                        "name": "v3.3",
+                        "baseModel": "SD 1.5",
+                        "files": [
+                            {
+                                "type": "Model",
+                                "primary": True,
+                                "name": "cyberrealistic_v33.safetensors",
+                                "hashes": {"SHA256": "3c8530cb2239b686d23a94627e29883fe44a1605f31a777727b6709f80d11679"},
+                            }
+                        ],
+                    }, None
+                return None, "Model not found"
+
+            async def get_model_by_hash(self, model_hash):
+                if model_hash == "e67ebd5e315f":
+                    return {
+                        "id": 359072,
+                        "modelId": 320224,
+                        "model": {"name": "Daphne Blake Cosplay (Scooby Doo)", "type": "lora"},
+                        "name": "v1.0",
+                        "baseModel": "SD 1.5",
+                        "downloadUrl": "https://civitai.com/api/download/359072",
+                        "files": [
+                            {
+                                "type": "Model",
+                                "primary": True,
+                                "name": "Daphne Blake Cosplay_v1.safetensors",
+                                "hashes": {"SHA256": LORA_SHA256.upper()},
+                            }
+                        ],
+                    }, None
+                return None, "Model not found"
+
+        return Provider()
+
+    monkeypatch.setattr(
+        "py.recipes.parsers.automatic.get_default_metadata_provider",
+        fake_metadata_provider,
+    )
+
+    class DummyScanner:
+        async def build_local_hash_cache(self):
+            return {}
+
+        async def find_recipes_by_fingerprint(self, fp):
+            return []
+
+        async def get_local_lora(self, name, base_model=None):
+            return None
+
+        async def get_local_lora_by_hash(self, hash_value):
+            return None
+
+    from py.recipes.factory import RecipeParserFactory
+
+    service = RecipeAnalysisService(
+        exif_utils=FakeExif(),
+        recipe_parser_factory=RecipeParserFactory(),
+        downloader_factory=downloader_factory,
+        logger=logging.getLogger("test"),
+    )
+
+    result = await service.analyze_remote_image(
+        url="https://civitai.red/images/7076441",
+        recipe_scanner=DummyScanner(),
+        civitai_client=FakeCivitaiClient(),
+    )
+    payload = result.payload
+
+    assert payload.get("error") is None
+    loras = payload.get("loras") or []
+    assert len(loras) == 1
+    assert loras[0]["hash"] == LORA_SHA256
+    assert loras[0].get("isDeleted") in (None, False)
+    assert "Daphne" in str(payload.get("gen_params", {}).get("prompt"))

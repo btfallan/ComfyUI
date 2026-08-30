@@ -24,10 +24,50 @@ Whether you're a casual user or a power user, iTools brings quality-of-life impr
 </tr>
 </table>
 
+## Known issues:
+4 of 22 nodes are not yet compatible with ComfyUI Node.2 (Beta). I’m working to make most nodes fully supported in both modes, but frequent ComfyUI updates may cause occasional issues. Keep in mind that Node.2 is also still in (Beta).
+
+#### Unsupported Nodes in Node.2:
+- iTools Prompt Record
+- iTools Image Preview
+- iTools Image Compare
+- iTools Crop Node (Beta)
+
+For full functionality, use the classic node system.
+
+
 ## Nodes:
+
+### **iTools Prompt Builder 🛖**
+
+This node is an interactive, all-in-one prompt management node for ComfyUI. It combines a clean, modern text interface with a dynamic styling system, allowing you to build, merge, and manage both positive and negative prompts without leaving the node.
+
+#### 🚀 Key Features:
+* Dynamic Styler Integration: Directly connects to your `.yaml` style libraries. Browse categories and specific templates (e.g., Cinematic, Anime, Photographic) and merge them into your prompt with one click.
+* Dual-Prompt Workspace: High-performance textareas for both Positive and Negative prompts with auto-adjusting layouts.
+* Smart "NEG" Toggle: A three-state cycle button (**🌕**, **🌔**, **🌓**) to manage your workflow:
+    * Off (🌕): Standard positive output only.
+    * Output Only (🌔): Adds a "negative" output pin to the node without showing the text area, It will automatically retrieve the default negative prompt from the `.yaml` file.
+    * Full UI (🌓): Displays the dedicated negative prompt textarea and enables the output pin. so you may add additional negative prompts.
+* Merge & Append Modes:
+    * MERGE STYLE: Intelligently blends your text with the selected style via server-side logic.
+    * APPEND: Quickly tags style keywords onto the end of your existing prompt.
+* History & Undo: Includes a dedicated Reset/Undo button (`↺`) to step back through prompt changes or clear the text entirely.
+
+[![Watch the video](https://github.com/user-attachments/assets/8c824129-e608-467e-813c-567049152dec)](https://github.com/user-attachments/assets/8c824129-e608-467e-813c-567049152dec)
+
+### **iTools Instructor 👨🏻‍🏫**
+
+This node is a powerful prompt engineering tool that helps you write better prompts by providing a structured template system. It allows you to define placeholders in your prompt text (e.g., `[SUBJECT]`, `[STYLE]`) and then fill them in using a simple interface. The node also includes features for prompt organization, history tracking, and template management.
+
+![iTools Instructor](examples/Screenshot23.jpg)
+
+---
 ### **iTools Prompt Record 🪶:**
 
 Tracks and records your prompts during workflow execution. Features a Timeline system that saves your prompt history between sessions, allowing you to quickly access and reuse previously successful prompts. Includes favorites management and prompt organization tools.
+
+`Edit: Now this node will save its Timeline with the node itself. It will remember every prompt that runs through it, even after reloading the workflow.`
 
 [![Watch the video](https://github.com/user-attachments/assets/99c55c91-f71d-4f5c-9067-cd5966cc9a75)](https://github.com/user-attachments/assets/99c55c91-f71d-4f5c-9067-cd5966cc9a75)
 
@@ -36,7 +76,9 @@ Tracks and records your prompts during workflow execution. Features a Timeline s
 
 Enhanced image preview node with built-in history tracking. Allows you to cycle through previously generated images and compare them side by side. Features quick access buttons for history navigation and image comparison.
 
-[![Watch the video](https://github.com/user-attachments/assets/07acb50c-afca-4668-9073-75ea2c11895d)](https://github.com/user-attachments/assets/07acb50c-afca-4668-9073-75ea2c11895d)
+You can also attach a note to any image with the **Add Note** button on the preview. The note is rendered as a caption bar at the bottom of the image it belongs to, and it follows that image everywhere: in the single image view, in the history grid (each image shows its own note), and on both sides of the compare split. Notes are stored per image inside the workflow, never baked into the image file, so nothing is written to your outputs. Click **Add Note** / **Edit Note** again to change a note, or leave the text empty to remove it. In the history grid the note applies to the image you are hovering.
+
+[![Watch the video](https://github.com/user-attachments/assets/ec77dd51-5565-4a0f-8007-d6f4f627bbd5)](https://github.com/user-attachments/assets/ec77dd51-5565-4a0f-8007-d6f4f627bbd5)
 
 ---
 ### **iTools Image Compare 🔍:**
@@ -82,6 +124,11 @@ Reset size and rotation when double-clicking the image
 - **`Alt`** – Stamps an image onto the background or foreground layer.  
 - **`Alt`** (while the color picker is visible) – Swaps the position of the color palette.
 - **`Double Click`** – Will Reset selecting image or text rotation.  
+---
+### **iTools Image Adjustments 🎛️:**
+
+Fine-tune your images directly within ComfyUI, a node that can run on its own or within a workflow. I'm not the first to do it, but I did it the way I like it. live updates, no extra windows, can work separately, support drag-and-drop / pasting, save your edits directly or pass the result to the next node.
+
 ---
 ### **iTools Image Loader Plus:**
 
@@ -187,10 +234,10 @@ A text replacer tool that might also be useful.
 ![iTools Text Replacer](examples/Screenshot12.jpg)
 
 ---
-### **iTools Vae Preview:**
+### **iTools Preview Bridge:**
 
-Merges VAE decoding and image preview into one node, The goal of `iTools Vae Preview`  is to Decode & Preview the image at same node, so you do not have to use the `VAEDecod` node every time before preview an image.
-![iTools Vae Preview](examples/Screenshot16.jpg)
+Merges VAE decoding and image preview into one node, The goal of `iTools Preview Bridge`  is to Decode & Preview the image at same node, so you do not have to use the `VAEDecod` node every time before preview an image.
+![iTools Preview Bridge](examples/Screenshot16.jpg)
 
 ---
 ### **iTools Checkerboard:**

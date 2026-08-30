@@ -57,8 +57,32 @@ class StubLoraScanner:
         meta = self._hash_meta.get(hash_value.lower())
         return meta.get("path") if meta else None
 
-    async def get_model_info_by_name(self, name: str):
+    async def get_model_info_by_name(
+        self,
+        name: str,
+        *,
+        require_unique: bool = False,
+        base_model: str | None = None,
+    ):
+        if require_unique or base_model:
+            matches = ModelScanner.find_matching_models(
+                self._cache.raw_data,
+                name,
+                base_model=base_model,
+                extensions={".safetensors"},
+            )
+            if require_unique and len(matches) != 1:
+                return None
+            return matches[0] if matches else None
         return self._models_by_name.get(name)
+
+    async def find_models_by_name(self, name: str, *, base_model: str | None = None):
+        return ModelScanner.find_matching_models(
+            self._cache.raw_data,
+            name,
+            base_model=base_model,
+            extensions={".safetensors"},
+        )
 
     def register_model(self, name: str, info: Dict[str, Any]) -> None:
         self._models_by_name[name] = info
@@ -105,6 +129,39 @@ def recipe_scanner(tmp_path: Path, monkeypatch):
     yield scanner, stub
     RecipeScanner._instance = None
     settings_manager_module.reset_settings_manager()
+
+
+@pytest.mark.asyncio
+async def test_local_lora_lookup_requires_unambiguous_name_and_matching_base_model(recipe_scanner):
+    scanner, stub = recipe_scanner
+    models = [
+        {
+            "file_name": "style.safetensors",
+            "folder": "sd15",
+            "file_path": "/models/loras/sd15/style.safetensors",
+            "sha256": "a" * 64,
+            "base_model": "SD 1.5",
+        },
+        {
+            "file_name": "style.safetensors",
+            "folder": "sdxl",
+            "file_path": "/models/loras/sdxl/style.safetensors",
+            "sha256": "b" * 64,
+            "base_model": "SDXL 1.0",
+        },
+    ]
+    stub._cache.raw_data = models
+    stub._hash_meta["b" * 64] = {"path": models[1]["file_path"]}
+
+    assert await scanner.get_local_lora("style") is None
+    assert await scanner.get_local_lora("style", "SDXL 1.0") is models[1]
+    assert await scanner.get_local_lora("sdxl/style.safetensors", "SDXL 1.0") is models[1]
+    # The lora scanner only indexes .safetensors, so a .pt name must not be
+    # stripped into a cross-extension match.
+    assert await scanner.get_local_lora("sdxl/style.pt", "SDXL 1.0") is None
+    assert await scanner.get_local_lora("sdxl/style.safetensors", "SD 1.5") is None
+    assert await scanner.get_local_lora("other/style.safetensors") is None
+    assert await scanner.get_local_lora_by_hash("b" * 64) is models[1]
 
 
 def test_recipes_dir_uses_custom_settings_path(tmp_path: Path, monkeypatch):
@@ -274,6 +331,77 @@ async def test_update_lora_entry_updates_cache_and_file(tmp_path: Path, recipe_s
     assert cached_recipe["fingerprint"] == expected_fingerprint
 
 
+async def test_set_lora_entry_hash_invalid_persists_flag(tmp_path: Path, recipe_scanner):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    recipe_id = "hash-invalid-1"
+    recipe_path = recipes_dir / f"{recipe_id}.recipe.json"
+    recipe_data = {
+        "id": recipe_id,
+        "file_path": str(tmp_path / "image.png"),
+        "title": "Hash invalid",
+        "modified": 0.0,
+        "created_date": 0.0,
+        "loras": [
+            {
+                "file_name": "Daphne Blake Cosplay_v1",
+                "strength": 1.0,
+                "hash": "a2a12bfa01",
+            },
+        ],
+    }
+    recipe_path.write_text(json.dumps(recipe_data))
+    await scanner.add_recipe(dict(recipe_data))
+
+    updated_recipe, updated_lora = await scanner.set_lora_entry_hash_invalid(
+        recipe_id, 0, True
+    )
+
+    assert updated_lora["hashInvalid"] is True
+    assert updated_recipe["loras"][0]["hashInvalid"] is True
+    with recipe_path.open("r", encoding="utf-8") as file_obj:
+        persisted = json.load(file_obj)
+    assert persisted["loras"][0]["hashInvalid"] is True
+    assert persisted["loras"][0]["hash"] == "a2a12bfa01"
+
+    cache = await scanner.get_cached_data()
+    cached_recipe = next(item for item in cache.raw_data if item["id"] == recipe_id)
+    assert cached_recipe["loras"][0]["hashInvalid"] is True
+
+    _, cleared_lora = await scanner.set_lora_entry_hash_invalid(recipe_id, 0, False)
+    assert cleared_lora["hashInvalid"] is False
+
+
+@pytest.mark.asyncio
+async def test_get_recipe_syntax_tokens_skips_unobtainable_loras(tmp_path: Path, recipe_scanner):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    recipe_id = "syntax-skip-1"
+    recipe_path = recipes_dir / f"{recipe_id}.recipe.json"
+    recipe_data = {
+        "id": recipe_id,
+        "file_path": str(tmp_path / "image.png"),
+        "title": "Syntax skip",
+        "modified": 0.0,
+        "created_date": 0.0,
+        "loras": [
+            {"file_name": "usable_lora", "strength": 0.8, "hash": ""},
+            {"file_name": "deleted_lora", "strength": 1.0, "hash": "", "isDeleted": True},
+            {"file_name": "invalid_hash_lora", "strength": 1.0, "hash": "", "hashInvalid": True},
+        ],
+    }
+    recipe_path.write_text(json.dumps(recipe_data))
+    await scanner.add_recipe(dict(recipe_data))
+
+    tokens = await scanner.get_recipe_syntax_tokens(recipe_id)
+
+    assert tokens == ["<lora:usable_lora:0.8>"]
+
+
 @pytest.mark.asyncio
 async def test_load_recipe_rewrites_missing_image_path(tmp_path: Path, recipe_scanner):
     scanner, _ = recipe_scanner
@@ -336,6 +464,214 @@ async def test_load_recipe_upgrades_string_checkpoint(tmp_path: Path, recipe_sca
     assert loaded["checkpoint"]["file_name"] == "sd15"
 
 
+# ---------------------------------------------------------------------------
+# has_workflow detection (plan 3.1)
+# ---------------------------------------------------------------------------
+
+
+def _recipe_json(recipes_dir: Path, recipe_id: str, image_path: Path, **extra: Any) -> Path:
+    recipe_path = recipes_dir / f"{recipe_id}.recipe.json"
+    data: Dict[str, Any] = {
+        "id": recipe_id,
+        "file_path": str(image_path),
+        "title": recipe_id,
+        "modified": 0.0,
+        "created_date": 0.0,
+        "loras": [],
+    }
+    data.update(extra)
+    recipe_path.write_text(json.dumps(data))
+    return recipe_path
+
+
+def _mock_metadata(monkeypatch, workflow=None, raises=False):
+    def _load_structured_metadata(_image_path):
+        if raises:
+            raise RuntimeError("metadata parse failure")
+        return {
+            "parameters": None,
+            "prompt": "a test prompt",
+            "workflow": workflow,
+            "comment": None,
+        }
+
+    monkeypatch.setattr(
+        "py.services.recipe_scanner.ExifUtils._load_structured_metadata",
+        _load_structured_metadata,
+    )
+
+
+@pytest.mark.asyncio
+async def test_load_recipe_detects_embedded_workflow(tmp_path: Path, recipe_scanner, monkeypatch):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    image_path = recipes_dir / "with-workflow.webp"
+    image_path.write_bytes(b"fake-webp")
+    recipe_path = _recipe_json(recipes_dir, "with-workflow", image_path)
+
+    _mock_metadata(monkeypatch, workflow='{"nodes": []}')
+
+    loaded = await scanner._load_recipe_file(str(recipe_path))
+
+    assert loaded["has_workflow"] is True
+    persisted = json.loads(recipe_path.read_text())
+    assert persisted["has_workflow"] is True
+
+
+@pytest.mark.asyncio
+async def test_load_recipe_detects_no_workflow(tmp_path: Path, recipe_scanner, monkeypatch):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    image_path = recipes_dir / "without-workflow.webp"
+    image_path.write_bytes(b"fake-webp")
+    recipe_path = _recipe_json(recipes_dir, "without-workflow", image_path)
+
+    _mock_metadata(monkeypatch, workflow=None)
+
+    loaded = await scanner._load_recipe_file(str(recipe_path))
+
+    assert loaded["has_workflow"] is False
+    persisted = json.loads(recipe_path.read_text())
+    assert persisted["has_workflow"] is False
+
+
+@pytest.mark.asyncio
+async def test_load_recipe_metadata_exception_yields_false(
+    tmp_path: Path, recipe_scanner, monkeypatch
+):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    image_path = recipes_dir / "broken-meta.webp"
+    image_path.write_bytes(b"fake-webp")
+    recipe_path = _recipe_json(recipes_dir, "broken-meta", image_path)
+
+    _mock_metadata(monkeypatch, raises=True)
+
+    loaded = await scanner._load_recipe_file(str(recipe_path))
+
+    assert loaded["has_workflow"] is False
+
+
+@pytest.mark.asyncio
+async def test_load_recipe_missing_image_yields_false(
+    tmp_path: Path, recipe_scanner, monkeypatch
+):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    image_path = recipes_dir / "missing-image.webp"
+    recipe_path = _recipe_json(recipes_dir, "missing-image", image_path)
+
+    _mock_metadata(monkeypatch, workflow='{"nodes": []}')
+
+    loaded = await scanner._load_recipe_file(str(recipe_path))
+
+    assert loaded["has_workflow"] is False
+
+
+@pytest.mark.asyncio
+async def test_load_recipe_keeps_existing_has_workflow(
+    tmp_path: Path, recipe_scanner, monkeypatch
+):
+    scanner, _ = recipe_scanner
+    recipes_dir = Path(config.loras_roots[0]) / "recipes"
+    recipes_dir.mkdir(parents=True, exist_ok=True)
+
+    image_path = recipes_dir / "pre-recorded.webp"
+    image_path.write_bytes(b"fake-webp")
+    recipe_path = _recipe_json(recipes_dir, "pre-recorded", image_path, has_workflow=True)
+
+    _mock_metadata(monkeypatch, workflow=None)
+
+    loaded = await scanner._load_recipe_file(str(recipe_path))
+
+    assert loaded["has_workflow"] is True
+    persisted = json.loads(recipe_path.read_text())
+    assert persisted["has_workflow"] is True
+
+
+def test_load_recipe_file_sync_detects_embedded_workflow(tmp_path: Path, monkeypatch):
+    RecipeScanner._instance = None
+    settings_manager_module.reset_settings_manager()
+    monkeypatch.setattr(config, "loras_roots", [str(tmp_path)])
+    scanner = RecipeScanner(lora_scanner=StubLoraScanner())  # pyright: ignore[reportArgumentType]
+    try:
+        recipes_dir = Path(config.loras_roots[0]) / "recipes"
+        recipes_dir.mkdir(parents=True, exist_ok=True)
+
+        image_path = recipes_dir / "sync-workflow.webp"
+        image_path.write_bytes(b"fake-webp")
+        recipe_path = _recipe_json(recipes_dir, "sync-workflow", image_path)
+
+        _mock_metadata(monkeypatch, workflow='{"nodes": []}')
+
+        loaded = scanner._load_recipe_file_sync(str(recipe_path))
+
+        assert loaded["has_workflow"] is True
+        persisted = json.loads(recipe_path.read_text())
+        assert persisted["has_workflow"] is True
+    finally:
+        RecipeScanner._instance = None
+        settings_manager_module.reset_settings_manager()
+
+
+def test_load_recipe_file_sync_detects_no_workflow(tmp_path: Path, monkeypatch):
+    RecipeScanner._instance = None
+    settings_manager_module.reset_settings_manager()
+    monkeypatch.setattr(config, "loras_roots", [str(tmp_path)])
+    scanner = RecipeScanner(lora_scanner=StubLoraScanner())  # pyright: ignore[reportArgumentType]
+    try:
+        recipes_dir = Path(config.loras_roots[0]) / "recipes"
+        recipes_dir.mkdir(parents=True, exist_ok=True)
+
+        image_path = recipes_dir / "sync-no-workflow.webp"
+        image_path.write_bytes(b"fake-webp")
+        recipe_path = _recipe_json(recipes_dir, "sync-no-workflow", image_path)
+
+        _mock_metadata(monkeypatch, workflow=None)
+
+        loaded = scanner._load_recipe_file_sync(str(recipe_path))
+
+        assert loaded["has_workflow"] is False
+        persisted = json.loads(recipe_path.read_text())
+        assert persisted["has_workflow"] is False
+    finally:
+        RecipeScanner._instance = None
+        settings_manager_module.reset_settings_manager()
+
+
+def test_load_recipe_file_sync_metadata_exception_yields_false(
+    tmp_path: Path, monkeypatch
+):
+    RecipeScanner._instance = None
+    settings_manager_module.reset_settings_manager()
+    monkeypatch.setattr(config, "loras_roots", [str(tmp_path)])
+    scanner = RecipeScanner(lora_scanner=StubLoraScanner())  # pyright: ignore[reportArgumentType]
+    try:
+        recipes_dir = Path(config.loras_roots[0]) / "recipes"
+        recipes_dir.mkdir(parents=True, exist_ok=True)
+
+        image_path = recipes_dir / "sync-broken-meta.webp"
+        image_path.write_bytes(b"fake-webp")
+        recipe_path = _recipe_json(recipes_dir, "sync-broken-meta", image_path)
+
+        _mock_metadata(monkeypatch, raises=True)
+
+        loaded = scanner._load_recipe_file_sync(str(recipe_path))
+
+        assert loaded["has_workflow"] is False
+    finally:
+        RecipeScanner._instance = None
+        settings_manager_module.reset_settings_manager()
+
+
 @pytest.mark.asyncio
 async def test_get_paginated_data_normalizes_legacy_checkpoint(recipe_scanner):
     scanner, _ = recipe_scanner
@@ -360,7 +696,6 @@ async def test_get_paginated_data_normalizes_legacy_checkpoint(recipe_scanner):
     assert checkpoint["name"] == "legacy.safetensors"
     assert checkpoint["file_name"] == "legacy"
 
-
 @pytest.mark.asyncio
 async def test_get_recipe_by_id_handles_non_dict_checkpoint(recipe_scanner):
     scanner, _ = recipe_scanner
@@ -381,6 +716,53 @@ async def test_get_recipe_by_id_handles_non_dict_checkpoint(recipe_scanner):
 
     assert recipe["checkpoint"]["name"] == "by-id.safetensors"
     assert recipe["checkpoint"]["file_name"] == "by-id"
+
+
+@pytest.mark.asyncio
+async def test_get_recipe_by_id_detects_workflow_for_legacy_recipes(
+    recipe_scanner, monkeypatch
+):
+    scanner, _ = recipe_scanner
+    await scanner.add_recipe(
+        {
+            "id": "legacy-no-flag",
+            "file_path": "/models/recipes/legacy.webp",
+            "title": "Legacy",
+            "modified": 0.0,
+            "created_date": 0.0,
+            "loras": [],
+        }
+    )
+
+    monkeypatch.setattr(
+        RecipeScanner, "_detect_has_workflow", lambda self, path: True
+    )
+
+    recipe = await scanner.get_recipe_by_id("legacy-no-flag")
+
+    assert recipe is not None
+    assert recipe["has_workflow"] is True
+
+
+@pytest.mark.asyncio
+async def test_get_recipe_by_id_keeps_existing_has_workflow_flag(recipe_scanner):
+    scanner, _ = recipe_scanner
+    await scanner.add_recipe(
+        {
+            "id": "flagged",
+            "file_path": "/models/recipes/flagged.webp",
+            "title": "Flagged",
+            "modified": 0.0,
+            "created_date": 0.0,
+            "loras": [],
+            "has_workflow": False,
+        }
+    )
+
+    recipe = await scanner.get_recipe_by_id("flagged")
+
+    assert recipe is not None
+    assert recipe["has_workflow"] is False
 
 
 @pytest.mark.asyncio
@@ -1899,6 +2281,24 @@ async def test_is_rematch_candidate_rejects_non_dict(tmp_path: Path):
     scanner, _, _ = _make_rematch_scanner([], [], tmp_path)
     malformed: Any = "garbage"
     assert not scanner._is_rematch_candidate(malformed)
+
+
+async def test_is_rematch_candidate_hash_invalid_passes(tmp_path: Path):
+    scanner, _, _ = _make_rematch_scanner([], [], tmp_path)
+    assert scanner._is_rematch_candidate(
+        {"hash": "abc", "file_name": "m.safetensors", "hashInvalid": True}
+    )
+
+
+async def test_is_rematch_candidate_healthy_not_in_library_rejected(tmp_path: Path):
+    # A healthy entry whose hash is simply absent from the local library
+    # (recipe imported without downloading the model) must not become a
+    # candidate: its CivitAI-valid hash would be at risk of being
+    # overwritten by the imprecise filename fallback.
+    scanner, _, _ = _make_rematch_scanner([], [], tmp_path)
+    assert not scanner._is_rematch_candidate(
+        {"hash": "abc", "file_name": "m.safetensors", "hashInvalid": False}
+    )
 
 
 # _match_rematch_entry — L1 hash-cache lookup

@@ -1,0 +1,204 @@
+{
+	"5": {
+		"inputs": {
+			"ckpt_name": "Qwen-Rapid-AIO-NSFW-v23.safetensors"
+		},
+		"class_type": "CheckpointLoaderSimple"
+	},
+	"100": {
+		"inputs": {
+			"ckpt_name": "biglust.safetensors"
+		},
+		"class_type": "CheckpointLoaderSimple"
+	},
+	"78": {
+		"inputs": {
+			"image": "input_image.png"
+		},
+		"class_type": "LoadImage"
+	},
+	"93": {
+		"inputs": {
+			"upscale_method": "lanczos",
+			"megapixels": 1,
+			"resolution_steps": 64,
+			"image": [
+				"78",
+				0
+			]
+		},
+		"class_type": "ImageScaleToTotalPixels"
+	},
+	"88": {
+		"inputs": {
+			"pixels": [
+				"93",
+				0
+			],
+			"vae": [
+				"5",
+				2
+			]
+		},
+		"class_type": "VAEEncode"
+	},
+	"110": {
+		"inputs": {
+			"prompt": "",
+			"clip": [
+				"",
+				1
+			],
+			"vae": [
+				"5",
+				2
+			],
+			"image1": [
+				"93",
+				0
+			]
+		},
+		"class_type": "TextEncodeQwenImageEditPlus"
+	},
+	"111": {
+		"inputs": {
+			"prompt": "",
+			"clip": [
+				"",
+				1
+			],
+			"vae": [
+				"5",
+				2
+			],
+			"image1": [
+				"93",
+				0
+			]
+		},
+		"class_type": "TextEncodeQwenImageEditPlus"
+	},
+	"3": {
+		"inputs": {
+			"seed": 123456789,
+			"steps": 6,
+			"cfg": 1.5,
+			"sampler_name": "euler",
+			"scheduler": "simple",
+			"denoise": 1,
+			"model": [
+				"",
+				0
+			],
+			"positive": [
+				"111",
+				0
+			],
+			"negative": [
+				"110",
+				0
+			],
+			"latent_image": [
+				"88",
+				0
+			]
+		},
+		"class_type": "KSampler"
+	},
+	"8": {
+		"inputs": {
+			"samples": [
+				"3",
+				0
+			],
+			"vae": [
+				"5",
+				2
+			]
+		},
+		"class_type": "VAEDecode"
+	},
+	"200": {
+		"inputs": {
+			"pixels": [
+				"8",
+				0
+			],
+			"vae": [
+				"100",
+				2
+			]
+		},
+		"class_type": "VAEEncode"
+	},
+	"202": {
+		"inputs": {
+			"text": "masterpiece, best quality, ultra detailed, highly realistic, biglust style, ",
+			"clip": [
+				"100",
+				1
+			]
+		},
+		"class_type": "CLIPTextEncode"
+	},
+	"203": {
+		"inputs": {
+			"text": "",
+			"clip": [
+				"100",
+				1
+			]
+		},
+		"class_type": "CLIPTextEncode"
+	},
+	"201": {
+		"inputs": {
+			"seed": 987654321,
+			"steps": 20,
+			"cfg": 2.5,
+			"sampler_name": "euler",
+			"scheduler": "simple",
+			"denoise": 0.15,
+			"model": [
+				"100",
+				0
+			],
+			"positive": [
+				"202",
+				0
+			],
+			"negative": [
+				"203",
+				0
+			],
+			"latent_image": [
+				"200",
+				0
+			]
+		},
+		"class_type": "KSampler"
+	},
+	"300": {
+		"inputs": {
+			"samples": [
+				"201",
+				0
+			],
+			"vae": [
+				"100",
+				2
+			]
+		},
+		"class_type": "VAEDecode"
+	},
+	"19": {
+		"inputs": {
+			"filename_prefix": "ARIA_QWEN_I2I_REFINED",
+			"images": [
+				"300",
+				0
+			]
+		},
+		"class_type": "SaveImage"
+	}
+}

@@ -3,53 +3,8 @@
 
 The IPAdapter are very powerful models for image-to-image conditioning. The subject or even just the style of the reference image(s) can be easily transferred to a generation. Think of it as a 1-image lora.
 
-# Sponsorship
-
-<div align="center">
-
-**[:heart: Github Sponsor](https://github.com/sponsors/cubiq) | [:coin: Paypal](https://paypal.me/matt3o)**
-
-</div>
-
-If you like my work and wish to see updates and new features please consider sponsoring my projects.
-
-- [ComfyUI IPAdapter Plus](https://github.com/cubiq/ComfyUI_IPAdapter_plus)
-- [ComfyUI InstantID (Native)](https://github.com/cubiq/ComfyUI_InstantID)
-- [ComfyUI Essentials](https://github.com/cubiq/ComfyUI_essentials)
-- [ComfyUI FaceAnalysis](https://github.com/cubiq/ComfyUI_FaceAnalysis)
-- [Comfy Dungeon](https://github.com/cubiq/Comfy_Dungeon)
-
-Not to mention the documentation and videos tutorials. Check my **ComfyUI Advanced Understanding** videos on YouTube for example, [part 1](https://www.youtube.com/watch?v=_C7kR2TFIX0) and [part 2](https://www.youtube.com/watch?v=ijqXnW_9gzc)
-
-The only way to keep the code open and free is by sponsoring its development. The more sponsorships the more time I can dedicate to my open source projects.
-
-Please consider a [Github Sponsorship](https://github.com/sponsors/cubiq) or [PayPal donation](https://paypal.me/matt3o) (Matteo "matt3o" Spinelli). For sponsorships of $50+, let me know if you'd like to be mentioned in this readme file, you can find me on [Discord](https://latent.vision/discord) or _matt3o :snail: gmail.com_.
-
-## Important updates
-
-**2024/05/21**: Improved memory allocation when `encode_batch_size`. Useful mostly for very long animations.
-
-**2024/05/02**: Add `encode_batch_size` to the Advanced batch node. This can be useful for animations with a lot of frames to reduce the VRAM usage during the image encoding. Please note that results will be slightly different based on the batch size.
-
-**2024/04/27**: Refactored the IPAdapterWeights mostly useful for AnimateDiff animations.
-
-**2024/04/21**: Added Regional Conditioning nodes to simplify attention masking and masked text conditioning.
-
-**2024/04/16**: Added support for the new SDXL portrait unnorm model (link below). It's very strong and tends to ignore the text conditioning. Lower the CFG to 3-4 or use a RescaleCFG node.
-
-**2024/04/12**: Added scheduled weights. Useful for animations.
-
-**2024/04/09**: Added experimental Style/Composition transfer for SD1.5. The results are often not as good as SDXL. Optimal weight seems to be from 0.8 to 2.0. The **Style+Composition node doesn't work for SD1.5** at the moment, you can only alter either the Style or the Composition, I need more time for testing. Old workflows will still work **but you may need to refresh the page and re-select the weight type!**
-
-**2024/04/04**: Added Style & Composition node. It's now possible to apply both Style and Composition from the same node
-
-**2024/04/01**: Added Composition only transfer weight type for SDXL
-
-**2024/03/27**: Added Style transfer weight type for SDXL
-
-**2024/03/23**: Complete code rewrite! **This is a breaking update!** Your previous workflows won't work and you'll need to recreate them. You've been warned! After the update, refresh your browser, delete the old IPAdapter nodes and create the new ones.
-
-*(I removed old updates related to the previous version of the extension)*
+> [!IMPORTANT]  
+> **2025.04.14** - I do not use ComfyUI as my main way to interact with Gen AI anymore as a result I'm setting the repository in "maintenance only" mode. If there are crucial updates or PRs I might still consider merging them but I do not plan any consistent work on this repo.
 
 ## Example workflows
 
@@ -81,6 +36,7 @@ Remember you can also use any custom location setting an `ipadapter` entry in th
 - `/ComfyUI/models/clip_vision`
     - [CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors](https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors), download and rename
     - [CLIP-ViT-bigG-14-laion2B-39B-b160k.safetensors](https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/image_encoder/model.safetensors), download and rename
+    - [clip-vit-large-patch14-336.bin](https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-Plus/resolve/main/image_encoder/pytorch_model.bin), download and rename only for Kolors models
 - `/ComfyUI/models/ipadapter`, create it if not present
     - [ip-adapter_sd15.safetensors](https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors), Basic model, average strength
     - [ip-adapter_sd15_light_v11.bin](https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15_light_v11.bin), Light impact model
@@ -127,6 +83,8 @@ The community has baked some interesting IPAdapter models.
 - `/ComfyUI/models/ipadapter`
     - [ip_plus_composition_sd15.safetensors](https://huggingface.co/ostris/ip-composition-adapter/resolve/main/ip_plus_composition_sd15.safetensors), general composition ignoring style and content, more about it [here](https://huggingface.co/ostris/ip-composition-adapter)
     - [ip_plus_composition_sdxl.safetensors](https://huggingface.co/ostris/ip-composition-adapter/resolve/main/ip_plus_composition_sdxl.safetensors), SDXL version
+    - [Kolors-IP-Adapter-Plus.bin](https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-Plus/resolve/main/ip_adapter_plus_general.bin?download=true), IPAdapter Plus for Kolors model
+    - [Kolors-IP-Adapter-FaceID-Plus.bin](https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-FaceID-Plus/resolve/main/ipa-faceid-plus.bin?download=true), IPAdapter FaceIDv2 for Kolors model. **Note:** Kolors is trained on InsightFace  **antelopev2** model, you need to [manually download it](https://huggingface.co/MonsterMMORPG/tools/tree/main) and place it inside the `models/inisghtface` directory.
 
 if you know of other models please let me know and I will add them to the unified loader.
 
@@ -136,43 +94,9 @@ There are many workflows included in the [examples](./examples/) directory. Plea
 
 Usually it's a good idea to lower the `weight` to at least `0.8` and increase the number steps. To increase adherece to the prompt you may try to change the **weight type** in the `IPAdapter Advanced` node.
 
-## Nodes reference
-
-I'm (slowly) documenting all nodes. Please check the [Nodes reference](./NODES.md).
-
 ## Troubleshooting
 
 Please check the [troubleshooting](https://github.com/cubiq/ComfyUI_IPAdapter_plus/issues/108) before posting a new issue. Also remember to check the previous closed issues.
-
-## Current sponsors
-
-It's only thanks to generous sponsors that **the whole community** can enjoy open and free software. Please join me in thanking the following companies and individuals!
-
-### :trophy: Gold sponsors
-
-[![Kaiber.ai](https://f.latent.vision/imgs/kaiber.png)](https://kaiber.ai/)&nbsp; &nbsp;[![Kaiber.ai](https://f.latent.vision/imgs/replicate.png)](https://replicate.com/)
-
-### :tada: Silver sponsors
-
-[![OperArt.ai](https://f.latent.vision/imgs/openart.png?r=1)](https://openart.ai/workflows)&nbsp; &nbsp;[![OperArt.ai](https://f.latent.vision/imgs/finetuners.png)](https://www.finetuners.ai/)
-
-### Companies supporting my projects
-
-- [RunComfy](https://www.runcomfy.com/) (ComfyUI Cloud)
-
-### Esteemed individuals
-
-- [Jack Gane](https://github.com/ganeJackS)
-- [Nathan Shipley](https://www.nathanshipley.com/)
-- [Dkdnzia](https://github.com/Dkdnzia)
-
-### One-time Extraordinaires
-
-- [Eric Rollei](https://github.com/EricRollei)
-- [francaleu](https://github.com/francaleu)
-- [Neta.art](https://github.com/talesofai)
-- [Samwise Wang](https://github.com/tzwm)
-- _And all private sponsors, you know who you are!_
 
 ## Credits
 

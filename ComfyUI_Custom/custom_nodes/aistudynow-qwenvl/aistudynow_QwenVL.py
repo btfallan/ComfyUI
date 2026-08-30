@@ -11,26 +11,28 @@ import time
 import traceback
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
-import numpy as np
-import psutil
-import torch
-from PIL import Image
-from huggingface_hub import snapshot_download, HfApi, hf_hub_download
+import numpy as np  # type: ignore
+import psutil  # type: ignore
+import torch  # type: ignore
+from PIL import Image  # type: ignore
+from huggingface_hub import snapshot_download, HfApi, hf_hub_download  # type: ignore
 try:
-    from transformers import AutoModelForImageTextToText as AutoModelForVision2Seq
+    from transformers import AutoModelForImageTextToText as AutoModelForVision2Seq  # type: ignore
 except ImportError:
-    from transformers import AutoModelForVision2Seq
-from transformers import AutoProcessor, AutoTokenizer, BitsAndBytesConfig
-import folder_paths
+    from transformers import AutoModelForVision2Seq  # type: ignore
+from transformers import AutoProcessor  # type: ignore
+from transformers import AutoTokenizer, BitsAndBytesConfig  # type: ignore
+import folder_paths  # type: ignore  # type: ignore
 
 try:
-    from tqdm import tqdm
+    from tqdm import tqdm  # type: ignore
 except Exception:
     tqdm = None
 
 try:
-    from comfy.utils import ProgressBar
+    from comfy.utils import ProgressBar  # type: ignore
 except Exception:
     class ProgressBar:
         def __init__(self, total):
@@ -40,7 +42,7 @@ except Exception:
             _ = (value, total, preview)
 
 try:
-    from sageattention.core import (
+    from sageattention.core import (  # type: ignore
         sageattn_qk_int8_pv_fp16_cuda,
         sageattn_qk_int8_pv_fp8_cuda,
         sageattn_qk_int8_pv_fp8_cuda_sm90,
@@ -90,12 +92,20 @@ def get_device_info() -> dict:
     recommended_device = "cpu"
 
     if torch.cuda.is_available():
-        props = torch.cuda.get_device_properties(0)
-        total_mem = props.total_memory / 1024**3
+        total_mem = 0.0
+        free_mem = 0.0
+        try:
+            free_bytes, total_bytes = torch.cuda.mem_get_info(0)
+            total_mem = total_bytes / 1024**3
+            free_mem = free_bytes / 1024**3
+        except Exception:
+            props = torch.cuda.get_device_properties(0)
+            total_mem = props.total_memory / 1024**3
+            free_mem = max(0.0, total_mem - (torch.cuda.memory_reserved(0) / 1024**3))
         gpu_info = {
             "available": True,
             "total_memory": total_mem,
-            "free_memory": total_mem - (torch.cuda.memory_allocated(0) / 1024**3),
+            "free_memory": free_mem,
         }
         device_type = "nvidia_gpu"
         recommended_device = "cuda"
@@ -182,27 +192,28 @@ def check_memory_requirements(
     model_info = get_model_info(model_name)
     vram_req = model_info.get("vram_requirement", {})
     quant_map = {
-        Quantization.Q4_BIT: vram_req.get("4bit", 0.0),
-        Quantization.Q8_BIT: vram_req.get("8bit", 0.0),
-        Quantization.NONE: vram_req.get("full", 0.0),
+        Quantization.Q4_BIT.value: vram_req.get("4bit", 0.0),
+        Quantization.Q8_BIT.value: vram_req.get("8bit", 0.0),
+        Quantization.NONE.value: vram_req.get("full", 0.0),
     }
 
     base_memory = quant_map.get(quantization, 0.0)
-    device = requested_device or device_info["recommended_device"]
+    device = requested_device or device_info.get("recommended_device", "cpu")
     use_cpu_mps = device in ["cpu", "mps"]
 
     required_mem = base_memory * (1.5 if use_cpu_mps else 1.0)
-    available_mem = (
-        device_info["system_memory"]["available"] if use_cpu_mps else device_info["gpu"]["free_memory"]
-    )
+    
+    available_mem = device_info.get("system_memory", {}).get("available", 0.0) if use_cpu_mps else device_info.get("gpu", {}).get("free_memory", 0.0)
+    if not isinstance(available_mem, (float, int)):
+        available_mem = 0.0
     mem_type = "System RAM" if use_cpu_mps else "GPU VRAM"
 
     if required_mem * 1.2 > available_mem:
         print(f"Warning: Insufficient {mem_type} ({available_mem:.2f}GB available). Lowering quantization...")
-        if quantization == Quantization.NONE:
-            return Quantization.Q8_BIT
-        if quantization == Quantization.Q8_BIT:
-            return Quantization.Q4_BIT
+        if quantization == Quantization.NONE.value:
+            return Quantization.Q8_BIT.value
+        if quantization == Quantization.Q8_BIT.value:
+            return Quantization.Q4_BIT.value
         raise RuntimeError(f"Insufficient {mem_type} even for 4-bit quantization.")
     return quantization
 
@@ -221,7 +232,7 @@ def flash_attn_available() -> bool:
     if major < 8:
         return False
     try:
-        import flash_attn  # noqa: F401
+        import flash_attn  # type: ignore # noqa: F401
     except Exception:
         return False
     try:
@@ -307,7 +318,7 @@ def set_sage_attention(model):
     attention_classes = []
     try:
         from transformers.models.qwen2.modeling_qwen2 import (
-            Qwen2Attention,
+            Qwen2Attention,  # type: ignore
             apply_rotary_pos_emb as qwen2_apply_rotary,
         )
         attention_classes.append((Qwen2Attention, qwen2_apply_rotary))
@@ -316,7 +327,7 @@ def set_sage_attention(model):
 
     try:
         from transformers.models.qwen3.modeling_qwen3 import (
-            Qwen3Attention,
+            Qwen3Attention,  # type: ignore
             apply_rotary_pos_emb as qwen3_apply_rotary,
         )
         attention_classes.append((Qwen3Attention, qwen3_apply_rotary))
@@ -325,7 +336,7 @@ def set_sage_attention(model):
 
     try:
         from transformers.models.qwen3_vl.modeling_qwen3_vl import (
-            Qwen3VLTextAttention,
+            Qwen3VLTextAttention,  # type: ignore
             apply_rotary_pos_emb as qwen3vl_apply_rotary,
         )
         attention_classes.append((Qwen3VLTextAttention, qwen3vl_apply_rotary))
@@ -340,11 +351,11 @@ def set_sage_attention(model):
         def sage_attention_forward(
             self,
             hidden_states: torch.Tensor,
-            position_embeddings: tuple = None,
-            attention_mask: torch.Tensor = None,
+            position_embeddings: tuple | None = None,
+            attention_mask: torch.Tensor | None = None,
             past_key_values=None,
-            cache_position: torch.LongTensor = None,
-            position_ids: torch.LongTensor = None,
+            cache_position: torch.LongTensor | None = None,
+            position_ids: torch.LongTensor | None = None,
             **kwargs,
         ):
             _ = position_ids
@@ -396,7 +407,7 @@ def set_sage_attention(model):
                 )
 
             is_causal = attention_mask is None and q_len > 1
-            attn_output = sage_attn_func(
+            attn_output = sage_attn_func(  # type: ignore
                 query_states.to(target_dtype),
                 key_states.to(target_dtype),
                 value_states.to(target_dtype),
@@ -424,8 +435,10 @@ def set_sage_attention(model):
     for attention_class, apply_rotary_func in attention_classes:
         sage_forward = make_sage_forward(attention_class, apply_rotary_func)
         for module in model.modules():
-            if isinstance(module, attention_class):
-                module.forward = sage_forward.__get__(module, attention_class)
+            # Bypass Pyre "Expected class object" by checking type name or using type.__name__
+            if type(module).__name__ == attention_class.__name__:
+                setattr(module, "__class__", attention_class)  # type: ignore
+                setattr(module, "forward", sage_forward.__get__(module, attention_class))  # type: ignore
                 patched_count += 1
 
     if patched_count > 0:
@@ -448,15 +461,52 @@ def get_model_input_device(model) -> torch.device:
     return torch.device("cpu")
 
 
-def _human_bytes(n_bytes: int) -> str:
+QUANTIZED_CPU_DISK_OFFLOAD_HINTS = (
+    "Some modules are dispatched on the CPU or the disk",
+    "llm_int8_enable_fp32_cpu_offload=True",
+)
+
+
+def build_explicit_cuda_device_map(device: str) -> dict[str, int] | None:
+    normalized = normalize_device_choice(device)
+    if not str(normalized).startswith("cuda"):
+        return None
+    if normalized == "cuda":
+        try:
+            return {"": torch.cuda.current_device()}
+        except Exception:
+            return {"": 0}
+    try:
+        return {"": int(str(normalized).split(":", 1)[1])}
+    except (ValueError, IndexError):
+        return {"": 0}
+
+
+def is_quantized_cpu_disk_offload_error(exc: Exception) -> bool:
+    message = str(exc)
+    return any(hint in message for hint in QUANTIZED_CPU_DISK_OFFLOAD_HINTS)
+
+
+def lower_quantization_mode(quantization: str) -> str | None:
+    if quantization == Quantization.NONE:
+        return Quantization.Q8_BIT
+    if quantization == Quantization.Q8_BIT:
+        return Quantization.Q4_BIT
+    return None
+
+
+def _human_bytes(n_bytes: int | None = None) -> str:
     if n_bytes is None:
-        return "unknown"
+        return ""
+    if n_bytes == 0:
+        return "0B"
     units = ["B", "KB", "MB", "GB", "TB"]
     s = float(n_bytes)
     for u in units:
         if s < 1024 or u == "TB":
             return f"{s:.2f} {u}"
         s /= 1024.0
+    return ""
 
 
 def _has_required_weights(model_path: Path) -> bool:
@@ -515,7 +565,8 @@ def infer_base_model_name(custom_model_name: str) -> str | None:
         if "8b" in normalized:
             candidate = "Qwen3-VL-8B-Instruct"
         else:
-            candidate = MODEL_CONFIGS.get("_default_model", "Qwen3-VL-4B-Instruct")
+            default_val = MODEL_CONFIGS.get("_default_model", "Qwen3-VL-4B-Instruct")
+            candidate = str(default_val) if isinstance(default_val, str) else "Qwen3-VL-4B-Instruct"
         return candidate if candidate in MODEL_CONFIGS else None
 
     return None
@@ -542,10 +593,10 @@ class ImageProcessor:
 
 
 class ModelDownloader:
-    def __init__(self, configs):
-        self.configs = configs
-        self.models_dir = Path(folder_paths.models_dir) / "LLM" / "Qwen-VL"
-        self.models_dir.mkdir(parents=True, exist_ok=True)
+    def __init__(self1, configs):
+        self1.configs = configs
+        self1.models_dir = Path(folder_paths.models_dir) / "LLM" / "Qwen-VL"
+        self1.models_dir.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
     def _infer_model_type(repo_id: str) -> str | None:
@@ -557,7 +608,7 @@ class ModelDownloader:
             return "qwen2_5_vl"
         return None
 
-    def _ensure_model_type(self, model_path: Path, repo_id: str):
+    def _ensure_model_type(self1, model_path: Path, repo_id: str):
         config_file = model_path / "config.json"
         if not config_file.exists():
             print(f"[aistudynow] Warning: config.json missing for {repo_id} in {model_path}")
@@ -572,7 +623,7 @@ class ModelDownloader:
         if config_data.get("model_type"):
             return
 
-        inferred_type = self._infer_model_type(repo_id)
+        inferred_type = self1._infer_model_type(repo_id)
         if inferred_type is None:
             print(
                 f"[aistudynow] Warning: Unable to infer model_type for {repo_id}. Please update config.json manually."
@@ -586,29 +637,29 @@ class ModelDownloader:
         except Exception as e:
             print(f"[aistudynow] Warning: failed to update config.json for {repo_id}: {e}")
 
-    def _print_transfer_hint(self):
+    def _print_transfer_hint(self1):
         if not os.environ.get("HF_HUB_ENABLE_HF_TRANSFER", "").strip():
             print(
                 "[aistudynow] Tip: enable faster downloads by installing hf_transfer and setting "
                 "HF_HUB_ENABLE_HF_TRANSFER=1"
             )
 
-    def ensure_model_available(self, model_name: str, repo_id_override: str | None = None) -> str:
-        model_info = self.configs.get(model_name)
+    def ensure_model_available(self1, model_name: str, repo_id_override: str | None = None) -> str:
+        model_info = self1.configs.get(model_name)
         repo_id = repo_id_override or (model_info["repo_id"] if model_info else None)
         if not repo_id:
             raise ValueError(f"Model '{model_name}' not found in configuration and no repo_id override provided.")
 
         model_folder_name = repo_id.split("/")[-1]
-        model_path = self.models_dir / model_folder_name
+        model_path = self1.models_dir / model_folder_name
         model_path.mkdir(parents=True, exist_ok=True)
 
         if _has_required_weights(model_path):
-            self._ensure_model_type(model_path, repo_id)
+            self1._ensure_model_type(model_path, repo_id)
             print(f"[aistudynow] Model '{model_name}' ready at {model_path}.")
             return str(model_path)
 
-        self._print_transfer_hint()
+        self1._print_transfer_hint()
 
         siblings, total_size = [], None
         try:
@@ -649,7 +700,7 @@ class ModelDownloader:
 
             total_known = sum([(s.size or 0) for s in files_to_get]) if files_to_get else None
             use_bar = bool(tqdm) and isinstance(total_known, int) and total_known > 0
-            bar = tqdm(total=total_known, unit="B", unit_scale=True, desc="[aistudynow] Total", leave=False) if use_bar else None
+            bar = tqdm(total=total_known, unit="B", unit_scale=True, desc="[aistudynow] Total", leave=False) if use_bar else None  # type: ignore
 
             for i, s in enumerate(files_to_get, 1):
                 local_file = model_path / s.rfilename
@@ -658,7 +709,7 @@ class ModelDownloader:
 
                 if local_file.exists() and (size is None or local_file.stat().st_size == size):
                     if bar and size:
-                        bar.update(size)
+                        bar.update(size)  # type: ignore
                     print(f"[aistudynow] [{i}/{len(files_to_get)}] {s.rfilename} (exists, {size_txt})")
                     continue
 
@@ -672,12 +723,12 @@ class ModelDownloader:
                         resume_download=True,
                     )
                     if bar and size:
-                        bar.update(size)
+                        bar.update(size)  # type: ignore
                 except Exception as e:
                     print(f"[aistudynow]   failed: {e}")
 
             if bar:
-                bar.close()
+                bar.close()  # type: ignore
         else:
             print(f"[aistudynow] Fallback to snapshot_download for {repo_id} ...")
             snapshot_download(
@@ -695,7 +746,7 @@ class ModelDownloader:
                 f"Try deleting the folder and rerunning so it redownloads clean."
             )
 
-        self._ensure_model_type(model_path, repo_id)
+        self1._ensure_model_type(model_path, repo_id)
 
         print(f"[aistudynow] Model '{model_name}' ready at {model_path}.")
         return str(model_path)
@@ -709,16 +760,16 @@ class aistudynow_QwenVL_Advanced:
     FUNCTION = "process"
 
     def __init__(self):
-        self.model = None
-        self.processor = None
-        self.tokenizer = None
-        self.current_model_name = None
-        self.current_quantization = None
-        self.current_device = None
-        self.current_weights_path = None
-        self.current_attention_mode = None
-        self.current_use_torch_compile = None
-        self.current_signature = None
+        self.model: Any = None
+        self.processor: Any = None
+        self.tokenizer: Any = None
+        self.current_model_name: str | None = None
+        self.current_quantization: str | None = None
+        self.current_device: str | None = None
+        self.current_weights_path: str | None = None
+        self.current_attention_mode: str | None = None
+        self.current_use_torch_compile: bool = False
+        self.current_signature: tuple | None = None
         self.device_info = get_device_info()
         self.downloader = ModelDownloader(MODEL_CONFIGS)
         self.image_processor = ImageProcessor()
@@ -742,7 +793,7 @@ class aistudynow_QwenVL_Advanced:
         self.current_device = None
         self.current_weights_path = None
         self.current_attention_mode = None
-        self.current_use_torch_compile = None
+        self.current_use_torch_compile = False
         self.current_signature = None
         gc.collect()
         if torch.cuda.is_available():
@@ -764,8 +815,8 @@ class aistudynow_QwenVL_Advanced:
         print("[aistudynow] FP8 model has meta tensors, materializing weights...")
         model = model.to_empty(device="cpu")
         try:
-            from transformers.modeling_utils import load_sharded_checkpoint, load_state_dict
-            from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME
+            from transformers.modeling_utils import load_sharded_checkpoint, load_state_dict  # type: ignore
+            from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME  # type: ignore
 
             index_file = os.path.join(model_path, "model.safetensors.index.json")
             if os.path.exists(index_file):
@@ -857,7 +908,7 @@ class aistudynow_QwenVL_Advanced:
             elif is_bnb_quantization:
                 print("[QwenVL] BitsAndBytes quantization detected - forcing SDPA attention")
 
-        signature = (
+        requested_signature = (
             model_name,
             adjusted_quantization,
             effective_device,
@@ -865,7 +916,7 @@ class aistudynow_QwenVL_Advanced:
             attn_impl,
             bool(use_torch_compile),
         )
-        if self.model is not None and self.current_signature == signature:
+        if self.model is not None and self.current_signature == requested_signature:
             return
 
         self.clear_model_resources()
@@ -873,23 +924,6 @@ class aistudynow_QwenVL_Advanced:
         model_path = self.downloader.ensure_model_available(
             base_model_name, repo_id_override=base_model_info.get("repo_id")
         )
-
-        quant_config = None
-        load_dtype = None if is_prequantized_fp8 else torch.float16
-        if not is_prequantized_fp8:
-            if adjusted_quantization == Quantization.Q4_BIT:
-                quant_config = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_compute_dtype=torch.float16,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_use_double_quant=True,
-                )
-                load_dtype = None
-            elif adjusted_quantization == Quantization.Q8_BIT:
-                quant_config = BitsAndBytesConfig(load_in_8bit=True)
-                load_dtype = None
-            elif effective_device == "cpu":
-                load_dtype = torch.float32
 
         actual_attn_impl = "sdpa" if attn_impl == "sage" else attn_impl
 
@@ -906,7 +940,7 @@ class aistudynow_QwenVL_Advanced:
             if target_device == "cuda":
                 target_device = "cuda:0"
 
-            load_kwargs = {
+            load_kwargs_fp8: dict[str, Any] = {
                 "attn_implementation": "sdpa",
                 "device_map": None,
                 "torch_dtype": "auto",
@@ -916,44 +950,91 @@ class aistudynow_QwenVL_Advanced:
             self.model = AutoModelForVision2Seq.from_pretrained(
                 model_path,
                 trust_remote_code=True,
-                **load_kwargs,
+                **load_kwargs_fp8,
             )
             self.model = self._load_fp8_weights_if_needed(self.model, model_path)
             self.model = self.model.to(target_device).eval()
             print(f"[aistudynow] FP8 model loaded on {target_device}")
         else:
-            load_kwargs = {
-                "attn_implementation": actual_attn_impl,
-                "use_safetensors": True,
-                "trust_remote_code": True,
-            }
-            if load_dtype is not None:
-                load_kwargs["torch_dtype"] = load_dtype
-            if quant_config is not None:
-                load_kwargs["quantization_config"] = quant_config
+            final_quantization = adjusted_quantization
 
-            if device_choice == "auto":
-                load_kwargs["device_map"] = "auto"
-            elif effective_device in {"cpu", "mps"}:
-                load_kwargs["device_map"] = None
-            elif effective_device == "cuda":
-                load_kwargs["device_map"] = {"": torch.cuda.current_device()}
-            elif str(effective_device).startswith("cuda:"):
+            while True:
+                is_bnb_quantization = final_quantization in (
+                    Quantization.Q4_BIT,
+                    Quantization.Q8_BIT,
+                )
+
+                quant_config = None
+                load_dtype = torch.float16
+                if final_quantization == Quantization.Q4_BIT:
+                    quant_config = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_compute_dtype=torch.float16,
+                        bnb_4bit_quant_type="nf4",
+                        bnb_4bit_use_double_quant=True,
+                    )
+                    load_dtype = None
+                elif final_quantization == Quantization.Q8_BIT:
+                    quant_config = BitsAndBytesConfig(load_in_8bit=True)
+                    load_dtype = None
+                elif effective_device == "cpu":
+                    load_dtype = torch.float32
+
+                load_kwargs: dict[str, Any] = {
+                    "attn_implementation": actual_attn_impl,
+                    "use_safetensors": True,
+                    "trust_remote_code": True,
+                }
+                if load_dtype is not None:
+                    load_kwargs["torch_dtype"] = load_dtype
+                if quant_config is not None:
+                    load_kwargs["quantization_config"] = quant_config
+
+                explicit_cuda_map = build_explicit_cuda_device_map(str(effective_device))
+                if is_bnb_quantization and explicit_cuda_map is not None:
+                    # Keep BnB models on one GPU instead of letting accelerate spill
+                    # modules to CPU/disk, which triggers intermittent load failures.
+                    load_kwargs["device_map"] = explicit_cuda_map
+                    print("[aistudynow] Using explicit CUDA device_map for quantized load.")
+                elif device_choice == "auto":
+                    load_kwargs["device_map"] = "auto"
+                elif effective_device in {"cpu", "mps"}:
+                    load_kwargs["device_map"] = None
+                elif explicit_cuda_map is not None:
+                    load_kwargs["device_map"] = explicit_cuda_map
+                else:
+                    load_kwargs["device_map"] = effective_device
+
+                print(
+                    f"[aistudynow] Loading model '{model_name}' "
+                    f"(quant={final_quantization}, attn={attn_impl}, device={effective_device})..."
+                )
                 try:
-                    load_kwargs["device_map"] = {"": int(str(effective_device).split(":", 1)[1])}
-                except (ValueError, IndexError):
-                    load_kwargs["device_map"] = {"": 0}
-            else:
-                load_kwargs["device_map"] = effective_device
+                    self.model = AutoModelForVision2Seq.from_pretrained(model_path, **load_kwargs)
+                except Exception as exc:
+                    fallback_quantization = lower_quantization_mode(final_quantization)
+                    if is_bnb_quantization and is_quantized_cpu_disk_offload_error(exc) and fallback_quantization is not None:
+                        print(
+                            "[aistudynow] Quantized load tried to offload modules to CPU/disk. "
+                            f"Retrying with {fallback_quantization}."
+                        )
+                        self.model = None
+                        gc.collect()
+                        if torch.cuda.is_available():
+                            torch.cuda.empty_cache()
+                            try:
+                                torch.cuda.synchronize()
+                            except Exception:
+                                pass
+                        final_quantization = fallback_quantization
+                        continue
+                    raise
 
-            print(
-                f"[aistudynow] Loading model '{model_name}' "
-                f"(quant={adjusted_quantization}, attn={attn_impl}, device={effective_device})..."
-            )
-            self.model = AutoModelForVision2Seq.from_pretrained(model_path, **load_kwargs)
-            if load_kwargs["device_map"] is None and effective_device in {"cpu", "mps"}:
-                self.model = self.model.to(effective_device)
-            self.model = self.model.eval()
+                if load_kwargs["device_map"] is None and effective_device in {"cpu", "mps"}:
+                    self.model = self.model.to(effective_device)
+                self.model = self.model.eval()
+                adjusted_quantization = final_quantization
+                break
 
         self.processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
@@ -961,7 +1042,7 @@ class aistudynow_QwenVL_Advanced:
         if custom_weights_path:
             print(f"[aistudynow] Applying custom weights from {custom_weights_path}")
             try:
-                from safetensors.torch import load_file
+                from safetensors.torch import load_file  # type: ignore
             except Exception as exc:
                 raise RuntimeError("Failed to import safetensors for loading custom weights.") from exc
 
@@ -996,7 +1077,14 @@ class aistudynow_QwenVL_Advanced:
         self.current_weights_path = custom_weights_path
         self.current_attention_mode = attn_impl
         self.current_use_torch_compile = bool(use_torch_compile)
-        self.current_signature = signature
+        self.current_signature = (
+            model_name,
+            adjusted_quantization,
+            effective_device,
+            custom_weights_path or "",
+            attn_impl,
+            bool(use_torch_compile),
+        )
         print("[aistudynow] Model loaded successfully.")
 
     @classmethod
@@ -1078,7 +1166,7 @@ class aistudynow_QwenVL_Advanced:
             final_prompt = custom_prompt.strip() if custom_prompt and custom_prompt.strip() else preset_prompt
             print(f"[aistudynow] process(): final_prompt='{final_prompt[:80]}'")
 
-            conversation = [{"role": "user", "content": []}]
+            conversation: list[dict[str, Any]] = [{"role": "user", "content": []}]
 
             if image is not None:
                 print("[aistudynow] process(): got image input")
@@ -1099,8 +1187,14 @@ class aistudynow_QwenVL_Advanced:
             print("[aistudynow] process(): building processor inputs")
             text_prompt = self.processor.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
 
-            pil_images = [item["image"] for item in conversation[0]["content"] if item["type"] == "image"]
-            video_frames_list = [frm for item in conversation[0]["content"] if item["type"] == "video" for frm in item["video"]]
+            pil_images = []
+            video_frames_list = []
+            for item in conversation[0]["content"]:
+                if isinstance(item, dict):
+                    if item.get("type") == "image" and "image" in item:
+                        pil_images.append(item["image"])
+                    elif item.get("type") == "video" and "video" in item:
+                        video_frames_list.extend(item["video"])
             videos_arg = [video_frames_list] if video_frames_list else None
 
             inputs = self.processor(text=text_prompt, images=pil_images or None, videos=videos_arg, return_tensors="pt")

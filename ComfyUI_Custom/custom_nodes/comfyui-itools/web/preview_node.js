@@ -16,7 +16,7 @@ app.registerExtension({
     }
 
     // init size
-    node.size = [285, 330];
+    node.size = [350, 350];
 
     if (allow_debug) console.log("node", node);
 
@@ -24,7 +24,10 @@ app.registerExtension({
     let a = null;
     let b = null;
     let c = null;
+    let noteButton = null;
+    let drawNoteButton = () => {};
     let compare = false;
+    let imgsBeforeCompare = null;
     let imagesTracked = [];
     const MAX_IMAGES = 8;
 
@@ -161,6 +164,7 @@ app.registerExtension({
         if (compare) {
           // cancel compare
           compare = !compare;
+          applyCompareState();
           toggleButtonActivation(c, compare);
         }
         if (!node.imgs) {
@@ -196,6 +200,7 @@ app.registerExtension({
         if (compare) {
           // cancel compare
           compare = !compare;
+          applyCompareState();
           toggleButtonActivation(c, compare);
         }
         togglingLastTwoImages();
@@ -215,14 +220,6 @@ app.registerExtension({
         // reset togglingLastTwoImages
         if (b.text !== "[Current] | Previous") togglingLastTwoImages();
 
-        // reset from history state
-        if (node.imageIndex === null) {
-          if (imagesTracked.length > 1) {
-            node.imageIndex = 0; // reset to single view
-            node.imgs = node.imgs = [node.imgs[node.imgs.length - 1]]; // show last image in node.imgs list;
-          }
-        }
-
         // start compare
         if (imagesTracked.length <= 1) {
           if (toastShownCountI < MAX_TOAST_SHOWS) {
@@ -237,9 +234,209 @@ app.registerExtension({
           return;
         }
         compare = !compare;
+        applyCompareState();
         toggleButtonActivation(c, compare);
       };
+
+      // Sits on the top left of the preview area
+      noteButton = new SmartButton(8, 40, 54, 17, node, "Add Note");
+      noteButton.allowVisualHover = true;
+      noteButton.textYoffset = -0;
+      noteButton.isVisible = false;
+      noteButton.shape = Shapes.ROUND;
+      noteButton.roundRadius = 5;
+      noteButton.outlineWidth = 1;
+      noteButton.outlineColor = "#656565";
+      noteButton.color = "#222222AA";
+      noteButton.font = "11px Arial";
+      noteButton.onClick = () => {
+        const img = noteTargetImage();
+        if (!img) return;
+        app.extensionManager.dialog
+          .prompt({
+            title: "iTools Preview Image",
+            message: "Note for this image (leave empty to remove)",
+            defaultValue: getNote(img), // key name differs between frontend versions
+            default: getNote(img),
+          })
+          .then((value) => {
+            if (value === null || value === undefined) return; // cancelled
+            setNote(img, value.trim());
+            node.setDirtyCanvas(true, true);
+          });
+      };
+
+      // The frontend paints the image from a deferred microtask, which lands on
+      // top of anything the widget pass drew, so this button is painted from that
+      // same deferred pass instead (see drawNoteLayer). Clicks still use isVisible.
+      const buttonDraw = noteButton.draw.bind(noteButton);
+      noteButton.draw = () => {};
+      drawNoteButton = (ctx) => {
+        if (noteButton.isVisible) buttonDraw(ctx);
+      };
     }
+
+    // Notes are stored per image filename in node.properties, so they are saved
+    // with the workflow and follow the image through history / compare instead of
+    // being baked into the image itself
+    function getNotes() {
+      if (!node.properties.iToolsImageNotes) node.properties.iToolsImageNotes = {};
+      return node.properties.iToolsImageNotes;
+    }
+
+    function getNote(img) {
+      const key = getImageKey(img);
+      return (key && getNotes()[key]) || "";
+    }
+
+    function setNote(img, text) {
+      const key = getImageKey(img);
+      if (!key) return;
+      if (text) getNotes()[key] = text;
+      else delete getNotes()[key];
+    }
+
+    // The image a new note applies to: the one currently on screen, or the
+    // current (right hand) image while comparing
+    function noteTargetImage() {
+      if (!node.imgs?.length) return null;
+      if (compare && node.imgs.length > 1) return node.imgs.at(-1);
+      // In the grid state overIndex is the image the mouse is over
+      if (node.imageIndex == null && node.imgs.length > 1) return node.imgs[node.overIndex ?? 0];
+      return node.imgs[node.imageIndex ?? 0] || node.imgs[0];
+    }
+
+    // Mirrors the frontend renderPreview geometry so the note sits exactly on the
+    // image in both preview states: single image and the multi image grid
+    function collectNoteTargets(widget_width, shiftY, computedHeight) {
+      if (!node.imgs?.length) return [];
+
+      // Grid state: the frontend fills node.imageRects with the cell of each image
+      if (node.imageIndex == null && node.imgs.length > 1) {
+        const cells = node.imageRects;
+        if (!cells?.length) return [];
+        return node.imgs
+          .map((img, i) => {
+            const cell = cells[i];
+            if (!cell || !img?.width) return null;
+            const [cellX, cellY, cellW, cellH] = cell;
+            const ratio = Math.min(cellW / img.width, cellH / img.height);
+            const w = img.width * ratio;
+            const h = img.height * ratio;
+            return { img, rect: { x: cellX + (cellW - w) / 2, y: cellY + (cellH - h) / 2, w, h } };
+          })
+          .filter(Boolean);
+      }
+
+      // Single image state, scale is capped at 1 (no upscaling) like the frontend
+      const img = node.imgs[node.imageIndex ?? 0];
+      if (!img?.naturalWidth) return [];
+      const sizeTextHeight = app.extensionManager.setting.get("Comfy.Node.AllowImageSizeDraw") ? 15 : 0;
+      const dw = widget_width;
+      const dh = (computedHeight ?? node.size[1] - shiftY) - sizeTextHeight;
+      const scale = Math.min(dw / img.naturalWidth, dh / img.naturalHeight, 1);
+      const w = img.naturalWidth * scale;
+      const h = img.naturalHeight * scale;
+      return [{ img, rect: { x: (dw - w) / 2, y: (dh - h) / 2 + shiftY, w, h } }];
+    }
+
+    // The frontend defers its drawImage calls to a microtask, so queue the notes
+    // and the button right after to land on top of the images instead of under them
+    function drawNoteLayer(ctx, widget_width, shiftY, computedHeight) {
+      const targets = collectNoteTargets(widget_width, shiftY || 0, computedHeight).filter((t) =>
+        getNote(t.img)
+      );
+
+      const transform = ctx.getTransform();
+      queueMicrotask(() => {
+        ctx.save();
+        ctx.setTransform(transform);
+        for (const target of targets) drawNoteBar(ctx, target.rect, getNote(target.img));
+        drawNoteButton(ctx);
+        ctx.restore();
+      });
+    }
+
+    // iToolsPreviewImage gets one image per run, while iToolsCompareImage gets two.
+    // Feeding node.imgs the last two tracked images puts this node in the same
+    // two-image preview state compare_node draws from.
+    function applyCompareState() {
+      if (compare) {
+        const lastTwo = imagesTracked.slice(-2);
+        imgsBeforeCompare = node.imgs;
+        node.imgs = [lastTwo[0], lastTwo[1]]; // A = previous, B = current
+        node.imageIndex = null; // multi image view, same as compare node
+      } else {
+        node.imgs = imgsBeforeCompare || [imagesTracked.at(-1)];
+        node.imageIndex = 0;
+        imgsBeforeCompare = null;
+      }
+      patchPreviewWidget(); // widget may already be swapped by the assignment above
+      node.setDirtyCanvas(true, true);
+    }
+
+    // Patches the image preview widget draw. Re-applied on demand because
+    // assigning node.imgs makes the frontend rebuild the widget, dropping the patch.
+    function patchPreviewWidget() {
+      // ImagePreviewWidget is added by the frontend under this name
+      const previewWidget =
+        node.widgets?.find((widget) => widget.name === "$$canvas-image-preview") ||
+        node.widgets?.find((widget) => !(widget instanceof BaseSmartWidget) && widget.drawWidget);
+
+      // Pinned to the node, top left of the preview area
+      if (noteButton) {
+        const targetImg = noteTargetImage();
+        noteButton.isVisible = !!previewWidget && !!node.imgs?.length;
+        if (typeof previewWidget?.y === "number") noteButton.myY = previewWidget.y + 6;
+        noteButton.text = getNote(targetImg) ? "Edit Note" : "Add Note";
+      }
+
+      if (!previewWidget) return;
+
+      const comparing = () => compare && node.imgs?.length > 1;
+
+      // The canvas uses widget.draw when it exists, otherwise widget.drawWidget,
+      // so both entry points need the override
+      // Only wrap draw if the widget already has one, adding it would change dispatch
+      if (typeof previewWidget.draw === "function" && previewWidget.draw !== previewWidget._itoolsDrawWrapper) {
+        const originalDraw = previewWidget.draw;
+        const drawWrapper = function (ctx, node, widget_width, y, widget_height, lowQuality) {
+          if (comparing()) {
+            drawImgOverlay(mouse, node, widget_width, y, ctx, compare, getNote);
+            drawNoteButton(ctx); // compare draws its images synchronously
+          } else {
+            originalDraw.call(this, ctx, node, widget_width, y, widget_height, lowQuality);
+            drawNoteLayer(ctx, widget_width, y, this.computedHeight ?? widget_height);
+          }
+        };
+        previewWidget._itoolsDrawWrapper = drawWrapper;
+        previewWidget.draw = drawWrapper;
+      }
+
+      if (previewWidget.drawWidget !== previewWidget._itoolsDrawWidgetWrapper) {
+        const originalDrawWidget = previewWidget.drawWidget;
+        const drawWidgetWrapper = function (ctx, options) {
+          const width = options?.width ?? node.size[0];
+          if (comparing()) {
+            drawImgOverlay(mouse, node, width, this.y, ctx, compare, getNote);
+            drawNoteButton(ctx); // compare draws its images synchronously
+          } else {
+            originalDrawWidget?.call(this, ctx, options);
+            drawNoteLayer(ctx, width, this.y, this.computedHeight);
+          }
+        };
+        previewWidget._itoolsDrawWidgetWrapper = drawWidgetWrapper;
+        previewWidget.drawWidget = drawWidgetWrapper;
+      }
+    }
+
+    // Canvas level hook, same approach as BaseSmartWidget: runs every frame so the
+    // patch is re-applied as soon as the frontend rebuilds the preview widget
+    const origCanvasDrawForeground = app.canvas.onDrawForeground;
+    app.canvas.onDrawForeground = (ctx) => {
+      if (origCanvasDrawForeground) origCanvasDrawForeground.call(app.canvas, ctx);
+      if (node.graph) patchPreviewWidget();
+    };
 
     createButtons();
 
@@ -264,22 +461,11 @@ app.registerExtension({
           pushToImgs(lastImage);
         }
 
+        // Keep comparing against the freshly generated image
+        if (compare) applyCompareState();
+
         // Override draw function in ImagePreviewWidget
-        const previewWidget = node.widgets.find((widget) => !(widget instanceof BaseSmartWidget));
-        if (!previewWidget) {
-          if (allow_debug) console.log("ImagePreviewWidget not found");
-          return;
-        }
-    
-        const originalDraw = previewWidget.drawWidget;
-        if (originalDraw) {
-          previewWidget.draw = function (ctx, node, widget_width, y, widget_height, ...args) {
-            // Call the original draw function first
-            originalDraw.apply(this, [ctx, node, widget_width, y, widget_height, ...args]);
-            
-            drawImgOverlay(mouse, node, widget_width, y, ctx, imagesTracked, compare);
-          };
-        }
+        patchPreviewWidget();
       }, 300);
     };
 
@@ -317,41 +503,104 @@ app.registerExtension({
   
 });
 
-function drawImgOverlay(mouse, node, widget_width, y, ctx, _imagesRef, compareMode = false) {
-  if (!compareMode) return;
+const compareWay = app.extensionManager.setting.get("iTools.Nodes.Compare Mode", "makadi");
+
+// Notes key off the output filename so the same image keeps its note across
+// runs, history cycling and compare
+function getImageKey(img) {
+  if (!img?.src) return "";
+  const match = img.src.match(/filename=([^&]+)/);
+  return match ? decodeURIComponent(match[1]) : img.src;
+}
+
+// Note bar sitting on the bottom of the image, clipped to it
+function drawNoteBar(ctx, rect, text) {
+  if (!text || !rect) return;
+  const fontSize = Math.max(8, Math.min(12, Math.round(rect.w / 16)));
+  const padding = Math.round(fontSize / 2);
+  const barHeight = fontSize + padding * 2;
+  const barY = rect.y + rect.h - barHeight;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(rect.x, barY, rect.w, barHeight);
+  ctx.clip();
+  ctx.fillStyle = "#000000AA";
+  ctx.fillRect(rect.x, barY, rect.w, barHeight);
+  ctx.fillStyle = "white";
+  ctx.font = `${fontSize}px monospace`;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, rect.x + padding, barY + barHeight / 2);
+  ctx.restore();
+}
+
+function drawImgOverlay(mouse, node, widget_width, y, ctx, compareMode = false, getNote = null) {
+  if (!compareMode || !node.imgs || node.imgs.length < 2) return;
   y = y ? y : 0; // Ensure y is defined
 
-  const allowImageSizeDraw = app.extensionManager.setting.get("Comfy.Node.AllowImageSizeDraw", true);
-  const IMAGE_TEXT_SIZE_TEXT_HEIGHT = allowImageSizeDraw ? 15 : 0;
-
-  const img2 = _imagesRef[0];
-  const img1 = _imagesRef.length > 1 ? _imagesRef[_imagesRef.length - 2] : null;
-  if (!img2) {
+  const img1 = node.imgs[0]; // previous
+  const img2 = node.imgs[1]; // current
+  if (!img1 || !img2) {
     if (allow_debug) console.log("No previous image to compare with");
     return;
-  };
+  }
 
   const dw = widget_width;
-  const dh = node.size[1] - y - IMAGE_TEXT_SIZE_TEXT_HEIGHT;
-  let w = Math.max(img1.naturalWidth, img2.naturalWidth);
-  let h = Math.max(img1.naturalHeight, img2.naturalHeight);
+  const dh = node.size[1] - y;
 
-  const scaleX = dw / w;
-  const scaleY = dh / h;
-  const scale = Math.min(scaleX, scaleY, 1);
+  // Force both images to the same height (dh), scaling down if too wide
+  const getParams = (img) => {
+    const scale = dh / img.naturalHeight;
+    const w = img.naturalWidth * scale;
+    const finalScale = w > dw ? dw / w : 1;
 
-  w *= scale;
-  h *= scale;
+    const finalW = w * finalScale;
+    const finalH = dh * finalScale;
 
-  // Centered position within the widget
-  const imgX = (dw - w) / 2;
-  const imgY = (dh - h) / 2 + y; // +y to offset within canvas
+    return {
+      x: (dw - finalW) / 2,
+      y: y + (dh - finalH) / 2,
+      w: finalW,
+      h: finalH,
+    };
+  };
 
-  const mouseX = mouse.x
-  const splitX = Math.max(imgX, Math.min(mouseX, imgX + w));
-  const splitRatio = (splitX - imgX) / w;
+  const p1 = getParams(img1);
+  const p2 = getParams(img2);
 
-  if (img1 && compareMode) {
-   ctx.drawImage(img1, 0, 0, img1.naturalWidth * splitRatio, img1.naturalHeight, imgX, imgY, w * splitRatio, h);
+  // Shared interaction bounds (the container area)
+  const viewW = Math.max(p1.w, p2.w);
+  const imgX = (dw - viewW) / 2;
+
+  let mouseX;
+  if (compareWay === "makadi") {
+    const graphMouse = app.canvas.graph_mouse;
+    mouseX = graphMouse[0] - node.pos[0];
+  } else {
+    mouseX = mouse.mouseInNode ? mouse.x : dw / 2;
   }
+
+  const splitX = Math.max(imgX, Math.min(mouseX, imgX + viewW));
+
+  const left = compareWay === "makadi" ? { img: img1, p: p1 } : { img: img2, p: p2 };
+  const right = compareWay === "makadi" ? { img: img2, p: p2 } : { img: img1, p: p1 };
+
+  // Draw Left Side
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, y, splitX, dh);
+  ctx.clip();
+  ctx.drawImage(left.img, left.p.x, left.p.y, left.p.w, left.p.h);
+  drawNoteBar(ctx, left.p, getNote?.(left.img)); // clipped to this half
+  ctx.restore();
+
+  // Draw Right Side
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(splitX, y, dw - splitX, dh);
+  ctx.clip();
+  ctx.drawImage(right.img, right.p.x, right.p.y, right.p.w, right.p.h);
+  drawNoteBar(ctx, right.p, getNote?.(right.img));
+  ctx.restore();
 }

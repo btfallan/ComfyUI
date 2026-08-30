@@ -10,7 +10,7 @@ import asyncio
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Awaitable, Callable, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Awaitable, Callable, Dict, List, Mapping, Optional, Protocol, Tuple
 
 from aiohttp import web
 
@@ -45,6 +45,17 @@ EnsureDependenciesCallable = Callable[[], Awaitable[None]]
 RecipeScannerGetter = Callable[[], Any]
 CivitaiClientGetter = Callable[[], Any]
 
+
+class PromptServerProtocol(Protocol):
+    """Subset of PromptServer used by the recipe workflow handler."""
+
+    instance: "PromptServerProtocol"
+
+    def send_sync(
+        self, event: str, payload: dict[str, Any] | None = None, sid: str | None = None
+    ) -> None:  # pragma: no cover - protocol
+        ...
+
 # Cap concurrent preview-dimension reads across requests. With a cold LRU
 # cache one page can touch up to page_size image files; 16 balances SSD and
 # HDD throughput without starving the event loop.
@@ -73,6 +84,7 @@ class RecipeHandlerSet:
     analysis: "RecipeAnalysisHandler"
     sharing: "RecipeSharingHandler"
     batch_import: "BatchImportHandler"
+    workflow: "RecipeWorkflowHandler"
 
     def to_route_mapping(
         self,
@@ -101,6 +113,7 @@ class RecipeHandlerSet:
             "update_recipe": self.management.update_recipe,
             "record_recipe_open": self.management.record_recipe_open,
             "reconnect_lora": self.management.reconnect_lora,
+            "mark_lora_hash_invalid": self.management.mark_lora_hash_invalid,
             "find_duplicates": self.query.find_duplicates,
             "move_recipes_bulk": self.management.move_recipes_bulk,
             "bulk_delete": self.management.bulk_delete,
@@ -128,6 +141,7 @@ class RecipeHandlerSet:
             "import_from_url": self.management.import_from_url,
             "create_from_example": self.management.create_from_example,
             "reimport_recipe": self.management.reimport_recipe,
+            "send_recipe_workflow": self.workflow.send_recipe_workflow,
         }
 
 
@@ -163,11 +177,19 @@ class RecipePageView:
             user_language = self._settings.get("language", "en")
             self._server_i18n.set_locale(user_language)
 
+            # While the initial scan is running, show the initialization
+            # screen (same as the model pages) instead of an empty grid; the
+            # page reloads itself when the scanner broadcasts completion.
+            is_initializing = (
+                recipe_scanner._cache is None or recipe_scanner.is_initializing()
+            )
+
             try:
-                await recipe_scanner.get_cached_data(force_refresh=False)
+                if not is_initializing:
+                    await recipe_scanner.get_cached_data(force_refresh=False)
                 rendered = self._template_env.get_template(self._template_name).render(
                     recipes=[],
-                    is_initializing=False,
+                    is_initializing=is_initializing,
                     settings=self._settings,
                     request=request,
                     t=self._server_i18n.get_translation,
@@ -252,6 +274,14 @@ class RecipeListingHandler:
 
             if tag_filters:
                 filters["tags"] = tag_filters
+
+            lora_availability = {
+                status.strip()
+                for status in request.query.get("lora_availability", "").split(",")
+                if status.strip() in ("ready", "missing", "deleted")
+            }
+            if lora_availability:
+                filters["lora_availability"] = lora_availability
 
             lora_hash = request.query.get("lora_hash")
             checkpoint_hash = request.query.get("checkpoint_hash")
@@ -589,16 +619,31 @@ class RecipeQueryHandler:
                 include_prompt=include_prompt
             )
             url_groups = await recipe_scanner.find_duplicate_recipes_by_source()
+
+            # Assemble the response directly from the cached recipe summaries.
+            # Resolving each id via get_recipe_by_id would re-read every recipe
+            # JSON from disk — thousands of blocking reads on the event loop
+            # for large libraries — while all required fields already live in
+            # the cache.
+            cache = await recipe_scanner.get_cached_data()
+            recipes_by_id = {
+                str(recipe.get("id", "")): recipe for recipe in cache.raw_data
+            }
+
             response_data = []
 
-            for fingerprint, recipe_ids in fingerprint_groups.items():
-                if len(recipe_ids) <= 1:
-                    continue
+            def append_groups(
+                groups: Dict[str, List[Any]], group_type: str
+            ) -> None:
+                for group_key, recipe_ids in groups.items():
+                    if len(recipe_ids) <= 1:
+                        continue
 
-                recipes = []
-                for recipe_id in recipe_ids:
-                    recipe = await recipe_scanner.get_recipe_by_id(recipe_id)
-                    if recipe:
+                    recipes = []
+                    for recipe_id in recipe_ids:
+                        recipe = recipes_by_id.get(str(recipe_id))
+                        if recipe is None:
+                            continue
                         recipes.append(
                             {
                                 "id": recipe.get("id"),
@@ -613,55 +658,23 @@ class RecipeQueryHandler:
                             }
                         )
 
-                if len(recipes) >= 2:
-                    recipes.sort(
-                        key=lambda entry: entry.get("modified", 0), reverse=True
-                    )
-                    response_data.append(
-                        {
-                            "type": "fingerprint",
-                            "key": f"g-{len(response_data) + 1}",
-                            "fingerprint": fingerprint,
-                            "count": len(recipes),
-                            "recipes": recipes,
-                        }
-                    )
-
-            for url, recipe_ids in url_groups.items():
-                if len(recipe_ids) <= 1:
-                    continue
-
-                recipes = []
-                for recipe_id in recipe_ids:
-                    recipe = await recipe_scanner.get_recipe_by_id(recipe_id)
-                    if recipe:
-                        recipes.append(
+                    if len(recipes) >= 2:
+                        recipes.sort(
+                            key=lambda entry: entry.get("modified") or 0,
+                            reverse=True,
+                        )
+                        response_data.append(
                             {
-                                "id": recipe.get("id"),
-                                "title": recipe.get("title"),
-                                "file_url": recipe.get("file_url")
-                                or self._format_recipe_file_url(
-                                    recipe.get("file_path", "")
-                                ),
-                                "modified": recipe.get("modified"),
-                                "created_date": recipe.get("created_date"),
-                                "lora_count": len(recipe.get("loras", [])),
+                                "type": group_type,
+                                "key": f"g-{len(response_data) + 1}",
+                                "fingerprint": group_key,
+                                "count": len(recipes),
+                                "recipes": recipes,
                             }
                         )
 
-                if len(recipes) >= 2:
-                    recipes.sort(
-                        key=lambda entry: entry.get("modified", 0), reverse=True
-                    )
-                    response_data.append(
-                        {
-                            "type": "source_path",
-                            "key": f"g-{len(response_data) + 1}",
-                            "fingerprint": url,
-                            "count": len(recipes),
-                            "recipes": recipes,
-                        }
-                    )
+            append_groups(fingerprint_groups, "fingerprint")
+            append_groups(url_groups, "source_path")
 
             response_data.sort(key=lambda entry: entry["count"], reverse=True)
             return web.json_response(
@@ -1580,6 +1593,35 @@ class RecipeManagementHandler:
             self._logger.error("Error reconnecting LoRA: %s", exc, exc_info=True)
             return web.json_response({"error": str(exc)}, status=500)
 
+    async def mark_lora_hash_invalid(self, request: web.Request) -> web.Response:
+        try:
+            await self._ensure_dependencies_ready()
+            recipe_scanner = self._recipe_scanner_getter()
+            if recipe_scanner is None:
+                raise RuntimeError("Recipe scanner unavailable")
+
+            data = await request.json()
+            for field in ("recipe_id", "lora_index"):
+                if field not in data:
+                    raise RecipeValidationError(f"Missing required field: {field}")
+
+            result = await self._persistence_service.mark_lora_hash_invalid(
+                recipe_scanner=recipe_scanner,
+                recipe_id=data["recipe_id"],
+                lora_index=int(data["lora_index"]),
+                hash_invalid=bool(data.get("hash_invalid", True)),
+            )
+            return web.json_response(result.payload, status=result.status)
+        except RecipeValidationError as exc:
+            return web.json_response({"error": str(exc)}, status=400)
+        except RecipeNotFoundError as exc:
+            return web.json_response({"error": str(exc)}, status=404)
+        except Exception as exc:
+            self._logger.error(
+                "Error marking LoRA hash invalid: %s", exc, exc_info=True
+            )
+            return web.json_response({"error": str(exc)}, status=500)
+
     async def bulk_delete(self, request: web.Request) -> web.Response:
         try:
             await self._ensure_dependencies_ready()
@@ -2171,14 +2213,21 @@ class RecipeManagementHandler:
             civitai_base_model = civitai_parsed.get("base_model")
             if civitai_base_model and not metadata.get("base_model"):
                 metadata["base_model"] = civitai_base_model
-        elif parsed_embedded:
-            parsed_loras = parsed_embedded.get("loras")
-            if parsed_loras and not metadata.get("loras"):
-                metadata["loras"] = parsed_loras
-            parsed_model = parsed_embedded.get("model")
-            if parsed_model and not metadata.get("checkpoint"):
-                metadata["checkpoint"] = parsed_model
-            if parsed_embedded.get("base_model") and not metadata.get("base_model"):
+
+        # EXIF fills whatever the API-only parse left open — when the image
+        # API meta is null (only modelVersionIds present) the API parse
+        # yields a checkpoint but no LoRAs, while the image EXIF carries the
+        # full resource list.
+        if parsed_embedded:
+            if not metadata.get("loras"):
+                parsed_loras = parsed_embedded.get("loras")
+                if parsed_loras:
+                    metadata["loras"] = parsed_loras
+            if not metadata.get("checkpoint"):
+                parsed_model = parsed_embedded.get("model")
+                if parsed_model:
+                    metadata["checkpoint"] = parsed_model
+            if not metadata.get("base_model") and parsed_embedded.get("base_model"):
                 metadata["base_model"] = parsed_embedded["base_model"]
 
         civitai_client = self._civitai_client_getter()
@@ -2752,6 +2801,91 @@ class RecipeSharingHandler:
             self._logger.error(
                 "Error downloading shared recipe: %s", exc, exc_info=True
             )
+            return web.json_response({"error": str(exc)}, status=500)
+
+
+class RecipeWorkflowHandler:
+    """Extract an embedded workflow from a recipe image and broadcast it."""
+
+    def __init__(
+        self,
+        *,
+        ensure_dependencies_ready: EnsureDependenciesCallable,
+        recipe_scanner_getter: RecipeScannerGetter,
+        prompt_server: type[PromptServerProtocol],
+        logger: Logger,
+    ) -> None:
+        self._ensure_dependencies_ready = ensure_dependencies_ready
+        self._recipe_scanner_getter = recipe_scanner_getter
+        self._prompt_server = prompt_server
+        self._logger = logger
+
+    async def send_recipe_workflow(self, request: web.Request) -> web.Response:
+        try:
+            await self._ensure_dependencies_ready()
+            recipe_scanner = self._recipe_scanner_getter()
+            if recipe_scanner is None:
+                raise RuntimeError("Recipe scanner unavailable")
+
+            recipe_id = request.match_info["recipe_id"]
+            recipe = await recipe_scanner.get_recipe_by_id(recipe_id)
+            if not recipe:
+                return web.json_response({"error": "Recipe not found"}, status=404)
+
+            if os.environ.get("LORA_MANAGER_STANDALONE", "0") == "1":
+                return web.json_response(
+                    {"error": "Standalone Mode Active"}, status=400
+                )
+
+            image_path = recipe.get("file_path")
+            if not image_path:
+                return web.json_response({"error": "no_workflow"}, status=404)
+
+            metadata = await asyncio.to_thread(
+                ExifUtils._load_structured_metadata, image_path
+            )
+            workflow_raw = metadata.get("workflow")
+            if not workflow_raw:
+                return web.json_response(
+                    {
+                        "error": "no_workflow",
+                        "message": "No embedded workflow found in recipe image",
+                    },
+                    status=404,
+                )
+
+            # _load_structured_metadata always yields workflow as a JSON string;
+            # the frontend extension expects a parsed object for loadGraphData.
+            try:
+                workflow = (
+                    json.loads(workflow_raw)
+                    if isinstance(workflow_raw, str)
+                    else workflow_raw
+                )
+            except (TypeError, ValueError):
+                self._logger.warning(
+                    "Recipe %s embeds a non-JSON workflow payload; skipping send",
+                    recipe_id,
+                )
+                return web.json_response(
+                    {
+                        "error": "no_workflow",
+                        "message": "Embedded workflow data is not valid JSON",
+                    },
+                    status=404,
+                )
+
+            self._prompt_server.instance.send_sync(
+                "lm_load_workflow",
+                {
+                    "workflow": workflow,
+                    "name": recipe.get("title") or "",
+                    "recipe_id": recipe_id,
+                },
+            )
+            return web.json_response({"success": True, "sent": True})
+        except Exception as exc:
+            self._logger.error("Error sending recipe workflow: %s", exc, exc_info=True)
             return web.json_response({"error": str(exc)}, status=500)
 
 

@@ -7,16 +7,17 @@
 import json
 from pathlib import Path
 
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import torch  # type: ignore
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig  # type: ignore
 
-from aistudynow_QwenVL_HF import (
+from aistudynow_QwenVL_HF import (  # type: ignore
     ATTENTION_MODES,
     HF_TEXT_MODELS,
     HF_VL_MODELS,
     QwenVLBase,
     Quantization,
     TOOLTIPS,
+    build_explicit_cuda_device_map,
 )
 
 NODE_DIR = Path(__file__).parent
@@ -68,7 +69,7 @@ class aistudynow_QwenVL_PromptEnhancer(QwenVLBase):
         super().__init__()
         self.text_model = None
         self.text_tokenizer = None
-        self.text_signature = None
+        self.text_signature: tuple | None = None
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -196,6 +197,10 @@ class aistudynow_QwenVL_PromptEnhancer(QwenVLBase):
         else:
             device = device_choice
 
+        if quantization in (Quantization.Q4, Quantization.Q8) and not str(device).startswith("cuda"):
+            print("[QwenVL] 4-bit/8-bit text quantization needs CUDA. Falling back to FP16.")
+            quantization = Quantization.FP16
+
         if quantization == Quantization.Q4:
             quant_cfg = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -219,14 +224,19 @@ class aistudynow_QwenVL_PromptEnhancer(QwenVLBase):
         load_kwargs = {}
         if quant_cfg:
             load_kwargs["quantization_config"] = quant_cfg
+            explicit_cuda_map = build_explicit_cuda_device_map(str(device))
+            if explicit_cuda_map is not None:
+                load_kwargs["device_map"] = explicit_cuda_map
+                print("[QwenVL] Using explicit CUDA device_map for quantized text load.")
         else:
-            load_kwargs["torch_dtype"] = torch.float16 if device == "cuda" else torch.float32
+            load_kwargs["torch_dtype"] = torch.float16 if str(device).startswith("cuda") else torch.float32
 
         print(f"[QwenVL] Loading text model {model_name} ({quantization})")
         self.text_tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
         self.text_model = AutoModelForCausalLM.from_pretrained(repo_id, trust_remote_code=True, **load_kwargs).eval()
-        self.text_model.to(device)
-        self.text_signature = signature
+        if quant_cfg is None and hasattr(self.text_model, "to"):
+            self.text_model.to(device)  # type: ignore
+        self.text_signature = signature  # type: ignore
 
     def _invoke_text(
         self,

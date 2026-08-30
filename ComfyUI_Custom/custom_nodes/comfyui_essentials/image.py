@@ -10,12 +10,13 @@ import torch
 import torch.nn.functional as F
 import torchvision.transforms.v2 as T
 
-import warnings
-warnings.filterwarnings('ignore', module="torchvision")
+#import warnings
+#warnings.filterwarnings('ignore', module="torchvision")
 import math
 import os
 import numpy as np
 import folder_paths
+from pathlib import Path
 import random
 
 """
@@ -195,6 +196,23 @@ class ImageListToBatch:
         out = torch.cat(out, dim=0)
 
         return (out,)
+
+class ImageBatchToList:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    OUTPUT_IS_LIST = (True,)
+    FUNCTION = "execute"
+    CATEGORY = "essentials/image batch"
+
+    def execute(self, image):
+        return ([image[i].unsqueeze(0) for i in range(image.shape[0])], )
 
 
 """
@@ -631,13 +649,13 @@ class ImageUntile:
                 mask = torch.ones((1, tile_h+overlap_y, tile_w+overlap_x), device=tiles.device, dtype=tiles.dtype)
 
                 # feather the overlap on top
-                if i > 0:
+                if i > 0 and overlap_y > 0:
                     mask[:, :overlap_y, :] *= torch.linspace(0, 1, overlap_y, device=tiles.device, dtype=tiles.dtype).unsqueeze(1)
                 # feather the overlap on bottom
                 #if i < rows - 1:
                 #    mask[:, -overlap_y:, :] *= torch.linspace(1, 0, overlap_y, device=tiles.device, dtype=tiles.dtype).unsqueeze(1)
                 # feather the overlap on left
-                if j > 0:
+                if j > 0 and overlap_x > 0:
                     mask[:, :, :overlap_x] *= torch.linspace(0, 1, overlap_x, device=tiles.device, dtype=tiles.dtype).unsqueeze(0)
                 # feather the overlap on right
                 #if j < cols - 1:
@@ -743,7 +761,7 @@ class ImageRandomTransform:
             ])
             out.append(tramsforms(i.unsqueeze(0)))
 
-        out = torch.cat(out, dim=0).permute([0, 2, 3, 1])
+        out = torch.cat(out, dim=0).permute([0, 2, 3, 1]).clamp(0, 1)
 
         return (out,)
 
@@ -824,8 +842,9 @@ class ImageRemoveBackground:
         output = torch.stack(output, dim=0)
         output = output.permute([0, 2, 3, 1])
         mask = output[:, :, :, 3] if output.shape[3] == 4 else torch.ones_like(output[:, :, :, 0])
+        # output = output[:, :, :, :3]
 
-        return(output[:, :, :, :3], mask,)
+        return(output, mask,)
 
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -926,8 +945,6 @@ class ImagePosterize:
 
         return(image,)
 
-
-LUTS_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "luts")
 # From https://github.com/yoonsikp/pycubelut/blob/master/pycubelut.py (MIT license)
 class ImageApplyLUT:
     @classmethod
@@ -935,7 +952,7 @@ class ImageApplyLUT:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "lut_file": (sorted([f for f in os.listdir(LUTS_DIR) if f.lower().endswith('.cube')]), ),
+                "lut_file": (folder_paths.get_filename_list("luts"),),
                 "gamma_correction": ("BOOLEAN", { "default": True }),
                 "clip_values": ("BOOLEAN", { "default": True }),
                 "strength": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.1 }),
@@ -947,10 +964,15 @@ class ImageApplyLUT:
 
     # TODO: check if we can do without numpy
     def execute(self, image, lut_file, gamma_correction, clip_values, strength):
+        lut_file_path = folder_paths.get_full_path("luts", lut_file)
+        if not lut_file_path or not Path(lut_file_path).exists():
+            print(f"Could not find LUT file: {lut_file_path}")
+            return (image,)
+            
         from colour.io.luts.iridas_cube import read_LUT_IridasCube
-
+        
         device = image.device
-        lut = read_LUT_IridasCube(os.path.join(LUTS_DIR, lut_file))
+        lut = read_LUT_IridasCube(lut_file_path)
         lut.name = lut_file
 
         if clip_values:
@@ -1046,6 +1068,54 @@ class ImageCAS:
         output = output.permute([0,2,3,1])
 
         return (output,)
+
+class ImageSmartSharpen:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "noise_radius": ("INT", { "default": 7, "min": 1, "max": 25, "step": 1, }),
+                "preserve_edges": ("FLOAT", { "default": 0.75, "min": 0.0, "max": 1.0, "step": 0.05 }),
+                "sharpen": ("FLOAT", { "default": 5.0, "min": 0.0, "max": 25.0, "step": 0.5 }),
+                "ratio": ("FLOAT", { "default": 0.5, "min": 0.0, "max": 1.0, "step": 0.1 }),
+        }}
+
+    RETURN_TYPES = ("IMAGE",)
+    CATEGORY = "essentials/image processing"
+    FUNCTION = "execute"
+
+    def execute(self, image, noise_radius, preserve_edges, sharpen, ratio):
+        import cv2
+
+        output = []
+        #diagonal = np.sqrt(image.shape[1]**2 + image.shape[2]**2)
+        if preserve_edges > 0:
+            preserve_edges = max(1 - preserve_edges, 0.05)
+
+        for img in image:
+            if noise_radius > 1:
+                sigma = 0.3 * ((noise_radius - 1) * 0.5 - 1) + 0.8 # this is what pytorch uses for blur
+                #sigma_color = preserve_edges * (diagonal / 2048)
+                blurred = cv2.bilateralFilter(img.cpu().numpy(), noise_radius, preserve_edges, sigma)
+                blurred = torch.from_numpy(blurred)
+            else:
+                blurred = img
+
+            if sharpen > 0:
+                sharpened = kornia.enhance.sharpness(img.permute(2,0,1), sharpen).permute(1,2,0)
+            else:
+                sharpened = img
+
+            img = ratio * sharpened + (1 - ratio) * blurred
+            img = torch.clamp(img, 0, 1)
+            output.append(img)
+        
+        del blurred, sharpened
+        output = torch.stack(output)
+
+        return (output,)
+
 
 class ExtractKeyframes:
     @classmethod
@@ -1619,6 +1689,7 @@ IMAGE_CLASS_MAPPINGS = {
     "ImageExpandBatch+": ImageExpandBatch,
     "ImageFromBatch+": ImageFromBatch,
     "ImageListToBatch+": ImageListToBatch,
+    "ImageBatchToList+": ImageBatchToList,
 
     # Image manipulation
     "ImageCompositeFromMaskBatch+": ImageCompositeFromMaskBatch,
@@ -1644,13 +1715,13 @@ IMAGE_CLASS_MAPPINGS = {
     "ImageColorMatch+": ImageColorMatch,
     "ImageColorMatchAdobe+": ImageColorMatchAdobe,
     "ImageHistogramMatch+": ImageHistogramMatch,
+    "ImageSmartSharpen+": ImageSmartSharpen,
 
     # Utilities
     "GetImageSize+": GetImageSize,
     "ImageToDevice+": ImageToDevice,
     "ImagePreviewFromLatent+": ImagePreviewFromLatent,
     "NoiseFromImage+": NoiseFromImage,
-
     #"ExtractKeyframes+": ExtractKeyframes,
 }
 
@@ -1663,6 +1734,7 @@ IMAGE_NAME_MAPPINGS = {
     "ImageExpandBatch+": "🔧 Image Expand Batch",
     "ImageFromBatch+": "🔧 Image From Batch",
     "ImageListToBatch+": "🔧 Image List To Batch",
+    "ImageBatchToList+": "🔧 Image Batch To List",
 
     # Image manipulation
     "ImageCompositeFromMaskBatch+": "🔧 Image Composite From Mask Batch",
@@ -1688,6 +1760,7 @@ IMAGE_NAME_MAPPINGS = {
     "ImageColorMatch+": "🔧 Image Color Match",
     "ImageColorMatchAdobe+": "🔧 Image Color Match Adobe",
     "ImageHistogramMatch+": "🔧 Image Histogram Match",
+    "ImageSmartSharpen+": "🔧 Image Smart Sharpen",
 
     # Utilities
     "GetImageSize+": "🔧 Get Image Size",

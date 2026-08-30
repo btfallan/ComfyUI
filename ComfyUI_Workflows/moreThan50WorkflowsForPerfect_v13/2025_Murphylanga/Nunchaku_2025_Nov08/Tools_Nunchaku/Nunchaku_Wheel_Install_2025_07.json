@@ -1,0 +1,128 @@
+{
+  "id": "0186b4e8-643a-4420-95ec-328432a55ae5",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "ShowText|pysssss",
+      "pos": [
+        4172,
+        -576
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 1,
+      "type": "NunchakuWheelInstaller",
+      "pos": [
+        3860,
+        -580
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-nunchaku",
+        "ver": "aee38dd7ee8f88bf5db0a7ce813da67a4f969c88",
+        "Node name for S&R": "NunchakuWheelInstaller"
+      },
+      "widgets_values": [
+        "HuggingFace",
+        "v0.3.1"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "MarkdownNote",
+      "pos": [
+        3852,
+        -392
+      ],
+      "size": [
+        424,
+        248
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## Bildgenerierung  \n1. **Schritt**: Wähle einen Checkpoint.  \n2. **Schritt**: Setze die gewünschte Auflösung (z. B. `512x512`).  \n   - *Tipp*: Nutze `CFG Scale 7-10` für bessere Ergebnisse.  \n\n\n\n## 🔗 Link zu aktuellen ComfyUI-Tutorials  \n📺 [ComfyUI YouTube-Playlist](https://www.youtube.com/playlist?list=PLOlk3DTLbLzSJzShrwN0m9GWrlA8BxDU1)  \n- Aktuelle Videos & Tutorials zum Thema ComfyUI  \n- Inklusive Workflow-Beispiele und Tipps  "
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.2100000000000002,
+      "offset": [
+        -3169.20754876807,
+        900.715809151792
+      ]
+    },
+    "frontendVersion": "1.23.4",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

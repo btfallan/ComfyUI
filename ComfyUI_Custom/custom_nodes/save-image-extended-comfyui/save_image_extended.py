@@ -2,41 +2,52 @@ import os
 import re
 import sys
 import json
-import numpy as np
 import locale
 from datetime import datetime
 from pathlib import Path
 import folder_paths
-import pprint
-import piexif
-import piexif.helper
 
-version = 2.64
+import pprint
+import numpy
+# import piexif
+# import piexif.helper
+
+# import cv2  # not faster then PIL
+
+version = 2.88
 
 avif_supported = False
 jxl_supported = False
+
+debug = False
+# debug = True
 
 # Avif is included in requirements.txt
 try:
   import pillow_avif
 except:
-  print(f"\033[92m[save_image_extended]\033[0m AVIF is not supported. To add it: pip install pillow pillow-avif-plugin\033[0m") 
+  print(f"\033[92m[💾 save_image_extended]\033[0m AVIF is not supported. To add it: pip install pillow pillow-avif-plugin\033[0m") 
   pass
 else:
-  print(f"\033[92m[save_image_extended] AVIF is supported! Woohoo!\033[0m") 
+  print(f"\033[92m[💾 save_image_extended] AVIF   is supported! Woohoo!\033[0m") 
   avif_supported = True
 
 # Jxl requires jxlpy wheel to be compiled, and a valid MSVC environment, which is complex task
+# Therefore we use pillow_jxl which makes more sense
 try:
-  from jxlpy import JXLImagePlugin
+  # jxlpy is in early stages of development. No one has ever compiled it on Windows in 2025 AFAIK, please prove me wrong
+  # from jxlpy import JXLImagePlugin
+  # from imagecodecs import (jpegxl_encode, jpegxl_decode, jpegxl_check, jpegxl_version, JPEGXL)
+  import pillow_jxl
 except:
-  print(f"\033[92m[save_image_extended]\033[0m JXL is not supported. To add it: pip install jxlpy\033[0m") 
-  print(f"\033[92m[save_image_extended]\033[0m                       You will need a valid MSVC env to build the wheel\033[0m") 
+  print(f"\033[92m[💾 save_image_extended]\033[0m JXL is not supported. To add it: pip install jxlpy\033[0m") 
+  print(f"\033[92m[💾 save_image_extended]\033[0m                       You will need a valid MSVC env to build the wheel\033[0m") 
   pass
 else:
+  print(f"\033[92m[💾 save_image_extended] JPEGXL is supported! YeePee!\033[0m") 
   jxl_supported = True
 
-# PIL must be loaded after pillow_avif
+# PIL must be loaded after pillow plugins
 from PIL import Image, ExifTags
 from PIL.PngImagePlugin import PngInfo
 
@@ -46,67 +57,8 @@ original_locale = locale.setlocale(locale.LC_TIME, '')
 
 # class SaveImageExtended -------------------------------------------------------------------------------
 class SaveImageExtended:
-  RETURN_TYPES = ()
-  FUNCTION = 'save_images'
-  OUTPUT_NODE = True
-  CATEGORY = 'image'
-  DESCRIPTION = """
-### subfolders:
-- you can use / or ./ or even ../ to start from parent
-- you can also use / as the separator
-- if your widget name has subfolders like SDXL/whatnot, you will have subfolders too
-### Sample datetime formats: see [man datetime](https://www.man7.org/linux/man-pages/man1/date.1.html)
-- %F = %Y-%m-%d = 2024-05-22
-- %H-%M-%S = 09-13-58
-- %D = 05/22/24 (subfolders)
-
-"""
-
-  type                    = 'output'
-  
-  png_compress_level      = 9
-  avif_quality            = 60
-  webp_quality            = 75
-  jpeg_quality            = 91
-  jxl_quality             = 91
-  # tiff_quality has no impact unless you start meddling with the compressions algorithms
-  tiff_quality            = 91
-  # optimize_image only works for jpeg, with like just 2% reduction in size
-  optimize_image          = True
-  
-  filename_prefix         = 'ComfyUI'
-  filename_keys           = 'sampler_name, cfg, steps, %F %H-%M-%S'
-  foldername_prefix       = ''
-  foldername_keys         = 'ckpt_name'
-  delimiter               = '-'
-  save_job_data           = 'disabled'
-  job_data_per_image      = False
-  job_custom_text         = ''
-  save_metadata           = True
-  counter_digits          = 4
-  counter_position        = 'last'
-  counter_positions       = ['last', 'first']
-  one_counter_per_folder  = True
-  image_preview           = True
-  extToRemove             = ['.safetensors', '.ckpt', '.pt', '.bin', '.pth']
-  output_ext              = '.webp'
-  output_exts             = ['.webp', '.png', '.jpg', '.jpeg', '.gif', '.tiff', '.bmp']
-  quality                 = 75
-
-  print(f"\033[92m[save_image_extended]\033[0m version: {version}\033[0m")
-  if jxl_supported:
-    output_exts.insert(0, '.jxl')
-  # if pillow_avif not in sys.modules:
-  if avif_supported:
-    output_exts.insert(0, '.avif')
-
-  def __init__(self):
-    self.output_dir = folder_paths.get_output_directory()
-    self.prefix_append = ''
-    
-  
   """
-  Return a dictionary which contains config for all input fields.
+  INPUT_TYPES Return a dictionary which contains config for all input fields.
   Some types (string): "MODEL", "VAE", "CLIP", "CONDITIONING", "LATENT", "IMAGE", "INT", "STRING", "FLOAT".
   Input types "INT", "STRING" or "FLOAT" are special values for fields on the node.
   The type can be a list for selection.
@@ -121,51 +73,155 @@ class SaveImageExtended:
   """
   @classmethod
   def INPUT_TYPES(self):
+    # this is checked by ComfyUI/execution.py: validate_inputs(prompt, item, validated):
+    # must also define VALIDATE_INPUTS(self) so we can fill in missing inputs when new inputs are added by new versions
     return {
       'required': {
         'images': ('IMAGE', ),
-        'filename_prefix': ('STRING', {'default': self.filename_prefix, 'multiline': False}),
-        'filename_keys': ('STRING', {'default': self.filename_keys, 'multiline': True}),
-        'foldername_prefix': ('STRING', {'default': self.foldername_prefix, 'multiline': False}),
-        'foldername_keys': ('STRING', {'default': self.foldername_keys, 'multiline': True}),
-        'delimiter': ('STRING', {'default': self.delimiter, 'multiline': False}),
+        'filename_prefix': ('STRING', {'default': self.filename_prefix, 'multiline': False, 'tooltip': "Fixed string prefixed to file name"}),
+        'filename_keys': ('STRING', {'default': self.filename_keys, 'multiline': True, 'tooltip': "Comma separated string with sampler parameters to add to filename. \n* Example: `sampler_name, scheduler, cfg, denoise` Added to filename in written order. \n* Example: also accepts `vae_name` `model_name` (upscale model), `ckpt_name` (checkpoint). \n* `resolution`  also works. \n\n* ANY parameter name of any node will work. The same applies to `foldername_keys`"}),
+        'foldername_prefix': ('STRING', {'default': self.foldername_prefix, 'multiline': False, 'tooltip': "Fixed string prefixed to subfolders"}),
+        'foldername_keys': ('STRING', {'default': self.foldername_keys, 'multiline': True, 'tooltip': "Same rules as for `filename_keys`. Create subfolders by using `/` or `../` etc"}),
+        'delimiter': ('STRING', {'default': self.delimiter, 'multiline': False, 'tooltip': "Any string you like. You can also use `/` to create subfolders"}),
         'save_job_data': ([
           'disabled', 
           'prompt', 
           'basic, prompt', 
           'basic, sampler, prompt', 
           'basic, models, sampler, prompt'
-        ], {'default': self.save_job_data}),
-        'job_data_per_image': ('BOOLEAN', {"default": self.job_data_per_image}),
-        'job_custom_text': ('STRING', {'default': self.job_custom_text, 'multiline': False}),
-        'save_metadata': ('BOOLEAN', {'default': self.save_metadata}),
+        ], {'default': self.save_job_data, 'tooltip': "Saves information about each job as entries in a `jobs.json` text file, under the generated subfolder. \nMultiple options for its content: `prompt`, `basic data`, `sampler settings`, `loaded models`"}),
+        'job_data_per_image': ('BOOLEAN', {"default": self.job_data_per_image, 'tooltip': "Saves individual job data file per image"}),
+        'job_custom_text': ('STRING', {'default': self.job_custom_text, 'multiline': False, 'tooltip': "Custom string to save along with the job data"}),
+        'save_metadata': ('BOOLEAN', {'default': self.save_metadata, 'tooltip': "Saves metadata into the image"}),
         'counter_digits': ('INT', {
           "default": self.counter_digits, 
-          "min": 1, 
+          "min": 0, 
           "max": 8, 
           "step": 1,
-          "display": "silder"
+          "display": "silder",
+          'tooltip': "Number of digits used for the image counter. `3` = image_001.png, based on highest number in the subfolder, ignores gaps. **Can be disabled** when == 0"
          }),
-        'counter_position': (self.counter_positions, {'default': self.counter_position}),
-        'one_counter_per_folder': ('BOOLEAN', {'default': self.one_counter_per_folder}),
-        'image_preview': ('BOOLEAN', {'default': self.image_preview}),
-        'output_ext': (self.output_exts, {'default': self.output_ext}),
+        'counter_position': (self.counter_positions, {'default': self.counter_position, 'tooltip': "Image counter postition: image_001.png or 001_image.png"}),
+        'one_counter_per_folder': ('BOOLEAN', {'default': self.one_counter_per_folder, 'tooltip': "deprecated but I cannot remove it of all your saved prompts will break"}),
+        'image_preview': ('BOOLEAN', {'default': self.image_preview, 'tooltip': "Turns the image preview on and off"}),
+        'output_ext': (self.output_exts, {'default': self.output_ext, 'tooltip': "File extension: WEBP by default, AVIF, PNG, JXL, JPG, etc"}),
         'quality': ('INT', {
           "default": self.quality, 
-          "min": 1, 
+          "min": 0, 
           "max": 100, 
           "step": 1,
-          "display": "silder"
-         }),
+          "display": "silder",
+          'tooltip': "Quality for JPEG/JXL/WebP/AVIF/J2K formats; Quality is relative to each format. \n* Example: AVIF 60 is same quality as WebP 90. \n* PNG compression is fixed at 4 and not affected by this. PNG compression times skyrocket above level 4 for zero benefits on filesize."
+        }),
+        'named_keys': ('BOOLEAN', {'default': self.named_keys, 'tooltip': "Prefix each value by its key name. Example: prefix-seed=123456-width=1024-cfg=5.0-0001.avif"}),
       },
       'optional': {
-        'positive_text_opt': ('STRING', {'forceInput': True}),
-        'negative_text_opt': ('STRING', {'forceInput': True}),
+        'positive_text_opt': ('STRING', {'forceInput': True, 'tooltip': "Optional string saved as `positive_text_opt` in job.json when `save_job_data`=True"}),
+        'negative_text_opt': ('STRING', {'forceInput': True, 'tooltip': "Optional string saved as `negative_text_opt` in job.json when `save_job_data`=True"}),
                     },
       'hidden': {'prompt': 'PROMPT', 'extra_pnginfo': 'EXTRA_PNGINFO'},
     }
+
+  RETURN_TYPES = ()
+  FUNCTION = 'save_images'
+  OUTPUT_NODE = True
+  CATEGORY = 'image'
+  DESCRIPTION = """
+## Advice
+You must enable Badge numbers in the Manager if you have duplicate nodes: _#ID Nickname_
+
+### Default behavior
+- Workflows with multiple of the same node:
+  - if you don't specify the node number in your keys like _13.sampler_name_, 
+  - then the highest node number value will be returned
+- get name from CheckPoint/LorA/ControlNet: use _ckpt_name_ / _control_net_name_ / _lora_name_
+- get subfolders from CheckPoint/LorA/ControlNet: use use _ckpt_path_ / _control_net_path_ / _lora_path_
+
+### subfolders
+- you can use `/` or `./` or even `../`
+- you can prepend `/` to your key such as `/sampler_name` or `/12.sampler_name`
+- you can use subfolders in _filename\_keys_ as well
+- trailing `/` will be removed
+
+### Datetime formats
+See [man datetime](https://www.man7.org/linux/man-pages/man1/date.1.html) for all possible values
+- %F = %Y-%m-%d = 2024-05-22
+- %H-%M-%S = 09-13-58
+- %D = 05/22/24 (subfolders)
+
+### 💾 Prompt Embedded
+Prompt and Workflows are embedded in every files except BMP.
+Prompt and Workflows are saved in Exif tags _Make_ [0x010f] and _ImageDescription_ [0x010e].
+ComfyUI can only load PNG and WebP at the moment, AVIF is a PR that was sadly dropped when they implemented audio files in Summer 2024.
+
+"""
+
+  type                    = 'output'
   
+  avif_quality            = 60
+  webp_quality            = 90
+  jpeg_quality            = 90
+  jxl_quality             = 90
+  j2k_quality             = 90
+  # tiff_quality has no impact unless you start meddling with the compressions algorithms
+  tiff_quality            = 90
+  # optimize_image only works for jpeg, png anf TIFF, with like just 2% reduction in size; not used for PNG as it forces a level 9 compression.
+  optimize_image          = True
   
+  filename_prefix         = 'ComfyUI'
+  filename_keys           = 'sampler_name, cfg, steps, %F %H-%M-%S'
+  foldername_prefix       = ''
+  foldername_keys         = 'ckpt_name'
+  delimiter               = '-'
+  save_job_data           = 'disabled'
+  job_data_per_image      = False
+  job_custom_text         = ''
+  save_metadata           = True
+  counter_digits          = 4
+  counter_position        = 'last'
+  counter_positions       = ['last', 'first']
+  one_counter_per_folder  = True                # deprecated but cannot remove it or all values loaded after it will be shifted
+  image_preview           = True
+  modelExtensions         = ['.safetensors', '.ckpt', '.pt', '.bin', '.pth']
+  output_ext              = '.webp'
+  output_exts             = ['.webp', '.png', '.jpg', '.jpeg', '.j2k', '.jp2', '.gif', '.tiff', '.bmp']
+  # quality is a lossy compression unused by PNG/tiff/gif but also translated to integers 0-9 for PNG compression level
+  quality                 = 90
+  named_keys              = False
+
+  print(f"\033[92m[💾 save_image_extended]\033[0m version: {version}\033[0m")
+  if jxl_supported:
+    output_exts.insert(0, '.jxl')
+  # if pillow_avif not in sys.modules:
+  if avif_supported:
+    # no matter what people say, jxl is far away from being integrated in browsers. I bet on AVIF.
+    output_exts.insert(0, '.avif')
+
+  def __init__(self):
+    self.output_dir = folder_paths.get_output_directory()
+    self.prefix_append = ''
+  
+
+  # This class serves no purpose, it can only test 1 element. you always get all errors even if only one element is bad
+  # @classmethod
+  # def VALIDATE_INPUTS(self, output_ext, quality, **kwargs):
+    # print(f"VALIDATE_INPUTS output_ext = x{output_ext}x")
+    # print(f"VALIDATE_INPUTS quality = x{quality}x")
+    # if output_ext == None or output_ext == '':
+      # return "cannot be empty"
+    # if output_ext not in self.output_exts:
+      # return "extension invalid"
+    # else:
+      # return True
+    # if quality == None or quality == '' or quality == 0:
+      # return "cannot be empty or 0"
+    # return True
+
+  # TODO: see how that works and how that can help
+  # @classmethod
+  # def IS_CHANGED(self, **kwargs):
+      # return float("nan")
+
   def get_subfolder_path(self, image_path, output_path):
     image_path = Path(image_path).resolve()
     output_path = Path(output_path).resolve()
@@ -175,23 +231,46 @@ class SaveImageExtended:
     return str(subfolder_path)
   
   
+
+
+  #  ██████  ██████  ██    ██ ███    ██ ████████ ███████ ██████  
+  # ██      ██    ██ ██    ██ ████   ██    ██    ██      ██   ██ 
+  # ██      ██    ██ ██    ██ ██ ██  ██    ██    █████   ██████  
+  # ██      ██    ██ ██    ██ ██  ██ ██    ██    ██      ██   ██ 
+  #  ██████  ██████   ██████  ██   ████    ██    ███████ ██   ██ 
+
   # Get current counter number from file names
-  def get_latest_counter(self, one_counter_per_folder, folder_path, filename_prefix, counter_digits=counter_digits, counter_position=counter_position, output_ext=output_ext):
+  def get_latest_counter(self, folder_path, filename, counter_digits=counter_digits, counter_position=counter_position, output_ext=output_ext):
     counter = 1
     if not os.path.exists(folder_path):
       print(f"SaveImageExtended {version} error: Folder {folder_path} does not exist, starting counter at 1.")
       return counter
     
     try:
+      # grab all files with output_ext
       files = [file for file in os.listdir(folder_path) if file.endswith(output_ext)]
+      # ['0001.webp', '0003-a.webp', 'AnythingV5_inkBase-0001.webp', 'AnythingV5_inkBase-0002.webp']
+
       extLen = len(output_ext)
+      # '.webp' = 5
+
       if files:
+        # get default counter position if passed value is somehow not in the allowed values list
         if counter_position not in self.counter_positions: counter_position = self.counter_position
-        if counter_position == 'last':
-          # BUG: this works only if extension is 3 letters like png, this will break with webp and avif:
-          counters = [int(file[-(extLen + counter_digits):-extLen]) if file[-(extLen + counter_digits):-extLen].isdecimal() else 0 for file in files if one_counter_per_folder or file.startswith(filename_prefix)]
+        
+        # issue/48 needs a special case for files, counter_position does not matter here, but the filename length does
+        if not filename:
+          counters = [int(file[:counter_digits]) if (file[:counter_digits].isdecimal() and len(file)==(counter_digits+extLen)) else 0 for file in files]
+          # [1, 0, 0, 0]
         else:
-          counters = [int(file[:counter_digits]) if file[:counter_digits].isdecimal() else 0 for file in files if one_counter_per_folder or file[counter_digits +1:].startswith(filename_prefix)]
+          if counter_position == 'last':
+            counters = [int(file[-(extLen + counter_digits):-extLen]) if file[-(extLen + counter_digits):-extLen].isdecimal() else 0 for file in files if file.startswith(filename)]
+            # [1, 0, 1, 2]
+          else:
+            # file[:counter_digits] = '0001'
+            # file[counter_digits +1:] = 'webp'
+            counters = [int(file[:counter_digits]) if file[:counter_digits].isdecimal() else 0 for file in files if file[counter_digits +1:].startswith(filename)]
+            # [1, 3, 0, 0]
         
         if counters:
           counter = max(counters) + 1
@@ -199,19 +278,50 @@ class SaveImageExtended:
     except Exception as e:
       print(f"SaveImageExtended {version} error: An error occurred while finding the latest counter: {e}")
     
+    if debug: print(f"debug get_latest_counter: counter={counter}")
     return counter
   
   
   # find_keys_recursively is a self-updating recursive method, that will update the dict found_values
   def find_keys_recursively(self, prompt={}, keys_to_find=[], found_values={}):
+    if debug: print(f"debug find_keys_recursively: keys_to_find={keys_to_find} found_values={found_values}")
     for key, value in prompt.items():
       if key in keys_to_find:
-        found_values[key] = value
+        if debug: print(f"debug find_keys_recursively: found key={key}")
+        if debug: print(f"debug find_keys_recursively: value={value}")
+        # pythongosssss/ComfyUI-Custom-Scripts stores the value as a dict: value={'content': 'v1-5-pruned-emaonly.safetensors', 'image': 'checkpoints/v1-5-pruned-emaonly.jpg'}
+        if isinstance(value, dict):
+          if 'content' in value:
+            value = value['content']
+          else:
+            value = ''
+        
+        if key in ['ckpt_path','ckpt_name']:
+          value_path = Path(value)
+          if 'ckpt_path' in keys_to_find:
+            found_values['ckpt_path'] = self.cleanup_fileName(str(value_path.parent))
+          elif 'ckpt_name' in keys_to_find:
+            found_values['ckpt_name'] = self.cleanup_fileName(str(value_path.name))
+          if debug: print(f"debug find_keys_recursively: ckpt_name={value_path.name} ckpt_path={str(value_path.parent)}")
+        elif key in ['control_net_path','control_net_name']:
+          value_path = Path(value)
+          if 'control_net_path' in keys_to_find:
+            found_values['control_net_path'] = self.cleanup_fileName(str(value_path.parent))
+          elif 'control_net_name' in keys_to_find:
+            found_values['control_net_name'] = self.cleanup_fileName(str(value_path.name))
+        elif key in ['lora_path','lora_name']:
+          value_path = Path(value)
+          if 'lora_path' in keys_to_find:
+            found_values['lora_path'] = self.cleanup_fileName(str(value_path.parent))
+          elif 'lora_name' in keys_to_find:
+            found_values['lora_name'] = self.cleanup_fileName(str(value_path.name))
+        else:
+          found_values[key] = self.cleanup_fileName(value)
       elif isinstance(value, dict):
         self.find_keys_recursively(value, keys_to_find, found_values)
   
   
-  def cleanup_fileName(self, file='', extToRemove=extToRemove):
+  def cleanup_fileName(self, file='', extToRemove=modelExtensions):
     if isinstance(file, str):
       # takes care of all the possible safetensor extensions under the sun
       # cannot do that... maybe the user want a string.string fixed value to use, that does not end with extToRemove
@@ -224,7 +334,7 @@ class SaveImageExtended:
   def find_parameter_values(self, target_keys, prompt={}, found_values={}):
     loras_string = ''
     for key, value in prompt.items():
-      # print(f"debug find_parameter_values: key={key} value={value}")
+      if debug: print(f"debug find_parameter_values: key={key} value={value}")
       if 'loras' in target_keys:
         # Match both formats: lora_xx and lora_name_x
         if re.match(r'lora(_name)?(_\d+)?', key):
@@ -249,23 +359,36 @@ class SaveImageExtended:
     return found_values
   
   
+
+
+  # ███    ██  █████  ███    ███ ███████     ██       ██████   ██████  ██████  
+  # ████   ██ ██   ██ ████  ████ ██          ██      ██    ██ ██    ██ ██   ██ 
+  # ██ ██  ██ ███████ ██ ████ ██ █████       ██      ██    ██ ██    ██ ██████  
+  # ██  ██ ██ ██   ██ ██  ██  ██ ██          ██      ██    ██ ██    ██ ██      
+  # ██   ████ ██   ██ ██      ██ ███████     ███████  ██████   ██████  ██      
+
   # String Type                 Example   isdecimal() isdigit() isnumeric()
   # --------------------------- --------- ----------- --------- -----------
   # Base 10 Numbers             '0123'    True        True      True
   # Fractions and Superscripts  '⅔','2²'  False       True      True
   # Roman Numerals              'ↁ'       False       False     True
   # --------------------------- --------- ----------- --------- -----------
-  def generate_custom_name(self, keys_to_extract, prefix, delimiter, prompt, timestamp=datetime.now()):
-    if '%' in prefix:
-      custom_name = timestamp.strftime(prefix)
-    else:
-      custom_name = prefix
+  # def generate_custom_name: (self, keys_to_extract, prefix, delimiter, prompt, resolution, timestamp=datetime.now(), named_keys=False):
+  def generate_custom_name(self, keys_to_extract, prefix, delimiter, prompt, resolution, timestamp=datetime.now(), named_keys=False):
+    custom_name = []
+
+    # only filename has prefix
+    if prefix:
+      if '%' in prefix:
+        custom_name.append(timestamp.strftime(prefix))
+      else:
+        custom_name.append(prefix)
     
     if prompt is not None and keys_to_extract != ['']:
       found_values = {}
-      # print(f"debug generate_custom_name: --prefix: {prefix}")
-      # print(f"debug generate_custom_name: --keys_to_extract: {keys_to_extract}")
-      # print(f"debug generate_custom_name: --prompt:")
+      if debug: print(f"debug generate_custom_name: --prefix: {prefix}")
+      if debug: print(f"debug generate_custom_name: --keys_to_extract: {keys_to_extract}")
+      if debug: print(f"debug generate_custom_name: --prompt:")
       
       # now separating numbered keys from non-numbered keys:
       #   37.ckpt_name = i want the ckpt_name from node #37
@@ -275,21 +398,38 @@ class SaveImageExtended:
       #   'inputs': {'cfg': 1.6, 
       #     'denoise': 1.0, ...
       for key in keys_to_extract:
+        # empty comma
         if not key: continue
         
         value = None
         node, nodeKey = None, None
         
-        # check if this is a subfolder: starts with ./ or /, can also end with /
-        # we also exclude datetime formats like "%A %d. %B %Y"
-        if '/' in key and not '%' in key:
-          # key is a subfolder: ./subfolder or ../subfolder or /subfolder
+        # datetime format
+        if '%' in key:
+          value = timestamp.strftime(key)
+        
+        # check if there is an os.sep involved, cleanup the key
+        if '/' in key:
+          # key is a subfolder: ./key or ../key or /key ==> last / is removed
+          values = re.split('/+', key)
+          # we will strip the last / in all cases
+          if values[0] in ['','.','..']:
+            custom_name.append(values[0]+'/')
+            key = values[1]
+            # was it just a folder separator?
+            if not key: continue
+          else:
+            key = values[0]
+
+        # fixed string:
+        if (key.startswith("'") and key.endswith("'")) or (key.startswith('"') and key.endswith('"')):
           value = key
-        else:
+
+        # is it num.key ?
+        if value is None:
           splitKey = key.split('.')
           # we also exclude cases like "..string" or "sting.string.x" etc
-          # we also exclude datetime formats like "%A %d. %B %Y"
-          if len(splitKey) == 2 and not '%' in key:
+          if len(splitKey) == 2:
             # key has the form string.string
             if '' not in splitKey:
               # key has the form string.string
@@ -297,70 +437,112 @@ class SaveImageExtended:
                 # key has the form num.widget_name like 123.widget_name, we will then look for widget_name value in node #123
                 node, nodeKey = splitKey[0], splitKey[1]
                 if node in prompt:
-                  # print(f"debug generate_custom_name: --node.nodeKey = {node}.{nodeKey}")
+                  if debug: print(f"debug generate_custom_name: --node.nodeKey = {node}.{nodeKey}")
                   # splitKey[0] = #node number found in prompt, we will recurse only in that node:
-                  self.find_keys_recursively(prompt[node], [nodeKey], found_values)
+                  if nodeKey == 'ckpt_path':
+                    self.find_keys_recursively(prompt[node], ['ckpt_name', nodeKey], found_values)
+                  elif nodeKey == 'control_net_path':
+                    self.find_keys_recursively(prompt[node], ['control_net_name', nodeKey], found_values)
+                  elif nodeKey == 'lora_path':
+                    self.find_keys_recursively(prompt[node], ['lora_name', nodeKey], found_values)
+                  else:
+                    self.find_keys_recursively(prompt[node], [nodeKey], found_values)
                 else:
-                  # if splitKey[0] = #num node not found in prompt; #num could have changed or user made a typo
+                  # if splitKey[0] = #num node not found in prompt; #num could have changed or user made a typo. Fallback to normal key search
                   print(f"SaveImageExtended info: node #{node} not found")
-                  self.find_keys_recursively(prompt, [nodeKey], found_values)
+                  if nodeKey == 'ckpt_path':
+                    self.find_keys_recursively(prompt, ['ckpt_name', nodeKey], found_values)
+                  elif nodeKey == 'control_net_path':
+                    self.find_keys_recursively(prompt, ['control_net_name', nodeKey], found_values)
+                  elif nodeKey == 'lora_path':
+                    self.find_keys_recursively(prompt, ['lora_name', nodeKey], found_values)
+                  else:
+                    self.find_keys_recursively(prompt, [nodeKey], found_values)
               else:
-                # key is in the form string.string = fixed string
+                # key is in the form string.string = fixed string; still, we remove extra stuff and known extensions
                 value = self.cleanup_fileName(key)
             else:
               # key is in the form ".string" or "string." or "." - we won't clean that up and keep as is, maybe it's a separator
               value = key
+          
+          # key is not a datetime, folder, has no dot, or multiple dots, could be a valid key to find, could be a fixed string - keep as is
           else:
-            # could be a datetime format
-            if '%' in key:
-              value = timestamp.strftime(key)
-            # nodeKey is not a datetime, folder, has no dot, or multiple dots, could be a valid key to find, could be a fixed string - keep as is
+            nodeKey = key
+            if nodeKey == 'ckpt_path':
+              self.find_keys_recursively(prompt, ['ckpt_name', nodeKey], found_values)
+            elif nodeKey == 'control_net_path':
+              self.find_keys_recursively(prompt, ['control_net_name', nodeKey], found_values)
+            elif nodeKey == 'lora_path':
+              self.find_keys_recursively(prompt, ['lora_name', nodeKey], found_values)
+            elif nodeKey == 'resolution':
+              value = resolution
             else:
-              nodeKey = key
               self.find_keys_recursively(prompt, [nodeKey], found_values)
           # is key num.widget_name
-        # is key subfolder
-        
+        # value was None
+          
         # at this point we have a nodeKey, or a value, or both
-        # print(f"debug generate_custom_name: ----key:   {nodeKey}")
-        # print(f"debug generate_custom_name: ----value: {value}")
+        if debug: print(f"debug generate_custom_name: ----nodeKey:      {nodeKey}")
+        if debug: print(f"debug generate_custom_name: ----value:        {value}")
+        if debug: print(f"debug generate_custom_name: ----found_values: {found_values}")
         if value is None:
           if nodeKey is not None:
-            if nodeKey in found_values: value = found_values[nodeKey]
-            if value is None:
-              value = nodeKey
-            else:
-              value = self.cleanup_fileName(value)
+            if nodeKey in found_values:
+              if named_keys:
+                value = f"{nodeKey}={found_values[nodeKey]}"
+              else:
+                value = found_values[nodeKey]
+            if value is None: value = nodeKey
+          
         
         # at this point, value is not None anymore
         # now we analyze each value found and format them accordingly:
-        # print(f"debug generate_custom_name: ----value: {value}")
-        delim = delimiter
+        if debug: print(f"debug generate_custom_name: ----value: {value}")
         
         # now we build the custom_name:
         if isinstance(value, str):
           # prefix and keys can very well be subfolders ending or starting with a /
-          if custom_name.endswith('/'):
-            # for subfolders, do not start filename with a delimiter...
-            delim = ''
+          # for subfolders in keys, do not clean the filename...
+          if debug: print(f"debug generate_custom_name: ---------: / in value? {nodeKey}={value}")
+          
+          # Now process the custom cases ckpt_path and control_net_path; maybe we should do that to `image` as well?
+          # The recursive function creates ckpt_path and ckpt_name already; we just need to eliminate path if == '.'
+          if nodeKey in ['ckpt_path', 'control_net_path', 'lora_path']:
+            # smth_path is most likely placed before smth_name, therefore value cannot be resolved during the previous check
+            value = found_values[nodeKey]
           else:
-            # for subfolders in keys, do not clean the filename...
-            if '/' in value and not value.endswith('/'):
-              # print(f"debug generate_custom_name: ---------: folder")
-              delim= ''
-          # ".string" case
-          if value.startswith('.'):
-            delim = ''
+            value = self.cleanup_fileName(value)
+        elif isinstance(value, float):
+          # value = round(float(value), 1)  # too much rounding
+          value = float(f'{value:.10g}')
         
-        if isinstance(value, float):
-          value = round(float(value), 1)
-        
-        custom_name += f"{delim}{value}"
-        # print(f"debug generate_custom_name: ------custom_name: {custom_name}")
+        custom_name.append(str(value))
+        if debug: print(f"debug generate_custom_name: ------custom_name: {custom_name}")
       # for each key
-    return custom_name.strip(delimiter).strip('.').strip('/').strip(delimiter)
+    
+    # remove empty values
+    custom_name = list(filter(None, custom_name))
+    # strip each item
+    custom_name = list(map(str.strip, custom_name))
+    # join
+    stringName = delimiter.join(custom_name).replace('/'+delimiter, '/').replace(delimiter+'/', '/').replace(delimiter+'.', '.')
+    # clean and remove line feeds
+    stringName = re.sub('\s+',' ',stringName).strip(delimiter).strip('/').strip(delimiter).strip('.')
+
+    if debug: print(f"debug generate_custom_name: ------custom_name: {custom_name}")
+    if debug: print(f"debug generate_custom_name: ------stringName:  {stringName}")
+    return re.sub(r'[*?:"<>|]','',stringName).replace('/', os.sep)
   
   
+  
+
+
+  #      ██ ███████  ██████  ███    ██ 
+  #      ██ ██      ██    ██ ████   ██ 
+  #      ██ ███████ ██    ██ ██ ██  ██ 
+  # ██   ██      ██ ██    ██ ██  ██ ██ 
+  #  █████  ███████  ██████  ██   ████ 
+
   def save_job_to_json(self, save_job_data, prompt, filename_prefix, positive_text_opt, negative_text_opt, job_custom_text, resolution, output_path, filename, timestamp=datetime.now()):
     prompt_keys_to_save = {}
     if 'basic' in save_job_data:
@@ -455,7 +637,15 @@ class SaveImageExtended:
       json.dump(existing_data, f, indent=4)
   
   
-  def get_metadata_png(self, img, prompt, extra_pnginfo=None):
+
+
+  # ██████  ███    ██  ██████  
+  # ██   ██ ████   ██ ██       
+  # ██████  ██ ██  ██ ██   ███ 
+  # ██      ██  ██ ██ ██    ██ 
+  # ██      ██   ████  ██████  
+
+  def genMetadataPng(self, img, prompt, extra_pnginfo=None):
     metadata = PngInfo()
     if prompt is not None:
       metadata.add_text('prompt', json.dumps(prompt))
@@ -465,8 +655,13 @@ class SaveImageExtended:
     
     return metadata
   
-  
-  def get_metadata_exif(self, img, prompt, extra_pnginfo=None):
+  # ███████ ██   ██ ██ ███████ 
+  # ██       ██ ██  ██ ██      
+  # █████     ███   ██ █████   
+  # ██       ██ ██  ██ ██      
+  # ███████ ██   ██ ██ ██      
+
+  def genMetadataEXIF(self, img, prompt, extra_pnginfo=None):
     metadata = {}
     if prompt is not None:
       metadata["prompt"] = prompt
@@ -474,7 +669,7 @@ class SaveImageExtended:
       metadata.update(extra_pnginfo)
     
     ## For Comfy to load an image, it need a PNG tag at the root: Prompt={prompt}
-    ## For AVIF WebP Jpeg, it's only Exif that's available... and UserComment is the best choice.
+    ## For AVIF WebP Jpeg JXL, it's only Exif that's available... and UserComment is the best choice.
 
     ## This method gives good results, as long as you save the prompt/workflow in 2 separate Exif tags
     ## Otherwise, [ExifTool] will issue Warning: Invalid EXIF text encoding for UserComment
@@ -491,14 +686,15 @@ class SaveImageExtended:
     # exif[ExifTags.Base.UserComment] = dump
     
     ## It seems better to separate the two
-    # 0x010e: ImageDescription
-    # 0x010f: Make
-    # 0x9286: UserComment
+    # 0x010d: DocumentName      Parameters (SD)
+    # 0x010e: ImageDescription  Workflow
+    # 0x010f: Make              Prompt
+    # 0x9286: UserComment       cancelled
     # both prompt and workflow must be in IFD close together of that can cause problems for the parseIFD function on import
     # https://exiftool.org/TagNames/EXIF.html
     # exif[0x9286] = "Prompt: " + json.dumps(metadata['prompt'])     # UserComment
     exif[0x010f] = "Prompt: " + json.dumps(metadata['prompt'])     # Make
-    exif[0x010e] = "Workflow: " + json.dumps(metadata['workflow']) # ImageDescription
+    exif[0x010e] = "Workflow: " + json.dumps(metadata.get('workflow', {})) # ImageDescription
     
     # exif[ExifTags.Base.UserComment] = piexif.helper.UserComment.dump(json.dumps(metadata), encoding="unicode")  # type 4
     # exif[ExifTags.Base.UserComment] = piexif.helper.UserComment.dump(json.dumps(metadata), encoding="jis")      # type 1
@@ -532,50 +728,85 @@ class SaveImageExtended:
     # exif_dat = piexif.dump(exif_dict)
 
     return exif_dat
-  
-  
-  def save_image(self, image_path, img, prompt, save_metadata=save_metadata, extra_pnginfo=None, quality=75):
-    # print(f"debug save_images: image_path={image_path}")
-    output_ext = os.path.splitext(os.path.basename(image_path))[1]
+
+
+  # ██     ██ ██████  ██ ████████ ███████ 
+  # ██     ██ ██   ██ ██    ██    ██      
+  # ██  █  ██ ██████  ██    ██    █████   
+  # ██ ███ ██ ██   ██ ██    ██    ██      
+  #  ███ ███  ██   ██ ██    ██    ███████ 
+
+  def writeImage(self, image_path, img, prompt, save_metadata=save_metadata, extra_pnginfo=None, quality=quality):
+    if debug: print(f"debug writeImage: image_path={image_path}")
+    if quality == 0:
+      quality = self.quality
+    # output_ext = os.path.splitext(os.path.basename(image_path))[1]
+    output_ext = Path(image_path).suffix
     metadata = None
     kwargs = dict()
     
     # TODO: see if convert_hdr_to_8bit=False make a change
+    # https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html
     
-    # match is python 3.10+
-    if output_ext in ['.avif']:
-      if save_metadata: kwargs["exif"] = self.get_metadata_exif(img, prompt, extra_pnginfo)
-      kwargs["quality"] = quality
-      if quality == 100: kwargs["lossless"] = True
-    elif output_ext in ['.webp']:
-      if save_metadata: kwargs["exif"] = self.get_metadata_exif(img, prompt, extra_pnginfo)
-      kwargs["quality"] = quality
-      if quality == 100: kwargs["lossless"] = True
+    if output_ext in ['.avif', '.webp', '.jxl']:
+      if save_metadata: kwargs["exif"] = self.genMetadataEXIF(img, prompt, extra_pnginfo)
+      if quality == 100:
+        kwargs["lossless"] = True
+      else:
+        kwargs["quality"] = quality
+      kwargs["optimize"] = self.optimize_image
+    if output_ext in ['.j2k', '.jp2', '.jpc', '.jpf', '.jpx', '.j2c']:
+      if save_metadata: kwargs["exif"] = self.genMetadataEXIF(img, prompt, extra_pnginfo)
+      if quality < 100:
+        kwargs["irreversible"] = True
+        # there is no such thing as compression level in JPEG2000. Read https://comprimato.com/blog/2017/06/22/bitrate-control-quality-layers-jpeg2000/
+        # kwargs["quality_mode"] = 'rates' or 'dB'
+        # kwargs["quality_layers"] = [0,1,2] no refence online. i tried all values from 0 to 100 and no change in filesize
+      else:
+        kwargs["quality"] = quality
     elif output_ext in ['.jpg', '.jpeg']:
-      if save_metadata: kwargs["exif"] = self.get_metadata_exif(img, prompt, extra_pnginfo)
+      if save_metadata: kwargs["exif"] = self.genMetadataEXIF(img, prompt, extra_pnginfo)
+      # https://stackoverflow.com/questions/19303621/why-is-the-quality-of-jpeg-images-produced-by-pil-so-poor
+      kwargs["subsampling"] = 0
       kwargs["quality"] = quality
       kwargs["optimize"] = self.optimize_image
-    elif output_ext in ['.jxl']:
-      if save_metadata: kwargs["exif"] = self.get_metadata_exif(img, prompt, extra_pnginfo)
-      kwargs["quality"] = quality
-      if quality == 100: kwargs["lossless"] = True
     elif output_ext in ['.tiff']:
-      # tiff: i suspect no quality either
-      kwargs["quality"] = quality
+      # tiff: no quality
       kwargs["optimize"] = self.optimize_image
     elif output_ext in ['.png', '.gif']:
-      # png/gif: no quality
-      if save_metadata: kwargs["pnginfo"] = self.get_metadata_png(img, prompt, extra_pnginfo)
-      kwargs["compress_level"] = self.png_compress_level
-      kwargs["optimize"] = self.optimize_image
+      if save_metadata: kwargs["pnginfo"] = self.genMetadataPng(img, prompt, extra_pnginfo)
+    
+      # png/gif: no quality, rather we convert quality to compression level in the 0-9 range
+      old_min = 0
+      old_max = 90
+      new_min = 0
+      new_max = 9
+      if quality >= 91: quality = 90
+      png_compress_level = round( ( (quality - old_min) / (old_max - old_min) ) * (new_max - new_min) + new_min )
+      
+      kwargs["compress_level"] = png_compress_level
+      # BUG: PIL will compress at level 9 when PNG optimize_image = True
+      # kwargs["optimize"] = self.optimize_image
     # elif output_ext in ['.bmp']:
       # nothing to add
       
-    # img.save(image_path, pnginfo=metadata, compress_level=self.png_compress_level)
+    # BUG: PIL.Image doesn't respect compress_level value and always output max 9 compressed images when optimize_image = True
+    # img.save(image_path, pnginfo=metadata, compress_level=png_compress_level)
     img.save(image_path, **kwargs)
 
-# class SaveImageExtended -------------------------------------------------------------------------------
+    # Is saving image with OpenCV really faster then PIL? https://github.com/python-pillow/Pillow/issues/5986
+    # I found that it does not matter for anything smaller then 8k*8k, which Comfy cannot produce anyways.
+    # compression_level = [cv2.IMWRITE_PNG_COMPRESSION, png_compress_level]
+    # image_array = numpy.array(img)
+    # image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
+    # cv2.imwrite(image_path.replace('000','cv2'), image_array)
 
+
+  # ███████  █████  ██    ██ ███████ 
+  # ██      ██   ██ ██    ██ ██      
+  # ███████ ███████ ██    ██ █████   
+  #      ██ ██   ██  ██  ██  ██      
+  # ███████ ██   ██   ████   ███████ 
 
   # node will never return None values, except for optional input. Impossible.
   def save_images(self,
@@ -598,20 +829,27 @@ class SaveImageExtended:
       positive_text_opt=None,
       extra_pnginfo=None,
       prompt=None,
-      quality=75,
+      quality=quality,
+      named_keys=named_keys,
     ):
     
-    # print(f"filename_prefix = x{filename_prefix}x")
-    # print(f"filename_keys = x{filename_keys}x")
-    # print(f"foldername_prefix = x{foldername_prefix}x")
-    # print(f"foldername_keys = x{foldername_keys}x")
-    # print(f"delimiter = x{delimiter}x")
-    # print(f"save_job_data = x{save_job_data}x")
-    # print(f"job_data_per_image = x{job_data_per_image}x")
-    # print(f"output_ext = x{output_ext}x")
+    if debug: 
+      print(f"debug save_images filename_prefix =     x{filename_prefix}x")
+      print(f"debug save_images filename_keys =       x{filename_keys}x")
+      print(f"debug save_images foldername_prefix =   x{foldername_prefix}x")
+      print(f"debug save_images foldername_keys =     x{foldername_keys}x")
+      print(f"debug save_images delimiter =           x{delimiter}x")
+      print(f"debug save_images save_job_data =       x{save_job_data}x")
+      print(f"debug save_images job_data_per_image =  x{job_data_per_image}x")
+      print(f"debug save_images output_ext =          x{output_ext}x")
+      print(f"debug save_images quality =             x{quality}x")
 
+    # bugfix: sometimes on load, quality == 0
+    if quality == 0: quality = self.quality
+    
     # apply default values: we replicate the default save image box
-    if not filename_prefix and not filename_keys: filename_prefix=self.filename_prefix
+    # Nope: as per issues/48 request, we could want 0001.jpg etc with no name
+    # if not filename_prefix and not filename_keys: filename_prefix=self.filename_prefix
     if delimiter: delimiter = delimiter[0]
     
     filename_keys_to_extract = [item.strip() for item in filename_keys.split(',')]
@@ -620,44 +858,65 @@ class SaveImageExtended:
     ################################## UNCOMMENT HERE TO SEE THE ENTIRE PROMPT
     # pprint.pprint(prompt)
     ##########################################################################
-    timestamp = datetime.now()
-    custom_filename = self.generate_custom_name(filename_keys_to_extract, filename_prefix, delimiter, prompt, timestamp)
-    custom_foldername = self.generate_custom_name(foldername_keys_to_extract, foldername_prefix, delimiter, prompt, timestamp)
-    
-    # Get set resolution value
+    # Get set resolution value - that's a secret keyword
     i = 255. * images[0].cpu().numpy()
-    img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+    img = Image.fromarray(numpy.clip(i, 0, 255).astype(numpy.uint8))
     resolution = f'{img.width}x{img.height}'
+    
+    timestamp = datetime.now()
+    custom_foldername = self.generate_custom_name(foldername_keys_to_extract, foldername_prefix, delimiter, prompt, resolution, timestamp, named_keys)
+    custom_filename = self.generate_custom_name(filename_keys_to_extract, filename_prefix, delimiter, prompt, resolution, timestamp, named_keys)
     
     # Create folders, count images, save images
     try:
-      full_output_folder, filename, _, _, custom_filename = folder_paths.get_save_image_path(custom_filename, self.output_dir, images[0].shape[1], images[0].shape[0])
-      output_path = os.path.join(full_output_folder, custom_foldername)
-      # print(f"debug save_images: full_output_folder={full_output_folder}")
-      # print(f"debug save_images: custom_foldername={custom_foldername}")
-      # print(f"debug save_images: output_path={output_path}")
+      # folder_paths.get_save_image_path() is kind of magic, I don't like that. Outpout is wrong anyway, when custom_filename contains folders
+      # full_output_folder, filename, _, _, custom_filename = folder_paths.get_save_image_path(custom_filename, self.output_dir, images[0].shape[1], images[0].shape[0])
+      # output_path = os.path.join(full_output_folder, custom_foldername)
+
+      # issue/48
+      if custom_filename:
+        output_path = Path(os.path.join(self.output_dir, custom_foldername, custom_filename)).parent
+        filename    = Path(os.path.join(self.output_dir, custom_foldername, custom_filename)).name
+      else:
+        output_path = Path(os.path.join(self.output_dir, custom_foldername))
+        filename = ''
+      if debug: print(f"debug save_images: custom_foldername=  {custom_foldername}")
+      if debug: print(f"debug save_images: custom_filename=    {custom_filename}")
+      if debug: print(f"debug save_images: output_path=        {output_path}")
+      if debug: print(f"debug save_images: filename=           {filename}")
+      
       os.makedirs(output_path, exist_ok=True)
-      counter = self.get_latest_counter(one_counter_per_folder, output_path, filename, counter_digits, counter_position, output_ext)
-      # print(f"debug save_images: counter for {output_ext}: {counter}")
+      counter = self.get_latest_counter(output_path, filename, counter_digits, counter_position, output_ext)
     
       results = list()
       for image in images:
         i = 255. * image.cpu().numpy()
-        img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+        img = Image.fromarray(numpy.clip(i, 0, 255).astype(numpy.uint8))
         
-        if counter_position == 'last':
-          file = f'{filename}{delimiter}{counter:0{counter_digits}}{output_ext}'
+        if counter_digits > 0:
+          # issue/48
+          if filename:
+            if counter_position == 'last':
+              image_name = f'{filename}{delimiter}{counter:0{counter_digits}}{output_ext}'
+            else:
+              image_name = f'{counter:0{counter_digits}}{delimiter}{filename}{output_ext}'
+          else:
+            image_name = f'{counter:0{counter_digits}}{output_ext}'
         else:
-          file = f'{counter:0{counter_digits}}{delimiter}{filename}{output_ext}'
+          # issue/48
+          if filename:
+            image_name = f'{filename}{output_ext}'
+          else:
+            image_name = f'{filename_prefix}{output_ext}'
         
-        image_path = os.path.join(output_path, file)
-        self.save_image(image_path, img, prompt, save_metadata, extra_pnginfo, quality)
+        image_path = os.path.join(output_path, image_name)
+        self.writeImage(image_path, img, prompt, save_metadata, extra_pnginfo, quality)
         
         if save_job_data != 'disabled' and job_data_per_image:
-          self.save_job_to_json(save_job_data, prompt, filename_prefix, positive_text_opt, negative_text_opt, job_custom_text, resolution, output_path, f'{file.removesuffix(output_ext)}.json', timestamp)
+          self.save_job_to_json(save_job_data, prompt, filename_prefix, positive_text_opt, negative_text_opt, job_custom_text, resolution, output_path, f'{image_name.removesuffix(output_ext)}.json', timestamp)
         
         subfolder = self.get_subfolder_path(image_path, self.output_dir)
-        results.append({ 'filename': file, 'subfolder': subfolder, 'type': self.type})
+        results.append({ 'filename': image_name, 'subfolder': subfolder, 'type': self.type})
         counter += 1
       
       if save_job_data != 'disabled' and not job_data_per_image:
@@ -670,6 +929,8 @@ class SaveImageExtended:
         results = list()
       return { 'ui': { 'images': results } }
 
+# class SaveImageExtended -------------------------------------------------------------------------------
+
 
 NODE_CLASS_MAPPINGS = {
   'SaveImageExtended': SaveImageExtended,
@@ -677,7 +938,7 @@ NODE_CLASS_MAPPINGS = {
 
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-  'SaveImageExtended': '💾 Save Image Extended',
+  'SaveImageExtended': f'💾 Save Image Extended {version}',
 }
 
 

@@ -1,0 +1,3368 @@
+{
+  "id": "1516fd94-8f5e-4f51-923b-3285785b865d",
+  "revision": 0,
+  "last_node_id": 116,
+  "last_link_id": 192,
+  "nodes": [
+    {
+      "id": 55,
+      "type": "ChatterBoxF5TTSEditVoice",
+      "pos": [
+        1280.2037353515625,
+        695.9549560546875
+      ],
+      "size": [
+        400,
+        486
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "original_audio",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "edit_options",
+          "shape": 7,
+          "type": "F5TTS_EDIT_OPTIONS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "edited_audio",
+          "type": "AUDIO",
+          "links": []
+        },
+        {
+          "name": "edit_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "ChatterBoxF5TTSEditVoice"
+      },
+      "widgets_values": [
+        "Some call me nature, others call me mother nature.",
+        "Some call me optimist, others call me realist.",
+        "1.42,2.44\n4.04,4.9",
+        "cpu",
+        "F5TTS_Base",
+        3509060768,
+        "randomize",
+        "1.2\n1.0",
+        0.8,
+        32,
+        2,
+        -1,
+        "euler"
+      ]
+    },
+    {
+      "id": 72,
+      "type": "String Literal",
+      "pos": [
+        1283.6551513671875,
+        429.3813171386719
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Hello! This is unified TTS with character switching support.\n[Alice] Hi there! I'm Alice speaking with the selected TTS engine.\n[Bob] And I'm Bob! This works with any TTS engine.\nBack to the main narrator voice for the conclusion."
+      ]
+    },
+    {
+      "id": 69,
+      "type": "ChatterBoxF5TTSEditOptions",
+      "pos": [
+        924.2597045898438,
+        868.2808837890625
+      ],
+      "size": [
+        320.75,
+        322
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "edit_options",
+          "type": "F5TTS_EDIT_OPTIONS",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "ChatterBoxF5TTSEditOptions"
+      },
+      "widgets_values": [
+        100,
+        "cosine",
+        false,
+        true,
+        100,
+        true,
+        true,
+        false,
+        false,
+        true,
+        0.1,
+        false
+      ]
+    },
+    {
+      "id": 54,
+      "type": "ChatterBoxF5TTSEditOptions",
+      "pos": [
+        923.5873413085938,
+        474.56072998046875
+      ],
+      "size": [
+        320.75,
+        322
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "edit_options",
+          "type": "F5TTS_EDIT_OPTIONS",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "ChatterBoxF5TTSEditOptions"
+      },
+      "widgets_values": [
+        100,
+        "cosine",
+        false,
+        true,
+        100,
+        true,
+        true,
+        false,
+        false,
+        true,
+        0.1,
+        false
+      ]
+    },
+    {
+      "id": 62,
+      "type": "ChatterBoxVoiceCapture",
+      "pos": [
+        563.1808471679688,
+        475.55731201171875
+      ],
+      "size": [
+        307.40234375,
+        226
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "voice_audio",
+          "type": "AUDIO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "ChatterBoxVoiceCapture"
+      },
+      "widgets_values": [
+        "Microsoft Soundmapper - Input - Input",
+        44100,
+        10,
+        1,
+        0.02,
+        2,
+        true,
+        0
+      ]
+    },
+    {
+      "id": 70,
+      "type": "String Literal",
+      "pos": [
+        1288.5494384765625,
+        177.95877075195312
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "1\n00:00:01,000 --> 00:00:04,000\nHello! This is unified SRT TTS with character switching.\n\n2\n00:00:04,500 --> 00:00:09,500\n[Alice] Hi there! I'm Alice speaking with precise timing.\n\n3\n00:00:10,000 --> 00:00:14,000\n[Bob] And I'm Bob! The audio matches these exact SRT timings."
+      ]
+    },
+    {
+      "id": 74,
+      "type": "String Literal",
+      "pos": [
+        847.4103393554688,
+        207.5941619873047
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Hello! This is unified TTS with character switching support.\n[Alice] Hi there! I'm Alice speaking with the selected TTS engine.\n[Bob] And I'm Bob! This works with any TTS engine.\nBack to the main narrator voice for the conclusion."
+      ]
+    },
+    {
+      "id": 64,
+      "type": "CharacterVoicesNode",
+      "pos": [
+        -3426.448486328125,
+        505.0682373046875
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "opt_audio_input",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 108
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opt_narrator",
+          "type": "NARRATOR_VOICE",
+          "links": [
+            131
+          ]
+        },
+        {
+          "name": "character_name",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "CharacterVoicesNode"
+      },
+      "widgets_values": [
+        "none",
+        "The quick brown fox jumps over the lazy dog. It's a crisp autumn morning and the leaves gently rustle in the breeze. Every breath brings a hint of coldness to the air."
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 58,
+      "type": "CharacterVoicesNode",
+      "pos": [
+        -3434.47802734375,
+        878.8184204101562
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 43,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "opt_audio_input",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 107
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opt_narrator",
+          "type": "NARRATOR_VOICE",
+          "links": [
+            132
+          ]
+        },
+        {
+          "name": "character_name",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "CharacterVoicesNode"
+      },
+      "widgets_values": [
+        "none",
+        "The quick brown fox jumps over the lazy dog. It's a crisp autumn morning and the leaves gently rustle in the breeze. Every breath brings a hint of coldness to the air."
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 66,
+      "type": "CharacterVoicesNode",
+      "pos": [
+        -3437.412353515625,
+        1274.672119140625
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 44,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "opt_audio_input",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 110
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opt_narrator",
+          "type": "NARRATOR_VOICE",
+          "links": [
+            133
+          ]
+        },
+        {
+          "name": "character_name",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "CharacterVoicesNode"
+      },
+      "widgets_values": [
+        "none",
+        "The quick brown fox jumps over the lazy dog. It's a crisp autumn morning and the leaves gently rustle in the breeze. Every breath brings a hint of coldness to the air."
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 68,
+      "type": "CharacterVoicesNode",
+      "pos": [
+        -3423.621337890625,
+        132.47760009765625
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "opt_audio_input",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 111
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opt_narrator",
+          "type": "NARRATOR_VOICE",
+          "links": [
+            130
+          ]
+        },
+        {
+          "name": "character_name",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "CharacterVoicesNode"
+      },
+      "widgets_values": [
+        "none",
+        "The quick brown fox jumps over the lazy dog. It's a crisp autumn morning and the leaves gently rustle in the breeze. Every breath brings a hint of coldness to the air."
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 67,
+      "type": "LoadAudio",
+      "pos": [
+        -3748.918701171875,
+        127.18535614013672
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            111
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Murph.wav",
+        null,
+        null
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 63,
+      "type": "LoadAudio",
+      "pos": [
+        -3751.186279296875,
+        506.6300964355469
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            108
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Cyrus_01.wav",
+        null,
+        null
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 56,
+      "type": "LoadAudio",
+      "pos": [
+        -3747.7373046875,
+        878.509765625
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            107
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Vicky_01.wav",
+        null,
+        null
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 65,
+      "type": "LoadAudio",
+      "pos": [
+        -3743.816162109375,
+        1274.3489990234375
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            110
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Ziggy_01.wav",
+        null,
+        null
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 76,
+      "type": "Any Switch (rgthree)",
+      "pos": [
+        -2116.135986328125,
+        475.99896240234375
+      ],
+      "size": [
+        250.08045959472656,
+        106
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "any_01",
+          "type": "NARRATOR_VOICE",
+          "link": 130
+        },
+        {
+          "dir": 3,
+          "name": "any_02",
+          "type": "NARRATOR_VOICE",
+          "link": 131
+        },
+        {
+          "dir": 3,
+          "name": "any_03",
+          "type": "NARRATOR_VOICE",
+          "link": 132
+        },
+        {
+          "dir": 3,
+          "name": "any_04",
+          "type": "NARRATOR_VOICE",
+          "link": 133
+        },
+        {
+          "name": "any_05",
+          "type": "NARRATOR_VOICE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": "NARRATOR_VOICE",
+          "name": "*",
+          "shape": 3,
+          "type": "NARRATOR_VOICE",
+          "links": [
+            134,
+            135
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "c5ffa43de4ddb17244626a65a30700a05dd6b67d"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 77,
+      "type": "Any Switch (rgthree)",
+      "pos": [
+        -2109.459228515625,
+        538.849853515625
+      ],
+      "size": [
+        250.08045959472656,
+        106
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 55,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "any_01",
+          "type": "TTS_ENGINE",
+          "link": 137
+        },
+        {
+          "dir": 3,
+          "name": "any_02",
+          "type": "TTS_ENGINE",
+          "link": 138
+        },
+        {
+          "dir": 3,
+          "name": "any_03",
+          "type": "TTS_ENGINE",
+          "link": null
+        },
+        {
+          "dir": 3,
+          "name": "any_04",
+          "type": "TTS_ENGINE",
+          "link": null
+        },
+        {
+          "name": "any_05",
+          "type": "TTS_ENGINE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": "TTS_ENGINE",
+          "name": "*",
+          "shape": 3,
+          "type": "TTS_ENGINE",
+          "links": [
+            139,
+            140
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "c5ffa43de4ddb17244626a65a30700a05dd6b67d"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 53,
+      "type": "F5TTSEngineNode",
+      "pos": [
+        -2266.504638671875,
+        136.49681091308594
+      ],
+      "size": [
+        272.73828125,
+        226
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "TTS_engine",
+          "type": "TTS_ENGINE",
+          "links": [
+            137
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "F5TTSEngineNode"
+      },
+      "widgets_values": [
+        "F5TTS_Base",
+        "auto",
+        0.8,
+        1.1,
+        0.1,
+        0.15,
+        32,
+        2
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 79,
+      "type": "String Literal",
+      "pos": [
+        -2976.02587890625,
+        502.97491455078125
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            149
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Heyy!! Cyrus is watching you."
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 80,
+      "type": "String Literal",
+      "pos": [
+        -2971.24365234375,
+        885.7818603515625
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            150
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Heyy!! Sis is watching you."
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 81,
+      "type": "String Literal",
+      "pos": [
+        -2959.176025390625,
+        1274.02734375
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            151
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Heyy!! Ziggy is watching you."
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 26,
+      "type": "LoadAudio",
+      "pos": [
+        -1751.696044921875,
+        1416.0709228515625
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            97
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Vicky_01.wav",
+        null,
+        null
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 35,
+      "type": "LoadAudio",
+      "pos": [
+        -1727.9786376953125,
+        1948.0284423828125
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            93
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "male_stewie.mp3",
+        null,
+        null
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 34,
+      "type": "LoadAudio",
+      "pos": [
+        -1718.8267822265625,
+        2172.2548828125
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            94
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "LoadAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "male_harvey_keitel.mp3",
+        null,
+        null
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 36,
+      "type": "PreviewAudio",
+      "pos": [
+        -1041.2049560546875,
+        2046.3150634765625
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 95
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "PreviewAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 15,
+      "type": "PreviewAudio",
+      "pos": [
+        -1018.5059814453125,
+        1414.833251953125
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 57,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 91
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.39",
+        "Node name for S&R": "PreviewAudio",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 57,
+      "type": "PreviewAudio",
+      "pos": [
+        -900.3582763671875,
+        673.5850219726562
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 61,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 122
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 89,
+      "type": "String Literal",
+      "pos": [
+        -3746.012939453125,
+        307.3047790527344
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            165
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "audio/Murph_"
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 90,
+      "type": "String Literal",
+      "pos": [
+        -3747.384521484375,
+        681.9166259765625
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            166
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "audio/Cyrus_"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 91,
+      "type": "String Literal",
+      "pos": [
+        -3745.2158203125,
+        1061.4849853515625
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            167
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "audio/Vicky_"
+      ],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159"
+    },
+    {
+      "id": 92,
+      "type": "String Literal",
+      "pos": [
+        -3737.3828125,
+        1454.5064697265625
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            168
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "audio/Ziggy_"
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 61,
+      "type": "UnifiedTTSTextNode",
+      "pos": [
+        -1465.89404296875,
+        147.2804718017578
+      ],
+      "size": [
+        537.3652954101562,
+        382.1359558105469
+      ],
+      "flags": {},
+      "order": 58,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "TTS_engine",
+          "type": "TTS_ENGINE",
+          "link": 139
+        },
+        {
+          "name": "opt_narrator",
+          "shape": 7,
+          "type": "*",
+          "link": 135
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 154
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 189
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            127,
+            172
+          ]
+        },
+        {
+          "name": "generation_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "UnifiedTTSTextNode"
+      },
+      "widgets_values": [
+        "Hello! This is unified TTS with character switching support.\n[Alice] Hi there! I'm Alice speaking with the selected TTS engine.\n[Bob] And I'm Bob! This works with any TTS engine.\nBack to the main narrator voice for the conclusion.",
+        "none",
+        1000000000,
+        "fixed",
+        true,
+        400,
+        "auto",
+        100,
+        true
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 46,
+      "type": "ChatterBoxVoiceTTS",
+      "pos": [
+        -1458.224609375,
+        1417.95947265625
+      ],
+      "size": [
+        400,
+        372
+      ],
+      "flags": {},
+      "order": 54,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "reference_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 97
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 156
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 188
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            91,
+            174
+          ]
+        },
+        {
+          "name": "generation_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "ShmuelRonen/ComfyUI_ChatterBox_Voice",
+        "ver": "6e5fc4e268656235c50e1e791f6b5d7afe615677",
+        "Node name for S&R": "ChatterBoxVoiceTTS"
+      },
+      "widgets_values": [
+        "Hello! This is the enhanced ChatterboxTTS with bundled support and improved chunking. It can handle very long texts by intelligently splitting them into smaller segments.",
+        "auto",
+        0.5000000000000001,
+        0.8,
+        0.5,
+        1000000000,
+        "fixed",
+        "",
+        true,
+        400,
+        "auto",
+        100
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 47,
+      "type": "ChatterBoxVoiceVC",
+      "pos": [
+        -1387.903076171875,
+        2056.100830078125
+      ],
+      "size": [
+        305.8872985839844,
+        78
+      ],
+      "flags": {},
+      "order": 45,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "source_audio",
+          "type": "AUDIO",
+          "link": 93
+        },
+        {
+          "name": "target_audio",
+          "type": "AUDIO",
+          "link": 94
+        }
+      ],
+      "outputs": [
+        {
+          "name": "converted_audio",
+          "type": "AUDIO",
+          "links": [
+            95,
+            175
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "ShmuelRonen/ComfyUI_ChatterBox_Voice",
+        "ver": "6e5fc4e268656235c50e1e791f6b5d7afe615677",
+        "Node name for S&R": "ChatterBoxVoiceVC"
+      },
+      "widgets_values": [
+        "auto"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 95,
+      "type": "Node Collector (rgthree)",
+      "pos": [
+        -3278.075927734375,
+        -157.73097229003906
+      ],
+      "size": [
+        190.07186889648438,
+        66
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 47,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "Standard text overwrites everything",
+          "type": "*",
+          "link": 158
+        },
+        {
+          "dir": 3,
+          "name": "String Literal",
+          "type": "*",
+          "link": 159
+        },
+        {
+          "dir": 3,
+          "name": "",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "name": "Output",
+          "type": "*",
+          "links": [
+            162
+          ]
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": 96,
+      "type": "Mute / Bypass Repeater (rgthree)",
+      "pos": [
+        -3285.08544921875,
+        -128.05372619628906
+      ],
+      "size": [
+        247.65780639648438,
+        66
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 53,
+      "mode": 2,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "Standard text overwrites everything",
+          "type": "*",
+          "link": 162
+        },
+        {
+          "dir": 3,
+          "name": "",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": "#a80",
+          "color_on": "#Fc0",
+          "dir": 4,
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": [
+            163
+          ]
+        }
+      ],
+      "title": "Extra Voice",
+      "properties": {}
+    },
+    {
+      "id": 93,
+      "type": "String Literal",
+      "pos": [
+        -2546.05810546875,
+        -175.795654296875
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            157,
+            159
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "audio/Extra_"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 75,
+      "type": "Any Switch (rgthree)",
+      "pos": [
+        -2219.868408203125,
+        984.4883422851562
+      ],
+      "size": [
+        250.08045959472656,
+        126
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 48,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "any_01",
+          "type": "STRING",
+          "link": 147
+        },
+        {
+          "dir": 3,
+          "name": "any_02",
+          "type": "STRING",
+          "link": 148
+        },
+        {
+          "dir": 3,
+          "name": "any_03",
+          "type": "STRING",
+          "link": 149
+        },
+        {
+          "dir": 3,
+          "name": "any_04",
+          "type": "STRING",
+          "link": 150
+        },
+        {
+          "dir": 3,
+          "name": "any_05",
+          "type": "STRING",
+          "link": 151
+        },
+        {
+          "name": "any_06",
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": "STRING",
+          "name": "*",
+          "shape": 3,
+          "type": "STRING",
+          "links": [
+            154,
+            155,
+            156
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "c5ffa43de4ddb17244626a65a30700a05dd6b67d"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 94,
+      "type": "Any Switch (rgthree)",
+      "pos": [
+        -2174.162841796875,
+        1381.63037109375
+      ],
+      "size": [
+        250.08045959472656,
+        126
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 46,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "any_01",
+          "type": "STRING",
+          "link": 157
+        },
+        {
+          "dir": 3,
+          "name": "any_02",
+          "type": "STRING",
+          "link": 165
+        },
+        {
+          "dir": 3,
+          "name": "any_03",
+          "type": "STRING",
+          "link": 166
+        },
+        {
+          "dir": 3,
+          "name": "any_04",
+          "type": "STRING",
+          "link": 167
+        },
+        {
+          "dir": 3,
+          "name": "any_05",
+          "type": "STRING",
+          "link": 168
+        },
+        {
+          "name": "any_06",
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": "STRING",
+          "name": "*",
+          "shape": 3,
+          "type": "STRING",
+          "links": [
+            179
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "c5ffa43de4ddb17244626a65a30700a05dd6b67d"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 82,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        -1876.778564453125,
+        -459.6960754394531
+      ],
+      "size": [
+        362.6348571777344,
+        82
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Engine",
+      "properties": {
+        "matchColors": "purple",
+        "matchTitle": "",
+        "showNav": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "max one"
+      },
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 103,
+      "type": "String Literal",
+      "pos": [
+        -3765.977783203125,
+        -171.14024353027344
+      ],
+      "size": [
+        372.7272644042969,
+        119.09091186523438
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Murph_text_to_speech_v0.99"
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 102,
+      "type": "Bookmark (rgthree)",
+      "pos": [
+        -3786.001708984375,
+        -616.504150390625
+      ],
+      "size": [
+        210,
+        62
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "🔖 2 Voices",
+      "properties": {},
+      "widgets_values": [
+        "2",
+        1
+      ]
+    },
+    {
+      "id": 104,
+      "type": "String Literal",
+      "pos": [
+        -3536.323486328125,
+        -938.206787109375
+      ],
+      "size": [
+        544.1157836914062,
+        380.3155517578125
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Standard text overwrites everything",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Die primären Methoden, um die Stimme in Chatterbox zu steuern, sind zwei Haupt-Parameter:\n1. Exaggeration (Übertreibung)\nDieser Wert bestimmt, wie emotional und ausdrucksstark die Stimme klingen soll.\n\t• exaggeration = 0.5: Dies ist der Standardwert. Die Stimme ist neutral und unauffällig.\n\t• Werte höher als 0.5: Machen die Stimme expressiver und dramatischer. Zum Beispiel kann ein Wert von 0.7 für emotionalere Passagen verwendet werden, um Begeisterung oder Empörung auszudrücken.\n\t• Werte niedriger als 0.5: Führen zu einer ruhigeren, gedämpfteren oder monotoneren Sprechweise.\n2. CFG/Pace (Classifier-Free Guidance / Tempo)\nDieser Parameter beeinflusst das Sprechtempo und die Rhythmik.\n\t• cfg_weight = 0.5: Auch hier ist dies der Standardwert.\n\t• Werte niedriger als 0.5: Verlangsamen die Sprechweise. Dies ist oft nützlich in Kombination mit einem hohen exaggeration-Wert, um eine dramatische, bewusste oder nachdenkliche Emotion zu erzeugen.\n\n\nStatt Schlüsselwörter wie <haha> in den Text zu schreiben, musst du mit der Kombination dieser beiden Parameter experimentieren.\n\t• Für Lachen oder Kichern: Du gibst den Text für das Lachen einfach selbst ein, zum Beispiel \"Ha ha ha, das ist ja lustig!\", und erhöhst gleichzeitig den exaggeration-Wert, damit die Stimme nicht monoton klingt, sondern lebendig lacht.\nFür andere Emotionen: Du schreibst den Text ganz normal und passt dann die Werte für exaggeration und cfg_weight an, um die gewünschte Stimmung (z.B. begeistert, nachdenklich, traurig) zu erzeugen.\n"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 84,
+      "type": "Fast Muter (rgthree)",
+      "pos": [
+        -3376.5966796875,
+        -172.8658447265625
+      ],
+      "size": [
+        398.25616455078125,
+        95.38033294677734
+      ],
+      "flags": {},
+      "order": 56,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "Extra Voice",
+          "type": "*",
+          "link": 163
+        },
+        {
+          "dir": 3,
+          "name": "",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "title": "Standard text overwrites everything",
+      "properties": {
+        "toggleRestriction": "default"
+      },
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 83,
+      "type": "String Literal",
+      "pos": [
+        -2961.720703125,
+        -179.13565063476562
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            147,
+            158
+          ]
+        }
+      ],
+      "title": "Standard text overwrites everything",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Then I just won't do it!"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 99,
+      "type": "Any Switch (rgthree)",
+      "pos": [
+        -526.7078857421875,
+        1129.9593505859375
+      ],
+      "size": [
+        250.08045959472656,
+        106
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 62,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "any_01",
+          "type": "AUDIO",
+          "link": 172
+        },
+        {
+          "dir": 3,
+          "name": "any_02",
+          "type": "AUDIO",
+          "link": 173
+        },
+        {
+          "dir": 3,
+          "name": "any_03",
+          "type": "AUDIO",
+          "link": 174
+        },
+        {
+          "dir": 3,
+          "name": "any_04",
+          "type": "AUDIO",
+          "link": 175
+        },
+        {
+          "dir": 3,
+          "name": "any_05",
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": "AUDIO",
+          "name": "*",
+          "shape": 3,
+          "type": "AUDIO",
+          "links": [
+            182
+          ]
+        }
+      ],
+      "title": "Audio Save",
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "c5ffa43de4ddb17244626a65a30700a05dd6b67d"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 43,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        -81.55320739746094,
+        141.7897491455078
+      ],
+      "size": [
+        610,
+        1100
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "PrimitiveStringMultiline",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "We're excited to introduce Chatterbox, Resemble AI's first production-grade open source TTS model. Licensed under MIT, Chatterbox has been benchmarked against leading closed-source systems like ElevenLabs, and is consistently preferred in side-by-side evaluations.\n\nWhether you're working on memes, videos, games, or AI agents, Chatterbox brings your content to life. It's also the first open source TTS model to support emotion exaggeration control, a powerful feature that makes your voices stand out. Try it now on our Hugging Face Gradio app.\n\nIf you like the model but need to scale or tune it for higher accuracy, check out our competitively priced TTS service (link). It delivers reliable performance with ultra-low latency of sub 200ms—ideal for production use in agents, applications, or interactive media.\n\nKey Details\nSoTA zeroshot TTS\n0.5B Llama backbone\nUnique exaggeration/intensity control\nUltra-stable with alignment-informed inference\nTrained on 0.5M hours of cleaned data\nWatermarked outputs\nEasy voice conversion script\nOutperforms ElevenLabs\nTips\nGeneral Use (TTS and Voice Agents):\n\nThe default settings (exaggeration=0.5, cfg_weight=0.5) work well for most prompts.\nIf the reference speaker has a fast speaking style, lowering cfg_weight to around 0.3 can improve pacing.\nExpressive or Dramatic Speech:\n\nTry lower cfg_weight values (e.g. ~0.3) and increase exaggeration to around 0.7 or higher.\nHigher exaggeration tends to speed up speech; reducing cfg_weight helps compensate with slower, more deliberate pacing."
+      ]
+    },
+    {
+      "id": 108,
+      "type": "Reroute (rgthree)",
+      "pos": [
+        -546.6885986328125,
+        1354.8870849609375
+      ],
+      "size": [
+        77.97376251220703,
+        30
+      ],
+      "flags": {},
+      "order": 52,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "label": " ",
+          "name": "",
+          "type": "*",
+          "widget": {
+            "name": "value"
+          },
+          "link": 179
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": " ",
+          "name": "*",
+          "type": "STRING",
+          "links": [
+            180
+          ]
+        }
+      ],
+      "title": "Filename",
+      "properties": {
+        "resizable": false,
+        "size": [
+          77.97376251220703,
+          30
+        ],
+        "connections_layout": [
+          "Left",
+          "Right"
+        ],
+        "showLabel": true
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 109,
+      "type": "Reroute (rgthree)",
+      "pos": [
+        -544.59716796875,
+        1309.38134765625
+      ],
+      "size": [
+        77.97376251220703,
+        30
+      ],
+      "flags": {},
+      "order": 63,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "label": " ",
+          "name": "",
+          "type": "*",
+          "link": 182
+        }
+      ],
+      "outputs": [
+        {
+          "dir": 4,
+          "label": " ",
+          "name": "*",
+          "type": "AUDIO",
+          "links": [
+            183
+          ]
+        }
+      ],
+      "title": "Audio",
+      "properties": {
+        "resizable": false,
+        "size": [
+          77.97376251220703,
+          30
+        ],
+        "connections_layout": [
+          "Left",
+          "Right"
+        ],
+        "showLabel": true
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 110,
+      "type": "SaveAudio",
+      "pos": [
+        593.988525390625,
+        1023.5059814453125
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 111,
+      "type": "SaveAudioOpus",
+      "pos": [
+        596.5634765625,
+        818.51953125
+      ],
+      "size": [
+        270,
+        136
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "SaveAudioOpus"
+      },
+      "widgets_values": [
+        "audio/ComfyUI",
+        "128k"
+      ]
+    },
+    {
+      "id": 107,
+      "type": "SaveAudioMP3",
+      "pos": [
+        -425.9976501464844,
+        1315.4395751953125
+      ],
+      "size": [
+        273.0789489746094,
+        136
+      ],
+      "flags": {},
+      "order": 64,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 183
+        },
+        {
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": 180
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "SaveAudioMP3"
+      },
+      "widgets_values": [
+        "audio/ComfyUI",
+        "128k"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 112,
+      "type": "Seed Generator",
+      "pos": [
+        -2263.172119140625,
+        -173.78379821777344
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            187,
+            188,
+            189
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "Seed Generator"
+      },
+      "widgets_values": [
+        1000000000,
+        "fixed"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 101,
+      "type": "Bookmark (rgthree)",
+      "pos": [
+        -2294.5751953125,
+        -670.4537353515625
+      ],
+      "size": [
+        210,
+        62
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "🔖 1 Setup",
+      "properties": {},
+      "widgets_values": [
+        "1",
+        1
+      ]
+    },
+    {
+      "id": 50,
+      "type": "ChatterBoxEngineNode",
+      "pos": [
+        -2249.313232421875,
+        665.755859375
+      ],
+      "size": [
+        270.8599548339844,
+        154
+      ],
+      "flags": {},
+      "order": 49,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "exaggeration",
+          "type": "FLOAT",
+          "widget": {
+            "name": "exaggeration"
+          },
+          "link": 192
+        },
+        {
+          "name": "temperature",
+          "type": "FLOAT",
+          "widget": {
+            "name": "temperature"
+          },
+          "link": 191
+        },
+        {
+          "name": "cfg_weight",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg_weight"
+          },
+          "link": 190
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TTS_engine",
+          "type": "TTS_ENGINE",
+          "links": [
+            138
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "ChatterBoxEngineNode"
+      },
+      "widgets_values": [
+        "English",
+        "auto",
+        1.0000000000000002,
+        0.8,
+        0.5
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 78,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        -2265.139404296875,
+        -335.8576354980469
+      ],
+      "size": [
+        365.74456787109375,
+        130
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Voices",
+      "properties": {
+        "matchColors": "green",
+        "matchTitle": "",
+        "showNav": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "max one"
+      },
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 114,
+      "type": "Cfg Literal",
+      "pos": [
+        -1977.370361328125,
+        -167.8572235107422
+      ],
+      "size": [
+        291.8182678222656,
+        58
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            191
+          ]
+        }
+      ],
+      "title": "temperature chatterbox engine (0.8)",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "Cfg Literal"
+      },
+      "widgets_values": [
+        0.8
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 60,
+      "type": "UnifiedTTSSRTNode",
+      "pos": [
+        -1442.2423095703125,
+        673.86669921875
+      ],
+      "size": [
+        514.03515625,
+        545.3158569335938
+      ],
+      "flags": {},
+      "order": 59,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "TTS_engine",
+          "type": "TTS_ENGINE",
+          "link": 140
+        },
+        {
+          "name": "opt_narrator",
+          "shape": 7,
+          "type": "*",
+          "link": 134
+        },
+        {
+          "name": "srt_content",
+          "type": "STRING",
+          "widget": {
+            "name": "srt_content"
+          },
+          "link": 155
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 187
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            122,
+            173
+          ]
+        },
+        {
+          "name": "generation_info",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "timing_report",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "Adjusted_SRT",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "tts_audio_suite",
+        "ver": "608942207a2108b7e6e0f2ed7c3fdcf91e245abb",
+        "Node name for S&R": "UnifiedTTSSRTNode"
+      },
+      "widgets_values": [
+        "",
+        "none",
+        1000000000,
+        "fixed",
+        "smart_natural",
+        true,
+        0.01,
+        1,
+        0.5,
+        2
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 100,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        -1874.471435546875,
+        -331.77587890625
+      ],
+      "size": [
+        363.1741638183594,
+        130
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Tool",
+      "properties": {
+        "matchColors": "blue",
+        "matchTitle": "",
+        "showNav": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "max one"
+      },
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 113,
+      "type": "Cfg Literal",
+      "pos": [
+        -2263.294677734375,
+        -51.03171157836914
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            190
+          ]
+        }
+      ],
+      "title": "Cfg Chatterbox engine (0.5)",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "Cfg Literal"
+      },
+      "widgets_values": [
+        0.5
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 106,
+      "type": "String Literal",
+      "pos": [
+        -3777.3115234375,
+        -500.026123046875
+      ],
+      "size": [
+        1393.1016845703125,
+        270.3502502441406
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Standard text overwrites everything",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "\nEmotion / Stimmung\t        Deutsche Textbeispiele\t                                                 Englische Textbeispiele\t                                Spezielle Tags (Kartoffel-TTS)\t   Chatterbox-Parameter (Anpassung)\n\nLachen & Kichern\t        Ha ha ha, He he he, Kicher..., Das ist zu komisch.\t                 Ha ha ha, He he he, Chuckle..., That's hilarious.\t        <haha>, <hahaha>, <chuckle>\t   exaggeration erhöhen\nFreude & Begeisterung\t        Fantastisch!, Jaaaa!, Einfach unglaublich!, Wuhuuu!\t                 Fantastic!, Yesss!, Simply unbelievable!, Woohoo!\t        <wuhuuu>, <wow>\t                   exaggeration erhöhen\nJubelnd\tJaaaa!                  Wir haben es geschafft!, Ein unglaublicher Sieg!\t                 Yesss! We did it!, An incredible victory!\t                (Keine spezifischen Tags)\t   exaggeration erhöhen, cfg_weight senken\nSchock & Erschrecken\t        Oh nein!, Was war das denn?!, Aaaah!, Ich kann es nicht fassen!\t         Oh no!, What was that?!, Aaaah!, I can't believe it!\t        <ohhh>, <oooooh>, <aaaaaaah>\t   exaggeration erhöhen\nWut & Ärger\t                Das reicht!, Ughh!, Das ist doch unmöglich!\t                         That's enough!, Ughh!, That's impossible!\t                <ughh>, <aaach>\t                   exaggeration erhöhen\nSauer\t                        Ich bin wirklich sauer!, Das ist absolut inakzeptabel!\t                 I'm really mad about this!, That's absolutely unacceptable!\t(Keine spezifischen Tags)          exaggeration erhöhen\nVerwirrung & Nachdenken\t        Ähm..., Hmm..., Wie meinst du das?, Huh?\tUhm..., Hmm...,          What do you mean?, Huh?\t                                <huh>, <hmm_neugierig>\t           exaggeration senken\nErleichterung\t                Puuh..., Gott sei Dank..., Ich bin so froh.\t                         Phew..., Thank goodness..., I'm so glad.                \t(Keine spezifischen Tags)\t   exaggeration senken\nLangeweile & Unzufriedenheit\tGähhhhn..., Ich habe keine Lust mehr., Hmph.\t                         Yawn..., I'm not in the mood anymore., Hmph.           \t<hmph>\t                           exaggeration senken\nSpott & Sarkasmus\t        Ja, ganz toll., Ach, wie überraschend...\t                         Yeah, great., Oh, how surprising...\t                        (Keine spezifischen Tags)\t   exaggeration senken\nZögern\t                        Eeeehhh., Ich weiß nicht so recht...\t                                 Eeeehhh., I'm not so sure...\t                                <eeehhh>\t                   exaggeration senken, cfg_weight erhöhen\nTraurig / Enttäuscht\t        Das ist wirklich schade..., Ach, das hätte ich nicht erwartet. <aaach>\t That's really a shame..., Oh, I didn't expect that. <aaach>\t<aaach>\t                           exaggeration senken\nBockig / Trotzig\t        Ich will aber nicht!, Dann mache ich es eben nicht!\t                 But I don't want to!, Then I just won't do it!\t                (Keine spezifischen Tags)\t   exaggeration erhöhen, cfg_weight erhöhen\n"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 71,
+      "type": "String Literal",
+      "pos": [
+        -2968.250244140625,
+        129.3142852783203
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            148
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "String Literal"
+      },
+      "widgets_values": [
+        "Aaaah!, I can't believe it!"
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 73,
+      "type": "PreviewAudio",
+      "pos": [
+        -902.9539184570312,
+        145.2691650390625
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 60,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 127
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 85,
+      "type": "Fast Groups Muter (rgthree)",
+      "pos": [
+        -1382.2484130859375,
+        -97.61306762695312
+      ],
+      "size": [
+        372.4093017578125,
+        84.55970001220703
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Save Audio",
+      "properties": {
+        "matchColors": "black",
+        "matchTitle": "",
+        "showNav": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "max one"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 115,
+      "type": "Cfg Literal",
+      "pos": [
+        -1976.4619140625,
+        -54.220916748046875
+      ],
+      "size": [
+        293.63623046875,
+        58
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            192
+          ]
+        }
+      ],
+      "title": "exaggeration chatterbox engine (0.5)",
+      "properties": {
+        "cnr_id": "comfy-image-saver",
+        "ver": "65e6903eff274a50f8b5cd768f0f96baf37baea1",
+        "Node name for S&R": "Cfg Literal"
+      },
+      "widgets_values": [
+        0.5
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    }
+  ],
+  "links": [
+    [
+      91,
+      46,
+      0,
+      15,
+      0,
+      "AUDIO"
+    ],
+    [
+      93,
+      35,
+      0,
+      47,
+      0,
+      "AUDIO"
+    ],
+    [
+      94,
+      34,
+      0,
+      47,
+      1,
+      "AUDIO"
+    ],
+    [
+      95,
+      47,
+      0,
+      36,
+      0,
+      "AUDIO"
+    ],
+    [
+      97,
+      26,
+      0,
+      46,
+      0,
+      "AUDIO"
+    ],
+    [
+      107,
+      56,
+      0,
+      58,
+      0,
+      "AUDIO"
+    ],
+    [
+      108,
+      63,
+      0,
+      64,
+      0,
+      "AUDIO"
+    ],
+    [
+      110,
+      65,
+      0,
+      66,
+      0,
+      "AUDIO"
+    ],
+    [
+      111,
+      67,
+      0,
+      68,
+      0,
+      "AUDIO"
+    ],
+    [
+      122,
+      60,
+      0,
+      57,
+      0,
+      "AUDIO"
+    ],
+    [
+      127,
+      61,
+      0,
+      73,
+      0,
+      "AUDIO"
+    ],
+    [
+      130,
+      68,
+      0,
+      76,
+      0,
+      "*"
+    ],
+    [
+      131,
+      64,
+      0,
+      76,
+      1,
+      "NARRATOR_VOICE"
+    ],
+    [
+      132,
+      58,
+      0,
+      76,
+      2,
+      "NARRATOR_VOICE"
+    ],
+    [
+      133,
+      66,
+      0,
+      76,
+      3,
+      "NARRATOR_VOICE"
+    ],
+    [
+      134,
+      76,
+      0,
+      60,
+      1,
+      "*"
+    ],
+    [
+      135,
+      76,
+      0,
+      61,
+      1,
+      "*"
+    ],
+    [
+      137,
+      53,
+      0,
+      77,
+      0,
+      "*"
+    ],
+    [
+      138,
+      50,
+      0,
+      77,
+      1,
+      "TTS_ENGINE"
+    ],
+    [
+      139,
+      77,
+      0,
+      61,
+      0,
+      "TTS_ENGINE"
+    ],
+    [
+      140,
+      77,
+      0,
+      60,
+      0,
+      "TTS_ENGINE"
+    ],
+    [
+      147,
+      83,
+      0,
+      75,
+      0,
+      "STRING"
+    ],
+    [
+      148,
+      71,
+      0,
+      75,
+      1,
+      "STRING"
+    ],
+    [
+      149,
+      79,
+      0,
+      75,
+      2,
+      "STRING"
+    ],
+    [
+      150,
+      80,
+      0,
+      75,
+      3,
+      "STRING"
+    ],
+    [
+      151,
+      81,
+      0,
+      75,
+      4,
+      "STRING"
+    ],
+    [
+      154,
+      75,
+      0,
+      61,
+      2,
+      "STRING"
+    ],
+    [
+      155,
+      75,
+      0,
+      60,
+      2,
+      "STRING"
+    ],
+    [
+      156,
+      75,
+      0,
+      46,
+      1,
+      "STRING"
+    ],
+    [
+      157,
+      93,
+      0,
+      94,
+      0,
+      "STRING"
+    ],
+    [
+      158,
+      83,
+      0,
+      95,
+      0,
+      "*"
+    ],
+    [
+      159,
+      93,
+      0,
+      95,
+      1,
+      "*"
+    ],
+    [
+      162,
+      95,
+      0,
+      96,
+      0,
+      "*"
+    ],
+    [
+      163,
+      96,
+      0,
+      84,
+      0,
+      "*"
+    ],
+    [
+      165,
+      89,
+      0,
+      94,
+      1,
+      "STRING"
+    ],
+    [
+      166,
+      90,
+      0,
+      94,
+      2,
+      "STRING"
+    ],
+    [
+      167,
+      91,
+      0,
+      94,
+      3,
+      "STRING"
+    ],
+    [
+      168,
+      92,
+      0,
+      94,
+      4,
+      "STRING"
+    ],
+    [
+      172,
+      61,
+      0,
+      99,
+      0,
+      "*"
+    ],
+    [
+      173,
+      60,
+      0,
+      99,
+      1,
+      "AUDIO"
+    ],
+    [
+      174,
+      46,
+      0,
+      99,
+      2,
+      "AUDIO"
+    ],
+    [
+      175,
+      47,
+      0,
+      99,
+      3,
+      "AUDIO"
+    ],
+    [
+      179,
+      94,
+      0,
+      108,
+      0,
+      "*"
+    ],
+    [
+      180,
+      108,
+      0,
+      107,
+      1,
+      "STRING"
+    ],
+    [
+      182,
+      99,
+      0,
+      109,
+      0,
+      "*"
+    ],
+    [
+      183,
+      109,
+      0,
+      107,
+      0,
+      "AUDIO"
+    ],
+    [
+      187,
+      112,
+      0,
+      60,
+      3,
+      "INT"
+    ],
+    [
+      188,
+      112,
+      0,
+      46,
+      2,
+      "INT"
+    ],
+    [
+      189,
+      112,
+      0,
+      61,
+      3,
+      "INT"
+    ],
+    [
+      190,
+      113,
+      0,
+      50,
+      2,
+      "FLOAT"
+    ],
+    [
+      191,
+      114,
+      0,
+      50,
+      1,
+      "FLOAT"
+    ],
+    [
+      192,
+      115,
+      0,
+      50,
+      0,
+      "FLOAT"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 2,
+      "title": "ChatterBox Text-to-Speech",
+      "bounding": [
+        -1775.4757080078125,
+        1321.676025390625,
+        1184.8331298828125,
+        514.5884399414062
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "ChatterBox Voice Conversion",
+      "bounding": [
+        -1774.2313232421875,
+        1857.24267578125,
+        1181.8594970703125,
+        534.8585205078125
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "F5TTS SRT",
+      "bounding": [
+        -1780.546630859375,
+        584.5247192382812,
+        1180.2017822265625,
+        715.0425415039062
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "Nicht verwendet",
+      "bounding": [
+        553.1807861328125,
+        104.35875701904297,
+        1145.369140625,
+        1095.9222412109375
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "TTS Text",
+      "bounding": [
+        -1784.143798828125,
+        72.95652770996094,
+        1170.844970703125,
+        466.45989990234375
+      ],
+      "color": "#88A",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "Murph",
+      "bounding": [
+        -3758.918701171875,
+        53.585323333740234,
+        1357.1820068359375,
+        360.3865051269531
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 9,
+      "title": "Cyrus",
+      "bounding": [
+        -3761.186279296875,
+        431.46807861328125,
+        1354.97119140625,
+        351.8167419433594
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "Vicky",
+      "bounding": [
+        -3757.7373046875,
+        804.9097900390625,
+        1346.0924072265625,
+        366.5402526855469
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 11,
+      "title": "Ziggy",
+      "bounding": [
+        -3753.816162109375,
+        1200.748046875,
+        1343.839599609375,
+        359.4740295410156
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 12,
+      "title": "Chatterbox Engine",
+      "bounding": [
+        -2259.313232421875,
+        592.1558837890625,
+        290.85986328125,
+        237.60000610351562
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 13,
+      "title": "F5 TTS Engine",
+      "bounding": [
+        -2276.504638671875,
+        62.8968391418457,
+        337.06585693359375,
+        332.1394348144531
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 14,
+      "title": "Audio Save",
+      "bounding": [
+        -558.4475708007812,
+        1029.0911865234375,
+        443.8606872558594,
+        470.18255615234375
+      ],
+      "color": "#444",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 15,
+      "title": "Setup",
+      "bounding": [
+        -2282.24853515625,
+        -538.2130126953125,
+        825.249267578125,
+        570.2389526367188
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8264462809917354,
+      "offset": [
+        4340.3208651643035,
+        680.7230631653257
+      ]
+    },
+    "frontendVersion": "1.23.4",
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

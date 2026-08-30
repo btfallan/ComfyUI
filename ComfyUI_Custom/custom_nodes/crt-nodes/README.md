@@ -22,11 +22,13 @@ pip install -r requirements.txt
 
 Restart ComfyUI after installation or an update.
 
+> **Note on updates:** Nodes that have changed inputs, outputs, or widget names may appear red or show `NaN` values in existing workflows. Right-click the node and select **Fix node (recreate)** to refresh its sockets.
+
 ### CRT/Audio (8)
 
 - `Audio Frame Adjuster (CRT)`
-- `Audio Transcript (CRT)` (conditional)
-- `Audio Transcript Pipe Out (CRT)` (conditional)
+- `Audio Transcript Batch (CRT)` (conditional)
+- `Audio Transcript turbo (CRT ALT)`
 - `Frame Count (Audio or Manual) (CRT)`
 - `Mono to Stereo Converter (CRT)`
 - `Parametric EQ (CRT)`
@@ -42,12 +44,11 @@ Restart ComfyUI after installation or an update.
 - `ChronoEdit Upscaler LoRA (CRT AutoDL)`
 - `ChronoEdit VAE (CRT AutoDL)`
 
-### CRT/AutoDL/ERNIE (5)
+### CRT/AutoDL/ERNIE (4)
 
 - `ERNIE CLIP (CRT AutoDL)`
 - `ERNIE Model (CRT AutoDL)`
 - `ERNIE Turbo Model (CRT AutoDL)`
-- `ERNIE Turbo NVFP4 Model (CRT AutoDL)`
 - `ERNIE VAE (CRT AutoDL)`
 
 ### CRT/AutoDL/FLUXKLEIN (4)
@@ -64,19 +65,42 @@ Restart ComfyUI after installation or an update.
 - `Krea 2 Turbo Model (CRT AutoDL)`
 - `Krea 2 VAE (CRT AutoDL)`
 
-### CRT/AutoDL/LTX2.3 (11)
+### CRT/AutoDL/LTX2.5 (11)
 
-- `LTX2.3 AUDIO VAE (CRT AutoDL)`
-- `LTX2.3 CLIP (CRT AutoDL)`
-- `LTX2.3 IC Cnet LoRA (CRT AutoDL)`
-- `LTX2.3 IC Outpaint LoRA (CRT AutoDL)`
-- `LTX2.3 IC Upscale LoRA (CRT AutoDL)`
-- `LTX2.3 Latent Upscaler (CRT AutoDL)`
-- `LTX2.3 Model (CRT AutoDL)`
-- `LTX2.3 Model GGUF Q4_K_M (CRT AutoDL)`
-- `LTX2.3 Model GGUF Q5_K_M (CRT AutoDL)`
-- `LTX2.3 Model NVFP4 (CRT AutoDL)`
-- `LTX2.3 VIDEO VAE (CRT AutoDL)`
+- `LTX2.5 AUDIO VAE (CRT AutoDL)`
+- `LTX2.5 CLIP w4a8 Light (CRT AutoDL)`
+- `LTX2.5 Duration Head (CRT AutoDL)`
+- `LTX2.5 IC Cnet LoRA (CRT AutoDL)`
+- `LTX2.5 IC Outpaint LoRA (CRT AutoDL)`
+- `LTX2.5 IC Pixel Spatial Upscale LoRA (CRT AutoDL)`
+- `LTX2.5 IC Upscale LoRA (CRT AutoDL)`
+- `LTX2.5 Model (CRT AutoDL)`
+- `LTX2.5 Spatial Upscaler (CRT AutoDL)`
+- `LTX2.5 Temporal Upscaler (CRT AutoDL)`
+- `LTX2.5 VIDEO VAE (CRT AutoDL)`
+
+### CRT/AutoDL/MINIMAXH3 (4)
+
+- `MiniMax H3 CLIP (CRT AutoDL)`
+- `MiniMax H3 Model (CRT AutoDL)`
+- `MiniMax H3 AUDIO VAE (CRT AutoDL)`
+- `MiniMax H3 VIDEO VAE (CRT AutoDL)`
+
+### CRT/AutoDL/PIXAL3D (6)
+
+- `Pixal3D Model Selector (CRT AutoDL)` (BF16 / Int8)
+- `Pixal3D CLIP Vision (CRT AutoDL)`
+- `Pixal3D Shape VAE (CRT AutoDL)`
+- `Pixal3D Texture VAE (CRT AutoDL)`
+- `Pixal3D MoGe Model (CRT AutoDL)` (also `SAM3Body MoGe Model`)
+- `Pixal3D BiRefNet (CRT AutoDL)`
+
+### CRT/AutoDL/SAM3BODY (4)
+
+- `SAM3Body Model Selector (CRT AutoDL)` (BF16 / Int8)
+- `SAM3Body Checkpoint (CRT AutoDL)` (SAM3.1 multiplex)
+- `SAM3Body RT-DETR Detector (CRT AutoDL)`
+- `SAM3Body MoGe Model (CRT AutoDL)` (shared MoGe-2)
 
 ### CRT/AutoDL/ZIMAGETURBO (3)
 
@@ -84,22 +108,16 @@ Restart ComfyUI after installation or an update.
 - `Z-Image Turbo Model (CRT AutoDL)`
 - `Z-Image Turbo VAE (CRT AutoDL)`
 
-### CRT/Conditioning (7)
+### CRT/Conditioning (4)
 
 - `CLIP Text Encode + Unload (CRT)`
-- `CLIP Text Encode FLUX Merged (CRT)`
 - `Dynamic Prompt Scheduler (CRT)`
 - `File Batch Prompt Scheduler (CRT)`
 - `File Batch Prompt Scheduler KREA2 (CRT)`
-- `Smart ControlNet Apply (CRT)`
-- `Smart Style Model Apply DUAL (CRT)`
 
-### CRT/Flux2 (4)
+### CRT/DepthAnything3 (1)
 
-- `Flux2Klein Seamless Tile (CRT)`
-- `Tiny FLUX.2 VAE Decode (CRT)` (conditional)
-- `Tiny FLUX.2 VAE Encode (CRT)` (conditional)
-- `Tiny FLUX.2 VAE Loader (CRT)` (conditional)
+- `DepthAnything3 (CRT)`
 
 ### CRT/FX (12)
 
@@ -116,7 +134,7 @@ Restart ComfyUI after installation or an update.
 - `Smart DeNoise FX (CRT)`
 - `Technicolor 2 FX (CRT)`
 
-### CRT/Image (12)
+### CRT/Image (10)
 
 - `Batch Brightness Curve (U-Shape) (CRT)`
 - `Chroma Key Overlay (CRT)`
@@ -127,27 +145,29 @@ Restart ComfyUI after installation or an update.
 - `Image Tile Checker (CRT)`
 - `Percentage Crop Calculator (CRT)`
 - `Quantize and Crop Image (CRT)`
-- `Smart Preprocessor (CRT)`
 - `Solid Color (CRT)`
-- `Upscale Model Advanced (CRT)`
 
 ### CRT/Image Scorer (1)
 
 - `ERNIE Image Aesthetic Score (CRT)`
 
-### CRT/Latent (3)
+### CRT/Latent (4)
 
 - `Enable Latent (CRT)`
 - `Reference Latent Batch (CRT)`
 - `Scale Latent To Megapixels (CRT)`
+- `VAE Decode Last Frame (CRT)`
 
-### CRT/LLM (1)
+### CRT/LLM (3)
 
+- `Kimi Inference Bridge (CRT)`
+- `LM Studio Bridge (CRT)`
 - `Unsloth Studio Bridge (CRT)`
 
-### CRT/Load (12)
+### CRT/Load (13)
 
 - `Audio Loader Crawl (CRT)`
+- `Audio Loader Crawl Batch (CRT)`
 - `Image Loader Crawl (CRT)`
 - `Image Loader Crawl Batch (CRT)`
 - `Load Image Base64 (CRT)`
@@ -166,29 +186,25 @@ Restart ComfyUI after installation or an update.
 - `Boolean Invert (CRT)`
 - `Strength to Steps (CRT)`
 
-### CRT/LoRA (5)
+### CRT/LoRA (6)
 
 - `Flux LoRA Blocks Patcher (CRT)`
 - `Magic LoRA Loader (CRT)`
 - `Magic Save Merged LoRA (CRT)`
+- `Seeded Persona LoRA Crawl Batch (CRT)`
 - `Seeded Persona LoRA Loader (CRT)`
 - `Wan Video Multi-LoRA Select (CRT)`
 
-### CRT/LTX2.3 (4)
+### CRT/LTX2.5 (3)
 
-- `LTX 2.3 AutoDownload (CRT)` (conditional)
-- `LTX 2.3 Unified Sampler (CRT)`
-- `LTX 2.3 US Config (CRT)`
-- `LTX 2.3 US Models Pipe (CRT)`
+- `LTX US Models Pipe (CRT)`
+- `LTX Unified Sampler (CRT)`
+- `LTX US Config (CRT)`
 
 ### CRT/Mask (2)
 
 - `Mask Censor (CRT)`
 - `Mask Temporal Enhancer (CRT)`
-
-### CRT/Model Patches (1)
-
-- `Ideogram 4 FlashAttention (CRT)`
 
 ### CRT/Sampling (8)
 
@@ -212,18 +228,21 @@ Restart ComfyUI after installation or an update.
 - `Save Text With Path (CRT)`
 - `Save Video With Path (CRT)`
 
-### CRT/Text (11)
+### CRT/Text (14)
 
 - `Add Settings and Prompt (CRT)`
-- `Advanced String Replace (CRT)`
 - `AutopromptProcessor (CRT)`
+- `Extract Dialogues MiniMaxH3 (CRT)`
+- `Extract Q/A (CRT)`
 - `Join Strings (CRT)`
+- `Merge Q/A (CRT)`
 - `Remove Lines (CRT)`
-- `Remove Trailing Comma (CRT)`
 - `String Batcher (CRT)`
 - `String Line Counter (CRT)`
 - `String Splitter (CRT)`
-- `Text Box line spot (CRT)`
+- `Text Add Rows (CRT)`
+- `TextBox line spot (CRT)`
+- `Text Rows Crawl (CRT)`
 - `Textbox (CRT)`
 
 ### CRT/Utils/Isolate (3)
@@ -234,7 +253,7 @@ Restart ComfyUI after installation or an update.
 
 ### CRT/Utils/Logic & Values (10)
 
-- `Boolean Transform (CRT)`
+- `String to Boolean (CRT)`
 - `Int Value (CRT)`
 - `Mask Empty Float (CRT)`
 - `Mask Pass or Placeholder (CRT)`
@@ -257,6 +276,16 @@ Restart ComfyUI after installation or an update.
 - `Even Batch Picker (CRT)`
 - `Get First & Last Frame (CRT)`
 - `Seamless Loop Blender (CRT)`
+
+## Notes
+
+### Unsloth Studio Bridge (CRT)
+
+Connects to the model currently loaded in [Unsloth Studio](https://github.com/unslothai/studio) and chats with it through its local llama-server.
+
+- `unload_model_after_run`: unloads the model from VRAM after the response is generated so the rest of the workflow gets the full GPU. The next run automatically reloads the same model via the Studio API with its previous settings (context, parallel slots, KV cache type, speculative decoding, GPU layers).
+- `studio_api_key`: single optional credential. Paste an `sk-unsloth-...` API key or your Studio password, or leave empty for automatic local authentication. Required only for unload/reload.
+- If llama-server is down when a run starts (e.g. unloaded after the previous run), the bridge reloads it and fails within seconds if Unsloth Studio itself is not running.
 
 ## Links
 
