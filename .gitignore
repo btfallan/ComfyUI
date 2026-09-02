@@ -32,6 +32,7 @@ lora*
 ai-toolkit\models
 ai-toolkit\input
 ai-toolkit\output
+ai-toolkit\ui\node_modules
 
 # --- Model / weight file types (wherever they show up, e.g. inside custom_nodes) ---
 *.safetensors

@@ -596,3 +596,55 @@ The background consists of a gymnasium setting with wooden flooring and orange a
 [2026-09-02 18:32:14.533] [SMJ 00227.txt]: ohwxsmj person, This is a close-up photograph of a young woman with wavy, light brown hair, smiling slightly. Her skin is fair and she has light makeup on, including pinkish lipstick. She has blue eyes and her hair is loosely falling around her shoulders. The background is dark and out of focus, which makes the subject stand out. She is wearing a light-colored top, and the lighting is soft, highlighting her face and hair. The camera angle is straight-on, capturing her from the shoulders up. The framing is tight, focusing on her face and upper chest. The texture of her hair is soft and slightly tousled, adding a natural, casual look. The overall style of the photograph is portrait-oriented, with a focus on the subject's expression and gentle smile. The image has a warm, natural feel, with a slight emphasis on the subject's facial features and hair. The photograph is well-composed, with a balanced use of light and shadow to create a soft, inviting atmosphere.
 [2026-09-02 18:32:14.534] [SMJ 00249.txt]: ohwxsmj person, This is a black-and-white photograph of a young woman with long, curly hair that falls over her shoulders. She is smiling slightly and looking directly at the camera. She is wearing a light-colored, textured knit sweater with a round neckline. The background is completely black, creating a strong contrast with her lighter skin and hair. The lighting is soft but directional, highlighting her face and hair while casting subtle shadows. The camera angle is straight-on, capturing her from the chest up in a close-up shot. Her hair has a glossy texture, and the curls are well-defined. The photograph has a classic, portrait-style composition, emphasizing simplicity and focus on the subject. The overall mood of the image is calm and natural. The texture of the sweater is visible, adding a tactile element to the visual. The photograph is well-framed, with the subject centered and balanced within the composition.
 [2026-09-02 18:32:14.536] Prompt executed in 00:18:34
+[2026-09-02 18:45:52.976] got prompt
+[2026-09-02 18:45:52.986] Failed to validate prompt for output 104:
+[2026-09-02 18:45:52.986] * UNETLoader 95:
+[2026-09-02 18:45:52.987]   - Value not in list: unet_name: 'Flux 2 Klein\\flux-2-klein-9b.safetensors' not in ['Flux 1\\flux1-dev.safetensors', 'Flux 1\\fuxCapacityNSFWPornFlux_31FP16.safetensors', 'Flux 1\\nsfwMASTERFLUXFp16LoraMerged_v12Hyper8stepFp16.safetensors', 'Flux 2 Klein\\flux-2-klein-base-9b.safetensors', 'Flux 2 Klein\\snofsSexNudesAndOther_distilledV12KleinFp8.safetensors', 'Flux 2 Klein\\snofsSexNudesAndOther_v14Klein9bBase.safetensors', 'Flux 2 Klein\\snofsSexNudesAndOther_v14Klein9bDistilled.safetensors', 'Flux 2 Klein\\snofs_v12_klein_aitk.safetensors', 'Krea 2\\krea2_raw_bf16.safetensors', 'PornMaster_Flux2Klein_v4_Base_bf16.safetensors', 'PornMaster_Flux2Klein_v4_Base_fp8.safetensors', 'PornMaster_Flux2Klein_v4_Turbo_bf16.safetensors', 'PornMaster_Flux2Klein_v4_Turbo_fp8.safetensors', 'SDXL\\pornmaster_proSDXLV8.safetensors']
+[2026-09-02 18:45:52.987] Output will be ignored
+[2026-09-02 18:45:52.987] Failed to validate prompt for output 105:
+[2026-09-02 18:45:52.987] Output will be ignored
+[2026-09-02 18:45:52.987] invalid prompt: {'type': 'prompt_outputs_failed_validation', 'message': 'Prompt outputs failed validation', 'details': '', 'extra_info': {}}
+[2026-09-02 18:46:09.145] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe-lightbox.esm.min.js
+[2026-09-02 18:46:09.186] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-09-02 18:46:09.186] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-09-02 18:46:09.187] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-09-02 18:46:09.188] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-09-02 18:46:09.189] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-09-02 18:46:09.195] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/pickr.min.js
+[2026-09-02 18:46:09.201] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe.min.css
+[2026-09-02 18:46:09.327] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/classic.min.css
+[2026-09-02 18:46:09.328] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/model-viewer.min.js
+[2026-09-02 18:46:09.334] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.css
+[2026-09-02 18:46:09.515] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.min.js
+[2026-09-02 18:46:09.899] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-09-02 18:46:09.899] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-09-02 18:46:09.981] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-09-02 18:46:09.982] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-09-02 18:46:13.358] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-09-02 18:46:13.359] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-09-02 18:46:13.361] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-09-02 18:46:13.361] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-09-02 18:46:13.362] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-09-02 18:46:38.514] got prompt
+[2026-09-02 18:46:38.545] got prompt
+[2026-09-02 18:46:38.565] got prompt
+[2026-09-02 18:46:38.585] Using pytorch attention in VAE
+[2026-09-02 18:46:38.586] Using pytorch attention in VAE
+[2026-09-02 18:46:38.586] got prompt
+[2026-09-02 18:46:38.619] got prompt
+[2026-09-02 18:46:38.643] got prompt
+[2026-09-02 18:46:38.668] got prompt
+[2026-09-02 18:46:38.671] VAE load device: cuda:0, offload device: cpu, dtype: torch.bfloat16
+[2026-09-02 18:46:38.688] got prompt
+[2026-09-02 18:46:38.710] got prompt
+[2026-09-02 18:46:38.731] got prompt
+[2026-09-02 18:46:39.221] CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cpu, dtype: torch.float16
+[2026-09-02 18:46:39.223] Requested to load Flux2TEModel_
+[2026-09-02 18:46:39.301] Model Flux2TEModel_ prepared for dynamic VRAM loading. 15622MB Staged. 0 patches attached. Force pre-loaded 145 weights: 602 KB.
+[2026-09-02 18:46:48.541] 0 models unloaded.
+[2026-09-02 18:46:48.580] Model Flux2TEModel_ prepared for dynamic VRAM loading. 15622MB Staged. 0 patches attached. Force pre-loaded 145 weights: 602 KB.
+[2026-09-02 18:46:48.902] model weight dtype torch.bfloat16, manual cast: None
+[2026-09-02 18:46:48.904] model_type FLUX
+[2026-09-02 18:46:49.029] Requested to load Flux2
+[2026-09-02 18:46:49.030] 0 models unloaded.
+[2026-09-02 18:46:49.072] Model Flux2 prepared for dynamic VRAM loading. 17316MB Staged. 112 patches attached. Force pre-loaded 80 weights: 59 KB.
