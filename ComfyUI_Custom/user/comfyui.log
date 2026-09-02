@@ -1,114 +1,114 @@
-** ComfyUI startup time: 2026-08-30 12:38:25.559
-[2026-08-30 12:38:25.559] ** Platform: Windows
-[2026-08-30 12:38:25.559] ** Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
-[2026-08-30 12:38:25.559] ** Python executable: C:\Users\btfal\miniconda3\envs\comfyenv\python.exe
-[2026-08-30 12:38:25.559] ** ComfyUI Path: C:\temp\ComfyUI\ComfyUI
-[2026-08-30 12:38:25.560] ** ComfyUI Base Folder Path: C:\temp\ComfyUI\ComfyUI
-[2026-08-30 12:38:25.560] ** User directory: C:\temp\ComfyUI\ComfyUI_Custom\user
-[2026-08-30 12:38:25.560] ** ComfyUI-Manager config path: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\config.ini
-[2026-08-30 12:38:25.560] ** Log path: C:\temp\ComfyUI\ComfyUI_Custom\user\comfyui.log
+** ComfyUI startup time: 2026-09-02 18:12:08.927
+[2026-09-02 18:12:08.927] ** Platform: Windows
+[2026-09-02 18:12:08.927] ** Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
+[2026-09-02 18:12:08.928] ** Python executable: C:\Users\btfal\miniconda3\envs\comfyenv\python.exe
+[2026-09-02 18:12:08.928] ** ComfyUI Path: C:\temp\ComfyUI\ComfyUI
+[2026-09-02 18:12:08.928] ** ComfyUI Base Folder Path: C:\temp\ComfyUI\ComfyUI
+[2026-09-02 18:12:08.928] ** User directory: C:\temp\ComfyUI\ComfyUI_Custom\user
+[2026-09-02 18:12:08.928] ** ComfyUI-Manager config path: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\config.ini
+[2026-09-02 18:12:08.928] ** Log path: C:\temp\ComfyUI\ComfyUI_Custom\user\comfyui.log
 [PRE] ComfyUI-Manager
-[2026-08-30 12:38:28.008] C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+[2026-09-02 18:12:11.584] C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
   import pynvml  # type: ignore[import]
-[2026-08-30 12:38:30.073] Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'int8_linear', 'na3d', 'quantize_and_rotate_rowwise', 'quantize_int8_rowwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'w4a8_int8_linear']}
-[2026-08-30 12:38:30.073] Found comfy_kitchen backend hip: {'available': False, 'disabled': False, 'unavailable_reason': 'PyTorch ROCm/HIP runtime not available', 'capabilities': []}
-[2026-08-30 12:38:30.073] Found comfy_kitchen backend cuda: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'gemv_awq_w4a16', 'int8_linear', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
-[2026-08-30 12:38:30.073] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_embedding', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'gemv_awq_w4a16', 'int8_linear', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
-[2026-08-30 12:38:30.081] Checkpoint files will always be loaded safely.
-[2026-08-30 12:38:30.169] Total VRAM 16275 MB, total RAM 130328 MB
-[2026-08-30 12:38:30.170] pytorch version: 2.12.1+cu130
-[2026-08-30 12:38:30.170] Set vram state to: NORMAL_VRAM
-[2026-08-30 12:38:30.170] Device: cuda:0 NVIDIA GeForce RTX 5070 Ti : cudaMallocAsync
-[2026-08-30 12:38:30.187] Using async weight offloading with 2 streams
-[2026-08-30 12:38:30.188] Enabled pinned memory 52131.0
-[2026-08-30 12:38:30.230] Using pytorch attention
-[2026-08-30 12:38:35.297] aimdo: src-win/cuda-detour.c:38:INFO:aimdo_setup_hooks: installing 6 hooks
-[2026-08-30 12:38:35.331] aimdo: src/control.c:262:INFO:comfy-aimdo NVML pressure enabled
-[2026-08-30 12:38:35.337] aimdo: src-win/shmem-detect.c:80:INFO:comfy-aimdo WDDM adapter match: NVIDIA GeForce RTX 5070 Ti runtime_luid=00000000:00012bcb dxgi_luid=00000000:00012bcb
-[2026-08-30 12:38:35.337] aimdo: src/control.c:277:INFO:comfy-aimdo inited for GPU: NVIDIA GeForce RTX 5070 Ti (VRAM: 16275 MB)
-[2026-08-30 12:38:35.338] DynamicVRAM support detected and enabled
-[2026-08-30 12:38:35.338] Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
-[2026-08-30 12:38:35.338] ComfyUI version: 0.34.0
-[2026-08-30 12:38:35.339] comfy-aimdo version: 0.4.15
-[2026-08-30 12:38:35.340] comfy-kitchen version: 0.2.31
-[2026-08-30 12:38:35.345] comfyui-frontend-package version: 1.51.9
-[2026-08-30 12:38:35.345] comfyui-workflow-templates version: 0.11.50
-[2026-08-30 12:38:35.345] comfyui-embedded-docs version: 0.5.10
-[2026-08-30 12:38:35.345] comfy-kitchen version: 0.2.31
-[2026-08-30 12:38:35.345] comfy-aimdo version: 0.4.15
-[2026-08-30 12:38:35.347] [Prompt Server] web root: C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\comfyui_frontend_package\static
-[2026-08-30 12:38:35.348] Asset seeder disabled
-[2026-08-30 12:38:35.348] [START] ComfyUI-Manager
-[2026-08-30 12:38:35.471] [ComfyUI-Manager] Using GitPython backend
-[2026-08-30 12:38:35.476] ### Loading: ComfyUI-Manager (V4.2.2)
-[2026-08-30 12:38:35.476] [ComfyUI-Manager] network_mode: public
-[2026-08-30 12:38:36.236] ### ComfyUI Version: v0.34.0-16-g406dfc65 | Released on '2026-08-29'
-[2026-08-30 12:38:36.751] [ComfyUI-Manager] Legacy UI is enabled.
-[2026-08-30 12:38:36.863] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/custom-node-list.json
-[2026-08-30 12:38:36.875] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/model-list.json
-[2026-08-30 12:38:36.876] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/alter-list.json
-[2026-08-30 12:38:36.943] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/github-stats.json
-[2026-08-30 12:38:37.001] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/extension-node-map.json
-[2026-08-30 12:38:38.324] No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
-[2026-08-30 12:38:39.440] [aistudynow] Loaded module: aistudynow_OutputCleaner
-[2026-08-30 12:38:39.616] Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-[2026-08-30 12:38:39.616] NumExpr defaulting to 16 threads.
-[2026-08-30 12:38:40.014] [aistudynow] Loaded module: aistudynow_QwenVL
-[2026-08-30 12:38:40.016] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF
-[2026-08-30 12:38:40.042] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF_PromptEnhancer
-[2026-08-30 12:38:40.044] [aistudynow] Loaded module: aistudynow_QwenVL_HF
-[2026-08-30 12:38:40.044] [aistudynow] Loaded module: aistudynow_QwenVL_PromptEnhancer
-[2026-08-30 12:38:40.045] [aistudynow] Loaded module: aistudynow_QwenVL_TryOn
-[2026-08-30 12:38:43.520] Web extensions folder found at C:\temp\ComfyUI\ComfyUI\web\extensions\ComfyLiterals
-[2026-08-30 12:38:43.550] Error importing RunningHubInit: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.550] Error importing RunningHubNodeInfo: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.551] Error importing RunningHubWorkflowExecutor: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.551] Error importing RunningHubAccountStatus: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.552] Error importing RunningHubFileSaver: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.553] Error importing RunningHubWorkflowID: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.553] Error importing RunningHubFilePreviewer: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.553] Error importing RunningHubNodeInfoReplace: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.554] Error importing RunningHubImageUploader: No module named 'ComfyUI-Addoor'
-[2026-08-30 12:38:43.555] Imported AddPaddingAdvanced successfully
-[2026-08-30 12:38:43.556] Imported AddPaddingBase successfully
-[2026-08-30 12:38:43.556] Imported AD_ImageResize successfully
-[2026-08-30 12:38:43.557] Imported AD_MockupMaker successfully
-[2026-08-30 12:38:43.558] Imported AD_PosterMaker successfully
-[2026-08-30 12:38:43.558] Imported AD_PromptSaver successfully
-[2026-08-30 12:38:43.559] Imported ComfyUI-FofrToolkit successfully
-[2026-08-30 12:38:44.120] Imported ComfyUI-ImageCaptioner successfully
-[2026-08-30 12:38:44.121] Imported ComfyUI-imageResize successfully
-[2026-08-30 12:38:44.121] Imported ComfyUI-textAppend successfully
-[2026-08-30 12:38:44.122] Imported imagecreatemask successfully
-[2026-08-30 12:38:44.122] Imported multiline_string successfully
-[2026-08-30 12:38:44.213] Adding C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes to sys.path
-[2026-08-30 12:38:44.213] Adding C:\temp\ComfyUI\ComfyUI\custom_nodes to sys.path
-[2026-08-30 12:38:44.282] [36mEfficiency Nodes:[0m Attempting to add Control Net options to the 'HiRes-Fix Script' Node (comfyui_controlnet_aux add-on)...[92mSuccess![0m
-[2026-08-30 12:38:44.282] Loaded Efficiency nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\efficiency-nodes-comfyui
-[2026-08-30 12:38:44.287] Loaded comfyui_controlnet_aux nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
-[2026-08-30 12:38:44.305] Loaded AdvancedControlNet nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
-[2026-08-30 12:38:44.305] module 'ComfyUI-Advanced-ControlNet' has no attribute 'NODE_CLASS_MAPPINGS'
-[2026-08-30 12:38:44.307] Could not find AnimateDiff nodes
-[2026-08-30 12:38:44.314] Loaded IPAdapter nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
-[2026-08-30 12:38:44.320] Could not find VideoHelperSuite nodes
-[2026-08-30 12:38:44.326] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
-[2026-08-30 12:38:44.481] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
-[2026-08-30 12:38:44.495] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
-[2026-08-30 12:38:44.495] Loaded ImpactPack nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
-[2026-08-30 12:38:44.496] [Impact Pack] Wildcards loading done.
-[2026-08-30 12:38:44.496] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
-[2026-08-30 12:38:44.501] [Impact Pack] Wildcards loading done.
-[2026-08-30 12:38:44.662] [Crystools [0;32mINFO[0m] Crystools version: 1.27.4
-[2026-08-30 12:38:44.694] [Crystools [0;32mINFO[0m] Platform release: 11
-[2026-08-30 12:38:44.695] [Crystools [0;32mINFO[0m] JETSON: Not detected.
-[2026-08-30 12:38:44.696] [Crystools [0;32mINFO[0m] CPU: Intel(R) Core(TM) Ultra 7 265K - Arch: AMD64 - OS: Windows 11
-[2026-08-30 12:38:44.696] [Crystools [0;32mINFO[0m] pynvml (NVIDIA) initialized.
-[2026-08-30 12:38:44.696] [Crystools [0;32mINFO[0m] GPU/s:
-[2026-08-30 12:38:44.697] [Crystools [0;32mINFO[0m] 0) NVIDIA GeForce RTX 5070 Ti
-[2026-08-30 12:38:44.697] [Crystools [0;32mINFO[0m] NVIDIA Driver: 616.56
-[2026-08-30 12:38:48.702] [ComfyUI-Easy-Use] server: v1.3.7 Loaded
-[2026-08-30 12:38:48.702] [ComfyUI-Easy-Use] web root: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use\web_version/v2 Loaded
-[2026-08-30 12:38:49.038] Traceback (most recent call last):
+[2026-09-02 18:12:14.489] Found comfy_kitchen backend cuda: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'gemv_awq_w4a16', 'int8_linear', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
+[2026-09-02 18:12:14.489] Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'int8_linear', 'na3d', 'quantize_and_rotate_rowwise', 'quantize_int8_rowwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'w4a8_int8_linear']}
+[2026-09-02 18:12:14.489] Found comfy_kitchen backend hip: {'available': False, 'disabled': False, 'unavailable_reason': 'PyTorch ROCm/HIP runtime not available', 'capabilities': []}
+[2026-09-02 18:12:14.489] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_embedding', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'gemv_awq_w4a16', 'int8_linear', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
+[2026-09-02 18:12:14.499] Checkpoint files will always be loaded safely.
+[2026-09-02 18:12:14.588] Total VRAM 16275 MB, total RAM 130328 MB
+[2026-09-02 18:12:14.588] pytorch version: 2.12.1+cu130
+[2026-09-02 18:12:14.589] Set vram state to: NORMAL_VRAM
+[2026-09-02 18:12:14.589] Device: cuda:0 NVIDIA GeForce RTX 5070 Ti : cudaMallocAsync
+[2026-09-02 18:12:14.608] Using async weight offloading with 2 streams
+[2026-09-02 18:12:14.609] Enabled pinned memory 52131.0
+[2026-09-02 18:12:14.669] Using pytorch attention
+[2026-09-02 18:12:23.202] aimdo: src-win/cuda-detour.c:38:INFO:aimdo_setup_hooks: installing 6 hooks
+[2026-09-02 18:12:23.235] aimdo: src/control.c:262:INFO:comfy-aimdo NVML pressure enabled
+[2026-09-02 18:12:23.249] aimdo: src-win/shmem-detect.c:80:INFO:comfy-aimdo WDDM adapter match: NVIDIA GeForce RTX 5070 Ti runtime_luid=00000000:00012952 dxgi_luid=00000000:00012952
+[2026-09-02 18:12:23.249] aimdo: src/control.c:277:INFO:comfy-aimdo inited for GPU: NVIDIA GeForce RTX 5070 Ti (VRAM: 16275 MB)
+[2026-09-02 18:12:23.249] DynamicVRAM support detected and enabled
+[2026-09-02 18:12:23.249] Python version: 3.13.14 | packaged by Anaconda, Inc. | (main, Jun 17 2026, 20:04:52) [MSC v.1942 64 bit (AMD64)]
+[2026-09-02 18:12:23.249] ComfyUI version: 0.34.0
+[2026-09-02 18:12:23.250] comfy-aimdo version: 0.4.15
+[2026-09-02 18:12:23.251] comfy-kitchen version: 0.2.31
+[2026-09-02 18:12:23.261] comfyui-frontend-package version: 1.51.9
+[2026-09-02 18:12:23.262] comfyui-workflow-templates version: 0.11.50
+[2026-09-02 18:12:23.262] comfyui-embedded-docs version: 0.5.10
+[2026-09-02 18:12:23.262] comfy-kitchen version: 0.2.31
+[2026-09-02 18:12:23.262] comfy-aimdo version: 0.4.15
+[2026-09-02 18:12:23.264] [Prompt Server] web root: C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\comfyui_frontend_package\static
+[2026-09-02 18:12:23.265] Asset seeder disabled
+[2026-09-02 18:12:23.265] [START] ComfyUI-Manager
+[2026-09-02 18:12:23.417] [ComfyUI-Manager] Using GitPython backend
+[2026-09-02 18:12:23.422] ### Loading: ComfyUI-Manager (V4.2.2)
+[2026-09-02 18:12:23.423] [ComfyUI-Manager] network_mode: public
+[2026-09-02 18:12:24.189] ### ComfyUI Version: v0.34.0-16-g406dfc65 | Released on '2026-08-29'
+[2026-09-02 18:12:25.779] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/alter-list.json
+[2026-09-02 18:12:25.804] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/model-list.json
+[2026-09-02 18:12:25.883] [ComfyUI-Manager] Legacy UI is enabled.
+[2026-09-02 18:12:25.911] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/github-stats.json
+[2026-09-02 18:12:25.968] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/extension-node-map.json
+[2026-09-02 18:12:26.041] [ComfyUI-Manager] default cache updated: https://raw.githubusercontent.com/Comfy-Org/ComfyUI-Manager/main/custom-node-list.json
+[2026-09-02 18:12:27.701] No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+[2026-09-02 18:12:28.926] [aistudynow] Loaded module: aistudynow_OutputCleaner
+[2026-09-02 18:12:29.168] Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+[2026-09-02 18:12:29.168] NumExpr defaulting to 16 threads.
+[2026-09-02 18:12:29.672] [aistudynow] Loaded module: aistudynow_QwenVL
+[2026-09-02 18:12:29.690] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF
+[2026-09-02 18:12:29.722] [aistudynow] Loaded module: aistudynow_QwenVL_GGUF_PromptEnhancer
+[2026-09-02 18:12:29.723] [aistudynow] Loaded module: aistudynow_QwenVL_HF
+[2026-09-02 18:12:29.724] [aistudynow] Loaded module: aistudynow_QwenVL_PromptEnhancer
+[2026-09-02 18:12:29.725] [aistudynow] Loaded module: aistudynow_QwenVL_TryOn
+[2026-09-02 18:12:33.132] Web extensions folder found at C:\temp\ComfyUI\ComfyUI\web\extensions\ComfyLiterals
+[2026-09-02 18:12:33.188] Error importing RunningHubInit: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.188] Error importing RunningHubNodeInfo: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.189] Error importing RunningHubWorkflowExecutor: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.189] Error importing RunningHubAccountStatus: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.190] Error importing RunningHubFileSaver: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.190] Error importing RunningHubWorkflowID: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.191] Error importing RunningHubFilePreviewer: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.191] Error importing RunningHubNodeInfoReplace: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.191] Error importing RunningHubImageUploader: No module named 'ComfyUI-Addoor'
+[2026-09-02 18:12:33.194] Imported AddPaddingAdvanced successfully
+[2026-09-02 18:12:33.195] Imported AddPaddingBase successfully
+[2026-09-02 18:12:33.196] Imported AD_ImageResize successfully
+[2026-09-02 18:12:33.198] Imported AD_MockupMaker successfully
+[2026-09-02 18:12:33.199] Imported AD_PosterMaker successfully
+[2026-09-02 18:12:33.200] Imported AD_PromptSaver successfully
+[2026-09-02 18:12:33.201] Imported ComfyUI-FofrToolkit successfully
+[2026-09-02 18:12:33.935] Imported ComfyUI-ImageCaptioner successfully
+[2026-09-02 18:12:33.936] Imported ComfyUI-imageResize successfully
+[2026-09-02 18:12:33.937] Imported ComfyUI-textAppend successfully
+[2026-09-02 18:12:33.938] Imported imagecreatemask successfully
+[2026-09-02 18:12:33.939] Imported multiline_string successfully
+[2026-09-02 18:12:34.065] Adding C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes to sys.path
+[2026-09-02 18:12:34.065] Adding C:\temp\ComfyUI\ComfyUI\custom_nodes to sys.path
+[2026-09-02 18:12:34.175] [36mEfficiency Nodes:[0m Attempting to add Control Net options to the 'HiRes-Fix Script' Node (comfyui_controlnet_aux add-on)...[92mSuccess![0m
+[2026-09-02 18:12:34.175] Loaded Efficiency nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\efficiency-nodes-comfyui
+[2026-09-02 18:12:34.182] Loaded comfyui_controlnet_aux nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
+[2026-09-02 18:12:34.198] Loaded AdvancedControlNet nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
+[2026-09-02 18:12:34.198] module 'ComfyUI-Advanced-ControlNet' has no attribute 'NODE_CLASS_MAPPINGS'
+[2026-09-02 18:12:34.201] Could not find AnimateDiff nodes
+[2026-09-02 18:12:34.209] Loaded IPAdapter nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
+[2026-09-02 18:12:34.219] Could not find VideoHelperSuite nodes
+[2026-09-02 18:12:34.226] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-09-02 18:12:34.433] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-09-02 18:12:34.451] Loaded ImpactPack nodes from C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
+[2026-09-02 18:12:34.459] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-09-02 18:12:34.467] [Impact Pack] Wildcards loading done.
+[2026-09-02 18:12:34.468] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-09-02 18:12:34.468] [Impact Pack] Wildcards loading done.
+[2026-09-02 18:12:34.706] [Crystools [0;32mINFO[0m] Crystools version: 1.27.4
+[2026-09-02 18:12:34.736] [Crystools [0;32mINFO[0m] Platform release: 11
+[2026-09-02 18:12:34.736] [Crystools [0;32mINFO[0m] JETSON: Not detected.
+[2026-09-02 18:12:34.738] [Crystools [0;32mINFO[0m] CPU: Intel(R) Core(TM) Ultra 7 265K - Arch: AMD64 - OS: Windows 11
+[2026-09-02 18:12:34.738] [Crystools [0;32mINFO[0m] pynvml (NVIDIA) initialized.
+[2026-09-02 18:12:34.738] [Crystools [0;32mINFO[0m] GPU/s:
+[2026-09-02 18:12:34.739] [Crystools [0;32mINFO[0m] 0) NVIDIA GeForce RTX 5070 Ti
+[2026-09-02 18:12:34.739] [Crystools [0;32mINFO[0m] NVIDIA Driver: 616.56
+[2026-09-02 18:12:39.294] [ComfyUI-Easy-Use] server: v1.3.7 Loaded
+[2026-09-02 18:12:39.294] [ComfyUI-Easy-Use] web root: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use\web_version/v2 Loaded
+[2026-09-02 18:12:39.839] Traceback (most recent call last):
   File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2263, in load_custom_node
     module_spec.loader.exec_module(module)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
@@ -126,91 +126,91 @@
     from transformers import CLIPFeatureExtractor, CLIPTextModel, CLIPTokenizer
 ImportError: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\transformers\__init__.py)
 
-[2026-08-30 12:38:49.038] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer module for custom nodes: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\transformers\__init__.py)
-[2026-08-30 12:38:49.065] ComfyUI-GGUF: Allowing full torch compile
-[2026-08-30 12:38:49.082] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
-[2026-08-30 12:38:49.095] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
-[2026-08-30 12:38:49.097] [Impact Pack] Wildcards loading done.
-[2026-08-30 12:38:49.101] ### Loading: ComfyUI-Impact-Subpack (V1.3.5)
-[2026-08-30 12:38:49.103] [Impact Pack/Subpack] Using folder_paths to determine whitelist path: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
-[2026-08-30 12:38:49.103] [Impact Pack/Subpack] Ensured whitelist directory exists: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack
-[2026-08-30 12:38:49.103] [Impact Pack/Subpack] Loaded 0 model(s) from whitelist: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
-[2026-08-30 12:38:49.180] [Impact Subpack] ultralytics_bbox: C:\temp\ComfyUI\ComfyUI\models\ultralytics\bbox
-[2026-08-30 12:38:49.180] [Impact Subpack] ultralytics_segm: C:\temp\ComfyUI\ComfyUI\models\ultralytics\segm
-[2026-08-30 12:38:49.193] ### Loading: ComfyUI-Inspire-Pack (V1.23)
-[2026-08-30 12:38:49.912] --------------------- Jake Upgrade Nodes ---------------------
-[2026-08-30 12:38:49.912] 🔶 Version 2.7.5
-[2026-08-30 12:38:49.913] 🔶 Config file loaded successfully
-[2026-08-30 12:38:49.913] 🔶 Using standard version of RandomPrompter
-[2026-08-30 12:38:49.927] 🔶 All main modules loaded
-[2026-08-30 12:38:49.927] 🔶 No deprecated nodes loaded
-[2026-08-30 12:38:49.928] 🔶 Total nodes: 108
-[2026-08-30 12:38:49.928] --------------------------------------------------------------
-[2026-08-30 12:38:49.958] [JoyCaption] ℹ️ No custom models found, skipping user-defined HF models.
-[2026-08-30 12:38:49.959] [JoyCaption GGUF] ℹ️ No custom models found, skipping user-defined GGUF models.
-[2026-08-30 12:38:49.962] ✅ K3NK Image Grab (WanVideoWrapper frame groups): Loaded
-[2026-08-30 12:38:49.962]    - anchor_frame_index: selects a specific frame from the anchor file
-[2026-08-30 12:38:49.962]    - batch_start_frame: starting FRAME GROUP index (0=first group, 1=second group, etc.)
-[2026-08-30 12:38:49.962]    - batch_end_frame: FRAME GROUPS to remove from END (0=none, 1=remove last group, etc.)
-[2026-08-30 12:38:49.963]    - max_batch_frames: maximum number of frames (0=ignored)
-[2026-08-30 12:38:49.963]    - WanVideoWrapper uses groups of 4 frames - parameters work with frame groups
-[2026-08-30 12:38:49.963]    - Example: batch_start_frame=1 skips the first 4 frames
-[2026-08-30 12:38:49.963]    - Example: batch_end_frame=1 removes the last 4 frames
-[2026-08-30 12:38:49.963]    - frame_stride: applies to frames inside .latent files when latent_frame_stride=True
-[2026-08-30 12:38:50.047] [LoRA-Manager] Found LoRA roots:
+[2026-09-02 18:12:39.839] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer module for custom nodes: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\Users\btfal\miniconda3\envs\comfyenv\Lib\site-packages\transformers\__init__.py)
+[2026-09-02 18:12:39.904] ComfyUI-GGUF: Allowing full torch compile
+[2026-09-02 18:12:39.940] ### Loading: ComfyUI-Impact-Pack (V8.28.3)
+[2026-09-02 18:12:39.954] [Impact Pack] Wildcard total size (0.00 MB) is within cache limit (50.00 MB). Using full cache mode.
+[2026-09-02 18:12:39.956] [Impact Pack] Wildcards loading done.
+[2026-09-02 18:12:39.966] ### Loading: ComfyUI-Impact-Subpack (V1.3.5)
+[2026-09-02 18:12:39.969] [Impact Pack/Subpack] Using folder_paths to determine whitelist path: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
+[2026-09-02 18:12:39.970] [Impact Pack/Subpack] Ensured whitelist directory exists: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack
+[2026-09-02 18:12:39.974] [Impact Pack/Subpack] Loaded 0 model(s) from whitelist: C:\temp\ComfyUI\ComfyUI_Custom\user\default\ComfyUI-Impact-Subpack\model-whitelist.txt
+[2026-09-02 18:12:40.143] [Impact Subpack] ultralytics_bbox: C:\temp\ComfyUI\ComfyUI\models\ultralytics\bbox
+[2026-09-02 18:12:40.143] [Impact Subpack] ultralytics_segm: C:\temp\ComfyUI\ComfyUI\models\ultralytics\segm
+[2026-09-02 18:12:40.176] ### Loading: ComfyUI-Inspire-Pack (V1.23)
+[2026-09-02 18:12:40.559] --------------------- Jake Upgrade Nodes ---------------------
+[2026-09-02 18:12:40.565] 🔶 Version 2.7.5
+[2026-09-02 18:12:40.569] 🔶 Config file loaded successfully
+[2026-09-02 18:12:40.570] 🔶 Using standard version of RandomPrompter
+[2026-09-02 18:12:40.594] 🔶 All main modules loaded
+[2026-09-02 18:12:40.595] 🔶 No deprecated nodes loaded
+[2026-09-02 18:12:40.595] 🔶 Total nodes: 108
+[2026-09-02 18:12:40.595] --------------------------------------------------------------
+[2026-09-02 18:12:40.630] [JoyCaption] ℹ️ No custom models found, skipping user-defined HF models.
+[2026-09-02 18:12:40.631] [JoyCaption GGUF] ℹ️ No custom models found, skipping user-defined GGUF models.
+[2026-09-02 18:12:40.640] ✅ K3NK Image Grab (WanVideoWrapper frame groups): Loaded
+[2026-09-02 18:12:40.640]    - anchor_frame_index: selects a specific frame from the anchor file
+[2026-09-02 18:12:40.641]    - batch_start_frame: starting FRAME GROUP index (0=first group, 1=second group, etc.)
+[2026-09-02 18:12:40.641]    - batch_end_frame: FRAME GROUPS to remove from END (0=none, 1=remove last group, etc.)
+[2026-09-02 18:12:40.641]    - max_batch_frames: maximum number of frames (0=ignored)
+[2026-09-02 18:12:40.641]    - WanVideoWrapper uses groups of 4 frames - parameters work with frame groups
+[2026-09-02 18:12:40.641]    - Example: batch_start_frame=1 skips the first 4 frames
+[2026-09-02 18:12:40.641]    - Example: batch_end_frame=1 removes the last 4 frames
+[2026-09-02 18:12:40.641]    - frame_stride: applies to frames inside .latent files when latent_frame_stride=True
+[2026-09-02 18:12:40.814] [LoRA-Manager] Found LoRA roots:
  - C:/temp/ComfyUI/ComfyUI/models/loras
  - C:/temp/ComfyUI/ComfyUI_Custom/models/loras
-[2026-08-30 12:38:50.048] [LoRA-Manager] Found checkpoint roots:
+[2026-09-02 18:12:40.815] [LoRA-Manager] Found checkpoint roots:
  - C:/temp/ComfyUI/ComfyUI/models/checkpoints
  - C:/temp/ComfyUI/ComfyUI/models/diffusion_models
  - C:/temp/ComfyUI/ComfyUI/models/unet
  - C:/temp/ComfyUI/ComfyUI_Custom/models/checkpoints
  - C:/temp/ComfyUI/ComfyUI_Custom/models/diffusion_models
  - C:/temp/ComfyUI/ComfyUI_Custom/models/unet
-[2026-08-30 12:38:50.049] [LoRA-Manager] Found embedding roots:
+[2026-09-02 18:12:40.815] [LoRA-Manager] Found embedding roots:
  - C:/temp/ComfyUI/ComfyUI/models/embeddings
  - C:/temp/ComfyUI/ComfyUI_Custom/models/embeddings
-[2026-08-30 12:38:50.063] [LoRA-Manager] Symlink cache loaded with 0 mappings
-[2026-08-30 12:38:50.063] [LoRA-Manager] Symlink mappings restored from cache in 1.39 ms
-[2026-08-30 12:38:50.069] [LoRA-Manager] Updated 'comfyui' library with current folder paths
-[2026-08-30 12:38:50.229] [LoRA-Manager] Detected async ComfyUI execution, installing async metadata hooks
-[2026-08-30 12:38:50.229] [LoRA-Manager] Metadata collection hooks installed for runtime values
-[2026-08-30 12:38:50.230] [LoRA-Manager] ComfyUI Metadata Collector initialized
-[2026-08-30 12:38:50.230] [LoRA-Manager] Example images path: 
-[2026-08-30 12:38:50.231] [LoRA-Manager] Added static route for locales: /locales -> C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager\locales
-[2026-08-30 12:38:50.292] Blocked by policy: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Manager
-[2026-08-30 12:38:51.288] --------------
-[2026-08-30 12:38:51.288] [91m ### Mixlab Nodes: [93mLoaded
-[2026-08-30 12:38:51.293] json_repair## OK
-[2026-08-30 12:38:51.306] ChatGPT.available True
-[2026-08-30 12:38:51.307] edit_mask.available True
-[2026-08-30 12:38:51.478] ## clip_interrogator_model not found: C:\temp\ComfyUI\ComfyUI\models\clip_interrogator\Salesforce\blip-image-captioning-base, pls download from https://huggingface.co/Salesforce/blip-image-captioning-base
-[2026-08-30 12:38:51.479] ClipInterrogator.available True
-[2026-08-30 12:38:51.480] ## text_generator_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\text2image-prompt-generator, pls download from https://huggingface.co/succinctly/text2image-prompt-generator/tree/main
-[2026-08-30 12:38:51.480] ## zh_en_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\opus-mt-zh-en, pls download from https://huggingface.co/Helsinki-NLP/opus-mt-zh-en/tree/main
-[2026-08-30 12:38:51.481] PromptGenerate.available True
-[2026-08-30 12:38:51.481] ChinesePrompt.available True
-[2026-08-30 12:38:51.481] RembgNode_.available True
-[2026-08-30 12:38:51.636] TripoSR.available
-[2026-08-30 12:38:51.636] MiniCPMNode.available
-[2026-08-30 12:38:51.705] Scenedetect.available False
-[2026-08-30 12:38:51.735] FishSpeech.available
-[2026-08-30 12:38:51.744] SenseVoice.available
-[2026-08-30 12:38:51.771] Whisper.available False
-[2026-08-30 12:38:51.772] fal-client## OK
-[2026-08-30 12:38:51.795] FalVideo.available
-[2026-08-30 12:38:51.795] [93m -------------- [0m
-[2026-08-30 12:38:51.973] ⚡ MNeMiC Nodes: Loaded
-[2026-08-30 12:38:52.032] [SD Prompt Reader] Node version: 1.3.4
-[2026-08-30 12:38:52.033] [SD Prompt Reader] Core version: 1.3.5
-[2026-08-30 12:38:52.041] Failed to auto update `Quality of Life Suit` 
-[2026-08-30 12:38:52.043] QualityOfLifeSuit_Omar92_DIR: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
-[2026-08-30 12:38:52.064] [ComfyUI-QwenVL] v2.3.0 | 7 nodes Loaded
-[2026-08-30 12:38:52.074] 
-[2026-08-30 12:38:52.074] [ReActor] - STATUS - Running v0.7.0-a2 in ComfyUI
-[2026-08-30 12:38:52.201] Torch version: 2.12.1+cu130
-[2026-08-30 12:38:52.408] [ComfyUI-RMBG] v3.1.0 | 43 nodes Loaded
-[2026-08-30 12:38:52.421] Traceback (most recent call last):
+[2026-09-02 18:12:40.836] [LoRA-Manager] Symlink cache loaded with 0 mappings
+[2026-09-02 18:12:40.836] [LoRA-Manager] Symlink mappings restored from cache in 4.98 ms
+[2026-09-02 18:12:40.842] [LoRA-Manager] Updated 'comfyui' library with current folder paths
+[2026-09-02 18:12:41.519] [LoRA-Manager] Detected async ComfyUI execution, installing async metadata hooks
+[2026-09-02 18:12:41.519] [LoRA-Manager] Metadata collection hooks installed for runtime values
+[2026-09-02 18:12:41.519] [LoRA-Manager] ComfyUI Metadata Collector initialized
+[2026-09-02 18:12:41.520] [LoRA-Manager] Example images path: 
+[2026-09-02 18:12:41.520] [LoRA-Manager] Added static route for locales: /locales -> C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager\locales
+[2026-09-02 18:12:41.615] Blocked by policy: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Manager
+[2026-09-02 18:12:42.706] --------------
+[2026-09-02 18:12:42.706] [91m ### Mixlab Nodes: [93mLoaded
+[2026-09-02 18:12:42.713] json_repair## OK
+[2026-09-02 18:12:42.732] ChatGPT.available True
+[2026-09-02 18:12:42.733] edit_mask.available True
+[2026-09-02 18:12:42.930] ## clip_interrogator_model not found: C:\temp\ComfyUI\ComfyUI\models\clip_interrogator\Salesforce\blip-image-captioning-base, pls download from https://huggingface.co/Salesforce/blip-image-captioning-base
+[2026-09-02 18:12:42.930] ClipInterrogator.available True
+[2026-09-02 18:12:42.932] ## text_generator_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\text2image-prompt-generator, pls download from https://huggingface.co/succinctly/text2image-prompt-generator/tree/main
+[2026-09-02 18:12:42.932] ## zh_en_model not found: C:\temp\ComfyUI\ComfyUI\models\prompt_generator\opus-mt-zh-en, pls download from https://huggingface.co/Helsinki-NLP/opus-mt-zh-en/tree/main
+[2026-09-02 18:12:42.932] PromptGenerate.available True
+[2026-09-02 18:12:42.932] ChinesePrompt.available True
+[2026-09-02 18:12:42.932] RembgNode_.available True
+[2026-09-02 18:12:43.150] TripoSR.available
+[2026-09-02 18:12:43.151] MiniCPMNode.available
+[2026-09-02 18:12:43.621] Scenedetect.available False
+[2026-09-02 18:12:43.670] FishSpeech.available
+[2026-09-02 18:12:43.683] SenseVoice.available
+[2026-09-02 18:12:43.723] Whisper.available False
+[2026-09-02 18:12:43.725] fal-client## OK
+[2026-09-02 18:12:43.753] FalVideo.available
+[2026-09-02 18:12:43.753] [93m -------------- [0m
+[2026-09-02 18:12:44.200] ⚡ MNeMiC Nodes: Loaded
+[2026-09-02 18:12:44.335] [SD Prompt Reader] Node version: 1.3.4
+[2026-09-02 18:12:44.335] [SD Prompt Reader] Core version: 1.3.5
+[2026-09-02 18:12:44.353] Failed to auto update `Quality of Life Suit` 
+[2026-09-02 18:12:44.355] QualityOfLifeSuit_Omar92_DIR: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
+[2026-09-02 18:12:44.406] [ComfyUI-QwenVL] v2.3.0 | 7 nodes Loaded
+[2026-09-02 18:12:44.432] 
+[2026-09-02 18:12:44.432] [ReActor] - STATUS - Running v0.7.0-a2 in ComfyUI
+[2026-09-02 18:12:44.621] Torch version: 2.12.1+cu130
+[2026-09-02 18:12:44.933] [ComfyUI-RMBG] v3.1.0 | 43 nodes Loaded
+[2026-09-02 18:12:44.990] Traceback (most recent call last):
   File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2263, in load_custom_node
     module_spec.loader.exec_module(module)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
@@ -233,26 +233,26 @@ ImportError: cannot import name 'CLIPFeatureExtractor' from 'transformers' (C:\U
            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ModuleNotFoundError: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData'
 
-[2026-08-30 12:38:52.421] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata module for custom nodes: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData'
-[2026-08-30 12:38:52.444] ⚡ SeedVR2 optimizations check: SageAttention ✅ | Flash Attention ❌ | Triton ✅
-[2026-08-30 12:38:52.445] 💡 Optional: pip install flash-attn
-[2026-08-30 12:38:52.445] 🔧 Conv3d workaround active: PyTorch 2.12.1, cuDNN 92000 (fixing VAE 3x memory bug)
-[2026-08-30 12:38:52.566] 📊 Initial CUDA memory: 14.60GB free / 15.89GB total
-[2026-08-30 12:38:53.301] (pysssss:WD14Tagger) [DEBUG] Available ORT providers: TensorrtExecutionProvider, CUDAExecutionProvider, CPUExecutionProvider
-[2026-08-30 12:38:53.301] (pysssss:WD14Tagger) [DEBUG] Using ORT providers: CUDAExecutionProvider, CPUExecutionProvider
-[2026-08-30 12:38:53.327] ------------------------------------------
-[2026-08-30 12:38:53.327] Comfyroll Studio v1.76 :  175 Nodes Loaded
-[2026-08-30 12:38:53.327] ------------------------------------------
-[2026-08-30 12:38:53.327] ** For changes, please see patch notes at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/blob/main/Patch_Notes.md
-[2026-08-30 12:38:53.327] ** For help, please see the wiki at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/wiki
-[2026-08-30 12:38:53.328] ------------------------------------------
-[2026-08-30 12:38:53.336] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ckpts path: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux\ckpts
-[2026-08-30 12:38:53.337] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using symlinks: False
-[2026-08-30 12:38:53.337] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'MIGraphXExecutionProvider', 'CPUExecutionProvider']
-[2026-08-30 12:38:53.381] Fearnworks Custom Nodes: Loading...
-[2026-08-30 12:38:53.381]  FEARNWORKS CUSTOM NODES: All nodes loaded successfully
-[2026-08-30 12:38:54.615] LOADED 6 FONTS
-[2026-08-30 12:38:54.838] 
+[2026-09-02 18:12:44.990] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata module for custom nodes: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData'
+[2026-09-02 18:12:45.113] ⚡ SeedVR2 optimizations check: SageAttention ✅ | Flash Attention ❌ | Triton ✅
+[2026-09-02 18:12:45.113] 💡 Optional: pip install flash-attn
+[2026-09-02 18:12:45.113] 🔧 Conv3d workaround active: PyTorch 2.12.1, cuDNN 92000 (fixing VAE 3x memory bug)
+[2026-09-02 18:12:45.246] 📊 Initial CUDA memory: 14.60GB free / 15.89GB total
+[2026-09-02 18:12:46.156] (pysssss:WD14Tagger) [DEBUG] Available ORT providers: TensorrtExecutionProvider, CUDAExecutionProvider, CPUExecutionProvider
+[2026-09-02 18:12:46.156] (pysssss:WD14Tagger) [DEBUG] Using ORT providers: CUDAExecutionProvider, CPUExecutionProvider
+[2026-09-02 18:12:46.224] ------------------------------------------
+[2026-09-02 18:12:46.225] Comfyroll Studio v1.76 :  175 Nodes Loaded
+[2026-09-02 18:12:46.225] ------------------------------------------
+[2026-09-02 18:12:46.225] ** For changes, please see patch notes at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/blob/main/Patch_Notes.md
+[2026-09-02 18:12:46.225] ** For help, please see the wiki at https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes/wiki
+[2026-09-02 18:12:46.225] ------------------------------------------
+[2026-09-02 18:12:46.251] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ckpts path: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux\ckpts
+[2026-09-02 18:12:46.252] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using symlinks: False
+[2026-09-02 18:12:46.253] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux] | INFO -> Using ort providers: ['CUDAExecutionProvider', 'DirectMLExecutionProvider', 'OpenVINOExecutionProvider', 'ROCMExecutionProvider', 'MIGraphXExecutionProvider', 'CPUExecutionProvider']
+[2026-09-02 18:12:46.307] Fearnworks Custom Nodes: Loading...
+[2026-09-02 18:12:46.308]  FEARNWORKS CUSTOM NODES: All nodes loaded successfully
+[2026-09-02 18:12:47.731] LOADED 6 FONTS
+[2026-09-02 18:12:48.034] 
 
 ███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗
 ████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝
@@ -268,24 +268,24 @@ ModuleNotFoundError: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData
 ██████╔╝███████╗███████╗╚██████╔╝███████║██║╚██████╔╝██║ ╚████║███████║
 ╚═════╝ ╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-[2026-08-30 12:38:54.838] 
-[2026-08-30 12:38:54.848] FizzleDorf Custom Nodes: Loaded
-[2026-08-30 12:38:55.010] [tinyterraNodes] Loaded
-[2026-08-30 12:38:55.092] USDU batch patches applied successfully.
-[2026-08-30 12:38:55.092] USDU batch patches applied successfully.
-[2026-08-30 12:38:55.146] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> loaded 111 nodes successfuly
-[2026-08-30 12:38:55.148] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Some nodes (2) could not be loaded. This can be ignored, but go to http://127.0.0.1:8188/mtb if you want more information.
-[2026-08-30 12:38:55.173] 
-[2026-08-30 12:38:55.173] Initializing ControlAltAI Nodes
-[2026-08-30 12:38:55.191] [CRT Post Process][INFO] Loading module
-[2026-08-30 12:38:55.369] [crt-pll] presets + automix routes registered
-[2026-08-30 12:38:55.392] Efficiency Nodes: Attempting to add Control Net options to the 'HiRes-Fix Script' Node (comfyui_controlnet_aux add-on)...Success!
-[2026-08-30 12:38:55.396] [IAMCCS] FFmpeg auto-expose skipped: [WinError 3] The system cannot find the path specified: 'D:\\'
-[2026-08-30 12:38:55.398] IAMCCS compat: enabled local Qwen Multi-Gen seed widget patch
-[2026-08-30 12:38:55.398] IAMCCS compat: LoadedModel.model_mmap_residency is not present; skipping mmap residency monkeypatch for newer ComfyUI core
-[2026-08-30 12:38:55.425] [IAMCCS_V2V_AUDIO_DEBUG] AudioVAE.encode_guard installed
-[2026-08-30 12:38:55.447] [IAMCCS] IAMCCS_QWEN_VL_FLF / Cine Board Analyzer nodes loaded OK
-[2026-08-30 12:38:55.474] 
+[2026-09-02 18:12:48.034] 
+[2026-09-02 18:12:48.053] FizzleDorf Custom Nodes: Loaded
+[2026-09-02 18:12:48.320] [tinyterraNodes] Loaded
+[2026-09-02 18:12:48.440] USDU batch patches applied successfully.
+[2026-09-02 18:12:48.441] USDU batch patches applied successfully.
+[2026-09-02 18:12:48.797] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> loaded 111 nodes successfuly
+[2026-09-02 18:12:48.799] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Some nodes (2) could not be loaded. This can be ignored, but go to http://127.0.0.1:8188/mtb if you want more information.
+[2026-09-02 18:12:48.859] 
+[2026-09-02 18:12:48.859] Initializing ControlAltAI Nodes
+[2026-09-02 18:12:48.907] [CRT Post Process][INFO] Loading module
+[2026-09-02 18:12:49.153] [crt-pll] presets + automix routes registered
+[2026-09-02 18:12:49.193] Efficiency Nodes: Attempting to add Control Net options to the 'HiRes-Fix Script' Node (comfyui_controlnet_aux add-on)...Success!
+[2026-09-02 18:12:49.204] [IAMCCS] FFmpeg auto-expose skipped: [WinError 3] The system cannot find the path specified: 'D:\\'
+[2026-09-02 18:12:49.206] IAMCCS compat: enabled local Qwen Multi-Gen seed widget patch
+[2026-09-02 18:12:49.207] IAMCCS compat: LoadedModel.model_mmap_residency is not present; skipping mmap residency monkeypatch for newer ComfyUI core
+[2026-09-02 18:12:49.254] [IAMCCS_V2V_AUDIO_DEBUG] AudioVAE.encode_guard installed
+[2026-09-02 18:12:49.283] [IAMCCS] IAMCCS_QWEN_VL_FLF / Cine Board Analyzer nodes loaded OK
+[2026-09-02 18:12:49.322] 
   ___    _    __  __  ____ ____  ____   ____            _           
  |_ _|  / \  |  \/  |/ ___/ ___|/ ___| |  _ \ ___   ___| | _____    
   | |  / _ \ | |\/| | |  | |    \___ \ | |_) / _ \ / __| |/ / __|   
@@ -293,69 +293,69 @@ ModuleNotFoundError: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData
  |___/_/   \_\_|  |_|\____\____||____/ |_|   \___/ \___|_|\_\___/   
 
 
-[2026-08-30 12:38:55.474] by IAMCCS (follow me on patreon.com/IAMCCS or carminecristalloscalzi.com)
-[2026-08-30 12:38:55.474] IAMCCS nodes loaded: 384
-[2026-08-30 12:38:55.475] - IAMCCS-SuperNodes AU+IMG2VID Exec Finalize, IAMCCS-SuperNodes AU+IMG2VID Exec Planner, IAMCCS-SuperNodes AU+IMG2VID Exec Render, IAMCCS-SuperNodes AU+IMG2VID Exec VAE, IAMCCS-SuperNodes Second Stage, IAMCCS_AUIMG2VID_AudioTimeline, IAMCCS_AUIMG2VID_Continuity, IAMCCS_AUIMG2VID_DiskExtension, IAMCCS_AUIMG2VID_Finalize, IAMCCS_AUIMG2VID_KeyframeTimeline
-[2026-08-30 12:38:55.475] - IAMCCS_AUIMG2VID_Planner, IAMCCS_AUIMG2VID_ProjectTimelinePlanner, IAMCCS_AUIMG2VID_ReanchorLatent, IAMCCS_AUIMG2VID_RefreshPolicy, IAMCCS_AUIMG2VID_RuntimeBridge, IAMCCS_ApplyLoRAHooksToConditioning, IAMCCS_ApplyScheduledWanLoRAFromConditioning, IAMCCS_AudioBoardArranger, IAMCCS_AudioBoardDirectShotboardAdapter, IAMCCS_AudioBoardMixer
-[2026-08-30 12:38:55.475] - IAMCCS_AudioExtender, IAMCCS_AudioExtensionMath, IAMCCS_AudioNormalizeForLTX, IAMCCS_AudioPhaseLazyGate, IAMCCS_AudioSegmentAutoPlanner, IAMCCS_AudioTimelineAssembler, IAMCCS_AudioTimelineGate, IAMCCS_AutoLinkArguments, IAMCCS_AutoLinkConverter, IAMCCS_BoardMaker
-[2026-08-30 12:38:55.475] - IAMCCS_BoardMaker_DialogueFoley, IAMCCS_BuildScheduledWanModelBank, IAMCCS_BusOut, IAMCCS_CineAllInOneFLFEngine, IAMCCS_CineAudioDurationProbe, IAMCCS_CineAudioInfo, IAMCCS_CineAudioPromptDirector, IAMCCS_CineAudioTranscriptPromptCompiler, IAMCCS_CineBoardDurationLock, IAMCCS_CineDialogueDurationPlanner
-[2026-08-30 12:38:55.475] - IAMCCS_CineDialogueLineRouter, IAMCCS_CineDialoguePromptKit, IAMCCS_CineDialogueTimingReconciler, IAMCCS_CineDirectorGuideB, IAMCCS_CineEmotionButtons, IAMCCS_CineFLFEngineSimple, IAMCCS_CineFLFEngineSimpleDyno, IAMCCS_CineFLFLengthCompensator, IAMCCS_CineFLFProductor, IAMCCS_CineFLFProductorDyno
-[2026-08-30 12:38:55.475] - IAMCCS_CineFilmmaker, IAMCCS_CineFilmmakerBackend, IAMCCS_CineFilmmakerCropGuides1to1, IAMCCS_CineFilmmakerGuide, IAMCCS_CineFilmmakerGuide1to1, IAMCCS_CineFinalAudioMixer, IAMCCS_CineH3AudioBus, IAMCCS_CineH3VisionInfo, IAMCCS_CineInfo, IAMCCS_CineInfo3
-[2026-08-30 12:38:55.475] - IAMCCS_CineInfoH3, IAMCCS_CineInfoH3V2V, IAMCCS_CineInfoV2, IAMCCS_CineInfoV2V, IAMCCS_CineInfoV2VBackendRouter, IAMCCS_CineInfoV2VPoseTransfer, IAMCCS_CineInfoV2VScail, IAMCCS_CineInfoV2VWanAnimate, IAMCCS_CineLTXSequencer, IAMCCS_CineLTXSequencerExact
-[2026-08-30 12:38:55.475] - IAMCCS_CineLatentDurationCrop, IAMCCS_CineLineStacker, IAMCCS_CineMotionSketch, IAMCCS_CineMultiGenDirector, IAMCCS_CineMusicVideoPlanner, IAMCCS_CinePPAntiAlias, IAMCCS_CinePromptArchitect, IAMCCS_CinePromptComposer, IAMCCS_CinePromptRelayAdapter, IAMCCS_CinePromptRelayLatentShapeSync
-[2026-08-30 12:38:55.475] - IAMCCS_CinePromptRelaySafeEncode, IAMCCS_CinePromptRelayTimeline, IAMCCS_CineRefLatentControl, IAMCCS_CineReferenceBoard, IAMCCS_CineRelayOrBypass, IAMCCS_CineResolutionParityTranslator, IAMCCS_CineShotAudioDirector, IAMCCS_CineShotLineBuilder, IAMCCS_CineShotPlanner, IAMCCS_CineShotboardBackendPro
-[2026-08-30 12:38:55.475] - IAMCCS_CineShotboardFinalFrameTrim, IAMCCS_CineShotboardLite, IAMCCS_CineShotboardPlannerPro, IAMCCS_CineShotboardPlannerProLegacy, IAMCCS_CineShotboardPlannerProV2, IAMCCS_CineShotboardPlannerV3, IAMCCS_CineShotboardPlannerV4, IAMCCS_CineShotboardPlannerV5V2V, IAMCCS_CineShotboardTailTrimPolicy, IAMCCS_CineShotboardTimelinePro
-[2026-08-30 12:38:55.475] - IAMCCS_CineShotboardV4Backend, IAMCCS_CineShotboardV4CropGuides, IAMCCS_CineShotboardV4Guide, IAMCCS_CineShotboardV4RetakePromptEncodeR2, IAMCCS_CineShotboardV4RetakeSourceR2, IAMCCS_CineShotboardV5V2VRouter, IAMCCS_CineSpeech1PromptCompiler, IAMCCS_CineSpeechLength, IAMCCS_CineStage2BypassSwitch, IAMCCS_CineStage2PreviewToggle
-[2026-08-30 12:38:55.476] - IAMCCS_CineSwitch, IAMCCS_CineTemporalCutBarrier, IAMCCS_CineTimelineAudioMixer, IAMCCS_CineUTAntiAlias, IAMCCS_CineV2VAssetSelector, IAMCCS_CineV2VTimelineDirector, IAMCCS_CineV2VTimelineLineBuilder, IAMCCS_CineVideoToWooshInputs, IAMCCS_CineWooshFoleyChunkPlanner, IAMCCS_CineWorkflowInspector
-[2026-08-30 12:38:55.476] - IAMCCS_ControlAudEfx, IAMCCS_ControlAudEfxPanel, IAMCCS_DetailAtelier, IAMCCS_DetailAtelierAdvanced, IAMCCS_DetailAtelierSampler, IAMCCS_DialogueAudioBoardBridge, IAMCCS_DialogueTagEditor, IAMCCS_FlashVSRPanelBatchPrep, IAMCCS_FlashVSRPanelBatchRestore, IAMCCS_FluxKleinMultiGen
-[2026-08-30 12:38:55.476] - IAMCCS_FluxKleinRefine, IAMCCS_GGUF_accelerator, IAMCCS_GemmaAssistLazyGate, IAMCCS_GemmaAssistOutput, IAMCCS_GetAutoLink, IAMCCS_GoyAICanvasPaint, IAMCCS_HWProbeRecommendations, IAMCCS_HardMemoryPurge, IAMCCS_HwSupporter, IAMCCS_HwSupporterAny
-[2026-08-30 12:38:55.476] - IAMCCS_IdeoImageHashDebug, IAMCCS_IdeoInfo, IAMCCS_IdeoInpaintPrep, IAMCCS_IdeoMaskedPixels, IAMCCS_IdeoNoiseDebug, IAMCCS_IdeoRandomNoiseNoCache, IAMCCS_IdeoTranslate, IAMCCS_IdeogramJSONPreviewPass, IAMCCS_IdeogramSheetBuilder, IAMCCS_IdeogramStoryboardSheet
-[2026-08-30 12:38:55.476] - IAMCCS_ImageBatch6, IAMCCS_ImageBatchRangeLite, IAMCCS_ImageResizeBatchSafe, IAMCCS_InfluencerLatent, IAMCCS_InfluencerSampler, IAMCCS_IntValueMonitor, IAMCCS_Krea2MultiGen, IAMCCS_LTX2_BlendLatentBridge, IAMCCS_LTX2_ConditionNextLatentWithPrevOverlap, IAMCCS_LTX2_ContextLatent
-[2026-08-30 12:38:55.476] - IAMCCS_LTX2_ControlPreprocess, IAMCCS_LTX2_EnsureFrames8nPlus1, IAMCCS_LTX2_EnsureMinFrames, IAMCCS_LTX2_ExtendSampler, IAMCCS_LTX2_ExtensionModule, IAMCCS_LTX2_ExtensionModule_Disk, IAMCCS_LTX2_ExtensionModule_simple, IAMCCS_LTX2_FirstLastFramesController, IAMCCS_LTX2_FirstLastLatentControl, IAMCCS_LTX2_FirstLastLatentControl_Pro
-[2026-08-30 12:38:55.476] - IAMCCS_LTX2_FrameCountValidator, IAMCCS_LTX2_FrameRateSync, IAMCCS_LTX2_GetImageFromBatch, IAMCCS_LTX2_ImageBatchCropByPad, IAMCCS_LTX2_ImageBatchPadReflect, IAMCCS_LTX2_InitLatentSampler, IAMCCS_LTX2_JointRefreshLatent, IAMCCS_LTX2_JointRefreshLatent_Disk, IAMCCS_LTX2_LastFrameBridgeLoad, IAMCCS_LTX2_LastFrameBridgeSave
-[2026-08-30 12:38:55.476] - IAMCCS_LTX2_LoRAStack, IAMCCS_LTX2_LoRAStackModelIO, IAMCCS_LTX2_LoRAStackSegmented6, IAMCCS_LTX2_LoRAStackStaged, IAMCCS_LTX2_LoadLatentBridge, IAMCCS_LTX2_LongVideoWrapperPrep, IAMCCS_LTX2_LongVideoWrapperPrepDisk, IAMCCS_LTX2_LoopingSampler, IAMCCS_LTX2_MiddleFrames, IAMCCS_LTX2_ModelWithLoRA_Segmented6
-[2026-08-30 12:38:55.476] - IAMCCS_LTX2_OneShotLowRAMLooper, IAMCCS_LTX2_ReferenceImageSwitch, IAMCCS_LTX2_ReferenceStartFramesInjector, IAMCCS_LTX2_SaveLatentBridge, IAMCCS_LTX2_SegmentQueueLoop, IAMCCS_LTX2_TimeFrameCount, IAMCCS_LTX2_Validator, IAMCCS_LTXReleaseVRAMBeforeSampler, IAMCCS_LTXVideoDurationCrop, IAMCCS_LatentTailSlice
-[2026-08-30 12:38:55.476] - IAMCCS_LazyAnySwitch, IAMCCS_LoadImagesFromDirLite, IAMCCS_LoadResizeSegmentFromDir, IAMCCS_Ltx2HelperModules_AudioTimeline, IAMCCS_Ltx2HelperModules_Continuity, IAMCCS_Ltx2HelperModules_DiskExtension, IAMCCS_Ltx2HelperModules_Finalize, IAMCCS_Ltx2HelperModules_KeyframeTimeline, IAMCCS_Ltx2HelperModules_Planner, IAMCCS_Ltx2HelperModules_ProjectTimelinePlanner
-[2026-08-30 12:38:55.476] - IAMCCS_Ltx2HelperModules_ReanchorLatent, IAMCCS_Ltx2HelperModules_RefreshPolicy, IAMCCS_Ltx2HelperModules_RuntimeBridge, IAMCCS_MiniMaxH3AtomicAudioDrive, IAMCCS_MiniMaxH3AtomicConditioningBackend, IAMCCS_MiniMaxH3AtomicModelRouter, IAMCCS_MiniMaxH3AudioConcat, IAMCCS_MiniMaxH3AudioOutputPolicyR21, IAMCCS_MiniMaxH3AudioPolicy, IAMCCS_MiniMaxH3AudioTimelineMixR21
-[2026-08-30 12:38:55.477] - IAMCCS_MiniMaxH3Backend, IAMCCS_MiniMaxH3BridgeLoad, IAMCCS_MiniMaxH3DeliveryRouterV2, IAMCCS_MiniMaxH3DirectorFLFParityConditioning, IAMCCS_MiniMaxH3DirectorFLFParityModelRouter, IAMCCS_MiniMaxH3EditorFinalGate, IAMCCS_MiniMaxH3EditorTakeRoute, IAMCCS_MiniMaxH3ExactDeliveryDurationR21, IAMCCS_MiniMaxH3FaceDetailerRouter, IAMCCS_MiniMaxH3FaceMaskSAM
-[2026-08-30 12:38:55.477] - IAMCCS_MiniMaxH3FaceStitch, IAMCCS_MiniMaxH3FaceTrackCrop, IAMCCS_MiniMaxH3FaceTransformInfo, IAMCCS_MiniMaxH3FinalMasterSave, IAMCCS_MiniMaxH3GGUFLoader, IAMCCS_MiniMaxH3GenerationBackendV2, IAMCCS_MiniMaxH3InjectVideoLatent, IAMCCS_MiniMaxH3LTXConditioningStageV3, IAMCCS_MiniMaxH3LTXDenoiseStackLoaderV3, IAMCCS_MiniMaxH3LumosPrompt
-[2026-08-30 12:38:55.477] - IAMCCS_MiniMaxH3MotionContext, IAMCCS_MiniMaxH3NativeCheckpointSave, IAMCCS_MiniMaxH3NativeMasterLoad, IAMCCS_MiniMaxH3OptionalLTXDetailerLoRA, IAMCCS_MiniMaxH3PerFrameDenoise, IAMCCS_MiniMaxH3PlanFrames, IAMCCS_MiniMaxH3PostUpscaleControlV2, IAMCCS_MiniMaxH3PromptRelayMap, IAMCCS_MiniMaxH3RTX4KPost, IAMCCS_MiniMaxH3RenderBackend
-[2026-08-30 12:38:55.477] - IAMCCS_MiniMaxH3SegmentQueueLoop, IAMCCS_MiniMaxH3SequentialLTXLoaderV2, IAMCCS_MiniMaxH3ShotPlanner, IAMCCS_MiniMaxH3UpscaleRouter, IAMCCS_MiniMaxH3V2VConditioningR22, IAMCCS_MiniMaxH3V2VExactDeliveryR22, IAMCCS_ModelWithLoRA, IAMCCS_ModelWithLoRA_LTX2, IAMCCS_ModelWithLoRA_LTX2_Staged, IAMCCS_ModelWithLoRA_RuntimeBridge
-[2026-08-30 12:38:55.477] - IAMCCS_MotionBridgeLoad, IAMCCS_MotionBridgeSave, IAMCCS_MotionGuideBridge, IAMCCS_MotionPartsICLoRAApply, IAMCCS_MotionScale, IAMCCS_MotionScaleAdvanced, IAMCCS_MotionSketchRenderer, IAMCCS_MoveAhead, IAMCCS_MoveAheadEnforcer, IAMCCS_MultiSwitch
-[2026-08-30 12:38:55.477] - IAMCCS_MultiTimelineBridge, IAMCCS_MultiTimelineTakePicker, IAMCCS_MultilinePromptSplitter8, IAMCCS_Navigator, IAMCCS_ProjectTimelinePlanner, IAMCCS_Prompter, IAMCCS_QWEN_VL_FLF, IAMCCS_QWEN_VL_FLF_Advanced, IAMCCS_QwenMultiGen, IAMCCS_SamplerAdvancedVersion1
-[2026-08-30 12:38:55.477] - IAMCCS_ScailExtendPlan, IAMCCS_ScailExtends, IAMCCS_ScailIdentitySeeder, IAMCCS_ScailIdentityTracker, IAMCCS_ScailMultiReference, IAMCCS_SegmentPlanFromPlanner, IAMCCS_SegmentPlanner, IAMCCS_SegmentPlannerFramesLinked, IAMCCS_SegmentPlannerLinked, IAMCCS_SegmentPlannerSettings
-[2026-08-30 12:38:55.477] - IAMCCS_SegmentSwitch, IAMCCS_SelectScheduledWanModelFromConditioning, IAMCCS_SelectScheduledWanModelPairFromConditioning, IAMCCS_SetAutoLink, IAMCCS_ShotboardH3Settings, IAMCCS_ShotboardPlannerV2V, IAMCCS_ShotboardV4MultigenAdapter, IAMCCS_ShotboardVideoEditorRenderV1, IAMCCS_ShotboardVideoEditorV1, IAMCCS_SourceFramesToDisk
-[2026-08-30 12:38:55.477] - IAMCCS_SourceRangeFromSegmentPlan, IAMCCS_StartDirToVideoLatent, IAMCCS_StartImagesToVideoLatent, IAMCCS_StoryboardAutoCropGrid, IAMCCS_StoryboardAutoCropGridPRO, IAMCCS_StoryboardCaptionSheet, IAMCCS_StoryboardFrameDesigner, IAMCCS_StoryboardFrameDesignerV2, IAMCCS_StoryboardPromptContactSheet, IAMCCS_SupernodeBase
-[2026-08-30 12:38:55.477] - IAMCCS_SupernodeModule, IAMCCS_TakePackage, IAMCCS_TakeRouter, IAMCCS_TargetCrop, IAMCCS_ThreeSegmentPlanner, IAMCCS_TwoSegmentPlanner, IAMCCS_V2VActiveBackendSwitch, IAMCCS_V2VBusToLTX, IAMCCS_V2VBusToPoseTransfer, IAMCCS_V2VBusToScail
-[2026-08-30 12:38:55.477] - IAMCCS_V2VBusToWanAnimate, IAMCCS_V2VShotboardEasyWanAnimate2, IAMCCS_V2VShotboardFreeScail, IAMCCS_V2VStageSwitch, IAMCCS_VAEDecodeTiledSafe, IAMCCS_VAEDecodeToDisk, IAMCCS_VRAMCleanup, IAMCCS_VRAMFlushLatent, IAMCCS_VideoColorCorrectionControl, IAMCCS_VideoCombineFromDir
-[2026-08-30 12:38:55.477] - IAMCCS_VideoHardConcat, IAMCCS_WDC_LTXKeyframer, IAMCCS_WDC_LTXSequencer, IAMCCS_WDC_LTXSequencerFixed5, IAMCCS_WDC_MultiImageLoader, IAMCCS_WanAnimate2ExtendPlan, IAMCCS_WanAnimate2Extends, IAMCCS_WanAnimate2ShotboardBridge, IAMCCS_WanAnimateExtendPlan, IAMCCS_WanAnimateExtends
-[2026-08-30 12:38:55.477] - IAMCCS_WanChunkGatePure, IAMCCS_WanCineInfoPure, IAMCCS_WanContinuityGuide, IAMCCS_WanFLFPairFromTimeline, IAMCCS_WanImageBatchFrameSelect, IAMCCS_WanImageMotion, IAMCCS_WanImageMotionInductive, IAMCCS_WanImageMotionPro, IAMCCS_WanImageMotionProLegacy, IAMCCS_WanImageMotionProPlus
-[2026-08-30 12:38:55.477] - IAMCCS_WanImageMotionProPlus_Simple, IAMCCS_WanImageMotionPro_AdaIN, IAMCCS_WanImageMotion_AdaIN, IAMCCS_WanIndexedPromptEncode, IAMCCS_WanLoRAHookSchedule, IAMCCS_WanLoRARuntimeBridge, IAMCCS_WanLoRASchedule, IAMCCS_WanLoRAStack, IAMCCS_WanLoRAStackModelIO, IAMCCS_WanLoadImageFromBoard
-[2026-08-30 12:38:55.478] - IAMCCS_WanLoadImageFromPath, IAMCCS_WanLongPlanner, IAMCCS_WanPrevTailPrep, IAMCCS_WanPromptLoopInfo, IAMCCS_WanPromptPhasePlanner, IAMCCS_WanRelayOrBypassPure, IAMCCS_WanSVIToFLFBridgeProPlus, IAMCCS_WanSVIToFLFBridgeProPlus_Simple, IAMCCS_WanShotboardLoopAccumulator, IAMCCS_WanShotboardLoopAccumulatorLinear
-[2026-08-30 12:38:55.478] - IAMCCS_WanShotboardLoopChunkSelect, IAMCCS_WanShotboardLoopInfo, IAMCCS_WanShotboardLoopState, IAMCCS_WanShotboardPlannerPure, IAMCCS_WanShotboardPrevSamplesLoopSelect, IAMCCS_WanSviFlfTimeline, IAMCCS_WanSviFlfTimelinePick, IAMCCS_bus_group, IAMCCS_shotboarder_aud+vid_exporter_PRO, WanImageMotionPro
-[2026-08-30 12:38:55.478] - WanImageMotionProLegacy, WanImageMotionProPlus, WanMotionProTrimmer, iamccs_ltx2_lora_stack
-[2026-08-30 12:38:56.155] 2026-08-30 12:38:56.152 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
-[2026-08-30 12:38:56.156] 2026-08-30 12:38:56.152 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
-[2026-08-30 12:38:56.156] 2026-08-30 12:38:56.152 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
-[2026-08-30 12:38:56.157] 2026-08-30 12:38:56.156 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.157] 2026-08-30 12:38:56.156 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.157] 2026-08-30 12:38:56.156 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.158] 2026-08-30 12:38:56.158 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.158] 2026-08-30 12:38:56.158 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.159] 2026-08-30 12:38:56.158 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
-[2026-08-30 12:38:56.265] Using pytorch attention
-[2026-08-30 12:38:56.271] (RES4LYF) Init
-[2026-08-30 12:38:56.272] (RES4LYF) Importing beta samplers.
-[2026-08-30 12:38:56.289] (RES4LYF) Importing legacy samplers.
-[2026-08-30 12:38:56.318] 
-[2026-08-30 12:38:56.318] [rgthree-comfy] Loaded 48 fantastic nodes. 🎉
-[2026-08-30 12:38:56.318] 
-[2026-08-30 12:38:56.318] [rgthree-comfy] ComfyUI's new Node 2.0 rendering may be incompatible with some rgthree-comfy nodes and features, breaking some rendering as well as losing the ability to access a node's properties (a vital part of many nodes). It also appears to run MUCH more slowly spiking CPU usage and causing jankiness and unresponsiveness, especially with large workflows. Personally I am not planning to use the new Nodes 2.0 and, unfortunately, am not able to invest the time to investigate and overhaul rgthree-comfy where needed. If you have issues when Nodes 2.0 is enabled, I'd urge you to switch it off as well and join me in hoping ComfyUI is not planning to deprecate the existing, stable canvas rendering all together.
-[2026-08-30 12:38:56.318] 
-[2026-08-30 12:38:56.321] [💾 save_image_extended] AVIF   is supported! Woohoo!
-[2026-08-30 12:38:56.321] [💾 save_image_extended] JPEGXL is supported! YeePee!
-[2026-08-30 12:38:56.322] [💾 save_image_extended] version: 2.88
-[2026-08-30 12:38:56.361] Traceback (most recent call last):
+[2026-09-02 18:12:49.323] by IAMCCS (follow me on patreon.com/IAMCCS or carminecristalloscalzi.com)
+[2026-09-02 18:12:49.323] IAMCCS nodes loaded: 384
+[2026-09-02 18:12:49.323] - IAMCCS-SuperNodes AU+IMG2VID Exec Finalize, IAMCCS-SuperNodes AU+IMG2VID Exec Planner, IAMCCS-SuperNodes AU+IMG2VID Exec Render, IAMCCS-SuperNodes AU+IMG2VID Exec VAE, IAMCCS-SuperNodes Second Stage, IAMCCS_AUIMG2VID_AudioTimeline, IAMCCS_AUIMG2VID_Continuity, IAMCCS_AUIMG2VID_DiskExtension, IAMCCS_AUIMG2VID_Finalize, IAMCCS_AUIMG2VID_KeyframeTimeline
+[2026-09-02 18:12:49.323] - IAMCCS_AUIMG2VID_Planner, IAMCCS_AUIMG2VID_ProjectTimelinePlanner, IAMCCS_AUIMG2VID_ReanchorLatent, IAMCCS_AUIMG2VID_RefreshPolicy, IAMCCS_AUIMG2VID_RuntimeBridge, IAMCCS_ApplyLoRAHooksToConditioning, IAMCCS_ApplyScheduledWanLoRAFromConditioning, IAMCCS_AudioBoardArranger, IAMCCS_AudioBoardDirectShotboardAdapter, IAMCCS_AudioBoardMixer
+[2026-09-02 18:12:49.323] - IAMCCS_AudioExtender, IAMCCS_AudioExtensionMath, IAMCCS_AudioNormalizeForLTX, IAMCCS_AudioPhaseLazyGate, IAMCCS_AudioSegmentAutoPlanner, IAMCCS_AudioTimelineAssembler, IAMCCS_AudioTimelineGate, IAMCCS_AutoLinkArguments, IAMCCS_AutoLinkConverter, IAMCCS_BoardMaker
+[2026-09-02 18:12:49.323] - IAMCCS_BoardMaker_DialogueFoley, IAMCCS_BuildScheduledWanModelBank, IAMCCS_BusOut, IAMCCS_CineAllInOneFLFEngine, IAMCCS_CineAudioDurationProbe, IAMCCS_CineAudioInfo, IAMCCS_CineAudioPromptDirector, IAMCCS_CineAudioTranscriptPromptCompiler, IAMCCS_CineBoardDurationLock, IAMCCS_CineDialogueDurationPlanner
+[2026-09-02 18:12:49.323] - IAMCCS_CineDialogueLineRouter, IAMCCS_CineDialoguePromptKit, IAMCCS_CineDialogueTimingReconciler, IAMCCS_CineDirectorGuideB, IAMCCS_CineEmotionButtons, IAMCCS_CineFLFEngineSimple, IAMCCS_CineFLFEngineSimpleDyno, IAMCCS_CineFLFLengthCompensator, IAMCCS_CineFLFProductor, IAMCCS_CineFLFProductorDyno
+[2026-09-02 18:12:49.323] - IAMCCS_CineFilmmaker, IAMCCS_CineFilmmakerBackend, IAMCCS_CineFilmmakerCropGuides1to1, IAMCCS_CineFilmmakerGuide, IAMCCS_CineFilmmakerGuide1to1, IAMCCS_CineFinalAudioMixer, IAMCCS_CineH3AudioBus, IAMCCS_CineH3VisionInfo, IAMCCS_CineInfo, IAMCCS_CineInfo3
+[2026-09-02 18:12:49.324] - IAMCCS_CineInfoH3, IAMCCS_CineInfoH3V2V, IAMCCS_CineInfoV2, IAMCCS_CineInfoV2V, IAMCCS_CineInfoV2VBackendRouter, IAMCCS_CineInfoV2VPoseTransfer, IAMCCS_CineInfoV2VScail, IAMCCS_CineInfoV2VWanAnimate, IAMCCS_CineLTXSequencer, IAMCCS_CineLTXSequencerExact
+[2026-09-02 18:12:49.324] - IAMCCS_CineLatentDurationCrop, IAMCCS_CineLineStacker, IAMCCS_CineMotionSketch, IAMCCS_CineMultiGenDirector, IAMCCS_CineMusicVideoPlanner, IAMCCS_CinePPAntiAlias, IAMCCS_CinePromptArchitect, IAMCCS_CinePromptComposer, IAMCCS_CinePromptRelayAdapter, IAMCCS_CinePromptRelayLatentShapeSync
+[2026-09-02 18:12:49.324] - IAMCCS_CinePromptRelaySafeEncode, IAMCCS_CinePromptRelayTimeline, IAMCCS_CineRefLatentControl, IAMCCS_CineReferenceBoard, IAMCCS_CineRelayOrBypass, IAMCCS_CineResolutionParityTranslator, IAMCCS_CineShotAudioDirector, IAMCCS_CineShotLineBuilder, IAMCCS_CineShotPlanner, IAMCCS_CineShotboardBackendPro
+[2026-09-02 18:12:49.324] - IAMCCS_CineShotboardFinalFrameTrim, IAMCCS_CineShotboardLite, IAMCCS_CineShotboardPlannerPro, IAMCCS_CineShotboardPlannerProLegacy, IAMCCS_CineShotboardPlannerProV2, IAMCCS_CineShotboardPlannerV3, IAMCCS_CineShotboardPlannerV4, IAMCCS_CineShotboardPlannerV5V2V, IAMCCS_CineShotboardTailTrimPolicy, IAMCCS_CineShotboardTimelinePro
+[2026-09-02 18:12:49.324] - IAMCCS_CineShotboardV4Backend, IAMCCS_CineShotboardV4CropGuides, IAMCCS_CineShotboardV4Guide, IAMCCS_CineShotboardV4RetakePromptEncodeR2, IAMCCS_CineShotboardV4RetakeSourceR2, IAMCCS_CineShotboardV5V2VRouter, IAMCCS_CineSpeech1PromptCompiler, IAMCCS_CineSpeechLength, IAMCCS_CineStage2BypassSwitch, IAMCCS_CineStage2PreviewToggle
+[2026-09-02 18:12:49.324] - IAMCCS_CineSwitch, IAMCCS_CineTemporalCutBarrier, IAMCCS_CineTimelineAudioMixer, IAMCCS_CineUTAntiAlias, IAMCCS_CineV2VAssetSelector, IAMCCS_CineV2VTimelineDirector, IAMCCS_CineV2VTimelineLineBuilder, IAMCCS_CineVideoToWooshInputs, IAMCCS_CineWooshFoleyChunkPlanner, IAMCCS_CineWorkflowInspector
+[2026-09-02 18:12:49.324] - IAMCCS_ControlAudEfx, IAMCCS_ControlAudEfxPanel, IAMCCS_DetailAtelier, IAMCCS_DetailAtelierAdvanced, IAMCCS_DetailAtelierSampler, IAMCCS_DialogueAudioBoardBridge, IAMCCS_DialogueTagEditor, IAMCCS_FlashVSRPanelBatchPrep, IAMCCS_FlashVSRPanelBatchRestore, IAMCCS_FluxKleinMultiGen
+[2026-09-02 18:12:49.324] - IAMCCS_FluxKleinRefine, IAMCCS_GGUF_accelerator, IAMCCS_GemmaAssistLazyGate, IAMCCS_GemmaAssistOutput, IAMCCS_GetAutoLink, IAMCCS_GoyAICanvasPaint, IAMCCS_HWProbeRecommendations, IAMCCS_HardMemoryPurge, IAMCCS_HwSupporter, IAMCCS_HwSupporterAny
+[2026-09-02 18:12:49.324] - IAMCCS_IdeoImageHashDebug, IAMCCS_IdeoInfo, IAMCCS_IdeoInpaintPrep, IAMCCS_IdeoMaskedPixels, IAMCCS_IdeoNoiseDebug, IAMCCS_IdeoRandomNoiseNoCache, IAMCCS_IdeoTranslate, IAMCCS_IdeogramJSONPreviewPass, IAMCCS_IdeogramSheetBuilder, IAMCCS_IdeogramStoryboardSheet
+[2026-09-02 18:12:49.324] - IAMCCS_ImageBatch6, IAMCCS_ImageBatchRangeLite, IAMCCS_ImageResizeBatchSafe, IAMCCS_InfluencerLatent, IAMCCS_InfluencerSampler, IAMCCS_IntValueMonitor, IAMCCS_Krea2MultiGen, IAMCCS_LTX2_BlendLatentBridge, IAMCCS_LTX2_ConditionNextLatentWithPrevOverlap, IAMCCS_LTX2_ContextLatent
+[2026-09-02 18:12:49.324] - IAMCCS_LTX2_ControlPreprocess, IAMCCS_LTX2_EnsureFrames8nPlus1, IAMCCS_LTX2_EnsureMinFrames, IAMCCS_LTX2_ExtendSampler, IAMCCS_LTX2_ExtensionModule, IAMCCS_LTX2_ExtensionModule_Disk, IAMCCS_LTX2_ExtensionModule_simple, IAMCCS_LTX2_FirstLastFramesController, IAMCCS_LTX2_FirstLastLatentControl, IAMCCS_LTX2_FirstLastLatentControl_Pro
+[2026-09-02 18:12:49.324] - IAMCCS_LTX2_FrameCountValidator, IAMCCS_LTX2_FrameRateSync, IAMCCS_LTX2_GetImageFromBatch, IAMCCS_LTX2_ImageBatchCropByPad, IAMCCS_LTX2_ImageBatchPadReflect, IAMCCS_LTX2_InitLatentSampler, IAMCCS_LTX2_JointRefreshLatent, IAMCCS_LTX2_JointRefreshLatent_Disk, IAMCCS_LTX2_LastFrameBridgeLoad, IAMCCS_LTX2_LastFrameBridgeSave
+[2026-09-02 18:12:49.324] - IAMCCS_LTX2_LoRAStack, IAMCCS_LTX2_LoRAStackModelIO, IAMCCS_LTX2_LoRAStackSegmented6, IAMCCS_LTX2_LoRAStackStaged, IAMCCS_LTX2_LoadLatentBridge, IAMCCS_LTX2_LongVideoWrapperPrep, IAMCCS_LTX2_LongVideoWrapperPrepDisk, IAMCCS_LTX2_LoopingSampler, IAMCCS_LTX2_MiddleFrames, IAMCCS_LTX2_ModelWithLoRA_Segmented6
+[2026-09-02 18:12:49.325] - IAMCCS_LTX2_OneShotLowRAMLooper, IAMCCS_LTX2_ReferenceImageSwitch, IAMCCS_LTX2_ReferenceStartFramesInjector, IAMCCS_LTX2_SaveLatentBridge, IAMCCS_LTX2_SegmentQueueLoop, IAMCCS_LTX2_TimeFrameCount, IAMCCS_LTX2_Validator, IAMCCS_LTXReleaseVRAMBeforeSampler, IAMCCS_LTXVideoDurationCrop, IAMCCS_LatentTailSlice
+[2026-09-02 18:12:49.325] - IAMCCS_LazyAnySwitch, IAMCCS_LoadImagesFromDirLite, IAMCCS_LoadResizeSegmentFromDir, IAMCCS_Ltx2HelperModules_AudioTimeline, IAMCCS_Ltx2HelperModules_Continuity, IAMCCS_Ltx2HelperModules_DiskExtension, IAMCCS_Ltx2HelperModules_Finalize, IAMCCS_Ltx2HelperModules_KeyframeTimeline, IAMCCS_Ltx2HelperModules_Planner, IAMCCS_Ltx2HelperModules_ProjectTimelinePlanner
+[2026-09-02 18:12:49.325] - IAMCCS_Ltx2HelperModules_ReanchorLatent, IAMCCS_Ltx2HelperModules_RefreshPolicy, IAMCCS_Ltx2HelperModules_RuntimeBridge, IAMCCS_MiniMaxH3AtomicAudioDrive, IAMCCS_MiniMaxH3AtomicConditioningBackend, IAMCCS_MiniMaxH3AtomicModelRouter, IAMCCS_MiniMaxH3AudioConcat, IAMCCS_MiniMaxH3AudioOutputPolicyR21, IAMCCS_MiniMaxH3AudioPolicy, IAMCCS_MiniMaxH3AudioTimelineMixR21
+[2026-09-02 18:12:49.325] - IAMCCS_MiniMaxH3Backend, IAMCCS_MiniMaxH3BridgeLoad, IAMCCS_MiniMaxH3DeliveryRouterV2, IAMCCS_MiniMaxH3DirectorFLFParityConditioning, IAMCCS_MiniMaxH3DirectorFLFParityModelRouter, IAMCCS_MiniMaxH3EditorFinalGate, IAMCCS_MiniMaxH3EditorTakeRoute, IAMCCS_MiniMaxH3ExactDeliveryDurationR21, IAMCCS_MiniMaxH3FaceDetailerRouter, IAMCCS_MiniMaxH3FaceMaskSAM
+[2026-09-02 18:12:49.325] - IAMCCS_MiniMaxH3FaceStitch, IAMCCS_MiniMaxH3FaceTrackCrop, IAMCCS_MiniMaxH3FaceTransformInfo, IAMCCS_MiniMaxH3FinalMasterSave, IAMCCS_MiniMaxH3GGUFLoader, IAMCCS_MiniMaxH3GenerationBackendV2, IAMCCS_MiniMaxH3InjectVideoLatent, IAMCCS_MiniMaxH3LTXConditioningStageV3, IAMCCS_MiniMaxH3LTXDenoiseStackLoaderV3, IAMCCS_MiniMaxH3LumosPrompt
+[2026-09-02 18:12:49.325] - IAMCCS_MiniMaxH3MotionContext, IAMCCS_MiniMaxH3NativeCheckpointSave, IAMCCS_MiniMaxH3NativeMasterLoad, IAMCCS_MiniMaxH3OptionalLTXDetailerLoRA, IAMCCS_MiniMaxH3PerFrameDenoise, IAMCCS_MiniMaxH3PlanFrames, IAMCCS_MiniMaxH3PostUpscaleControlV2, IAMCCS_MiniMaxH3PromptRelayMap, IAMCCS_MiniMaxH3RTX4KPost, IAMCCS_MiniMaxH3RenderBackend
+[2026-09-02 18:12:49.325] - IAMCCS_MiniMaxH3SegmentQueueLoop, IAMCCS_MiniMaxH3SequentialLTXLoaderV2, IAMCCS_MiniMaxH3ShotPlanner, IAMCCS_MiniMaxH3UpscaleRouter, IAMCCS_MiniMaxH3V2VConditioningR22, IAMCCS_MiniMaxH3V2VExactDeliveryR22, IAMCCS_ModelWithLoRA, IAMCCS_ModelWithLoRA_LTX2, IAMCCS_ModelWithLoRA_LTX2_Staged, IAMCCS_ModelWithLoRA_RuntimeBridge
+[2026-09-02 18:12:49.325] - IAMCCS_MotionBridgeLoad, IAMCCS_MotionBridgeSave, IAMCCS_MotionGuideBridge, IAMCCS_MotionPartsICLoRAApply, IAMCCS_MotionScale, IAMCCS_MotionScaleAdvanced, IAMCCS_MotionSketchRenderer, IAMCCS_MoveAhead, IAMCCS_MoveAheadEnforcer, IAMCCS_MultiSwitch
+[2026-09-02 18:12:49.325] - IAMCCS_MultiTimelineBridge, IAMCCS_MultiTimelineTakePicker, IAMCCS_MultilinePromptSplitter8, IAMCCS_Navigator, IAMCCS_ProjectTimelinePlanner, IAMCCS_Prompter, IAMCCS_QWEN_VL_FLF, IAMCCS_QWEN_VL_FLF_Advanced, IAMCCS_QwenMultiGen, IAMCCS_SamplerAdvancedVersion1
+[2026-09-02 18:12:49.325] - IAMCCS_ScailExtendPlan, IAMCCS_ScailExtends, IAMCCS_ScailIdentitySeeder, IAMCCS_ScailIdentityTracker, IAMCCS_ScailMultiReference, IAMCCS_SegmentPlanFromPlanner, IAMCCS_SegmentPlanner, IAMCCS_SegmentPlannerFramesLinked, IAMCCS_SegmentPlannerLinked, IAMCCS_SegmentPlannerSettings
+[2026-09-02 18:12:49.325] - IAMCCS_SegmentSwitch, IAMCCS_SelectScheduledWanModelFromConditioning, IAMCCS_SelectScheduledWanModelPairFromConditioning, IAMCCS_SetAutoLink, IAMCCS_ShotboardH3Settings, IAMCCS_ShotboardPlannerV2V, IAMCCS_ShotboardV4MultigenAdapter, IAMCCS_ShotboardVideoEditorRenderV1, IAMCCS_ShotboardVideoEditorV1, IAMCCS_SourceFramesToDisk
+[2026-09-02 18:12:49.325] - IAMCCS_SourceRangeFromSegmentPlan, IAMCCS_StartDirToVideoLatent, IAMCCS_StartImagesToVideoLatent, IAMCCS_StoryboardAutoCropGrid, IAMCCS_StoryboardAutoCropGridPRO, IAMCCS_StoryboardCaptionSheet, IAMCCS_StoryboardFrameDesigner, IAMCCS_StoryboardFrameDesignerV2, IAMCCS_StoryboardPromptContactSheet, IAMCCS_SupernodeBase
+[2026-09-02 18:12:49.325] - IAMCCS_SupernodeModule, IAMCCS_TakePackage, IAMCCS_TakeRouter, IAMCCS_TargetCrop, IAMCCS_ThreeSegmentPlanner, IAMCCS_TwoSegmentPlanner, IAMCCS_V2VActiveBackendSwitch, IAMCCS_V2VBusToLTX, IAMCCS_V2VBusToPoseTransfer, IAMCCS_V2VBusToScail
+[2026-09-02 18:12:49.325] - IAMCCS_V2VBusToWanAnimate, IAMCCS_V2VShotboardEasyWanAnimate2, IAMCCS_V2VShotboardFreeScail, IAMCCS_V2VStageSwitch, IAMCCS_VAEDecodeTiledSafe, IAMCCS_VAEDecodeToDisk, IAMCCS_VRAMCleanup, IAMCCS_VRAMFlushLatent, IAMCCS_VideoColorCorrectionControl, IAMCCS_VideoCombineFromDir
+[2026-09-02 18:12:49.326] - IAMCCS_VideoHardConcat, IAMCCS_WDC_LTXKeyframer, IAMCCS_WDC_LTXSequencer, IAMCCS_WDC_LTXSequencerFixed5, IAMCCS_WDC_MultiImageLoader, IAMCCS_WanAnimate2ExtendPlan, IAMCCS_WanAnimate2Extends, IAMCCS_WanAnimate2ShotboardBridge, IAMCCS_WanAnimateExtendPlan, IAMCCS_WanAnimateExtends
+[2026-09-02 18:12:49.326] - IAMCCS_WanChunkGatePure, IAMCCS_WanCineInfoPure, IAMCCS_WanContinuityGuide, IAMCCS_WanFLFPairFromTimeline, IAMCCS_WanImageBatchFrameSelect, IAMCCS_WanImageMotion, IAMCCS_WanImageMotionInductive, IAMCCS_WanImageMotionPro, IAMCCS_WanImageMotionProLegacy, IAMCCS_WanImageMotionProPlus
+[2026-09-02 18:12:49.326] - IAMCCS_WanImageMotionProPlus_Simple, IAMCCS_WanImageMotionPro_AdaIN, IAMCCS_WanImageMotion_AdaIN, IAMCCS_WanIndexedPromptEncode, IAMCCS_WanLoRAHookSchedule, IAMCCS_WanLoRARuntimeBridge, IAMCCS_WanLoRASchedule, IAMCCS_WanLoRAStack, IAMCCS_WanLoRAStackModelIO, IAMCCS_WanLoadImageFromBoard
+[2026-09-02 18:12:49.326] - IAMCCS_WanLoadImageFromPath, IAMCCS_WanLongPlanner, IAMCCS_WanPrevTailPrep, IAMCCS_WanPromptLoopInfo, IAMCCS_WanPromptPhasePlanner, IAMCCS_WanRelayOrBypassPure, IAMCCS_WanSVIToFLFBridgeProPlus, IAMCCS_WanSVIToFLFBridgeProPlus_Simple, IAMCCS_WanShotboardLoopAccumulator, IAMCCS_WanShotboardLoopAccumulatorLinear
+[2026-09-02 18:12:49.326] - IAMCCS_WanShotboardLoopChunkSelect, IAMCCS_WanShotboardLoopInfo, IAMCCS_WanShotboardLoopState, IAMCCS_WanShotboardPlannerPure, IAMCCS_WanShotboardPrevSamplesLoopSelect, IAMCCS_WanSviFlfTimeline, IAMCCS_WanSviFlfTimelinePick, IAMCCS_bus_group, IAMCCS_shotboarder_aud+vid_exporter_PRO, WanImageMotionPro
+[2026-09-02 18:12:49.326] - WanImageMotionProLegacy, WanImageMotionProPlus, WanMotionProTrimmer, iamccs_ltx2_lora_stack
+[2026-09-02 18:12:51.460] 2026-09-02 18:12:51.447 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
+[2026-09-02 18:12:51.461] 2026-09-02 18:12:51.447 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
+[2026-09-02 18:12:51.461] 2026-09-02 18:12:51.447 | WARNING  | jovimetrix.core.utility.io:<module>:63 - no gifski support
+[2026-09-02 18:12:51.462] 2026-09-02 18:12:51.461 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.462] 2026-09-02 18:12:51.461 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.462] 2026-09-02 18:12:51.461 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.463] 2026-09-02 18:12:51.463 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.464] 2026-09-02 18:12:51.463 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.464] 2026-09-02 18:12:51.463 | INFO     | cozy_comfyui.node:loader:135 - JOVIMETRIX 53 nodes loaded
+[2026-09-02 18:12:51.616] Using pytorch attention
+[2026-09-02 18:12:51.642] (RES4LYF) Init
+[2026-09-02 18:12:51.643] (RES4LYF) Importing beta samplers.
+[2026-09-02 18:12:51.668] (RES4LYF) Importing legacy samplers.
+[2026-09-02 18:12:51.735] 
+[2026-09-02 18:12:51.735] [rgthree-comfy] Loaded 48 magnificent nodes. 🎉
+[2026-09-02 18:12:51.735] 
+[2026-09-02 18:12:51.735] [rgthree-comfy] ComfyUI's new Node 2.0 rendering may be incompatible with some rgthree-comfy nodes and features, breaking some rendering as well as losing the ability to access a node's properties (a vital part of many nodes). It also appears to run MUCH more slowly spiking CPU usage and causing jankiness and unresponsiveness, especially with large workflows. Personally I am not planning to use the new Nodes 2.0 and, unfortunately, am not able to invest the time to investigate and overhaul rgthree-comfy where needed. If you have issues when Nodes 2.0 is enabled, I'd urge you to switch it off as well and join me in hoping ComfyUI is not planning to deprecate the existing, stable canvas rendering all together.
+[2026-09-02 18:12:51.735] 
+[2026-09-02 18:12:51.739] [💾 save_image_extended] AVIF   is supported! Woohoo!
+[2026-09-02 18:12:51.739] [💾 save_image_extended] JPEGXL is supported! YeePee!
+[2026-09-02 18:12:51.739] [💾 save_image_extended] version: 2.88
+[2026-09-02 18:12:51.815] Traceback (most recent call last):
   File "C:\temp\ComfyUI\ComfyUI\nodes.py", line 2263, in load_custom_node
     module_spec.loader.exec_module(module)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
@@ -367,212 +367,232 @@ ModuleNotFoundError: No module named 'custom_nodes.ComfyUI-SaveImageWithMetaData
     from comfy.ldm.lightricks.model import precompute_freqs_cis
 ImportError: cannot import name 'precompute_freqs_cis' from 'comfy.ldm.lightricks.model' (C:\temp\ComfyUI\ComfyUI\comfy\ldm\lightricks\model.py)
 
-[2026-08-30 12:38:56.361] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\teacache module for custom nodes: cannot import name 'precompute_freqs_cis' from 'comfy.ldm.lightricks.model' (C:\temp\ComfyUI\ComfyUI\comfy\ldm\lightricks\model.py)
-[2026-08-30 12:38:57.089] WAS Node Suite: OpenCV Python FFMPEG support is enabled
-[2026-08-30 12:38:57.090] WAS Node Suite Warning: `ffmpeg_bin_path` is not set in `C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.
-[2026-08-30 12:38:57.851] WAS Node Suite: Finished. Loaded 220 nodes successfully.
-[2026-08-30 12:38:57.852] 
-	"Life is 10% what happens to us and 90% how we react to it." - Charles R. Swindoll
-[2026-08-30 12:38:57.852] 
-[2026-08-30 12:38:57.863] 
+[2026-09-02 18:12:51.815] Cannot import C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\teacache module for custom nodes: cannot import name 'precompute_freqs_cis' from 'comfy.ldm.lightricks.model' (C:\temp\ComfyUI\ComfyUI\comfy\ldm\lightricks\model.py)
+[2026-09-02 18:12:52.509] WAS Node Suite: OpenCV Python FFMPEG support is enabled
+[2026-09-02 18:12:52.509] WAS Node Suite Warning: `ffmpeg_bin_path` is not set in `C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui\was_suite_config.json` config file. Will attempt to use system ffmpeg binaries if available.
+[2026-09-02 18:12:53.168] WAS Node Suite: Finished. Loaded 220 nodes successfully.
+[2026-09-02 18:12:53.169] 
+	"The best way to predict the future is to create it." - Peter Drucker
+[2026-09-02 18:12:53.169] 
+[2026-09-02 18:12:53.192] 
 Import times for custom nodes:
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI\custom_nodes\websocket_image_save.py
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Qwen-Aspect-Ratio
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-load-image-from-url
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Krea-2-Two-Stage-Sampler
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2TextEncoder
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Simple-Prompt-Batcher
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\one-node-flux-2-klein
-[2026-08-30 12:38:57.863]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2T-Enhancer
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mxtoolkit
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\bobs_latent_optimizer
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-H3-FaceRefine
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-PainterI2Vadvanced
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\image-size-tools
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-find-perfect-resolution
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wywywywy-pause
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\masquerade-nodes-comfyui
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyLiterals
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-QwenEditUtils
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Inpaint-CropAndStitch
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\cg-use-everywhere
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-RandomPromptBuilder
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wlsh_nodes
-[2026-08-30 12:38:57.864]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MultiLoraLoader
-[2026-08-30 12:38:57.864]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\teacache
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\save-image-extended-comfyui
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_JPS-Nodes
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\confyui-node-prompt-stash-saver
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-VAE-Utils
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wd14-tagger
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-EditUtils
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-GGUF
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-klein-photoreal-promptbuilder
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-florence2
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fearnworksnodes
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LoRA-Block-Filter
-[2026-08-30 12:38:57.865]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MelBandRoFormer
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ttp_toolset
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Flux2Klein-Enhancer
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Wan22FMLF
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-K3NK-ComfyUI-Nodes
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-Resolution-Master
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyMath
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fizznodes
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inpaint-nodes
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NovaSR
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-custom-scripts
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_essentials
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NAG
-[2026-08-30 12:38:57.866]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\efficiency-nodes-comfyui
-[2026-08-30 12:38:57.867]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Chibi-Nodes
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FramePackWrapper_PlusOne
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-adaptiveprompts
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\derfuu_comfyui_moddednodes
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ultimatesdupscale
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-image-saver
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-frame-interpolation
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_PoP
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-scene-composer
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QwenVL
-[2026-08-30 12:38:57.867]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\controlaltai-nodes
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\10S-Comfy-nodes
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-jakeupgrade
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_image_metadata_extension
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\basic_data_handling
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NO8D-controls
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\rgthree-comfy
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_Comfyroll_CustomNodes
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-kjnodes
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-logicutils
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\SickOllie
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inspire-pack
-[2026-08-30 12:38:57.868]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LTXVideo
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MMAudio
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-videohelpersuite
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-ergouzi-Nodes
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-animatediff-evolved
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_tinyterranodes
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-subpack
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\IAMCCS-nodes
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_layerstyle
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mnemic-nodes
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\RES4LYF
-[2026-08-30 12:38:57.869]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-ReActor
-[2026-08-30 12:38:57.869]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wan-i2v-control
-[2026-08-30 12:38:57.870]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\crt-nodes
-[2026-08-30 12:38:57.870]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-SeedVR2_VideoUpscaler
-[2026-08-30 12:38:57.870]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Crystools
-[2026-08-30 12:38:57.870]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-rmbg
-[2026-08-30 12:38:57.870]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager
-[2026-08-30 12:38:57.870]    0.3 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer
-[2026-08-30 12:38:57.870]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-art-venture
-[2026-08-30 12:38:57.870]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-detail-daemon
-[2026-08-30 12:38:57.870]    0.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-WanVideoWrapper
-[2026-08-30 12:38:57.870]    0.6 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Addoor
-[2026-08-30 12:38:57.870]    0.6 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-sam3
-[2026-08-30 12:38:57.870]    0.6 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\aistudynow-qwenvl
-[2026-08-30 12:38:57.870]    0.7 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\jovimetrix
-[2026-08-30 12:38:57.870]    0.7 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-itools
-[2026-08-30 12:38:57.870]    1.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fill-nodes
-[2026-08-30 12:38:57.870]    1.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui
-[2026-08-30 12:38:57.870]    1.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes
-[2026-08-30 12:38:57.870]    3.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use
-[2026-08-30 12:38:57.870]    3.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Boyonodes
-[2026-08-30 12:38:57.870] 
-[2026-08-30 12:38:57.873] Context impl SQLiteImpl.
-[2026-08-30 12:38:57.873] Will assume non-transactional DDL.
-[2026-08-30 12:38:58.032] Using RAM pressure cache.
-[2026-08-30 12:38:58.062] [LoRA-Manager] Deduplicate: removed 0 history rows, 0 queue rows, 0 orphaned queue rows
-[2026-08-30 12:38:58.065] Starting server
+[2026-09-02 18:12:53.192]    0.0 seconds: C:\temp\ComfyUI\ComfyUI\custom_nodes\websocket_image_save.py
+[2026-09-02 18:12:53.192]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-load-image-from-url
+[2026-09-02 18:12:53.192]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Qwen-Aspect-Ratio
+[2026-09-02 18:12:53.192]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\masquerade-nodes-comfyui
+[2026-09-02 18:12:53.192]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wlsh_nodes
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\one-node-flux-2-klein
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyLiterals
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_JPS-Nodes
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-VAE-Utils
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Krea-2-Two-Stage-Sampler
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LoRA-Block-Filter
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Simple-Prompt-Batcher
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\wywywywy-pause
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mxtoolkit
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2TextEncoder
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-PainterI2Vadvanced
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-QwenEditUtils
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-H3-FaceRefine
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\image-size-tools
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Inpaint-CropAndStitch
+[2026-09-02 18:12:53.193]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Krea2T-Enhancer
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ipadapter_plus
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\bobs_latent_optimizer
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-find-perfect-resolution
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\cg-use-everywhere
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-RandomPromptBuilder
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\save-image-extended-comfyui
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MultiLoraLoader
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-detail-daemon
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fearnworksnodes
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-florence2
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-K3NK-ComfyUI-Nodes
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ttp_toolset
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-GGUF
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MelBandRoFormer
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-EditUtils
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Wan22FMLF
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\confyui-node-prompt-stash-saver
+[2026-09-02 18:12:53.194]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\teacache
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inpaint-nodes
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\efficiency-nodes-comfyui
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyMath
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wd14-tagger
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-klein-photoreal-promptbuilder
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Flux2Klein-Enhancer
+[2026-09-02 18:12:53.194]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_essentials
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Chibi-Nodes
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fizznodes
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-Resolution-Master
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NAG
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QualityOfLifeSuit_Omar92
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-image-saver
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-adaptiveprompts
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-custom-scripts
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\derfuu_comfyui_moddednodes
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FramePackWrapper_PlusOne
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-pack
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_PoP
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NovaSR
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\10S-Comfy-nodes
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-prompt-reader-node
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-NO8D-controls
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-frame-interpolation
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-QwenVL
+[2026-09-02 18:12:53.195]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\basic_data_handling
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_image_metadata_extension
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Advanced-ControlNet
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-JoyCaption
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-jakeupgrade
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_ultimatesdupscale
+[2026-09-02 18:12:53.196]    0.0 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\controlaltai-nodes
+[2026-09-02 18:12:53.196]    0.0 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-saveimagewithmetadata
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-logicutils
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\SickOllie
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\rgthree-comfy
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-inspire-pack
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_controlnet_aux
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-kjnodes
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI_Comfyroll_CustomNodes
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-videohelpersuite
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-LTXVideo
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-animatediff-evolved
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_tinyterranodes
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-MMAudio
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-scene-composer
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Comfyui-ergouzi-Nodes
+[2026-09-02 18:12:53.196]    0.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\IAMCCS-nodes
+[2026-09-02 18:12:53.196]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-impact-subpack
+[2026-09-02 18:12:53.196]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_layerstyle
+[2026-09-02 18:12:53.197]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\RES4LYF
+[2026-09-02 18:12:53.197]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-wan-i2v-control
+[2026-09-02 18:12:53.197]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-SeedVR2_VideoUpscaler
+[2026-09-02 18:12:53.197]    0.2 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-ReActor
+[2026-09-02 18:12:53.197]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\crt-nodes
+[2026-09-02 18:12:53.197]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Crystools
+[2026-09-02 18:12:53.197]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-rmbg
+[2026-09-02 18:12:53.197]    0.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-itools
+[2026-09-02 18:12:53.197]    0.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mnemic-nodes
+[2026-09-02 18:12:53.197]    0.4 seconds (IMPORT FAILED): C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-FluxTrainer
+[2026-09-02 18:12:53.197]    0.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb
+[2026-09-02 18:12:53.197]    0.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-art-venture
+[2026-09-02 18:12:53.197]    0.5 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-WanVideoWrapper
+[2026-09-02 18:12:53.197]    0.7 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-lora-manager
+[2026-09-02 18:12:53.197]    0.8 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\ComfyUI-Addoor
+[2026-09-02 18:12:53.198]    0.8 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\aistudynow-qwenvl
+[2026-09-02 18:12:53.198]    1.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-sam3
+[2026-09-02 18:12:53.198]    1.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\was-node-suite-comfyui
+[2026-09-02 18:12:53.198]    1.7 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui_fill-nodes
+[2026-09-02 18:12:53.198]    2.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\jovimetrix
+[2026-09-02 18:12:53.198]    2.1 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes
+[2026-09-02 18:12:53.198]    3.3 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\Boyonodes
+[2026-09-02 18:12:53.198]    3.4 seconds: C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-easy-use
+[2026-09-02 18:12:53.198] 
+[2026-09-02 18:12:53.208] Context impl SQLiteImpl.
+[2026-09-02 18:12:53.208] Will assume non-transactional DDL.
+[2026-09-02 18:12:53.433] Using RAM pressure cache.
+[2026-09-02 18:12:53.471] [LoRA-Manager] Deduplicate: removed 0 history rows, 0 queue rows, 0 orphaned queue rows
+[2026-09-02 18:12:53.474] Starting server
 
-[2026-08-30 12:38:58.071] To see the GUI go to: http://127.0.0.1:8188
-[2026-08-30 12:38:58.084] [LoRA-Manager] Recipe cache hit: loaded 2 recipes from persistent cache
-[2026-08-30 12:38:58.090] [LoRA-Manager] Recipe cache initialized in 0.02 seconds. Found 2 recipes
-[2026-08-30 12:38:58.100] [LoRA-Manager] FTS index validated, reusing existing index with 2 recipes
-[2026-08-30 12:38:58.126] [LoRA-Manager] Duplicate filename conflict detected: 1 lora filename(s) are shared by 2 files total, causing ambiguity in Lora resolution. Open the Doctor panel to resolve one-click.
-[2026-08-30 12:38:58.144] [LoRA-Manager] Lora cache hydrated from persisted snapshot with 1580 models
-[2026-08-30 12:38:58.151] [LoRA-Manager] Checkpoint cache hydrated from persisted snapshot with 38 models
-[2026-08-30 12:38:58.156] [LoRA-Manager] Embedding cache hydrated from persisted snapshot with 1 models
-[2026-08-30 12:39:17.143] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:17.144] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/clipspace.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:17.147] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui/components/buttonGroup.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:17.148] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe-lightbox.esm.min.js
-[2026-08-30 12:39:17.150] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/groupNode.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:17.151] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:17.167] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/pickr.min.js
-[2026-08-30 12:39:17.200] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
-[2026-08-30 12:39:17.201] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
-[2026-08-30 12:39:17.202] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
-[2026-08-30 12:39:17.202] [Adaptive Prompts] Config Updated: {'hide_comments': True}
-[2026-08-30 12:39:17.203] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
-[2026-08-30 12:39:17.227] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe.min.css
-[2026-08-30 12:39:17.261] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/classic.min.css
-[2026-08-30 12:39:17.324] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/model-viewer.min.js
-[2026-08-30 12:39:17.332] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.css
-[2026-08-30 12:39:17.486] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.min.js
-[2026-08-30 12:39:17.916] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
-[2026-08-30 12:39:17.916] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
-[2026-08-30 12:39:18.053] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
-[2026-08-30 12:39:18.054] [NovaSR] Looking for models in: C:\temp\ComfyUI\ComfyUI\models\NovaSR
-[2026-08-30 12:39:18.054] [NovaSR] Model directory exists!
-[2026-08-30 12:39:18.054] [NovaSR] Found model: NovaSR.safetensors
-[2026-08-30 12:39:18.054] [NovaSR] Total models found: 1
-[2026-08-30 12:39:18.054] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
-[2026-08-30 12:39:18.066] QualityOfLifeSuit_Omar92::NSP ready
-[2026-08-30 12:39:18.437] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Found multiple match, we will pick the last C:\temp\ComfyUI\ComfyUI\models\upscale_models
+[2026-09-02 18:12:53.479] To see the GUI go to: http://127.0.0.1:8188
+[2026-09-02 18:12:53.496] [LoRA-Manager] Recipe cache hit: loaded 2 recipes from persistent cache
+[2026-09-02 18:12:53.501] [LoRA-Manager] Recipe cache initialized in 0.02 seconds. Found 2 recipes
+[2026-09-02 18:12:53.528] [LoRA-Manager] Duplicate filename conflict detected: 1 lora filename(s) are shared by 2 files total, causing ambiguity in Lora resolution. Open the Doctor panel to resolve one-click.
+[2026-09-02 18:12:53.542] [LoRA-Manager] Lora cache hydrated from persisted snapshot with 1580 models
+[2026-09-02 18:12:53.546] [LoRA-Manager] Checkpoint cache hydrated from persisted snapshot with 38 models
+[2026-09-02 18:12:53.546] [LoRA-Manager] FTS index validated, reusing existing index with 2 recipes
+[2026-09-02 18:12:53.550] [LoRA-Manager] Embedding cache hydrated from persisted snapshot with 1 models
+[2026-09-02 18:13:03.453] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:03.456] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/clipspace.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:03.458] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui/components/buttonGroup.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:03.462] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe-lightbox.esm.min.js
+[2026-09-02 18:13:03.479] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/groupNode.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:03.480] [DEPRECATION WARNING] Detected import of deprecated legacy API: /extensions/core/widgetInputs.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:03.501] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-09-02 18:13:03.502] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-09-02 18:13:03.503] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-09-02 18:13:03.505] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-09-02 18:13:03.506] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-09-02 18:13:03.531] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/pickr.min.js
+[2026-09-02 18:13:03.554] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/photoswipe.min.css
+[2026-09-02 18:13:03.641] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/model-viewer.min.js
+[2026-09-02 18:13:03.675] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/classic.min.css
+[2026-09-02 18:13:03.689] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.css
+[2026-09-02 18:13:04.075] C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfyui-mixlab-nodes\webApp\lib/juxtapose.min.js
+[2026-09-02 18:13:04.573] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-09-02 18:13:04.573] SAM3D From Video JK node may not function correctly: [SAM3D Check] SAM3D node path not found. Please ensure that the ComfyUI-SAM3DBody node is installed.
+[2026-09-02 18:13:05.345] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-09-02 18:13:05.345] [NovaSR] Looking for models in: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-09-02 18:13:05.345] [NovaSR] Model directory exists!
+[2026-09-02 18:13:05.346] [NovaSR] Found model: NovaSR.safetensors
+[2026-09-02 18:13:05.346] [NovaSR] Total models found: 1
+[2026-09-02 18:13:05.346] [NovaSR] Checking path: C:\temp\ComfyUI\ComfyUI\models\NovaSR
+[2026-09-02 18:13:05.362] QualityOfLifeSuit_Omar92::NSP ready
+[2026-09-02 18:13:05.730] [C:\temp\ComfyUI\ComfyUI_Custom\custom_nodes\comfy_mtb] | INFO -> Found multiple match, we will pick the last C:\temp\ComfyUI\ComfyUI\models\upscale_models
 ['C:\\temp\\ComfyUI\\ComfyUI_Custom\\models\\upscale_models', 'C:\\temp\\ComfyUI\\ComfyUI\\models\\upscale_models']
-[2026-08-30 12:39:21.376] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
-[2026-08-30 12:39:21.377] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
-[2026-08-30 12:39:21.378] [Adaptive Prompts] Config Updated: {'hide_comments': True}
-[2026-08-30 12:39:21.379] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
-[2026-08-30 12:39:21.379] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui/components/button.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
-[2026-08-30 12:39:21.381] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
-[2026-08-30 12:39:36.975] got prompt
-[2026-08-30 12:39:56.372] Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 743/743 [00:09<00:00, 79.96it/s]
-[2026-08-30 12:41:22.544] FETCH ComfyRegistry Data [DONE]
-[2026-08-30 12:41:22.788] [ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes
-[2026-08-30 12:41:22.899] FETCH DATA from: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\cache\1514988643_custom-node-list.json [DONE]
-[2026-08-30 12:41:22.950] [ComfyUI-Manager] All startup tasks have been completed.
-[2026-08-30 12:50:39.522] [20260530_141116.txt]: ohwxljkonf, This photograph captures a close-up of a young girl in profile, facing right. She has her blonde hair neatly braided and tied into a bun at the top of her head. She is wearing a traditional, embroidered, purple dress with black and white intricate patterns, and a white blouse underneath. The dress has a square neckline adorned with a decorative brooch and three silver buttons on the front. The background features a blurred outdoor setting with green trees and a paved surface. A man in a dark suit is partially visible behind her, standing to her left. Another person, dressed in a green military-style uniform with a white belt, is seen in the background to the right. The lighting is natural, suggesting it is daytime. The camera angle is slightly low, focusing on the girl's upper body and her dress. The framing is tight, emphasizing the girl's traditional attire and the details of her clothing. The overall mood of the photograph is formal and traditional.
-[2026-08-30 12:50:39.522] [20260530_141117.txt]: ohwxljkonf, This photograph captures a close-up side profile of a young girl with her blonde hair neatly tied in a bun. She is wearing a traditional, ornate dress with a white, long-sleeved blouse and a purple, patterned bodice adorned with black and silver embellishments. A small, decorative brooch is pinned to the front of her bodice. The background reveals a group of adults, some in dark suits, standing outdoors on a green, textured surface. The adults are partially blurred, drawing focus to the girl. The lighting is natural, suggesting an outdoor setting with greenery visible in the background. The camera angle is slightly below eye level, providing a respectful and focused view of the girl's upper body and attire. The image has a candid, documentary style, capturing a moment of quiet attention in a group setting. The overall composition emphasizes the girl's traditional dress and the contrasting formal attire of the adults behind her.
-[2026-08-30 12:50:39.523] [Gemini_Generated_Image_2m0g6s2m0g6s2m0g.txt]: ohwxljkonf, The photograph features a young person lying on a grey blanket in a grassy field. The subject is positioned in a close-up shot, focusing on their upper body and face. They are wearing a white long-sleeve shirt with a purple and black patterned vest over it. Their hair is pulled back into a small bun. The grass around them is green and dotted with small yellow and purple flowers. The background is slightly blurred, emphasizing the subject and the grassy field. The lighting is natural, suggesting an outdoor setting on a bright, cloudy day. The subject's expression is relaxed, and their right arm is bent at the elbow with the hand resting near their head. The camera angle is slightly above eye level, creating a gentle, intimate perspective. The overall composition is soft and serene, with a focus on the contrast between the white shirt, purple vest, and green grass. The textures of the grass, blanket, and clothing are clearly defined, adding to the photograph's detailed and natural aesthetic.
-[2026-08-30 12:50:39.524] [Gemini_Generated_Image_6q55ms6q55ms6q55.txt]: ohwxljkonf, This is a photograph of a young girl taken from a slightly low angle, focusing on her upper body. She has her light brown hair neatly pulled up into a bun at the top of her head. She is wearing a traditional, ornate dress with a white, high-collared blouse underneath. The dress has a dark purple, patterned bodice with intricate designs, and it features silver decorative buttons and a floral brooch at the neckline. The fabric of the bodice has a slightly textured appearance. She stands in an outdoor setting, with green trees and shrubs visible in the background, indicating a park or garden. There are two adults in dark suits partially visible behind her, their backs turned to the camera. The lighting is natural, suggesting it is daytime. The overall framing is close-up, emphasizing the girl's attire and hairstyle. The background is slightly blurred, drawing attention to the subject. The girl's expression is neutral, and she is looking slightly to the side. The photograph captures a moment that appears to be part of a formal or cultural event.
-[2026-08-30 12:50:39.524] [Gemini_Generated_Image_b4ux7bb4ux7bb4ux.txt]: ohwxljkonf, The photograph captures a close-up of a young girl standing outdoors, framed from the waist up. She has her blonde hair neatly tied in a bun and wears a traditional outfit. Her white blouse is adorned with intricate lace around the collar and cuffs, and she is dressed in a purple, patterned, embroidered vest with black and silver trim. The vest has three silver buttons and a decorative chain detail at the neckline. She is smiling slightly and looking directly at the camera. In the background, there are several adults, one of whom is a man in a dark suit and tie standing slightly out of focus. The background features green trees and a grassy area, suggesting a park or garden setting. The lighting is natural, and the photograph is taken at eye level. The overall tone of the image is bright and clear, with a focus on the girl's traditional attire and the outdoor setting. The camera angle is straight-on, providing a direct and respectful view of the subject.
-[2026-08-30 12:50:39.525] [Gemini_Generated_Image_duwqrcduwqrcduwq.txt]: ohwxljkonf, This photograph features a close-up of a young girl with her hair neatly pulled back into a bun, standing in front of an older man. The girl is wearing a traditional, white, high-collared blouse with intricate lace detailing around the neckline, paired with a purple, patterned, embroidered vest that has black trim. A small, ornate brooch with a floral design is centered at her collar. The man behind her is partially visible, wearing a dark blue suit with a white shirt. The background shows a blurred, green, outdoor setting with trees and a path, indicating a natural, park-like environment. The lighting is natural, with soft, even illumination. The camera angle is slightly below eye level, focusing on the girl's upper body and face, which is centered in the frame. The overall composition emphasizes the girl's traditional attire and the subtle contrast between her clothing and the man's formal suit.
-[2026-08-30 12:50:39.526] [Gemini_Generated_Image_grmriugrmriugrmr.txt]: ohwxljkonf, This photograph features a young girl with her blonde hair neatly tied up in a bun, standing outdoors on a gravel path surrounded by green trees and other people. She is wearing a traditional, ornate, purple dress with intricate floral patterns, white lace trim, and silver decorative buttons. The dress has a high collar and a large, elaborate silver brooch at the center. The background includes several adults dressed in formal black suits, some of whom are blurred and out of focus. The lighting is natural, suggesting it is daytime. The camera angle is a close-up, focusing on the girl's upper body and face, with a slight upward tilt. The image has a shallow depth of field, making the girl the clear focal point while the background remains blurred. The overall tone of the photograph is formal and traditional, with a focus on the girl's attire and expression.
-[2026-08-30 12:50:39.527] [Gemini_Generated_Image_qs5nshqs5nshqs5n.txt]: ohwxljkonf, This photograph captures a close-up of a young girl with light skin and blonde hair, which is neatly tied in a small bun at the back of her head. She is reclining on a richly patterned, deep red and gold upholstered chair. The girl is wearing a traditional, vintage-style outfit consisting of a white, high-collared blouse with delicate lace trim and a purple, embroidered pinafore dress with black trim and white floral accents. The dress features a square neckline and three small, white, decorative buttons down the front. She has a slight, content smile on her face, and her head is tilted slightly to the right. The background is softly blurred, showcasing lush green foliage that suggests an outdoor setting. The lighting is natural, highlighting her face and the intricate details of her clothing. The camera angle is slightly above eye level, providing a clear view of her upper body and the chair's ornate design. The overall composition and color palette evoke a sense of timeless elegance and tranquility. The photograph includes a small watermark in the bottom right corner that reads "METART."
-[2026-08-30 12:50:39.528] [Gemini_Generated_Image_s8knffs8knffs8kn.txt]: ohwxljkonf, Photograph of a young girl with her hair in a bun, standing in a park-like setting. She is wearing a traditional Eastern European outfit, featuring a white, ruffled blouse with a high, decorative collar and a purple, intricately patterned bodice with silver buttons. The bodice has a floral design and is adorned with a large, ornate silver brooch at the center. The background includes several other people dressed in similar traditional clothing, with men in vests and women in dresses with aprons. The setting is outdoors, with green trees and a gravel path visible. The lighting is natural, and the camera angle is a close-up, focusing on the girl's upper body. The image has a shallow depth of field, making the background slightly blurred. The overall mood is serene and traditional, capturing a cultural event or celebration.
-[2026-08-30 12:50:39.529] [Gemini_Generated_Image_tald70tald70tald.txt]: ohwxljkonf, This is a photograph of a young girl standing outdoors in a park-like setting. The camera angle is straight-on, capturing her from the waist up. She has her blonde hair neatly pulled back into a bun and is wearing a traditional outfit consisting of a white, long-sleeved, high-collared shirt and a purple, patterned, embroidered dress with black and white trim. The dress has a square neckline with a decorative brooch-like embellishment in the center and black toggle buttons down the front. She is holding her hands together in front of her.
+[2026-09-02 18:13:08.663] [Adaptive Prompts] Config Updated: {'default_rng_mode': 'Adaptive'}
+[2026-09-02 18:13:08.664] [Adaptive Prompts] Config Updated: {'search_depth_limit': 80}
+[2026-09-02 18:13:08.665] [Adaptive Prompts] Config Updated: {'hide_comments': True}
+[2026-09-02 18:13:08.666] [Adaptive Prompts] Config Updated: {'resolution_strategy': 'Scoped'}
+[2026-09-02 18:13:08.667] [Adaptive Prompts] Config Updated: {'missing_wildcard_behavior': 'Inject Warning'}
+[2026-09-02 18:13:08.725] [DEPRECATION WARNING] Detected import of deprecated legacy API: /scripts/ui/components/button.js. This is likely caused by a custom node extension using outdated APIs. Please update your extensions or contact the extension author for an updated version.
+[2026-09-02 18:13:39.818] got prompt
+[2026-09-02 18:14:10.791] Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 743/743 [00:09<00:00, 79.35it/s]
+[2026-09-02 18:15:13.200] FETCH ComfyRegistry Data [DONE]
+[2026-09-02 18:15:13.447] [ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes
+[2026-09-02 18:15:13.559] FETCH DATA from: C:\temp\ComfyUI\ComfyUI_Custom\user\__manager\cache\1514988643_custom-node-list.json [DONE]
+[2026-09-02 18:15:13.629] [ComfyUI-Manager] All startup tasks have been completed.
+[2026-09-02 18:32:14.494] [Gemini_Generated_Image_19m8ry19m8ry19m8.txt]: ohwxsmj person, The photograph is a close-up of a woman with curly hair styled in a loose updo, looking over her shoulder with a slight smile. She is wearing a white halter-neck dress with a large bow at the back. Her skin has a warm, glowing tone, and she has subtle, natural makeup with a hint of pink on her lips. She is adorned with pearl drop earrings and a delicate pearl choker. The background features a window with a dark exterior and warm, yellow string lights visible through the glass. The lighting is soft and warm, creating a cozy atmosphere. The camera angle is slightly above and to the side, focusing on her upper back and face. The framing is tight, emphasizing her expression and the details of her attire and accessories. The overall composition is intimate and warm, highlighting the woman's gentle smile and the soft, inviting lighting.
+[2026-09-02 18:32:14.495] [Gemini_Generated_Image_2cj7mr2cj7mr2cj7.txt]: ohwxsmj person, The image is a close-up photograph of a young person with curly brown hair, looking slightly to the left of the camera. They have a neutral expression and are wearing a beige, woolen coat with a black collar. The coat has a soft texture and appears to be slightly worn. The person's skin is fair with a slight blush on the cheeks. They have green eyes and light makeup. The background is a dark green, wooden panel that is slightly out of focus, creating a contrast with the subject's lighter clothing and skin. The lighting is natural, coming from the left side, casting soft shadows on the right side of the face. The camera angle is slightly above eye level, capturing the upper body and head in a three-quarter view. The framing is tight, focusing on the face and upper part of the coat. The photograph has a realistic style with a shallow depth of field, emphasizing the subject while the background remains blurred. The overall mood is calm and introspective.
+[2026-09-02 18:32:14.495] [Gemini_Generated_Image_2ly0y62ly0y62ly0.txt]: ohwxsmj person, This is a close-up photograph of a young woman with curly hair, wearing a white shirt. She has a neutral expression and is looking directly at the camera. Her hair is pulled back, and she is wearing gold hoop earrings. The background features a well-lit room with a bookshelf filled with books on the left side. A wooden chair with a striped cushion is partially visible behind her. On the right, there is a white cabinet with a wicker basket on top. A large, white, paper lantern-style light fixture is hanging from the ceiling. The lighting is natural, coming from an unseen source, likely a window. The camera angle is slightly tilted, capturing the woman from the shoulders up. The image has a warm, inviting feel, with soft, natural light highlighting the subject's face and the room's details.
+[2026-09-02 18:32:14.496] [Gemini_Generated_Image_2qimpc2qimpc2qim.txt]: ohwxsmj person, This is a close-up photograph of a young woman with long, wavy hair, smiling directly at the camera. She is wearing a light gray hooded sweatshirt and large gold hoop earrings. Her hair is parted in the middle and falls over her shoulders in loose curls. The background is a plain, light gray gradient, providing a neutral backdrop that keeps the focus on her face and upper body. The lighting is even and soft, eliminating harsh shadows and highlighting her natural complexion. The camera angle is straight-on, capturing her from the chest up, and the framing is tight, emphasizing her smile and upper torso. The texture of her hair is smooth with subtle curls, and the fabric of her sweatshirt appears soft and slightly ribbed. The overall style of the photograph is casual and natural, with a simple and clean composition that draws attention to the subject's friendly expression.
+[2026-09-02 18:32:14.497] [Gemini_Generated_Image_3odlw83odlw83odl.txt]: ohwxsmj person, Photograph of a young woman with curly hair in braids, smiling widely with her head tilted slightly to the right. She is wearing a light pink, chunky knit sweater and silver hoop earrings. The camera captures a close-up of her upper body from the chest up, with a slight upward angle. The background shows a modern, industrial-style cafe with exposed concrete ceiling, hanging light bulbs, and blurred figures of other patrons. The lighting is warm and soft, creating a cozy atmosphere. The woman's expression is joyful and carefree, with her teeth visible in her broad smile. The framing focuses on her face and upper body, with the background slightly out of focus to emphasize her expression. The overall mood of the image is warm and inviting.
+[2026-09-02 18:32:14.498] [Gemini_Generated_Image_5vuhpa5vuhpa5vuh.txt]: ohwxsmj person, This photograph features a close-up portrait of a young person with curly, blonde hair, wearing a loose, blue long-sleeve shirt. The subject's right arm is raised above their head, slightly bent at the elbow, with their hand out of the frame. Their left arm is not visible. The background is a plain, light beige color, providing a neutral backdrop that emphasizes the subject. The lighting is soft and even, highlighting the natural texture of the subject's hair and the fabric of their shirt. The camera angle is slightly tilted upwards, focusing on the upper body and face, capturing a candid, natural expression. The subject's mouth is slightly open, and their eyes are directed forward. The image has a clean, minimalistic style, with a shallow depth of field that keeps the subject in sharp focus while the background remains blurred. The photograph uses a natural color palette, with the blue of the shirt contrasting gently against the beige background. The overall composition is simple yet effective, drawing attention to the subject's relaxed, natural pose and the intricate details of their curly hair and soft facial expression.
+[2026-09-02 18:32:14.499] [Gemini_Generated_Image_7le1rg7le1rg7le1.txt]: ohwxsmj person, This is a photograph of a young woman with curly blonde hair, taken from a slightly low, frontal angle, focusing on her upper body. She is wearing a sleeveless dress with bold, diagonal orange and black stripes. The dress has a deep V-neck and a small, gold pendant necklace with a heart-shaped charm. She has a neutral expression, slightly smiling. The background is slightly out of focus, showing a green, dome-shaped structure, possibly a greenhouse, with white trim and some indistinct objects. The lighting is soft and even, suggesting an indoor setting. The image has a shallow depth of field, keeping the woman in sharp focus while the background is blurred. The camera captures the texture of her curly hair and the fabric of her dress clearly. The overall color palette is warm, with the orange and black of the dress contrasting with the green background. The photograph has a natural, candid feel, with a slight tilt to the right, adding a dynamic element to the composition.
+[2026-09-02 18:32:14.500] [Gemini_Generated_Image_7zg5px7zg5px7zg5.txt]: ohwxsmj person, This is a photograph of a young woman standing in an indoor gymnasium, taken from a slightly lower angle, focusing on her upper body. She has her arms raised above her head. She is wearing a cropped, bright pink top that reveals her midriff, and a dark purple leather jacket with a slightly puffed sleeve and a small pocket on the chest. Her jeans are dark blue with white stitching and she has a white belt with a gold buckle. She is also wearing large hoop earrings. The background shows a wooden gym floor and white walls with a door partially visible. The lighting is even, with no harsh shadows. The overall composition emphasizes her casual, slightly rebellious style, with a focus on her raised arms and the contrast between her pink top and dark jacket. The gymnasium setting adds a sense of everyday, active environment.
+[2026-09-02 18:32:14.501] [Gemini_Generated_Image_9flp2e9flp2e9flp.txt]: ohwxsmj person, The image is a photograph taken from a close-up, upper-body angle, focusing on a young person with curly, shoulder-length hair. They are wearing a black, puffy jacket with a small white logo on the left side of the chest. The person has light skin and is looking slightly to the right with a neutral expression. Their lips are slightly parted, showing a hint of teeth. The background features a teal-colored wall on the left and a wooden panel on the right, with a red metal frame visible in the top right corner. The lighting is natural, highlighting the person's hair and the texture of their jacket. The camera captures a shallow depth of field, keeping the subject in sharp focus while the background is slightly blurred. The photograph has a candid, casual feel, and the colors are muted and natural. The overall composition draws attention to the subject's face and hair, with the background elements providing a simple, unobtrusive setting.
+[2026-09-02 18:32:14.502] [Gemini_Generated_Image_a3jpxda3jpxda3jp.txt]: ohwxsmj person, The image is a photograph of a young woman captured in a side profile, standing in an indoor setting. She has light brown, curly hair tied back in a loose ponytail. She is wearing a fitted, beige tank top that accentuates her chest and a pair of blue denim jeans. A black strap from a bag is visible over her shoulder. She has a necklace with a small pendant. The background is slightly blurred, showing indistinct shapes and colors, including a blue object and a patterned white surface. The lighting is even and natural, illuminating her from the front. The camera angle is at eye level, capturing her upper body and part of her face in profile. The photograph has a shallow depth of field, focusing on the subject while the background remains out of focus. The overall composition emphasizes the subject's profile and the casual, everyday style of her clothing.
+[2026-09-02 18:32:14.503] [Gemini_Generated_Image_cokgo1cokgo1cokg.txt]: ohwxsmj person, This is a close-up photograph of a person with curly, light brown hair, wearing a gray, textured sweater. The person is shown in profile, facing left, with their eyes closed and lips slightly puckered. They have a small, black, metal headpiece with a circular, embossed design on the left side of their head. The background is a blurred, warm-toned wooden texture, suggesting an indoor setting. The lighting is soft and natural, highlighting the curls in the hair and the texture of the sweater. The camera angle is slightly above eye level, focusing on the upper body and head. The framing is tight, focusing on the hair, headpiece, and upper part of the sweater. The overall style of the photograph is casual and intimate, with a warm, natural color palette.
+[2026-09-02 18:32:14.504] [Gemini_Generated_Image_d9m74yd9m74yd9m7.txt]: ohwxsmj person, This photograph is a close-up, slightly low-angle shot of a young woman with light skin and blonde hair pulled back. She is wearing a white top with small black polka dots and gold hoop earrings. Her lips are slightly parted, and she has subtle makeup with light pink lipstick. She is also wearing dark sunglasses perched on top of her head. The background features a brick building with multiple windows, some of which have black frames and others with white frames. The sunlight creates a bright, natural light effect, highlighting her face and the texture of the brick building. The woman's expression is neutral, and the overall composition emphasizes her face and the architectural details behind her. The photograph has a crisp, clear quality with sharp details and vibrant colors.
+[2026-09-02 18:32:14.504] [Gemini_Generated_Image_disbrwdisbrwdisb.txt]: ohwxsmj person, Photograph of a woman with curly blonde hair looking over her shoulder at the camera. She has a light skin tone and is wearing a pink, semi-sheer halter top. Her hair is voluminous and textured, cascading down her back. The background features a gradient sky transitioning from deep blue at the top to a warm orange near the horizon, suggesting either dawn or dusk. The lighting is soft, highlighting her face and shoulders. The camera angle is a close-up, focusing on her upper body and face. She has a slight smile, and the background includes a dark, out-of-focus landscape with some lights visible in the distance. The image has a natural, candid feel. The photograph uses a shallow depth of field, keeping the woman in sharp focus while the background is blurred. The overall composition is balanced, with the woman's face and hair positioned slightly to the left of the center.
+[2026-09-02 18:32:14.505] [Gemini_Generated_Image_e34z6we34z6we34z.txt]: ohwxsmj person, The image is a close-up photograph of a young woman with curly blonde hair, wearing a white t-shirt. She has light skin with a few freckles, and her mouth is slightly open. She is wearing gold hoop earrings and has long, dark eyelashes. The background shows a well-lit room with a bookshelf filled with books on the left, a wooden chair, and a white wall with a large paper lantern on the right. There is a flat-screen TV mounted on the wall behind her. The lighting is natural, coming from the left, creating soft shadows. The camera angle is straight-on, capturing her from the shoulders up. The framing is tight, focusing primarily on her face. The overall style is casual and intimate, with a warm and homey atmosphere. The texture of her curly hair is prominent, and the soft light enhances her natural skin tone.
+[2026-09-02 18:32:14.506] [Gemini_Generated_Image_e7i027e7i027e7i0.txt]: ohwxsmj person, This is a close-up photograph of a young woman with light skin and blonde hair styled in two braids. She is wearing a white, textured, V-neck top and a black shoulder bag is visible on her right shoulder. Her lips are slightly parted, and she is looking to the left with a surprised or curious expression. She has small, gold hoop earrings in her ears. The background is a plain, white, indoor setting with a closed door visible behind her. The lighting is natural and even, highlighting her face and hair. The camera angle is slightly above eye level, capturing her from the shoulders up. The image has a soft, slightly warm tone, and the focus is sharp on her face, with a slight blur in the background. The overall style is casual and candid, emphasizing her expressive look and simple, everyday attire.
+[2026-09-02 18:32:14.507] [Gemini_Generated_Image_fiys18fiys18fiys.txt]: ohwxsmj person, This is a close-up photograph of a young woman with curly hair, wearing a light blue, knitted sweater and large hoop earrings. She has light skin and blue eyes, and her expression is neutral with a slight smile. The background is slightly out of focus, featuring dry, brown grass and a blurred, dark brown tree trunk. The lighting is natural, suggesting an outdoor setting, with sunlight highlighting her face and hair. The camera angle is straight-on, capturing her from the shoulders up. The texture of the knitted sweater is visible, and the soft light creates gentle shadows on her face. The overall style of the photograph is casual and candid, with a warm and natural color palette.
+[2026-09-02 18:32:14.507] [Gemini_Generated_Image_fkqi9nfkqi9nfkqi.txt]: ohwxsmj person, This is a photograph of a young woman crouching on a textured, speckled gray floor. She has blonde hair styled in two small buns and wears sunglasses perched on top of her head. She is dressed in a white, spaghetti-strap tank top with blue stripes on the side, and blue denim shorts. She has on black and white Adidas sneakers. The woman is smiling and looking to her right. She wears a gold necklace and small gold earrings. The background includes a blue-tiled wall on the right and a yellow door on the left. The camera angle is slightly above and to the side, capturing her upper body and face in profile. The lighting is natural, highlighting her skin and the textures of the floor and tiles. The photograph is framed to focus on her upper body and the immediate background, creating a balanced composition.
+[2026-09-02 18:32:14.508] [Gemini_Generated_Image_g9xxvjg9xxvjg9xx.txt]: ohwxsmj person, This photograph features a close-up of a young woman with curly, blonde hair, wearing a cream-colored, cable-knit cardigan with wooden buttons. She is smiling slightly, looking directly at the camera. Her skin has a light, natural tone with some freckles visible. In the background, slightly out of focus, is another young woman with similar hair color, wearing a light pink top. The background includes a large window with a blurred view of greenery outside. The lighting is soft and natural, coming from the window. The camera angle is slightly below eye level, creating a friendly and approachable perspective. The framing is tight, focusing on the woman in the foreground. The overall atmosphere is casual and warm, suggesting a relaxed setting. The textures of the knit cardigan and the curly hair are prominently featured, adding a sense of coziness to the image.
+[2026-09-02 18:32:14.509] [Gemini_Generated_Image_hxj7jihxj7jihxj7.txt]: ohwxsmj person, This is a close-up photograph of a young person lying on a rough, gray stone surface. The person has curly, blonde hair that is spread out around their head. They are looking up towards the camera with their mouth slightly open, revealing their teeth. The person's eyes are blue and they have light skin. They are wearing a white, ribbed, long-sleeve shirt and a light gray jacket that is partially visible. The background includes the textured stone surface with some small green plants growing near the top right corner. The lighting is natural, and the camera angle is from above, focusing on the person's face and upper body. The overall composition is intimate and candid, emphasizing the contrast between the softness of the person's skin and hair against the rough stone background. The image has a watermark in the bottom right corner that reads "METART.com".
+[2026-09-02 18:32:14.509] [Gemini_Generated_Image_is2jqhis2jqhis2j.txt]: ohwxsmj person, This is a photograph taken from a low-angle perspective, capturing the upper body of a person with light skin and curly hair. The person is wearing a loose, long-sleeved blue shirt that is being pulled up, revealing a grey shirt underneath. The blue shirt has a soft, slightly wrinkled texture. The person's arms are raised above their head, and their face is slightly tilted downward, with a neutral expression. A small, gold-colored earring is visible in their right ear. The background is a plain, beige-colored wall, and there is a ceiling light fixture visible at the top of the image. The lighting is even, without harsh shadows, and the overall color palette is muted. The framing is tight, focusing on the person's chest and face, with the camera positioned below eye level. The photograph has a candid, natural feel, capturing a moment of casual, everyday activity.
+[2026-09-02 18:32:14.510] [Gemini_Generated_Image_kw2ujgkw2ujgkw2u.txt]: ohwxsmj person, This is a close-up photograph of a young woman with long, curly blonde hair. She is smiling slightly and looking directly at the camera. She is wearing a light gray, textured sweater under a gray, woolen jacket with a black-and-white plaid pattern on the shoulders. Around her neck, she has a delicate gold necklace with a small, round pendant. The background is a colorful, abstract mural with a gradient of red, yellow, and blue, featuring textured, paint-like patterns. The lighting is natural, highlighting her hair and face. The camera angle is straight-on, capturing her upper body and face. The image has a soft, warm tone, and the woman's hair and clothing textures are clearly visible. The overall style is casual and candid, with a focus on the subject's natural beauty and relaxed demeanor.
+[2026-09-02 18:32:14.511] [Gemini_Generated_Image_kyi6q0kyi6q0kyi6.txt]: ohwxsmj person, This is a photograph of a young woman performing on stage, captured from a slightly low, side angle. She has wavy, shoulder-length hair and is wearing a dark blue, long-sleeved cardigan with a front button closure and a light gray, form-fitting t-shirt underneath. Her pants are light gray with a drawstring at the waist. She is raising her right arm above her head, with a joyful expression on her face. The background is dark, with a subtle spotlight highlighting her from the front, creating a dramatic contrast. The lighting emphasizes her upper body and face, while the lower part of her body is slightly shadowed. The image has a dynamic, energetic feel, with the subject's movement and expression conveying a sense of enthusiasm and engagement. The camera angle and lighting suggest a stage performance, with the focus on the performer's upper body and facial expression.
+[2026-09-02 18:32:14.512] [Gemini_Generated_Image_lne73vlne73vlne7.txt]: ohwxsmj person, The photograph is a close-up portrait of a young woman with long, straight hair parted in the middle, wearing a cream-colored, off-the-shoulder knitted sweater. She is smiling gently and looking slightly to the left of the camera. She has gold hoop earrings in both ears. The lighting is soft and even, highlighting her fair skin and natural makeup. The background is slightly blurred, showing a dark-colored piece of furniture on the right and a light-colored wall on the left. The camera angle is straight-on, capturing her from the chest up. The overall composition is simple and focused on the subject, with a shallow depth of field that keeps the background out of focus. The photograph has a warm and inviting feel, with a casual and relaxed atmosphere. The texture of the knitted sweater is visible, adding a tactile element to the image. The color palette is neutral, with the cream sweater and gold earrings standing out against the darker background.
+[2026-09-02 18:32:14.512] [Gemini_Generated_Image_lp45lklp45lklp45.txt]: ohwxsmj person, This is a close-up photograph of a woman's face taken outdoors in bright sunlight. The camera angle is slightly below eye level, looking up at her. She has light skin with a slight sheen, possibly from sunscreen, and her lips are slightly parted. She wears large, gold hoop earrings and has her hair pulled back with a few strands falling around her face. She also has sunglasses on top of her head. Her clothing is a white top with small black polka dots. The background features a multi-story brick building with numerous windows. The sunlight casts sharp shadows, indicating it's a clear, sunny day. The woman's expression is neutral, and she is looking slightly to the side. The texture of her skin and hair is smooth, and the overall lighting emphasizes her features and the shine on her skin. The photograph has a shallow depth of field, making the background slightly blurred while keeping the woman's face in sharp focus.
+[2026-09-02 18:32:14.513] [Gemini_Generated_Image_lti390lti390lti3.txt]: ohwxsmj person, The image is a photograph of a young woman with curly blonde hair, wearing a navy blue sleeveless dress with white polka dots. She is standing in front of a background adorned with vibrant pink and red flowers, which are partially visible in the upper left and right corners. The background also includes a stone structure, possibly a wall or a garden feature, adding a rustic element to the scene. The woman is looking slightly to the left with a neutral expression. The lighting is even, highlighting her hair and the pattern on her dress. The camera angle is a close-up, focusing on her upper body. The photograph has a natural, candid feel, with a shallow depth of field that keeps the background slightly blurred while keeping the subject in sharp focus. The image is well-composed, with the subject centered and the background elements framing her. The overall tone of the photograph is warm and inviting, with a balance of natural colors and textures. The photograph is taken in an outdoor setting, suggested by the presence of flowers and stone structure.
+[2026-09-02 18:32:14.514] [Gemini_Generated_Image_nnft7ynnft7ynnft.txt]: ohwxsmj person, Photograph of a young woman with long, curly blonde hair, smiling widely. She is wearing a light blue denim jacket with silver buttons over a white shirt. The camera angle is slightly above eye level, capturing her from the chest up. The background features a tiled wall with a grid pattern and a brick wall to the right. There is a warm, yellow light source in the background, creating a cozy atmosphere. The lighting highlights her hair and jacket, giving a slight glow to her face. The image is framed to focus on her upper body and face, with a slight tilt to the left. The overall composition is casual and friendly, with a warm, inviting color palette. The photograph has a natural, candid feel, with a slight bokeh effect in the background tiles.
+[2026-09-02 18:32:14.515] [Gemini_Generated_Image_p5fbgqp5fbgqp5fb.txt]: ohwxsmj person, The photograph is a close-up of a young woman with curly, light brown hair, wearing a black, off-the-shoulder top. She is sitting on a couch covered with a beige, fuzzy blanket and a black fabric. Her right arm is extended across her chest, with her index and middle fingers pointing upwards in a playful gesture. She has an open-mouthed, expressive look, with her tongue slightly out. She is wearing a gold necklace with a small, round pendant and a gold ring on her right hand. The background includes a white curtain that is slightly blurred. The lighting is bright, highlighting her face and upper body. The camera angle is slightly above eye level, capturing her from the shoulders up. The framing is tight, focusing on her face and upper torso. The overall style is casual and candid, with a playful and energetic mood. The textures of the blanket and curtain add a soft, cozy element to the scene.
+[2026-09-02 18:32:14.516] [Gemini_Generated_Image_pubdcjpubdcjpubd.txt]: ohwxsmj person, The image is a photograph of a young woman with curly, light brown hair, wearing a black The North Face jacket with a high collar. She has green eyes and is looking directly at the camera with a neutral expression. The photograph is taken from a close-up, slightly low angle, focusing on her face and upper chest. The background is slightly blurred, featuring a stone building with beige walls and a green grassy area. The lighting is natural, suggesting an outdoor setting. The jacket has a visible white logo on the right side of her chest. The overall color palette includes natural earth tones and the black of the jacket. The texture of her hair is wavy and slightly tousled, contrasting with the smooth fabric of her jacket. The photograph has a soft focus on the background, drawing attention to the subject's face and upper body. The image has a watermark in the bottom right corner that reads "METART.COM".
+[2026-09-02 18:32:14.516] [Gemini_Generated_Image_pvv3lcpvv3lcpvv3.txt]: ohwxsmj person, This photograph captures a close-up, low-angle shot of a woman standing in a gymnasium. She has her arms raised and slightly spread apart, creating a confident, assertive pose. She is wearing a fitted, purple leather jacket that is unzipped to reveal a tight, red, ribbed tank top that highlights her midriff. Her jeans are dark blue with white stitching and a white belt with a gold buckle. Her hair is pulled back, and she wears large hoop earrings.
 
-In the background, there are several other people, some of whom are partially visible. One person to the right is wearing a dark suit and tie, while others are dressed in more formal or traditional attire. The background also includes green trees and a grassy area, suggesting a park or garden setting. The lighting is natural, indicating that the photo was taken during the day. The overall framing of the image focuses on the girl as the primary subject, with a shallow depth of field that blurs the background slightly. The image has a soft, slightly overcast lighting that evenly illuminates the scene.
-[2026-08-30 12:50:39.529] [Gemini_Generated_Image_vhxqylvhxqylvhxq.txt]: ohwxljkonf, This is a close-up photograph of a young person lying on a beige, textured blanket. The camera angle is slightly above and to the side, focusing on the upper body and face. The subject has light skin and is wearing a white, long-sleeved shirt with a high collar and a purple, pinstriped vest with black trim. The vest has a decorative, silver brooch on the right side. The subject's hair is pulled back into a simple bun. The background includes a blurred window with natural light filtering in, creating a soft, warm illumination. The subject's expression is calm and slightly introspective, with a subtle, relaxed smile. The overall lighting is soft and natural, enhancing the warm, cozy atmosphere of the scene. The framing is tight, focusing primarily on the subject's face and upper body, with the background elements slightly out of focus to draw attention to the subject. The texture of the blanket and the fabric of the vest are clearly visible, adding to the tactile feel of the image.
-[2026-08-30 12:50:39.530] [Gemini_Generated_Image_vmlaxxvmlaxxvmla.txt]: ohwxljkonf, This photograph is a close-up portrait of a young person standing outdoors in a formal setting. The subject is centered in the frame, facing the camera with a neutral expression. They have their blonde hair neatly pulled back into a bun. They are wearing a traditional, ornate dress with a white, high-collared blouse underneath. The dress has a purple, patterned bodice with black and white trim, and it is fastened with two decorative silver buttons. The background shows a group of people, some of whom are dressed in formal attire, including suits and dresses. The setting appears to be a garden or park, with green trees and grass visible. The lighting is natural, and the photograph is taken during the day. The camera angle is eye-level, providing a direct and clear view of the subject's upper body. The overall composition is balanced, with the subject's attire and the greenery in the background creating a contrast between the formal and natural elements. The image has a sharp focus on the subject, with a slightly blurred background, emphasizing the person in the foreground.
-[2026-08-30 12:50:39.531] [Gemini_Generated_Image_ylgd8uylgd8uylgd.txt]: ohwxljkonf, This photograph captures a close-up, upper-body shot of a young girl reclining against a patterned, upholstered chair. She has her hair tied back in a simple bun, adorned with a small gold hair accessory. She is wearing a traditional, purple, floral-patterned dirndl with black and white trim, featuring three ornate, silver buttons down the front. Underneath, she has a white, high-collared blouse with a decorative silver brooch at the center of the collar. The background includes a blurred, indoor setting with a stack of books on a shelf to the left and a green potted plant on a table to the right. The lighting is soft and natural, highlighting the girl's calm expression and the intricate details of her clothing. The camera angle is slightly above eye level, providing a clear view of her face and upper body while also capturing the texture of the patterned chair and the surrounding environment. The overall composition emphasizes the traditional and cultural elements of her attire, set against a cozy, indoor background.
-[2026-08-30 12:50:39.531] [b5f93d94-c8e7-4fe1-b923-1a057860d507.txt]: ohwxljkonf, This photograph is a close-up portrait of a young girl standing outdoors in a garden-like setting. She has her blonde hair pulled back into a neat bun and is wearing a traditional, ornate, purple and white dress with intricate patterns and silver embellishments. The dress has a high white collar and is fastened with silver buttons. In the background, there are several adults dressed in formal attire, including suits and dresses, standing and conversing. The background is blurred, highlighting the girl as the main subject. The garden setting includes lush green trees and a paved path. The lighting is natural, suggesting it is daytime. The camera angle is straight-on, capturing the girl from the waist up. The overall composition focuses on the traditional dress and the formal outdoor event.
-[2026-08-30 12:50:39.532] [grok_image_1785047999771.txt]: ohwxljkonf, This photograph features a young girl standing on a grassy lawn, viewed from a high angle looking down at her. She has her blonde hair neatly pulled into a high bun. She is wearing a traditional outfit consisting of a white long-sleeve shirt, a purple vest with black and silver patterns, and a black skirt. The vest has silver buttons and a decorative pattern, adding a touch of elegance. Her expression is neutral, and she is looking directly at the camera. In the background, there are other people, partially visible, wearing similar traditional attire. One person is wearing a dark blue jacket, while another has a black garment with a white shirt underneath. The grass in the foreground is green and well-maintained, indicating an outdoor setting, possibly a cultural event or gathering. The lighting is natural, suggesting it is taken during the day. The framing of the photograph is tight, focusing primarily on the girl and her outfit, with the background slightly blurred to keep the attention on her. The overall composition highlights the traditional clothing and the outdoor setting.
-[2026-08-30 12:50:39.533] [grok_image_1785048046624.txt]: ohwxljkonf, This photograph is a close-up, slightly tilted upward shot of a young girl with her blonde hair pulled into a tight bun at the top of her head. She is wearing a traditional outfit featuring a white blouse with a high collar and intricate lace detailing, paired with a purple dress with black lace patterns and silver buttons. The dress has a black apron-like bottom. The girl is looking directly at the camera with a slightly tilted head and a neutral expression. In the background, there is an older man with white hair, wearing a dark blue suit, standing behind her. The background also includes several other people, some of whom are blurred, indicating a shallow depth of field. The setting appears to be outdoors, with green trees and a gravel path visible in the background. The lighting is natural, suggesting the photo was taken during daylight. The overall composition focuses on the girl's traditional attire and her direct gaze, while the background provides context with other individuals and a natural setting.
-[2026-08-30 12:50:39.534] [grok_image_1785048308131.txt]: ohwxljkonf, This photograph captures a young girl with her hair neatly pulled into a high bun, standing outdoors in a grassy area. She is wearing a traditional European dress with a white long-sleeve blouse and a purple, intricately patterned bodice with silver trim and decorative silver buttons. The dress has a black skirt that is not fully visible. The girl is looking directly at the camera with a slight, shy smile. In the background, there are several people, mostly men, dressed in formal dark suits, standing and conversing. The setting appears to be a garden or park, with green trees and grass visible. The photo is taken from a slightly low angle, focusing on the girl's upper body and face, while the background is slightly blurred, emphasizing the subject. The lighting is natural, with soft, diffused daylight. The overall composition highlights the traditional dress against the more modern, formal attire of the background figures.
-[2026-08-30 12:50:39.534] [grok_image_1785048388360.txt]: ohwxljkonf, This is a photograph taken from a high, slightly angled top-down perspective, focusing on a young girl standing on a paved surface with a grassy background. She has her blonde hair neatly tied in a bun at the top of her head with a small section of hair pulled through the bun. She is wearing a traditional outfit consisting of a white long-sleeved blouse with a high collar, and a purple dress with black and silver patterns, which is cinched at the waist with a black apron-like skirt. The dress has a decorative silver trim around the neckline and shoulders. Her expression is neutral, and she is looking slightly upward towards the camera. The grassy background is slightly out of focus, emphasizing the subject. The lighting is natural, suggesting an outdoor setting, and the overall color palette includes greens from the grass, purples and blacks from her outfit, and the gray of the pavement. The texture of the pavement is slightly rough, and the grass appears lush. The photograph captures the traditional clothing in detail, highlighting the cultural attire and the natural outdoor environment.
-[2026-08-30 12:50:39.535] [grok_image_1785102693844.txt]: ohwxljkonf, Photograph of a young girl with light skin and blonde hair tied in a bun, wearing a white high-collared blouse with intricate lace details and a purple, patterned, medieval-style dress with silver embellishments. She is looking upwards with her mouth open in a surprised or excited expression. The background features a blurred green tree and two men in dark suits, one partially visible on the left and another on the right. The image is taken from a close-up angle, focusing on the upper body of the girl. The lighting is natural, suggesting an outdoor setting. The framing captures the girl's face and upper torso, with the background slightly out of focus. The texture of the dress is rich and detailed, contrasting with the smooth fabric of the blouse. The overall composition highlights the girl's expression and traditional clothing against a simple, green outdoor backdrop.
-[2026-08-30 12:50:39.536] [grok_image_1785102741310.txt]: ohwxljkonf, Photograph of a young girl in a close-up, upper-body shot, standing outdoors. She has her light brown hair neatly tied in a bun and is wearing a traditional Bavarian dress with a white lace-trimmed blouse and a purple embroidered vest. The vest features intricate floral patterns and black and white trim. The girl is looking to the left with her mouth slightly open, as if speaking or exclaiming something. Behind her, a taller adult man in a dark suit is partially visible, standing slightly to her left. The background includes green trees and a paved ground, suggesting a park or outdoor event. The lighting is natural, and the photograph is taken at eye level with the girl. The overall composition focuses on the girl's attire and expression, with the adult man providing a subtle background element. The image has a candid, documentary style.
-[2026-08-30 12:50:39.536] [grok_image_1785208579728.txt]: ohwxljkonf, The image is a photograph taken outdoors in a natural light setting, capturing an upper-body shot of a young girl with her head turned slightly to the right, looking over her shoulder. She has her light brown hair pulled up into a neat bun, secured with a small gold hair accessory. She wears a white, high-collared blouse with black and white embroidered trim, and a purple vest with a black, intricate floral pattern. The background features a green, leafy tree and several adults in formal attire, including a man in a dark suit visible in the right background. The ground is covered in small, gray gravel. The camera angle is slightly low, focusing on the upper body and head of the girl, with a shallow depth of field that blurs the background. The lighting is natural, casting soft shadows and highlighting the girl's face and hair. The overall composition emphasizes the girl's attire and hairstyle, with the background providing context and a sense of location. The image has a calm, slightly formal atmosphere, suggesting a possible event or gathering.
-[2026-08-30 12:50:39.537] [grok_image_1785208619349.txt]: ohwxljkonf, This photograph captures a close-up, upper-body shot of a young girl looking over her shoulder with a slight, inquisitive expression. She has her blonde hair neatly pulled into a bun at the top of her head. She is wearing a white, high-collared blouse with lace trim and a purple, intricately patterned, puffy-sleeved vest with black and white trim. The background is slightly out of focus, showing several adults in formal attire, including a man with a bushy mustache and a dark suit. The setting appears to be an outdoor event, with greenery and a gravel path visible in the background. The lighting is natural, suggesting it is taken during daylight. The camera angle is slightly low, emphasizing the girl's head and upper body while her surroundings remain blurred. The overall composition focuses on the girl's attire and expression, with the background providing context without drawing attention away from the subject. The photograph uses a shallow depth of field to keep the girl in sharp focus while the background remains soft.
-[2026-08-30 12:50:39.537] [grok_image_1785208755299.txt]: ohwxljkonf, The photograph captures a young girl from a slightly elevated, three-quarter rear angle, focusing on her upper body and head. She has her light brown hair neatly pulled up into a bun, adorned with a small, beaded hair accessory. She wears a traditional, European-style dress with a white, long-sleeved blouse featuring puffed sleeves and intricate lace detailing at the collar and cuffs. Over the blouse, she has on a purple, floral-patterned bodice with black lace trim and silver bead accents along the seams. The skirt of the dress is black and has a slight pleat. The background is slightly blurred, showing a grassy outdoor setting with several other people, mostly adults, dressed in formal attire, including dark suits and white shirts. The lighting is natural, suggesting an outdoor event or gathering. The girl's expression is calm and slightly turned towards the camera, with a subtle, closed-mouth smile. The camera angle and framing emphasize her traditional attire and the intricate details of her dress, while the background provides a sense of context and setting.
-[2026-08-30 12:50:39.538] [grok_image_1785527871920.txt]: ohwxljkonf, This photograph is a close-up portrait of a young girl with her hair neatly tied in a bun on top of her head. She is wearing a traditional, embroidered dress with a white, ruffled, high-collared blouse underneath. The dress is purple with black and white intricate patterns, and there is a decorative silver brooch at the center of the neckline. The background is slightly blurred, showing a group of people dressed in formal attire, including suits and dresses, standing outdoors. The setting appears to be a park or garden, with green trees and a gray pavement visible. The lighting is natural, with soft daylight illuminating the scene. The camera angle is straight-on, capturing the girl's upper body and face, with a shallow depth of field that keeps the focus on her while softly blurring the background. The girl's expression is calm and slightly smiling, with a neutral, relaxed pose. The overall composition highlights the traditional costume against the more modern, blurred background, creating a contrast between the subject and the environment.
-[2026-08-30 12:50:39.539] [grok_image_1785527909402.txt]: ohwxljkonf, This photograph captures a young girl with her mouth open in a surprised or excited expression, looking upward to the right. She has her blonde hair neatly tied back in a small bun. She is wearing a traditional, white blouse with lace detailing at the collar and a purple, intricately patterned dress with black and white trim. A small, ornate brooch is pinned to the front of her dress. In the background, there are several adults, partially visible, dressed in formal attire, including a man in a dark suit with a light blue shirt. The setting appears to be outdoors, with lush green trees and grass visible in the background. The photograph is taken from a slight side angle, capturing the girl's upper body and part of the adults behind her. The lighting is natural, suggesting it is taken during daylight. The image focuses on the girl's expression and traditional clothing, with a shallow depth of field that keeps her in sharp focus while the background is slightly blurred. The overall tone of the photograph is bright and clear, with a strong emphasis on the girl's traditional attire and expressive face.
-[2026-08-30 12:50:39.540] [grok_image_1785528073391.txt]: ohwxljkonf, Photograph of a young girl with her blonde hair in a bun, standing outdoors on a grassy lawn with green trees in the background. She is wearing a traditional, ornate, purple dress with intricate black floral patterns and white trim, featuring three white decorative buttons near the bottom. Her white blouse has a high, ruffled collar and a silver brooch at the center. She has a neutral expression and is looking slightly downward. The camera is at a close-up angle, focusing on her upper body. In the background, there are partially visible people in dark blue suits, slightly out of focus. The lighting is natural, suggesting daytime. The framing is tight, concentrating on the girl's face and upper torso. The overall scene conveys a formal, traditional event or gathering.
-[2026-08-30 12:50:39.541] [grok_image_1785528230938.txt]: ohwxljkonf, The photograph is a close-up portrait of a young girl with her hair neatly tied in a bun, standing outdoors. She wears a traditional, ornate dress with a white blouse and a purple bodice featuring intricate black patterns and silver trim. The dress has a high, lace-up neckline with small, decorative buttons. The background is slightly blurred, showing several adults dressed in formal attire, including suits and dresses, standing and conversing on a gravel path surrounded by green trees. The lighting is natural, suggesting daytime. The camera angle is slightly low, focusing on the girl's upper body and face. The overall composition centers on the girl, who has a neutral expression, with the background providing context of a social or formal outdoor gathering. The image has a shallow depth of field, making the girl the sharp focal point against the softly blurred background. The photograph has a candid, documentary style, capturing a moment in a traditional or cultural event.
-[2026-08-30 12:50:39.542] [grok_image_1785528511825.txt]: ohwxljkonf, The image is a photograph taken from a close-up, slightly low-angle perspective, focusing on a young girl with her mouth open in a surprised or shocked expression. She has her blonde hair neatly tied up in a bun. She is wearing a traditional, ornate, purple vest with black and white floral patterns, and a white, high-collared shirt with intricate lace detailing. A silver brooch is visible at the center of her collar. The background is slightly blurred, showing several adults dressed in formal dark blue suits, standing outdoors in a park-like setting with green trees. The lighting is natural, suggesting it is daytime. The girl is centered in the frame, with the background adults slightly out of focus. The overall mood of the image is one of surprise or shock, emphasized by the girl's expressive face and open mouth. The photograph has a shallow depth of field, drawing attention to the girl's detailed attire and expression while the background remains blurred.
-[2026-08-30 12:50:39.544] Prompt executed in 00:11:02
-[2026-08-30 12:54:30.043] 
-Stopped server
+The background consists of a gymnasium setting with wooden flooring and orange and blue lockers along the wall. The ceiling has a grid pattern with fluorescent lights. The lighting in the image is bright, emphasizing the colors of her outfit and the gym's walls. The photograph has a slightly warm tone due to the indoor lighting. The image focuses on the subject from the waist up, with a shallow depth of field that blurs the background, drawing attention to her confident stance and stylish outfit.
+[2026-09-02 18:32:14.517] [Gemini_Generated_Image_syihagsyihagsyih.txt]: ohwxsmj person, The image is a close-up photograph of a person with curly, blonde hair that falls to their shoulders. They are wearing a black, long-sleeved top. The person's expression is neutral, with a slightly open mouth. They have light skin and are looking directly at the camera. The background is a solid, bright white, providing a stark contrast to the dark top. The lighting is even, with no visible shadows. The camera angle is straight-on, capturing the person's upper body and face in a centered, symmetrical frame. The texture of the curly hair is prominent, with each curl clearly defined. The person's eyes are slightly downcast. The photograph has a clean, minimalist style, focusing on the subject with no additional objects or distractions in the background. The overall composition is simple and direct, highlighting the subject's face and hair. The image has a professional, studio-quality feel due to the controlled lighting and neutral background.
+[2026-09-02 18:32:14.518] [Gemini_Generated_Image_ueh5vxueh5vxueh5.txt]: ohwxsmj person, This is a photograph of a young woman standing outdoors in a garden setting. She has curly hair and is wearing a white, ribbed, sleeveless tank top with black straps visible from a bra. She is also wearing pink, patterned pants with a white belt. A beige strap crosses her chest from a bag she is carrying. She is looking slightly to the side with a gentle smile. The background consists of lush green foliage with some pink flowers. The lighting is natural, suggesting it is daytime. The camera angle is slightly above eye level, capturing her from the waist up. The framing is centered, and the overall composition is casual and relaxed. The texture of her tank top is ribbed, contrasting with the smoothness of her pants and the leafy background. The image has a candid, natural feel, with a focus on everyday fashion and a serene garden environment.
+[2026-09-02 18:32:14.519] [Gemini_Generated_Image_ukhz2pukhz2pukhz.txt]: ohwxsmj person, Photograph of a young woman with curly blonde hair tied back with a red bow, smiling over her shoulder. She is wearing a sparkly pink spaghetti-strap dress with a low back. The background shows a wooden staircase with dim outdoor lighting, and a car is partially visible to the left. The camera angle is slightly low and to the side, capturing her upper body and part of her face. The lighting highlights her hair and dress, creating a warm, glowing effect. The image has a close-up framing, focusing on her from the shoulders up. The texture of the wooden staircase and the sparkly fabric of her dress are prominent. The overall atmosphere is casual and friendly, with a slight nighttime setting.
+[2026-09-02 18:32:14.519] [Gemini_Generated_Image_uwkvwbuwkvwbuwkv.txt]: ohwxsmj person, This photograph is a close-up selfie of a woman with curly, shoulder-length blonde hair, taken in a bathroom. She is holding a white smartphone in her left hand, partially visible in the frame. She is wearing a black sleeveless dress with white polka dots, which has a deep V-neckline that reveals part of her cleavage. Her expression is slightly surprised or curious, with her mouth slightly open. The background features dark green tiled walls and a white and black chevron-patterned floor. The lighting is bright and even, highlighting her hair and the texture of her dress. The camera angle is slightly tilted, focusing on her upper body and face. The overall composition emphasizes her hair and dress, with the bathroom setting providing a contrasting, everyday backdrop. The photograph uses a shallow depth of field, keeping the woman in sharp focus while the background is slightly blurred.
+[2026-09-02 18:32:14.520] [Gemini_Generated_Image_vmqplnvmqplnvmqp.txt]: ohwxsmj person, The image is a close-up photograph of a young woman with wavy, blonde hair that falls past her shoulders. She is smiling broadly, showing her teeth. She is wearing a dark blue, knitted cardigan with a small, white embroidered logo on the left side of her chest. Underneath the cardigan, she has on a plain white shirt. The background is a solid, dark blue curtain that is slightly out of focus, creating a subtle bokeh effect. The lighting is soft and directional, highlighting her face and upper body while casting gentle shadows. The camera angle is slightly tilted, giving a dynamic feel to the portrait. The overall mood of the photograph is warm and approachable, with the subject's cheerful expression and casual attire contributing to a relaxed, friendly atmosphere. The texture of the knitted cardigan contrasts with the smoothness of her shirt, adding visual interest to the composition.
+[2026-09-02 18:32:14.521] [Gemini_Generated_Image_wja4y4wja4y4wja4.txt]: ohwxsmj person, The image is a close-up photograph of a young woman with curly blonde hair, smiling widely at the camera. She is wearing a light gray zip-up hoodie with a subtle logo on the chest, and a gold necklace with a small pendant. Her hair is voluminous and textured, cascading down her shoulders. The background is a dark, textured wall with a blurred, indistinct image or pattern on the left side. The lighting is even, highlighting her cheerful expression and the texture of her hair. The camera angle is slightly above eye level, capturing her from the chest up. The framing is tight, focusing on her face and upper body. The overall style is casual and natural, with a warm and friendly atmosphere. The photograph has a high level of detail, particularly in the texture of her hair and the fabric of her hoodie.
+[2026-09-02 18:32:14.522] [Gemini_Generated_Image_xwpt61xwpt61xwpt.txt]: ohwxsmj person, This photograph captures a close-up of a woman seated at a table in a dimly lit restaurant with a cityscape visible through a window in the background. She is wearing a sleeveless, halter-neck dress in a shimmering, light brown color that fits snugly around her chest and shoulders. Her hair is styled in loose, curly waves and pulled back, with a few strands falling around her face. She is smiling slightly and looking to her left. She has small, gold hoop earrings in both ears. In the foreground, part of a clear wine glass is visible on the left side of the frame. The background shows a night view of a city with numerous lights twinkling against the dark sky. The lighting in the restaurant is warm and soft, creating a cozy atmosphere. The camera angle is slightly above eye level, capturing the upper body and face of the woman. The overall composition focuses on the subject's relaxed and happy expression, enhanced by the elegant setting and soft lighting.
+[2026-09-02 18:32:14.523] [Gemini_Generated_Image_xxnlu4xxnlu4xxnl.txt]: ohwxsmj person, This is a photograph of a young woman standing in a gymnasium. The camera captures her from the waist up in a medium close-up shot. She has light brown hair tied back in a ponytail and is smiling slightly. She is wearing a fitted, bright pink, ribbed, midriff-baring top and a dark purple leather jacket with a corduroy collar. The jacket has two front pockets and is unzipped. She also wears dark blue jeans with a white belt that has a silver buckle. Her earrings are small and silver. The background shows the gym's wooden walls and a black curtain to the right. The gymnasium floor has visible red and white lines, typical of a sports court. The lighting is even, with no harsh shadows. The photograph has a natural, candid feel, capturing a casual moment. The overall color palette includes the bright pink top, dark purple jacket, and dark blue jeans, with the gym's wooden and black elements providing contrast. The texture of the leather jacket and the ribbed top is clearly visible, adding depth to the image.
+[2026-09-02 18:32:14.524] [Gemini_Generated_Image_xy7xp7xy7xp7xy7x.txt]: ohwxsmj person, The photograph is a close-up shot of a person lying on their back outdoors, taken from a slightly overhead angle. The person has curly, light brown hair and is wearing a light gray, textured sweater with a white, ribbed turtleneck underneath. They have large, gold hoop earrings and their mouth is open wide in a joyful, laughing expression, showing their teeth. The background consists of a rough, gray asphalt surface with small pebbles and some green grass visible at the edges. The lighting is natural, suggesting a daytime setting, and the colors are warm and earthy. The framing focuses on the person's head and shoulders, with the upper body slightly out of focus. The image captures a sense of carefree happiness and relaxation.
+[2026-09-02 18:32:14.524] [Gemini_Generated_Image_xz1o5fxz1o5fxz1o.txt]: ohwxsmj person, This photograph is a close-up of a young woman's face and upper torso, taken from a slightly low angle. She has light skin and is wearing a maroon V-neck shirt. Her hair is pulled back, and she has large, gold hoop earrings. Her mouth is open, and she looks slightly upward, with a neutral to slightly expressive face. The background is blurred, showing the indistinct forms of other people, suggesting a crowd or group setting. The lighting is even, without harsh shadows, highlighting her facial features and the texture of her skin. The camera captures the subject from the chest up, focusing on her face and upper body, with the background being out of focus. The overall tone of the image is warm due to the lighting and the color of her shirt. The photograph has a candid, documentary style, capturing a moment of expression or speech in a group environment.
+[2026-09-02 18:32:14.526] [Gemini_Generated_Image_yr1u2lyr1u2lyr1u.txt]: ohwxsmj person, This photograph captures a young woman standing in a gymnasium, taken from a side angle at waist height. She is wearing a purple leather jacket with a slightly shiny texture, a pink t-shirt that is slightly lifted, revealing a small portion of her midriff, and dark blue, slightly faded jeans with white stitching. A white belt with a silver buckle is visible. She has a blonde ponytail secured with a purple hair clip and is wearing large hoop earrings. The gymnasium has a wooden floor with visible lines marking the court, and the background shows a basketball hoop with a white net and a gray wall. The lighting is even, with no strong shadows. The camera angle and framing focus on her upper body and jeans, with the background slightly blurred. The overall composition emphasizes her casual, slightly edgy style and the indoor sports setting. The image has a natural, candid feel, as if she was caught in a moment of movement or adjustment.
+[2026-09-02 18:32:14.526] [Gemini_Generated_Image_yu6ik5yu6ik5yu6i.txt]: ohwxsmj person, The image is a close-up photograph of a young woman with curly, shoulder-length hair, wearing a beige, ribbed, knit sweater. She has a warm, friendly smile and is looking directly at the camera. Her skin is fair, and she has subtle makeup. The background is softly blurred, with warm, amber lighting creating a cozy atmosphere. In the background, there are out-of-focus objects that appear to be part of a bar or café setting, including a light fixture and some indistinct shapes that might be bottles or glasses. The camera angle is straight-on, capturing her upper body and face in sharp focus, while the background remains softly blurred to emphasize her as the main subject. The lighting highlights her hair's texture and the knit pattern of her sweater, adding depth and warmth to the image. The overall composition is warm and inviting, with a focus on natural beauty and a relaxed, friendly atmosphere.
+[2026-09-02 18:32:14.528] [Gemini_Generated_Image_yxdaiayxdaiayxda.txt]: ohwxsmj person, This is a close-up photograph of a young woman with her face and upper body in focus, taken from a slightly low angle. She has her hair styled in two braided pigtails, each held by her hand, and she is wearing gold hoop earrings. Her lips are slightly parted, and she has a neutral expression. She is wearing a white, ribbed, long-sleeve top. The background is a plain, light-gray wall with a small section of a green vine plant visible in the upper left corner. She is holding a black strap, likely from a bag, on her right shoulder. The lighting is soft and even, highlighting her skin and the texture of her top. The overall composition is simple, with the subject centered and the background kept minimal to keep the focus on her. The camera captures her from the chest up, with a slight tilt upward, emphasizing her face and braided hair. The photograph has a natural, candid feel, with a slightly warm tone to the skin and hair.
+[2026-09-02 18:32:14.529] [SMJ 00044.txt]: ohwxsmj person, This is a photograph of a young woman with wavy, shoulder-length brown hair, wearing a light gray Nike hoodie with a white Nike logo on the left chest. She has a subtle smile and is looking directly at the camera. The background is a plain, light gray color, creating a neutral and unobtrusive backdrop that emphasizes the subject. She is wearing small, silver hoop earrings. The lighting is even and soft, with no harsh shadows, highlighting her face and the texture of her hair and hoodie. The camera angle is straight-on, capturing her from the waist up in a close-up shot. The framing is centered, focusing on her upper body and face. The overall style of the photograph is casual and straightforward, with a focus on natural beauty and simplicity. The image has a clean and modern feel, suitable for portrait photography.
+[2026-09-02 18:32:14.529] [SMJ 00065.txt]: ohwxsmj person, This photograph captures a woman standing outdoors in front of a building. She is seen from the waist up, facing to the right. She has blonde hair styled in a low bun and is wearing dark sunglasses. She is dressed in a white, long-sleeved, fitted shirt with small black polka dots and blue jeans with visible waistband. She carries a black leather shoulder bag with gold accents on her left shoulder and has several bracelets on her right wrist. She is also wearing small gold hoop earrings. The background features a dark green door to the left and a beige wall to the right with a green sign that reads "Skola Trenutno Zasebna." The lighting is bright, suggesting it is daytime, and the camera angle is slightly low, capturing her from a side profile. The texture of the wall and door are smooth and painted, while the ground is a rough stone surface. The overall style of the photograph is casual and candid, with a focus on everyday street fashion.
+[2026-09-02 18:32:14.530] [SMJ 00067.txt]: ohwxsmj person, Photograph of a young woman with curly blonde hair, wearing a sparkly silver spaghetti-strap top that reveals black straps from a bra. She is standing in a room with a neutral-colored door in the background, adorned with several coats—one pink and one brown—hanging on hooks. A black, studded handbag is also hanging on the door. The lighting is soft, creating a natural, indoor ambiance. The camera angle is slightly above eye level, capturing her upper body and face in a three-quarter profile. Her expression is neutral, with slightly parted lips. The texture of her top is shimmering and metallic, contrasting with the matte finish of the door and coats. The framing is tight, focusing on her upper body and the background elements. The image has a casual, candid feel, with a slight overexposure that adds a soft, warm tone to the overall composition.
+[2026-09-02 18:32:14.531] [SMJ 00091.txt]: ohwxsmj person, This is a close-up photograph of a woman with curly, blonde hair that cascades down to her shoulders. She is wearing a light beige sweater and a brown, textured coat. Black sunglasses rest on top of her head, partially visible. She has a subtle smile and is looking to the side. The background is softly blurred, with hints of green and red, suggesting an outdoor setting. The lighting is natural, highlighting her hair and skin. The camera angle is slightly above eye level, capturing her from the shoulders up. The framing is tight, focusing on her face and upper body. The texture of her hair contrasts with the smoothness of her sweater and the roughness of her coat. The overall style of the photograph is candid and natural, emphasizing the woman's relaxed and approachable demeanor.
+[2026-09-02 18:32:14.532] [SMJ 00120.txt]: ohwxsmj person, This is a close-up photograph of a young woman with light skin and blonde hair, which is tied back in a simple style. She is wearing a white, sleeveless tank top with a square neckline that reveals her collarbones and shoulders. She has small hoop earrings in both ears. Her expression is a slight smile, showing her teeth. The background is a plain, light grey wall with a soft shadow behind her, indicating a single light source from the front. The lighting is even and bright, highlighting her face and upper body. The image is framed from the top of her shoulders to just below her collarbones. The overall style is casual and straightforward, with a focus on the subject's upper body and face. The texture of the tank top appears smooth and slightly shiny, while the background is matte and untextured. The photograph is taken at eye level, providing a direct and centered view of the subject. The image has a clean and minimalistic aesthetic, with no additional objects or distractions in the frame.
+[2026-09-02 18:32:14.532] [SMJ 00159.txt]: ohwxsmj person, The image is a photograph of a woman standing indoors, captured from the waist up in a slightly low-angle shot. She has her hair pulled back with a purple hair clip on the left side. She is wearing a dark purple leather jacket with a ribbed collar and visible zipper pockets, over a bright pink top. She has a black crossbody bag with gold studs hanging from her right shoulder, which she is holding with her right hand. Her left hand is resting on the strap of the bag. She has gold hoop earrings and a small, beige, round stud earring in her right ear. The background is slightly blurred, showing blue and beige chairs, suggesting an indoor setting, possibly a gym or classroom. The lighting is even, with no harsh shadows, highlighting the textures of her jacket and top. The overall color palette includes dark purple, pink, black, and gold. The photograph is framed tightly around her upper body, focusing on her attire and accessories. Her expression is neutral, and she is looking slightly to the right of the camera.
+[2026-09-02 18:32:14.533] [SMJ 00227.txt]: ohwxsmj person, This is a close-up photograph of a young woman with wavy, light brown hair, smiling slightly. Her skin is fair and she has light makeup on, including pinkish lipstick. She has blue eyes and her hair is loosely falling around her shoulders. The background is dark and out of focus, which makes the subject stand out. She is wearing a light-colored top, and the lighting is soft, highlighting her face and hair. The camera angle is straight-on, capturing her from the shoulders up. The framing is tight, focusing on her face and upper chest. The texture of her hair is soft and slightly tousled, adding a natural, casual look. The overall style of the photograph is portrait-oriented, with a focus on the subject's expression and gentle smile. The image has a warm, natural feel, with a slight emphasis on the subject's facial features and hair. The photograph is well-composed, with a balanced use of light and shadow to create a soft, inviting atmosphere.
+[2026-09-02 18:32:14.534] [SMJ 00249.txt]: ohwxsmj person, This is a black-and-white photograph of a young woman with long, curly hair that falls over her shoulders. She is smiling slightly and looking directly at the camera. She is wearing a light-colored, textured knit sweater with a round neckline. The background is completely black, creating a strong contrast with her lighter skin and hair. The lighting is soft but directional, highlighting her face and hair while casting subtle shadows. The camera angle is straight-on, capturing her from the chest up in a close-up shot. Her hair has a glossy texture, and the curls are well-defined. The photograph has a classic, portrait-style composition, emphasizing simplicity and focus on the subject. The overall mood of the image is calm and natural. The texture of the sweater is visible, adding a tactile element to the visual. The photograph is well-framed, with the subject centered and balanced within the composition.
+[2026-09-02 18:32:14.536] Prompt executed in 00:18:34

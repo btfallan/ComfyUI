@@ -27,6 +27,12 @@ ComfyUI/output/*
 ComfyUI/temp/*
 lora*
 
+
+# --- AI Toolkit runtime data (models/inputs/outputs are regenerable or huge) ---
+ai-toolkit\models
+ai-toolkit\input
+ai-toolkit\output
+
 # --- Model / weight file types (wherever they show up, e.g. inside custom_nodes) ---
 *.safetensors
 *.ckpt
